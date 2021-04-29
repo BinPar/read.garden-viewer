@@ -14,7 +14,7 @@ This DOM based viewer will be designed to be:
 - **API Agnostic**: providing a universal event based interface (that will get `actions` and emit `events`) to be used by any viewer.
 - **Body Scroll Based**: the library will automatically append it's own DOM nodes in te body and use the page's body scroll navigate through the content.
 
-## How to integrate this viewer into an APP
+## How to integrate this viewer into any project
 
 The viewer consists of three different files:
 
@@ -56,5 +56,5 @@ We divide the features in three different groups:
 
 ### Fixed Content Features
 
-- Mouse and Touch based Zoom / PAN (avoiding iScroll)
+- Mouse and Touch based Zooming and Panning (avoiding iScroll)
 - Fit to width and height
