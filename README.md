@@ -52,7 +52,7 @@ We divide the features in three different groups:
 - Default font selection
 - Font size
 - Line height
-- Text justification
+- Text body align
 
 ### Fixed Content Features
 
