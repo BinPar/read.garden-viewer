@@ -18,9 +18,9 @@ This DOM based viewer will be designed to be:
 
 The viewer consists of three different files:
 
-- `read.garden-viewer.css`: the styles to imported in the page
+- `read.garden-viewer.css`: the styles to be imported in the page
 - `read.garden-viewer.js`: the minified JavaScript viewer bundle
-- `read.garden-viewer.d.ts`: width the type definitions in case you need to use in in a TypeScript project
+- `read.garden-viewer.d.ts`: the type definitions in case you need to use in in a TypeScript project
 
 ## Main Viewer Features
 
