@@ -1,0 +1,46 @@
+{
+  "name": "read.garden-viewer",
+  "version": "0.1.0",
+  "description": "Universal EBook Reader for EPUB2, EPUB3, HTML5 and PDF contents",
+  "scripts": {
+    "dev": "concurrently --kill-others \"npm run build-dev\" \"npm run server-dev\"",
+    "build": "tsc;webpack --config webpack.config.prod.js;cp ./web/js/viewer.js ../sdkNative/flow-viewer/js/viewer.js",
+    "build-dev": "nodemon --config nodemon.json --exec 'tsc;webpack --config webpack.config.js'",
+    "server-dev": "NODE_ENV=development ts-node-dev --debug --respawn --transpileOnly ./src/server/index.ts",
+    "test": "jest",
+    "test-dev": "NODE_ENV=development npx jest --watchAll",
+    "start": "node ./dist/server/index.js",
+    "lint": "npx eslint --config ./.eslintrc ./src --ext .js,.jsx,.ts,.tsx"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/acttoreact/read.garden-viewer.git"
+  },
+  "author": "Ignacio Ferro Picón",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/acttoreact/read.garden-viewer/issues"
+  },
+  "homepage": "https://github.com/acttoreact/read.garden-viewer#readme",
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.22.0",
+    "eslint-config-airbnb-typescript": "^12.3.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-react": "^7.23.2",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "jest": "^26.6.3",
+    "ngrok": "^4.0.1",
+    "source-map-loader": "^2.0.1",
+    "ts-jest": "^26.5.5",
+    "ts-node-dev": "^1.1.6",
+    "webpack": "^5.36.1",
+    "webpack-cli": "^4.6.0"
+  },
+  "dependencies": {
+    "live-server": "^1.2.1",
+    "loglevel": "^1.7.1",
+    "typescript": "^4.2.4"
+  }
+}
