@@ -33,7 +33,6 @@ We divide the features in three different groups:
 ### General Features
 
 - Style Reset
-- Vertical / horizontal scrolling
 - Pagination
 - Scroll management
 - Page change notification events
@@ -49,6 +48,7 @@ We divide the features in three different groups:
 
 ### Flow Content Features
 
+- Mouse and Touch based vertical or horizontal scrolling
 - Default font selection
 - Font size
 - Line height
@@ -56,5 +56,5 @@ We divide the features in three different groups:
 
 ### Fixed Content Features
 
-- Zoom (avoiding iScroll)
+- Mouse and Touch based Zoom / PAN (avoiding iScroll)
 - Fit to width and height
