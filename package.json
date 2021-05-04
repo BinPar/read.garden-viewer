@@ -6,11 +6,12 @@
     "dev": "concurrently --kill-others \"npm run build-dev\" \"npm run server-dev\"",
     "build": "tsc;webpack --config webpack.config.prod.js",
     "build-dev": "nodemon --config nodemon.json --exec 'tsc;webpack --config webpack.config.js'",
+    "generate-contents": "rm -rf ./web/books;ts-node-dev ./src/server/scripts/generateContents.ts",
+    "lint": "npx eslint --config ./.eslintrc ./src --ext .js,.jsx,.ts,.tsx",
     "server-dev": "NODE_ENV=development ts-node-dev --debug --respawn ./src/server/index.ts",
-    "test": "jest",
-    "test-dev": "NODE_ENV=development npx jest --watchAll",
     "start": "node ./dist/server/index.js",
-    "lint": "npx eslint --config ./.eslintrc ./src --ext .js,.jsx,.ts,.tsx"
+    "test": "jest",
+    "test-dev": "NODE_ENV=development npx jest --watchAll"
   },
   "jest": {
     "preset": "jest-puppeteer"
@@ -28,6 +29,7 @@
   "devDependencies": {
     "@types/jest": "^26.0.23",
     "@types/live-server": "^1.2.0",
+    "@types/node": "^15.0.1",
     "@typescript-eslint/eslint-plugin": "^4.22.0",
     "concurrently": "^6.0.2",
     "eslint-config-airbnb-typescript": "^12.3.1",
@@ -43,10 +45,12 @@
     "source-map-loader": "^2.0.1",
     "ts-jest": "^26.5.5",
     "ts-node-dev": "^1.1.6",
-    "webpack": "^5.36.1",
+    "webpack": "^5.36.2",
     "webpack-cli": "^4.6.0"
   },
   "dependencies": {
+    "@a2r/fs": "^1.5.1",
+    "js-base64": "^3.6.0",
     "live-server": "^1.2.1",
     "loglevel": "^1.7.1",
     "typescript": "^4.2.4"
