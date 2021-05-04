@@ -7,7 +7,7 @@
     "build": "tsc;webpack --config webpack.config.prod.js",
     "build-dev": "nodemon --config nodemon.json --exec 'tsc;webpack --config webpack.config.js'",
     "generate-contents": "rm -rf ./web/books;ts-node-dev ./src/server/scripts/generateContents.ts",
-    "lint": "npx eslint --config ./.eslintrc ./src --ext .js,.jsx,.ts,.tsx",
+    "lint": "eslint --config ./.eslintrc ./src --ext .js,.jsx,.ts,.tsx",
     "server-dev": "NODE_ENV=development ts-node-dev --debug --respawn ./src/server/index.ts",
     "start": "node ./dist/server/index.js",
     "test": "jest --runInBand",
