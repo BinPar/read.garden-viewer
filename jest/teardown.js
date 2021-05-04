@@ -1,15 +1,15 @@
-// teardown.js
-const os = require('os');
-const path = require('path');
-// eslint-disable-next-line import/no-extraneous-dependencies
-const rimraf = require('rimraf');
+/* eslint-disable no-console */
+/* eslint-disable import/no-extraneous-dependencies */
+const chalk = require('chalk')
+const rimraf = require('rimraf')
+const os = require('os')
+const path = require('path')
 
-const DIR = path.join(os.tmpdir(), 'jest_puppeteer_global_setup');
+const dir = path.join(os.tmpdir(), 'jest_puppeteer_global_setup')
+
 module.exports = async () => {
-  // close the browser instance
+  console.log(chalk.green('Teardown Puppeteer'))
   // eslint-disable-next-line no-underscore-dangle
-  await global.__BROWSER_GLOBAL__.close();
-
-  // clean-up the wsEndpoint file
-  rimraf.sync(DIR);
-};
+  await global.__BROWSER_GLOBAL__.close()
+  rimraf.sync(dir)
+}

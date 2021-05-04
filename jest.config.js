@@ -1,5 +1,5 @@
 module.exports = {
-  preset: 'jest-puppeteer',
+  preset: './jest/preset.js',
   globals: {
     'ts-jest': {
       tsConfig: '<rootDir>/tsconfig.jest.json',

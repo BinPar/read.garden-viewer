@@ -1,6 +1,5 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
 import * as puppeteer from 'puppeteer';
-
-const timeout = 5000;
 
 describe(
   'Google Page',
@@ -11,11 +10,11 @@ describe(
     const browser = globalAny.__BROWSER__;
     beforeAll(async () => {
       page = await browser.newPage();
-      await page.goto('https://google.com');
-    }, timeout);
+      await page.goto('http://localhost:3000/');
+    });    
     it('should load without error', async () => {
       const text = await page.evaluate(() => document.body.textContent);
-      expect(text).toContain('google');
+      expect(text).toContain('Viewer');
     });
   },
 );
