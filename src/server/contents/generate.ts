@@ -5,12 +5,16 @@ import books from './data/books';
 import download from './download';
 import oneFileToPath from './oneFileToPath';
 
+import { getConfig } from '../../config';
+
 const generate = async (destDir?: string): Promise<void> => {
   const booksPath = destDir || path.join(__dirname, '../../../web/books');
   await ensureDir(booksPath);
   const booksDownloads = books.map(
     async (book): Promise<void> => {
-      const remoteURI = `https://cdn.emp.binpar.cloud/books/${book}/${book}.bp`;
+      const remoteURI = `https://${
+        getConfig().cdnDomain
+      }/books/${book}/${book}.bp`;
       const bookPath = `${booksPath}/${book}`;
       const bookFile = `${booksPath}/${book}/${book}.bp`;
       await ensureDir(bookPath);
