@@ -31,6 +31,12 @@ The viewer consists of three different files:
 - Execute `npm run text` to check that everything works
 - Navigate to `http://localhost:3000`
 
+## Testing with Puppeteer
+
+As the project requires end to end testing we do use Puppeteer to ejecute our testings.
+
+You can check the [jest-puppeteer documentation](https://github.com/smooth-code/jest-puppeteer/tree/master#readme).
+
 ## Main Viewer Features
 
 We divide the features in three different groups:
