@@ -1,7 +1,7 @@
 const books: string[] = [
   'acuario', // EPUB Flow
   'autobiografia-postuma', // EPUB Fixed
-  'curso-de-derecho-constitucional', // PDF
+  'sistema-respiratorio', // PDF
 ];
 
 export default books;
