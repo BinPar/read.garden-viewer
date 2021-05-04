@@ -34,6 +34,7 @@ const extractJsonIndex = async (
       jsonIndexLength,
       jsonIndexPosition,
     );
+    // fastEncrypt
     return {
       jsonIndex: JSON.parse(Base64.fromBase64(base64JsonIndex)) as JSONIndex,
       jsonIndexLength,
