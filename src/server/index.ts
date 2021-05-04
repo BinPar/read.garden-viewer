@@ -10,7 +10,7 @@ const params: liveServer.LiveServerParams = {
   root: './web',
   open: false,
   wait: 0,
-  ignore: '/src,/dist',
+  ignore: '/src,/dist,/tests',
   logLevel: 2,
   file: 'index.html',
 };
