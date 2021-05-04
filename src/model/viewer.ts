@@ -46,10 +46,6 @@ export interface Zoom {
    * Scale steps for range input change and controls
    */
   steps: number[];
-  /**
-   * Current zoom value
-   */
-  current: number | FitMode.Height | FitMode.Width
 }
 
 export interface FontSize {

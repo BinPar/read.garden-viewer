@@ -1,5 +1,5 @@
 import { Config } from './config';
-import { FitMode, Margin } from './viewer';
+import { FitMode, Margin, Zoom } from './viewer';
 
 export interface State {
   margin: Margin;
@@ -25,4 +25,36 @@ export enum Actions {
   ToggleReadMode = 'toggleReadMode',
 }
 
-export type Action = | { type: Actions.ToggleReadMode };
+export type Action = { type: Actions.ToggleReadMode };
+
+export interface GlobalState {
+  title: string;
+}
+
+export interface FixedState {
+  layout: 'fixed';
+  zoom: Zoom;
+  loadedPages: string[];
+}
+
+export interface FlowState {
+  layout: 'flow';
+  fontSize: number;
+}
+
+export interface PaginatedState {
+  scrollMode: 'fixed';
+}
+
+export interface ScrolledState {
+  scrollMode: 'vertical' | 'horizontal';
+  scrollPosition: number;
+  maxScroll: number;
+  pageSeparations: boolean;
+}
+
+export type AppState = GlobalState &
+  (
+    | (FixedState & (PaginatedState | ScrolledState))
+    | (FlowState & ScrolledState)
+  );
