@@ -11,6 +11,7 @@
     "server-dev": "NODE_ENV=development ts-node-dev --debug --respawn ./src/server/index.ts",
     "start": "node ./dist/server/index.js",
     "test": "jest --runInBand",
+    "test-firefox": "FIREFOX=true jest --runInBand",
     "test-ui": "HEADLESS=false jest --runInBand",
     "test-dev": "NODE_ENV=development npx jest --watchAll --runInBand"
   },
