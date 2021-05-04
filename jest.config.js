@@ -5,9 +5,9 @@ module.exports = {
       tsConfig: '<rootDir>/tsconfig.jest.json',
     },
   },
-  globalSetup: './jest/setup.js',
-  globalTeardown: './jest/teardown.js',
-  testEnvironment: './jest/puppeteer_environment.js',
+  globalSetup: 'jest-environment-puppeteer/setup',
+  globalTeardown: 'jest-environment-puppeteer/teardown',
+  testEnvironment: 'jest-environment-puppeteer',
   testMatch: ['**/tests/**/*.[jt]s?(x)', '**/?(*.)+(spec|test).[jt]s?(x)'],
   transform: {
     '^.+\\.tsx?$': 'ts-jest',
