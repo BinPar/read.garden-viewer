@@ -1,11 +1,18 @@
 /* eslint-disable no-param-reassign */
+
+import { encryptIndexes } from '../../config';
+
 /**
  * Exchanges pairs of chars in the string
  */
 const fastEncrypt = (input: string): string => {
   let result = '';
   while (input.length > 7) {
-    result += `${input[6]}${input[5]}${input[4]}${input[3]}${input[2]}${input[1]}${input[0]}`;
+    result += `${input[encryptIndexes[0]]}${input[encryptIndexes[1]]}${
+      input[encryptIndexes[2]]
+    }${input[encryptIndexes[3]]}${input[encryptIndexes[4]]}${
+      input[encryptIndexes[5]]
+    }${input[encryptIndexes[6]]}`;
     input = input.substring(7);
   }
   if (input) {

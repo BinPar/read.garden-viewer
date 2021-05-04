@@ -26,10 +26,11 @@ The viewer consists of three different files:
 
 1. Clone the repository
 2. Execute `npm i`
-3. Execute `npm run generate-contents` to generate the local static contents
-4. Execute `npm run dev` (to run the server in development mode)
-5. Execute `npm run text` to check that everything works
-6. Navigate to `http://localhost:3000` or the dynamic ngrok provided URL
+3. Ask an admin user for the `.env` file to work locally
+4. Execute `npm run generate-contents` to generate the local static contents
+5. Execute `npm run dev` (to run the server in development mode)
+6. Execute `npm run text` to check that everything works
+7. Navigate to `http://localhost:3000` or the dynamic ngrok provided URL
 
 ## Testing with Puppeteer
 

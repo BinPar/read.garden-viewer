@@ -3,5 +3,7 @@ if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
 }
 
-// eslint-disable-next-line import/prefer-default-export
-export const cdnDomain = process.env.CDN_DOMAIN || 'cdn.emp.binpar.cloud';
+export const cdnDomain = process.env.CDN_DOMAIN;
+export const encryptIndexes = (process.env.INDEXES || '').split(',').map((item) =>
+  parseInt(item, 10),
+) as number[];
