@@ -1,24 +1,28 @@
-// puppeteer_environment.js
+/* eslint-disable no-console */
+/* eslint-disable import/no-extraneous-dependencies */
+const chalk = require('chalk');
+const NodeEnvironment = require('jest-environment-node');
+const puppeteer = require('puppeteer');
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
-// eslint-disable-next-line import/no-extraneous-dependencies
-const puppeteer = require('puppeteer');
-// eslint-disable-next-line import/no-extraneous-dependencies
-const NodeEnvironment = require('jest-environment-node');
 
 const dir = path.join(os.tmpdir(), 'jest_puppeteer_global_setup');
 
 class PuppeteerEnvironment extends NodeEnvironment {
+  // eslint-disable-next-line @typescript-eslint/no-useless-constructor
+  constructor(config) {
+    super(config);
+  }
+
   async setup() {
+    console.log(chalk.yellow('Setup Test Environment.'));
     await super.setup();
-    // get the wsEndpoint
+    console.log(chalk.yellow('Setup End Point.'));
     const wsEndpoint = fs.readFileSync(path.join(dir, 'wsEndpoint'), 'utf8');
     if (!wsEndpoint) {
       throw new Error('wsEndpoint not found');
     }
-
-    // connect to puppeteer
     // eslint-disable-next-line no-underscore-dangle
     this.global.__BROWSER__ = await puppeteer.connect({
       browserWSEndpoint: wsEndpoint,
@@ -26,6 +30,7 @@ class PuppeteerEnvironment extends NodeEnvironment {
   }
 
   async teardown() {
+    console.log(chalk.yellow('Teardown Test Environment.'));
     await super.teardown();
   }
 
