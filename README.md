@@ -22,6 +22,15 @@ The viewer consists of three different files:
 - `read.garden-viewer.js`: the minified JavaScript viewer bundle
 - `read.garden-viewer.d.ts`: the type definitions in case you need to use in in a TypeScript project
 
+## How to start the project
+
+- Clone the repository
+- Execute `npm i`
+- Execute `npm run generate-contents` to generate the local static contents
+- Execute `npm run dev` (to run the server in development mode)
+- Execute `npm run text` to check that everything works
+- Navigate to `http://localhost:3000`
+
 ## Main Viewer Features
 
 We divide the features in three different groups:
