@@ -11,6 +11,7 @@
     "server-dev": "NODE_ENV=development ts-node-dev --debug --respawn ./src/server/index.ts",
     "start": "node ./dist/server/index.js",
     "test": "jest --runInBand",
+    "test-ui": "HEADLESS=false jest --runInBand",
     "test-dev": "NODE_ENV=development npx jest --watchAll --runInBand"
   },
   "repository": {
@@ -47,6 +48,7 @@
     "live-server": "^1.2.1",
     "mkdirp": "^1.0.4",
     "ngrok": "^4.0.1",
+    "node-fetch": "^2.6.1",
     "nodemon": "^2.0.7",
     "puppeteer": "^8.0.0",
     "rimraf": "^3.0.2",
