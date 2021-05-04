@@ -1,9 +1,9 @@
 import { Config } from '../model/config';
 
-import { cdnDomain } from './env';
+import defaultConfig from './default';
 
 let config: Config = {
-  cdnDomain: cdnDomain || 'cdn.emp.binpar.cloud',
+  ...defaultConfig,
 };
 
 console.log('Initial default config: ', JSON.stringify(config, null, 2));

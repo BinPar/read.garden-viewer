@@ -1,5 +1,10 @@
 module.exports = {
   preset: 'jest-puppeteer',
+  globals: {
+    'ts-jest': {
+      tsConfig: '<rootDir>/tsconfig.jest.json',
+    },
+  },
   globalSetup: './jest/setup.js',
   globalTeardown: './jest/teardown.js',
   testEnvironment: './jest/puppeteer_environment.js',

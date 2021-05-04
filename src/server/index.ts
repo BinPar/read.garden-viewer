@@ -1,5 +1,4 @@
 /* eslint-disable no-console */
-/* eslint-disable import/no-extraneous-dependencies */
 import log from 'loglevel';
 import * as liveServer from 'live-server';
 import * as ngrok from 'ngrok';

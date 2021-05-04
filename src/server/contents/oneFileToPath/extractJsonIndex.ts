@@ -1,18 +1,23 @@
 import { Base64 } from 'js-base64';
 
-import { JSONIndex, ExtractedJSONIndexInfo } from './types';
+import { JSONIndex, ExtractedJSONIndexInfo } from '../../../model/oneFileToPath';
 
 import { stat, open, readFileBytes } from './fileHandlers';
 
 const JSON_INDEX_BYTES = 32;
 
+/**
+ * Extracts json index from compressed file
+ * @param pathToFile Path to compressed file
+ * @returns Extracted JSON Index info
+ */
 const extractJsonIndex = async (
-  pathToOneFile: string,
+  pathToFile: string,
 ): Promise<ExtractedJSONIndexInfo> => {
-  const fileStats = await stat(pathToOneFile);
+  const fileStats = await stat(pathToFile);
   if (fileStats && fileStats.size) {
     const { size } = fileStats;
-    const fd = await open(pathToOneFile, 'r');
+    const fd = await open(pathToFile, 'r');
     const base64JsonIndexPosition = await readFileBytes(
       fd,
       JSON_INDEX_BYTES,

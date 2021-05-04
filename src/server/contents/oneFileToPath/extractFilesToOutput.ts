@@ -2,10 +2,16 @@
 import * as path from 'path';
 import { ensureDir, writeFile } from '@a2r/fs';
 
-import { ExtractedJSONIndexInfo } from './types';
+import { ExtractedJSONIndexInfo } from '../../../model/oneFileToPath';
 
 import { open, readFileBytes } from './fileHandlers';
 
+/**
+ * Extracts contents from single compressed files to provided path
+ * @param pathToFile Path to compressed file
+ * @param jsonIndexInfo JSON Index info (containing bytes positions information)
+ * @param outputPath Path to write contents to
+ */
 const extractFilesToOutput = async (
   pathToFile: string,
   jsonIndexInfo: ExtractedJSONIndexInfo,

@@ -1,16 +1,25 @@
-export interface JSONIndex {
+/**
+ * JSON Index paths info
+ */
+ export interface JSONIndex {
   [relativePath: string]: {
     start: number;
     length: number;
   };
 }
 
+/**
+ * Extracted JSON Index info
+ */
 export interface ExtractedJSONIndexInfo {
   jsonIndex: JSONIndex;
   jsonIndexStartByte: number;
   jsonIndexLength: number;
 }
 
+/**
+ * Buffer encoding
+ */
 export type BufferEncoding =
   | 'base64'
   | 'ascii'
