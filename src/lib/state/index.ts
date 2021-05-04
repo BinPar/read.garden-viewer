@@ -14,6 +14,6 @@ export const getState = (): StateWithConfig => ({
   config: getConfig(),
 });
 
-export const setState = (newState: Partial<State>): void => {
+export const updateState = (newState: Partial<State>): void => {
   state = merge(state, newState);
 };
