@@ -6,6 +6,10 @@ import { FitMode, Margin } from './viewerSettings';
  */
 export interface GlobalState {
   /**
+   * Node of the viewer
+   */
+  readGardenViewerNode?: HTMLDivElement;
+  /**
    * Viewer config
    */
   config: Config;

@@ -2,6 +2,7 @@ import { DefaultConfig } from '../model/config';
 import { FitMode, ViewerMode } from '../model/viewerSettings';
 
 const defaultConfig: DefaultConfig = {
+  debugViewerSafeArea: false,
   initialFixedMode: ViewerMode.WithScroll,
   initialFitMode: FitMode.Height,
   initialReadMode: true,
