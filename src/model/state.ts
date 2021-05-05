@@ -77,6 +77,11 @@ export interface FixedState {
   // loadedPages: string[];
 }
 
+/**
+ * Available text align modes
+ */
+ export type TextAlignModes = 'start' | 'justify' | null;
+
 export interface FlowState {
   layout: 'flow';
   /**
@@ -94,7 +99,7 @@ export interface FlowState {
   /**
    * Current text align. `null` means auto (content's original align)
    */
-  textAlign: 'start' | 'justify' | null;
+  textAlign: TextAlignModes;
   /**
    * Space between columns (pixels)
    */
@@ -133,8 +138,13 @@ export interface PaginatedState {
   doublePage: boolean;
 }
 
+/**
+ * Available scroll modes
+ */
+ export type ScrollModes = 'vertical' | 'horizontal';
+
 export interface ScrolledState {
-  scrollMode: 'vertical' | 'horizontal';
+  scrollMode: ScrollModes;
   /**
    * Current left scroll
    */

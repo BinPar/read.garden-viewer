@@ -7,8 +7,3 @@ export interface Action {
    */
   type: string;
 }
-
-/**
- * Available scroll modes
- */
-export type ScrollModes = 'vertical' | 'horizontal';

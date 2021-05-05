@@ -1,4 +1,5 @@
-import { Action, ScrollModes } from "./common";
+import { ScrollModes } from "../state";
+import { Action } from "./common";
 
 /**
  * Names of the action types for global actions
