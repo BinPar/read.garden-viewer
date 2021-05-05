@@ -3,7 +3,11 @@ import { Action, ScrollModes } from "./common";
 /**
  * Names of the action types for global actions
  */
-export type GlobalActionTypes = 'setScrollMode' | 'setDarkMode';
+export enum GlobalActionTypes {
+  SetScrollMode = 'setScrollMode',
+  SetDarkMode = 'setDarkMode',
+  NavigateToPage = 'navigateToPage',
+}
 
 /**
  * Abstract interface for all Global Actions
@@ -16,7 +20,7 @@ interface GlobalAction extends Action {
  * Sets the horizontal or vertical mode
  */
  export interface SetScrollMode extends GlobalAction {
-  type: 'setScrollMode';
+  type: GlobalActionTypes.SetScrollMode;
   /**
    * Scroll mode to set
    */
@@ -27,7 +31,7 @@ interface GlobalAction extends Action {
  * Sets the Dark or Light Mode
  */
 export interface SetDarkMode extends GlobalAction {
-  type: 'setDarkMode';
+  type: GlobalActionTypes.SetDarkMode;
   /**
    * True for dark mode
    */
@@ -35,6 +39,17 @@ export interface SetDarkMode extends GlobalAction {
 }
 
 /**
+ * Navigates to any specific page
+ */
+export interface NavigateToPage extends GlobalAction {
+  type: GlobalActionTypes.NavigateToPage;
+  /**
+   * Page label of the page that we want to go to
+   */
+  pageLabel: string;
+}
+
+/**
  * Actions that affect Fixed and Flow Layout
  */
-export type GlobalActions = SetScrollMode;
+export type GlobalActions = SetScrollMode | NavigateToPage;

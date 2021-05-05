@@ -8,6 +8,10 @@ import { GlobalActions, GlobalActionTypes } from "./global";
 export type Actions = GlobalActions | FixedActions | FlowActions;
 
 /**
- * All the action types that are available for the viewer
+ * All the action names are available for the viewer
  */
-export type ActionTypes = GlobalActionTypes | FixedActionTypes | FlowActionTypes;
+export const actionTypeNames = {
+  global: Object.values(GlobalActionTypes),
+  flow: Object.values(FlowActionTypes),
+  fixed: Object.values(FixedActionTypes),
+};
