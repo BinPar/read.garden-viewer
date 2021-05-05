@@ -12,29 +12,29 @@ const createBasicDOMElements = (state: State): void => {
   // #endregion Main node
 
   // #region Content Wrapper and child nodes
-  const contentWrapper = document.createElement('div');
-  contentWrapper.classList.add('rg-content-wrapper');
-  readGardenViewerNode.appendChild(contentWrapper);
+  const contentWrapperNode = document.createElement('div');
+  contentWrapperNode.classList.add('rg-content-wrapper');
+  readGardenViewerNode.appendChild(contentWrapperNode);
 
-  const totalColumnWidthCalculator = document.createElement('div');
-  totalColumnWidthCalculator.classList.add('rg-total-width-calculator');
-  contentWrapper.appendChild(totalColumnWidthCalculator);
+  const totalWidthCalculatorNode = document.createElement('div');
+  totalWidthCalculatorNode.classList.add('rg-total-width-calculator');
+  contentWrapperNode.appendChild(totalWidthCalculatorNode);
 
   const backgroundCleaner = document.createElement('div');
   backgroundCleaner.classList.add('rg-bg-cleaner');
-  contentWrapper.appendChild(backgroundCleaner);
+  contentWrapperNode.appendChild(backgroundCleaner);
 
   const additionalPage = document.createElement('div');
   additionalPage.classList.add('rg-additional-page');
-  contentWrapper.appendChild(additionalPage.cloneNode(true));
+  contentWrapperNode.appendChild(additionalPage.cloneNode(true));
 
-  const contentPlaceholder = document.createElement('div');
-  contentWrapper.appendChild(contentPlaceholder);
+  const contentPlaceholderNode = document.createElement('div');
+  contentWrapperNode.appendChild(contentPlaceholderNode);
 
-  const endOfChapterCalculator = document.createElement('div');
-  endOfChapterCalculator.classList.add('rg-end-of-chapter-calculator');
-  endOfChapterCalculator.dataset.page = '-';
-  contentWrapper.appendChild(endOfChapterCalculator);
+  const endOfChapterCalculatorNode = document.createElement('div');
+  endOfChapterCalculatorNode.classList.add('rg-end-of-chapter-calculator');
+  endOfChapterCalculatorNode.dataset.page = '-';
+  contentWrapperNode.appendChild(endOfChapterCalculatorNode);
 
   for (let i = 0; i < endingAdditionalPages; i++) {
     const clone = additionalPage.cloneNode(true) as HTMLDivElement;
@@ -42,33 +42,44 @@ const createBasicDOMElements = (state: State): void => {
       clone.classList.add('rg-real-end-of-chapter');
       clone.textContent = 'realEndOfChapter';
     }
-    contentWrapper.appendChild(clone);
+    contentWrapperNode.appendChild(clone);
   }
   // #endregion Content Wrapper and child nodes
 
   // #region Content Wrapper Siblings
-  const pagesLabelsElement = document.createElement('div');
-  pagesLabelsElement.classList.add('rg-pages-labels');
-  readGardenViewerNode.appendChild(pagesLabelsElement);
+  const pagesLabelsNode = document.createElement('div');
+  pagesLabelsNode.classList.add('rg-pages-labels');
+  readGardenViewerNode.appendChild(pagesLabelsNode);
 
-  const selectionHighlights = document.createElement('div');
-  selectionHighlights.classList.add('rg-highlights', 'rg-selection');
-  readGardenViewerNode.appendChild(selectionHighlights);
+  const selectionHighlightsNode = document.createElement('div');
+  selectionHighlightsNode.classList.add('rg-highlights', 'rg-selection');
+  readGardenViewerNode.appendChild(selectionHighlightsNode);
 
-  const selectionSelectors = document.createElement('div');
-  selectionSelectors.classList.add('rg-highlights', 'rg-selectors');
-  readGardenViewerNode.appendChild(selectionSelectors);
+  const selectionSelectorsNode = document.createElement('div');
+  selectionSelectorsNode.classList.add('rg-highlights', 'rg-selectors');
+  readGardenViewerNode.appendChild(selectionSelectorsNode);
 
-  const searchTermsHighlights = document.createElement('div');
-  searchTermsHighlights.classList.add('rg-highlights', 'rg-search');
-  readGardenViewerNode.appendChild(searchTermsHighlights);
+  const searchTermsHighlightsNode = document.createElement('div');
+  searchTermsHighlightsNode.classList.add('rg-highlights', 'rg-search');
+  readGardenViewerNode.appendChild(searchTermsHighlightsNode);
   // #endregion Content Wrapper Siblings
 
   setCSSProperty(
     'debug-viewer-safe-area',
     `${state.debugViewerSafeArea ? 1 : 0}`,
   );
-  updateState({ basicDOMElementsCreated: true, readGardenViewerNode });
+  updateState({
+    basicDOMElementsCreated: true,
+    readGardenViewerNode,
+    contentWrapperNode,
+    totalWidthCalculatorNode,
+    contentPlaceholderNode,
+    endOfChapterCalculatorNode,
+    pagesLabelsNode,
+    selectionHighlightsNode,
+    selectionSelectorsNode,
+    searchTermsHighlightsNode,
+  });
 };
 
 export default createBasicDOMElements;

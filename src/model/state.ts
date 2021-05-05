@@ -6,9 +6,41 @@ import { FitMode, Margin } from './viewerSettings';
  */
 export interface GlobalState {
   /**
-   * Main viewer node
+   * Main viewer DOM node
    */
   readGardenViewerNode?: HTMLDivElement;
+  /**
+   * Content wrapper DOM node
+   */
+  contentWrapperNode?: HTMLDivElement;
+  /**
+   * Total content width calculator DOM node 
+   */
+  totalWidthCalculatorNode?: HTMLDivElement;
+  /**
+   * Content placeholder DOM node
+   */
+  contentPlaceholderNode?: HTMLDivElement;
+  /**
+   * End of chapter calculator DOM node
+   */
+  endOfChapterCalculatorNode?: HTMLDivElement;
+  /**
+   * Pages labels container DOM node
+   */
+  pagesLabelsNode?: HTMLDivElement;
+  /**
+   * Selection highlights layer DOM node
+   */
+  selectionHighlightsNode?: HTMLDivElement;
+  /**
+   * Selection selectors layer DOM node
+   */
+  selectionSelectorsNode?: HTMLDivElement;
+  /**
+   * Search terms highlights layer DOM node
+   */
+  searchTermsHighlightsNode?: HTMLDivElement;
   /**
    * Viewer config
    */
