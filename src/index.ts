@@ -1,4 +1,5 @@
 import log from 'loglevel';
+import viewer from './viewer';
 
 log.setLevel('info');
-log.info('Initial Load Ready...');
+(window as any).readGardenViewer = viewer;

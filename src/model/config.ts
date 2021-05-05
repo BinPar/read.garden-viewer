@@ -1,18 +1,21 @@
 import { FitMode, FontSize, Margin, ViewerMode, Zoom } from './viewer';
 
 /*
-
 SCOPES:
-
 - [GLobal]: all viewers.
 - [Fixed]: fixed contents viewer. Scrolled and Paginated.
 - [Scrolled]: Scrolled viewer.
 - [Paginated]: Paginated viewer.
 - [Flow]: Flow viewer.
-
 */
 
+export type LayoutType = 'fixed' | 'flow';
+
 export interface Config {
+  /**
+   * Layout type of the content to display
+   */
+  layoutType: LayoutType;
   /**
    * Will be the viewer mode when first displaying a content fixed book (PDF, EPUB 3 Fixed, etc)
    * and got no viewer mode set in user settings
@@ -92,3 +95,5 @@ export interface Config {
    */
   maxCharsPerColumn: number;
 }
+
+export type InitialConfig = Partial<Config> & Required<Pick<Config, 'layoutType'>>;

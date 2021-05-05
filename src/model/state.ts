@@ -14,6 +14,10 @@ export interface InitialState {
 
 export interface GlobalState extends InitialState {
   /**
+   * Needs a complete reset of the view
+   */
+  layoutResetRequired?: boolean;
+  /**
    * Page title
    */
   title: string;
@@ -83,6 +87,10 @@ export interface FixedState {
  export type TextAlignModes = 'start' | 'justify' | null;
 
 export interface FlowState {
+  /**
+   * Needs to recalculate paginations
+   */
+  invalidatedPagination?: boolean;
   layout: 'flow';
   /**
    * Read mode

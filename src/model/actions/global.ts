@@ -53,4 +53,4 @@ export interface NavigateToPage extends GlobalAction {
 /**
  * Actions that affect Fixed and Flow Layout
  */
-export type GlobalActions = SetScrollMode | NavigateToPage;
+export type GlobalActions = SetScrollMode | SetDarkMode | NavigateToPage;
