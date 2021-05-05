@@ -36,6 +36,8 @@ export const initializeState = (initialConfig: InitialConfig): void => {
   const globalState: GlobalState = {
     ...defaultGlobal,
     config,
+    debugViewerSafeArea: false,
+    basicDOMElementsCreated: false,
     margin: {
       ...defaultInitialMargins,
       ...(initialMargins || {}),
