@@ -24,7 +24,6 @@ const defaultConfig: Config = {
       3.5,
       4,
     ],
-    current: FitMode.Width,
   },
   loadedContentsNumber: 5,
   fontSize: {
