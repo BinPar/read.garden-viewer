@@ -11,17 +11,10 @@ export enum GlobalActionTypes {
 }
 
 /**
- * Abstract interface for all Global Actions
- */
-interface GlobalAction extends Action {
-  type: GlobalActionTypes;
-}
-
-/**
  * Sets the horizontal or vertical mode
  */
- export interface SetScrollMode extends GlobalAction {
-  type: GlobalActionTypes.SetScrollMode;
+ export interface SetScrollMode extends Action {
+  type: 'setScrollMode';
   /**
    * Scroll mode to set
    */
@@ -31,8 +24,8 @@ interface GlobalAction extends Action {
 /**
  * Sets the Dark or Light Mode
  */
-export interface SetDarkMode extends GlobalAction {
-  type: GlobalActionTypes.SetDarkMode;
+export interface SetDarkMode extends Action {
+  type: 'setDarkMode';
   /**
    * True for dark mode
    */
@@ -42,8 +35,8 @@ export interface SetDarkMode extends GlobalAction {
 /**
  * Navigates to any specific page
  */
-export interface NavigateToPage extends GlobalAction {
-  type: GlobalActionTypes.NavigateToPage;
+export interface NavigateToPage extends Action {
+  type: 'navigateToPage';
   /**
    * Page label of the page that we want to go to
    */

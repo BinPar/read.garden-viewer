@@ -1,22 +1,32 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import 'expect-puppeteer';
+import { ViewerFunction } from '../../src/model/viewerFunction';
+import testing from '../../src/config/testing';
 import { APIInterface } from '../../src/model/apiInterface';
-import { InitialConfig } from '../../src/model/config';
+import { Actions } from '../../src/model/actions';
+
+declare global {
+  interface Window {
+    readGardenViewer: ViewerFunction;
+    api: APIInterface;
+  }
+}
 
 describe('General', () => {
   it('should load without error', async () => {
-    await page.goto('http://localhost:3000/');
-    const title = await page.evaluate(() => document.title);
-    expect(title).toContain('Viewer');
-    const state = await page.evaluate(() => {
-      type ViewerContainer = {
-        readGardenViewer: (config: InitialConfig) => APIInterface;
-      };
-      const viewerFunction = ((window as unknown) as ViewerContainer)
-        .readGardenViewer;
-      const api = viewerFunction({ layoutType: 'flow' });
-      return api.state;
+    await page.goto(testing.baseURL);
+    let state = await page.evaluate(() => {
+      window.api = window.readGardenViewer({ layoutType: 'flow' });
+      return window.api.state;
     });
-    expect(state).toBeDefined();
+    state = await page.evaluate(() => {
+      const action: Actions = {
+        type: 'setScrollMode',
+        scrollMode: 'vertical',
+      };
+      window.api.dispatch(action);
+      return window.api.state;
+    });
+    expect(state.scrollMode).toBe('vertical');
   });
 });

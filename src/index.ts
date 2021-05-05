@@ -1,5 +1,13 @@
 import log from 'loglevel';
+import { ViewerFunction } from './model/viewerFunction';
 import viewer from './viewer';
 
 log.setLevel('info');
-(window as any).readGardenViewer = viewer;
+
+declare global {
+  interface Window {
+    readGardenViewer: ViewerFunction;
+  }
+}
+
+window.readGardenViewer = viewer;

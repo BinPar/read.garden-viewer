@@ -1,7 +1,7 @@
-import { Actions } from "./actions";
+import { Action } from "./actions/common";
 import { State } from "./state";
 
-export type DispatchAPIAction = (action: Actions) => Promise<void>;
+export type DispatchAPIAction = (action: Action) => Promise<void>;
 
 export interface APIInterface {
   dispatch: DispatchAPIAction;

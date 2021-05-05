@@ -1,5 +1,3 @@
-import * as merge from 'deepmerge';
-
 import { FixedState, GlobalState, State } from '../../model/state';
 import { setConfig } from '../../config';
 import { InitialConfig } from '../../model/config';
@@ -84,5 +82,8 @@ export const initializeState = (initialConfig: InitialConfig): void => {
 export const getState = (): State => state;
 
 export const updateState = (newState: Partial<State>): void => {
-  state = merge(state, newState);
+  const updatableState = state as any;
+  Object.keys(newState).forEach(key => {
+    updatableState[key] = (newState as any)[key];
+  });
 };
