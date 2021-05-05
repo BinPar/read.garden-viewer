@@ -45,10 +45,15 @@ export interface Config {
    */
   fontSize: FontSize;
   /**
-   * Viewer margins
+   * Viewer margins during `read mode`
    * @scope Global
    */
-  margin?: Margin;
+  readModeMargin?: Margin;
+  /**
+   * Viewer margins during `UI mode`
+   * @scope Global
+   */
+  uiModeMargin?: Margin;
   /**
    * [Scrolled] Loaded contents number. Viewer will always try to keep this number of contents (pages)
    * loaded. If number of visible contents (pages) is bigger than this number, this number will
