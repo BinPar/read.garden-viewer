@@ -1,11 +1,8 @@
-import { Action, Actions, State } from '../../model/state';
+import { Actions } from '../../model/actions';
+import { State } from '../../model/state';
 
-const reducer = async (state: State, action: Action): Promise<Partial<State>> => {
+const reducer = async (state: State, action: Actions): Promise<Partial<State>> => {
   switch (action.type) {
-    case Actions.ToggleReadMode:
-      return {
-        readMode: !state.readMode,
-      };
     default:
       return state;
   }

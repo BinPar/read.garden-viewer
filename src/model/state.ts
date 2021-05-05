@@ -21,12 +21,6 @@ export interface StateWithConfig extends State {
   config: Config;
 }
 
-export enum Actions {
-  ToggleReadMode = 'toggleReadMode',
-}
-
-export type Action = { type: Actions.ToggleReadMode };
-
 export interface GlobalState {
   title: string;
 }
