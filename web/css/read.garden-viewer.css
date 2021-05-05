@@ -3,7 +3,7 @@
   --debug-viewer-safe-area: 0;
   --safe-area-border-width: calc(1px * var(--debug-viewer-safe-area));
   --animation-speed: 0;
-  --animation-speed-value: calc(1s * var(var(--animation-speed)));
+  --animation-speed-value: calc(1s * var(--animation-speed));
   --viewer-margin-top: 100vh;
   --column-count: 2;
   --column-gap: 0px;
@@ -21,19 +21,14 @@
 }
 
 body {
-  scroll-snap-align: none;
   height: 100vh;
   margin: 0;
-  scrollbar-width: none;
   padding: 0;
   overflow-y: hidden;
   overflow-x: scroll;
-  scroll-snap-type: var(--snap-type);
-  font-size: var(--font-size);
-  line-height: var(--line-height);
   background-color: #fff;
   overscroll-behavior-y: contain;
-  text-align: var(--textAlign, start);
+  scrollbar-width: none;
 }
 
 div#rg-viewer {
@@ -49,6 +44,10 @@ div#rg-viewer {
     sepia(var(--sepiaViewerColor, 0)) invert(var(--invertViewerColor, 0));
   background-color: white;
   margin-top: var(--viewer-margin-top);
+  scroll-snap-align: none;
+  scroll-snap-type: var(--snap-type);
+  font-size: var(--font-size);
+  line-height: var(--line-height);
 }
 
 div.rg-content-wrapper {
