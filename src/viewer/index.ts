@@ -8,17 +8,18 @@ import { LoadNewContent } from '../model/events';
 
 const viewer: ViewerFunction = (config) => {
   initializeState(config);
+  const state = getState();
   const api: APIInterface = {
     dispatch,
-    state: getState(),
+    state,
   };
   createBasicDOMElements(api.state);
   const loadNewContent: LoadNewContent = {
     type: 'loadNewContent',
     contentSlug: config.contentSlug,
     label: config.startPageLabel,
-  };
-  dispatch(loadNewContent);
+  };  
+  state.config.eventHandler(loadNewContent);
   log.info('Viewer Initialized');
   return api;
 };
