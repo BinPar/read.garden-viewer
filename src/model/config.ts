@@ -11,32 +11,33 @@ SCOPES:
 
 export type LayoutType = 'fixed' | 'flow';
 
-export interface Config {
-  /**
-   * Layout type of the content to display
-   */
-  layoutType: LayoutType;
+export interface DefaultConfig {
   /**
    * Will be the viewer mode when first displaying a content fixed book (PDF, EPUB 3 Fixed, etc)
    * and got no viewer mode set in user settings
    * @scope Fixed
    */
-  defaultFixedMode: ViewerMode.WithScroll | ViewerMode.Paginated;
+  initialFixedMode: ViewerMode.WithScroll | ViewerMode.Paginated;
   /**
    * Initial fit mode. Will be used at viewer first load.
    * @scope Fixed
    */
-  initialFitMode?: FitMode;
+  initialFitMode: FitMode;
   /**
    * Initial scale. Will be ignored if `initialFitMode` is set. Will be used at viewer first load.
    * @scope Fixed
    */
-  initialScale?: number;
+  initialScale: number;
   /**
    * Initial font size (if it's no defined user settings)
    * @scope Flow
    */
   initialFontSize: number;
+  /**
+   * Initial read mode for first render
+   * @scope Global
+   */
+  initialReadMode: boolean;
   /**
    * Zoom config
    * @scope Fixed
@@ -51,12 +52,12 @@ export interface Config {
    * Viewer margins during `read mode`
    * @scope Global
    */
-  readModeMargin?: Margin;
+  readModeMargin: Margin;
   /**
    * Viewer margins during `UI mode`
    * @scope Global
    */
-  uiModeMargin?: Margin;
+  uiModeMargin: Margin;
   /**
    * [Scrolled] Loaded contents number. Viewer will always try to keep this number of contents (pages)
    * loaded. If number of visible contents (pages) is bigger than this number, this number will
@@ -94,6 +95,17 @@ export interface Config {
    * @scope Flow
    */
   maxCharsPerColumn: number;
+  /**
+   * If `true`, viewer will display a separation between pages
+   */
+  showPageSeparation: boolean;
+}
+
+export interface Config extends DefaultConfig {
+  /**
+   * Layout type of the content to display
+   */
+  layoutType: LayoutType;
 }
 
 export type InitialConfig = Partial<Config> & Required<Pick<Config, 'layoutType'>>;

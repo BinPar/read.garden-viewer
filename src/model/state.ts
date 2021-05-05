@@ -1,18 +1,18 @@
 import { Config } from './config';
 import { FitMode, Margin } from './viewer';
 
-export interface InitialState {
+/**
+ * Global state
+ */
+export interface GlobalState {
   /**
    * Viewer config
    */
   config: Config;
   /**
-   * Viewport margins 
+   * Viewport margins
    */
   margin: Margin;
-}
-
-export interface GlobalState extends InitialState {
   /**
    * Needs a complete reset of the view
    */
@@ -39,8 +39,35 @@ export interface GlobalState extends InitialState {
   searchTerms: string[];
 }
 
+/**
+ * Default global state
+ */
+export type DefaultGlobalState = Partial<GlobalState> &
+  Required<Pick<GlobalState, 'scale'>>;
+
+/**
+ * Layout types
+ */
+export enum LayoutTypes {
+  Fixed = 'fixed',
+  Flow = 'flow',
+}
+
+/**
+ * Available text align modes
+ */
+export type TextAlignModes = 'start' | 'justify' | null;
+
+/**
+ * Available scroll modes
+ */
+export type ScrollModes = 'vertical' | 'horizontal';
+
 export interface FixedState {
-  layout: 'fixed';
+  /**
+   * Layout type
+   */
+  layout: LayoutTypes.Fixed;
   /**
    * Fit mode (width/height/none)
    */
@@ -81,17 +108,15 @@ export interface FixedState {
   // loadedPages: string[];
 }
 
-/**
- * Available text align modes
- */
- export type TextAlignModes = 'start' | 'justify' | null;
-
 export interface FlowState {
   /**
-   * Needs to recalculate paginations
+   * Layout type
+   */
+  layout: LayoutTypes.Flow;
+  /**
+   * Needs to recalculate pagination
    */
   invalidatedPagination?: boolean;
-  layout: 'flow';
   /**
    * Read mode
    */
@@ -137,6 +162,10 @@ export interface FlowState {
    */
   labels: string[];
 }
+/**
+ * Default global state
+ */
+export type DefaultFlowState = Omit<FlowState, 'columnGap' | 'readMode'>;
 
 export interface PaginatedState {
   scrollMode: 'fixed';
@@ -145,11 +174,6 @@ export interface PaginatedState {
    */
   doublePage: boolean;
 }
-
-/**
- * Available scroll modes
- */
- export type ScrollModes = 'vertical' | 'horizontal';
 
 export interface ScrolledState {
   scrollMode: ScrollModes;

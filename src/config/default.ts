@@ -1,9 +1,11 @@
-import { Config } from '../model/config';
+import { DefaultConfig } from '../model/config';
 import { FitMode, ViewerMode } from '../model/viewer';
 
-const defaultConfig: Config = {
-  defaultFixedMode: ViewerMode.WithScroll,
+const defaultConfig: DefaultConfig = {
+  initialFixedMode: ViewerMode.WithScroll,
   initialFitMode: FitMode.Height,
+  initialReadMode: true,
+  showPageSeparation: false,
   zoom: {
     max: 4,
     min: 0.1,
@@ -37,6 +39,19 @@ const defaultConfig: Config = {
   minCharsPerColumn: 50,
   maxCharsPerColumn: 70,
   initialFontSize: 16,
+  initialScale: 1,
+  readModeMargin: {
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
+  },
+  uiModeMargin: {
+    top: 20,
+    right: 40,
+    left: 40,
+    bottom: 20,
+  },
 };
 
 export default defaultConfig;
