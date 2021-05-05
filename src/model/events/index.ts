@@ -13,10 +13,18 @@ export interface PageChange extends ReadGardenEvent{
   label: string;
 }
 
-export interface RequestChapter extends ReadGardenEvent{
-  type: 'requestChapter';
+export interface LoadNewContent extends ReadGardenEvent {
+  type: 'loadNewContent';
+  /**
+   * Slug of the content to load
+   */
+  contentSlug: string;
+  /**
+   * Label of the page of the content to load (null for the default page)
+   */
+  label: string | null;
 }
 
-export type ReadGardenEvents = PageChange | RequestChapter;
+export type ReadGardenEvents = PageChange | LoadNewContent;
 
 export type ReadGardenEventHandler = (event: ReadGardenEvents) => Promise<void>;
