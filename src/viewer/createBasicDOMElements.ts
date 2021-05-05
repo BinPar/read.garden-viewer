@@ -56,11 +56,11 @@ const createBasicDOMElements = (state: State): void => {
   readGardenViewerNode.appendChild(selectionHighlights);
 
   const selectionSelectors = document.createElement('div');
-  selectionSelectors.classList.add('rg-highlights rg-selectors');
+  selectionSelectors.classList.add('rg-highlights', 'rg-selectors');
   readGardenViewerNode.appendChild(selectionSelectors);
 
   const searchTermsHighlights = document.createElement('div');
-  searchTermsHighlights.classList.add('rg-highlights rg-search');
+  searchTermsHighlights.classList.add('rg-highlights', 'rg-search');
   readGardenViewerNode.appendChild(searchTermsHighlights);
   // #endregion Content Wrapper Siblings
 
