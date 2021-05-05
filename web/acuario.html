@@ -15,9 +15,9 @@
 <body>
 </body>
 <script type="text/javascript">
-  window.api = window.readGardenViewer({ layoutType: 'flow', eventHandler: window.eventHandler });
-  window.setDispatcher(window.api.dispatch);
-  window.setState(window.api.state);  
+  window.readGardenApi = window.readGardenViewer({ layoutType: 'flow', eventHandler: window.readGardenEventHandler });
+  window.readGardenSetDispatcher(window.readGardenApi.dispatch);
+  window.readGardenSetState(window.readGardenApi.state);  
 </script>
 
 </html>

@@ -10,10 +10,10 @@ import { State } from '../../src/model/state';
 declare global {
   interface Window {
     readGardenViewer: ViewerFunction;
-    api: APIInterface;
-    setDispatcher: (newDispatcher: DispatchAPIAction) => void;
-    eventHandler: ReadGardenEventHandler;
-    setState: (newState: State) => void;
+    readGardenApi: APIInterface;
+    readGardenSetDispatcher: (newDispatcher: DispatchAPIAction) => void;
+    readGardenEventHandler: ReadGardenEventHandler;
+    readGardenSetState: (newState: State) => void;
   }
 }
 
@@ -21,18 +21,18 @@ describe('General', () => {
   it('should load without error', async () => {
     await page.goto(testing.baseURL);
     let state = await page.evaluate(() => {
-      window.api = window.readGardenViewer({ layoutType: 'flow', eventHandler: window.eventHandler });
-      window.setDispatcher(window.api.dispatch);      
-      window.setState(window.api.state);
-      return window.api.state;
+      window.readGardenApi = window.readGardenViewer({ layoutType: 'flow', eventHandler: window.readGardenEventHandler });
+      window.readGardenSetDispatcher(window.readGardenApi.dispatch);      
+      window.readGardenSetState(window.readGardenApi.state);
+      return window.readGardenApi.state;
     });
     state = await page.evaluate(() => {
       const action: Actions = {
         type: 'setScrollMode',
         scrollMode: 'vertical',
       };
-      window.api.dispatch(action);
-      return window.api.state;
+      window.readGardenApi.dispatch(action);
+      return window.readGardenApi.state;
     });
     expect(state.scrollMode).toBe('vertical');
   });

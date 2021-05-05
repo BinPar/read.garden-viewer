@@ -33,12 +33,12 @@ export const eventHandler: ReadGardenEventHandler = async (event) => {
 
 declare global {
   interface Window {
-    setDispatcher: (newDispatcher: DispatchAPIAction) => void;
-    eventHandler: ReadGardenEventHandler;
-    setState: (newState: State) => void;
+    readGardenSetDispatcher: (newDispatcher: DispatchAPIAction) => void;
+    readGardenEventHandler: ReadGardenEventHandler;
+    readGardenSetState: (newState: State) => void;
   }
 }
 
-window.setDispatcher = setDispatcher;
-window.setState = setState;
-window.eventHandler = eventHandler;
+window.readGardenSetDispatcher = setDispatcher;
+window.readGardenEventHandler = eventHandler;
+window.readGardenSetState = setState;
