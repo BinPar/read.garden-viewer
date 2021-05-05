@@ -3,16 +3,20 @@ import { Action, ScrollModes } from "./common";
 /**
  * Names of the action types for global actions
  */
-export enum GlobalActionTypes {
-  SetScrollMode = 'setScrollMode',
-  SetDarkMode = 'setDarkMode',
+export type GlobalActionTypes = 'setScrollMode' | 'setDarkMode';
+
+/**
+ * Abstract interface for all Global Actions
+ */
+interface GlobalAction extends Action {
+  type: GlobalActionTypes;
 }
 
 /**
  * Sets the horizontal or vertical mode
  */
- export interface SetScrollMode extends Action {
-  type: GlobalActionTypes.SetScrollMode;
+ export interface SetScrollMode extends GlobalAction {
+  type: 'setScrollMode';
   /**
    * Scroll mode to set
    */
@@ -22,8 +26,8 @@ export enum GlobalActionTypes {
 /**
  * Sets the Dark or Light Mode
  */
-export interface SetDarkMode extends Action {
-  type: GlobalActionTypes.SetDarkMode;
+export interface SetDarkMode extends GlobalAction {
+  type: 'setDarkMode';
   /**
    * True for dark mode
    */

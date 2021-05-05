@@ -10,4 +10,4 @@ export type Actions = GlobalActions | FixedActions | FlowActions;
 /**
  * All the action types that are available for the viewer
  */
-export type ActionTypes = GlobalActionTypes & FixedActionTypes & FlowActionTypes;
+export type ActionTypes = GlobalActionTypes | FixedActionTypes | FlowActionTypes;

@@ -3,15 +3,20 @@ import { Action } from "./common";
 /**
  * Names of the action types for Flow Layout Actions
  */
- export enum FlowActionTypes {
-  SetFontSize = 'setFontSize',
+export type FlowActionTypes = 'setFontSize';
+
+/**
+ * Abstract interface for all Flow Layout Actions
+ */
+interface FlowAction extends Action {
+  type: FlowActionTypes;
 }
 
 /**
  * Sets the Font Size of the flow layout
  */
- export interface SetFontSize extends Action {
-  type: FlowActionTypes.SetFontSize;
+ export interface SetFontSize extends FlowAction {
+  type: 'setFontSize';
   /**
    * Size of the font to use (in EMs)
    */
@@ -21,4 +26,4 @@ import { Action } from "./common";
 /**
  * Actions for FlowLayout
  */
-export type FlowActions = SetFontSize;
+export type FlowActions = FlowAction;
