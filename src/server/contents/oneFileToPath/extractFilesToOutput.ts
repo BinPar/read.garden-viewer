@@ -1,7 +1,9 @@
 /* eslint-disable no-await-in-loop */
 import * as path from 'path';
 import { ensureDir, writeFile } from '@a2r/fs';
+
 import { ExtractedJSONIndexInfo } from '../../../model/oneFileToPath';
+
 import { open, readFileBytes } from './fileHandlers';
 import fastEncrypt from './fastEncrypt';
 
