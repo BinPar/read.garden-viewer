@@ -1,8 +1,8 @@
 import { Base64 } from 'js-base64';
 
 import { JSONIndex, ExtractedJSONIndexInfo } from '../../../model/oneFileToPath';
-import fastEncrypt from './fastEncrypt';
 
+import fastEncrypt from './fastEncrypt';
 import { stat, open, readFileBytes } from './fileHandlers';
 
 const JSON_INDEX_BYTES = 32;

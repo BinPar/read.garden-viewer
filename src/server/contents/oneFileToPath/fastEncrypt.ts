@@ -1,5 +1,4 @@
 /* eslint-disable no-param-reassign */
-
 import { encryptIndexes } from '../../config';
 
 /**

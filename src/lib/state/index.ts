@@ -1,13 +1,14 @@
 import { FixedState, GlobalState, State } from '../../model/state';
-import { setConfig } from '../../config';
 import { InitialConfig } from '../../model/config';
 import { ViewerMode } from '../../model/viewer';
-import defaultConfig from '../../config/default';
+
 import defaultGlobal from './defaultGlobal';
 import defaultFlow from './defaultFlow';
 import defaultScrolled from './defaultScrolled';
 import defaultFixed from './defaultFixed';
 import defaultPaginated from './defaultPaginated';
+import defaultConfig from '../../config/default';
+import { setConfig } from '../../config';
 
 let state: State;
 
