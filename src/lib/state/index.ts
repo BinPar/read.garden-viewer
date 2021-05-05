@@ -41,5 +41,8 @@ export const initializeState = (config: InitialConfig): void => {
 export const getState = (): State => state;
 
 export const updateState = (newState: Partial<State>): void => {
-  state = merge(state, newState);
+  const updatableState = state as any;
+  Object.keys(newState).forEach(key => {
+    updatableState[key] = (newState as any)[key];
+  });
 };
