@@ -6,15 +6,15 @@ const endingAdditionalPages = 10;
 
 const createBasicDOMElements = (state: State): void => {
   // #region Main node
-  const readGardenViewer = document.createElement('div');
-  readGardenViewer.id = 'rg-viewer';
-  document.body.appendChild(readGardenViewer);
+  const readGardenViewerNode = document.createElement('div');
+  readGardenViewerNode.id = 'rg-viewer';
+  document.body.appendChild(readGardenViewerNode);
   // #endregion Main node
 
   // #region Content Wrapper and child nodes
   const contentWrapper = document.createElement('div');
   contentWrapper.classList.add('rg-content-wrapper');
-  readGardenViewer.appendChild(contentWrapper);
+  readGardenViewerNode.appendChild(contentWrapper);
 
   const totalColumnWidthCalculator = document.createElement('div');
   totalColumnWidthCalculator.classList.add('rg-total-width-calculator');
@@ -49,26 +49,26 @@ const createBasicDOMElements = (state: State): void => {
   // #region Content Wrapper Siblings
   const pagesLabelsElement = document.createElement('div');
   pagesLabelsElement.classList.add('rg-pages-labels');
-  readGardenViewer.appendChild(pagesLabelsElement);
+  readGardenViewerNode.appendChild(pagesLabelsElement);
 
   const selectionHighlights = document.createElement('div');
   selectionHighlights.classList.add('rg-highlights rg-selection');
-  readGardenViewer.appendChild(selectionHighlights);
+  readGardenViewerNode.appendChild(selectionHighlights);
 
   const selectionSelectors = document.createElement('div');
   selectionSelectors.classList.add('rg-highlights rg-selectors');
-  readGardenViewer.appendChild(selectionSelectors);
+  readGardenViewerNode.appendChild(selectionSelectors);
 
   const searchTermsHighlights = document.createElement('div');
   searchTermsHighlights.classList.add('rg-highlights rg-search');
-  readGardenViewer.appendChild(searchTermsHighlights);
+  readGardenViewerNode.appendChild(searchTermsHighlights);
   // #endregion Content Wrapper Siblings
 
   setCSSProperty(
     'debug-viewer-safe-area',
     `${state.debugViewerSafeArea ? 1 : 0}`,
   );
-  updateState({ basicDOMElementsCreated: true, readGardenViewer });
+  updateState({ basicDOMElementsCreated: true, readGardenViewerNode });
 };
 
 export default createBasicDOMElements;

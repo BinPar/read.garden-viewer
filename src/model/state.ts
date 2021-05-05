@@ -6,7 +6,7 @@ import { FitMode, Margin } from './viewerSettings';
  */
 export interface GlobalState {
   /**
-   * Node of the viewer
+   * Main viewer node
    */
   readGardenViewerNode?: HTMLDivElement;
   /**
@@ -49,10 +49,6 @@ export interface GlobalState {
    * Search terms to highlight
    */
   searchTerms: string[];
-  /**
-   * Main DOM node
-   */
-  readGardenViewer?: HTMLDivElement;
 }
 
 /**
