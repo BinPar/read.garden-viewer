@@ -59,7 +59,7 @@ export interface GlobalState {
  * Default global state
  */
 export type DefaultGlobalState = Partial<GlobalState> &
-  Required<Pick<GlobalState, 'scale' | 'debugViewerSafeArea' | 'basicDOMElementsCreated'>>;
+  Required<Pick<GlobalState, 'scale' | 'basicDOMElementsCreated'>>;
 
 /**
  * Layout types

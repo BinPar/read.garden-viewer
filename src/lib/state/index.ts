@@ -45,6 +45,7 @@ export const initializeState = (initialConfig: InitialConfig): void => {
     pageNumber: 1, // From initial config
     scale: config.initialScale || defaultGlobal.scale,
     searchTerms: [],
+    debugViewerSafeArea: config.debugViewerSafeArea,
   };
 
   if (config.layoutType === 'flow') {
