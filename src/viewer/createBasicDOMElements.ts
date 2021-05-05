@@ -52,15 +52,15 @@ const createBasicDOMElements = (state: State): void => {
   readGardenViewerNode.appendChild(pagesLabelsNode);
 
   const selectionHighlightsNode = document.createElement('div');
-  selectionHighlightsNode.classList.add('rg-highlights', 'rg-selection');
+  selectionHighlightsNode.classList.add('rg-highlights-layer', 'rg-selection');
   readGardenViewerNode.appendChild(selectionHighlightsNode);
 
   const selectionSelectorsNode = document.createElement('div');
-  selectionSelectorsNode.classList.add('rg-highlights', 'rg-selectors');
+  selectionSelectorsNode.classList.add('rg-highlights-layer', 'rg-selectors');
   readGardenViewerNode.appendChild(selectionSelectorsNode);
 
   const searchTermsHighlightsNode = document.createElement('div');
-  searchTermsHighlightsNode.classList.add('rg-highlights', 'rg-search');
+  searchTermsHighlightsNode.classList.add('rg-highlights-layer', 'rg-search');
   readGardenViewerNode.appendChild(searchTermsHighlightsNode);
   // #endregion Content Wrapper Siblings
 
