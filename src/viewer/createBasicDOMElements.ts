@@ -52,7 +52,7 @@ const createBasicDOMElements = (state: State): void => {
   readGardenViewerNode.appendChild(pagesLabelsElement);
 
   const selectionHighlights = document.createElement('div');
-  selectionHighlights.classList.add('rg-highlights rg-selection');
+  selectionHighlights.classList.add('rg-highlights', 'rg-selection');
   readGardenViewerNode.appendChild(selectionHighlights);
 
   const selectionSelectors = document.createElement('div');
