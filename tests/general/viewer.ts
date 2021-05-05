@@ -3,6 +3,7 @@ import 'expect-puppeteer';
 import { ViewerFunction } from '../../src/model/viewerFunction';
 import testing from '../../src/config/testing';
 import { APIInterface } from '../../src/model/apiInterface';
+import { Actions } from '../../src/model/actions';
 
 declare global {
   interface Window {
@@ -19,7 +20,7 @@ describe('General', () => {
       return window.api.state;
     });
     state = await page.evaluate(() => {
-      const action = {
+      const action: Actions = {
         type: 'setScrollMode',
         scrollMode: 'vertical',
       };

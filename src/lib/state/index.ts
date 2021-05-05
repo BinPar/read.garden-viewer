@@ -1,5 +1,3 @@
-import * as merge from 'deepmerge';
-
 import { FixedState, FlowState, GlobalState, PaginatedState, ScrolledState, State } from '../../model/state';
 import { getConfig } from '../../config';
 import { InitialConfig } from '../../model/config';
