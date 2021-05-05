@@ -10,6 +10,8 @@ let dispatcher: DispatchAPIAction;
 let state: State;
 log.setLevel('info');
 
+export const getState = (): State => state;
+
 export const setState = (newState: State): void => {
   state = newState;
   setupButtonBar(state, dispatcher);
@@ -20,16 +22,24 @@ export const setDispatcher = (newDispatcher: DispatchAPIAction): void => {
   dispatcher = newDispatcher;
 };
 
-export const eventHandler: ReadGardenEventHandler = async (event) => {
-  const eventReference = (events as {
-    [key: string]: EventHandler<ReadGardenEvents>;
-  })[event.type];
-  if (!eventReference) {
-    log.warn(`Event not implemented ${event.type}`);
-  } else {
-    eventReference(event, dispatcher);
-  }
-};
+export const eventHandler: ReadGardenEventHandler = (event) =>
+  new Promise<void>((resolve) => {
+    if (dispatcher) {
+      const eventReference = (events as {
+        [key: string]: EventHandler<ReadGardenEvents>;
+      })[event.type];
+      if (!eventReference) {
+        log.warn(`Event not implemented ${event.type}`);
+      } else {
+        eventReference(event, dispatcher).then(resolve);
+      }
+    } else {
+      setTimeout(
+        () => eventHandler(event).then(resolve),
+        0
+      );
+    }
+  });
 
 declare global {
   interface Window {

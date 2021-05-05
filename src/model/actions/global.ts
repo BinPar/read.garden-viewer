@@ -9,7 +9,18 @@ export enum GlobalActionTypes {
   SetDarkMode = 'setDarkMode',
   NavigateToPage = 'navigateToPage',
   SetDebugViewerSafeArea = 'setDebugViewerSafeArea',
+  AppendNewContent = 'appendNewContent',
 }
+
+/**
+ * Appends new loaded content
+ */
+ export interface AppendNewContent extends Action {
+  type: 'appendNewContent';
+  cssURL?: string;
+  htmlContent: string;
+}
+
 
 /**
  * Enables the draw of red border around the viewer
@@ -62,4 +73,5 @@ export type GlobalActions =
   | SetScrollMode
   | SetDarkMode
   | NavigateToPage
-  | SetDebugViewerSafeArea;
+  | SetDebugViewerSafeArea
+  | AppendNewContent;
