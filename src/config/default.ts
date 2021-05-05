@@ -1,5 +1,5 @@
 import { DefaultConfig } from '../model/config';
-import { FitMode, ViewerMode } from '../model/viewer';
+import { FitMode, ViewerMode } from '../model/viewerSettings';
 
 const defaultConfig: DefaultConfig = {
   initialFixedMode: ViewerMode.WithScroll,

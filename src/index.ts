@@ -1,5 +1,5 @@
 import log from 'loglevel';
-import { ViewerFunction } from './model/viewerFunction';
+import { ViewerFunction } from './model/viewer';
 import viewer from './viewer';
 
 log.setLevel('info');

@@ -1,6 +1,6 @@
 import { FixedState, GlobalState, State } from '../../model/state';
 import { InitialConfig } from '../../model/config';
-import { ViewerMode } from '../../model/viewer';
+import { ViewerMode } from '../../model/viewerSettings';
 
 import defaultGlobal from './defaultGlobal';
 import defaultFlow from './defaultFlow';

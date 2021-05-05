@@ -1,4 +1,4 @@
-import { FitMode, FontSize, Margin, ViewerMode, Zoom } from './viewer';
+import { FitMode, FontSize, Margin, ViewerMode, Zoom } from './viewerSettings';
 
 /*
 SCOPES:

@@ -1,5 +1,5 @@
 import { Config } from './config';
-import { FitMode, Margin } from './viewer';
+import { FitMode, Margin } from './viewerSettings';
 
 /**
  * Global state
