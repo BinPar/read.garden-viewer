@@ -8,6 +8,18 @@ export enum GlobalActionTypes {
   SetScrollMode = 'setScrollMode',
   SetDarkMode = 'setDarkMode',
   NavigateToPage = 'navigateToPage',
+  SetDebugViewerSafeArea = 'setDebugViewerSafeArea',
+}
+
+/**
+ * Enables the draw of red border around the viewer
+ */
+export interface SetDebugViewerSafeArea extends Action {
+  type: 'setDebugViewerSafeArea';
+  /**
+   * True for debug mode (red border)
+   */
+  value: boolean;
 }
 
 /**
@@ -46,4 +58,8 @@ export interface NavigateToPage extends Action {
 /**
  * Actions that affect Fixed and Flow Layout
  */
-export type GlobalActions = SetScrollMode | SetDarkMode | NavigateToPage;
+export type GlobalActions =
+  | SetScrollMode
+  | SetDarkMode
+  | NavigateToPage
+  | SetDebugViewerSafeArea;

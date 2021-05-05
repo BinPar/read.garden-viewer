@@ -7,6 +7,7 @@ import { FitMode, Margin } from './viewerSettings';
 export interface GlobalState {
   basicDOMElementsCreated: boolean;
   debugViewerSafeArea: boolean;
+  readGardenViewerNode?: HTMLDivElement;
   /**
    * Viewer config
    */

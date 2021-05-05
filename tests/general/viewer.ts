@@ -5,6 +5,7 @@ import testing from '../../src/config/testing';
 import { APIInterface, DispatchAPIAction } from '../../src/model/apiInterface';
 import { Actions } from '../../src/model/actions';
 import { ReadGardenEventHandler } from '../../src/model/events';
+import { State } from '../../src/model/state';
 
 declare global {
   interface Window {
@@ -12,6 +13,7 @@ declare global {
     api: APIInterface;
     setDispatcher: (newDispatcher: DispatchAPIAction) => void;
     eventHandler: ReadGardenEventHandler;
+    setState: (newState: State) => void;
   }
 }
 
@@ -20,7 +22,8 @@ describe('General', () => {
     await page.goto(testing.baseURL);
     let state = await page.evaluate(() => {
       window.api = window.readGardenViewer({ layoutType: 'flow', eventHandler: window.eventHandler });
-      window.setDispatcher(window.api.dispatch);
+      window.setDispatcher(window.api.dispatch);      
+      window.setState(window.api.state);
       return window.api.state;
     });
     state = await page.evaluate(() => {
