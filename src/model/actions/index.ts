@@ -1,6 +1,6 @@
-import { FixedActions, FixedActionTypes } from "./fixed";
-import { FlowActions, FlowActionTypes } from "./flow";
-import { GlobalActions, GlobalActionTypes } from "./global";
+import { FixedActions, FixedActionTypes } from './fixed';
+import { FlowActions, FlowActionTypes } from './flow';
+import { GlobalActions, GlobalActionTypes } from './global';
 
 /**
  * All the actions that are available for the viewer

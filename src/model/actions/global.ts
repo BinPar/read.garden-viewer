@@ -1,5 +1,5 @@
-import { ScrollModes } from "../state";
-import { Action } from "./common";
+import { ScrollModes } from '../state';
+import { Action } from './common';
 
 /**
  * Names of the action types for global actions
@@ -13,7 +13,7 @@ export enum GlobalActionTypes {
 /**
  * Sets the horizontal or vertical mode
  */
- export interface SetScrollMode extends Action {
+export interface SetScrollMode extends Action {
   type: 'setScrollMode';
   /**
    * Scroll mode to set
