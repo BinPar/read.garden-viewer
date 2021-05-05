@@ -115,6 +115,14 @@ export interface RequiredConfig {
    * Event handler to process the Viewer Events
    */
   eventHandler: ReadGardenEventHandler;
+  /**
+   * Current content slug
+   */
+  contentSlug: string;
+  /**
+   * Label of the initial page or null to use the default page
+   */
+  startPageLabel: string | null;
 }
 
 export type Config = DefaultConfig & RequiredConfig;

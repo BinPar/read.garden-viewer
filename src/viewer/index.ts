@@ -11,7 +11,8 @@ const viewer: ViewerFunction = (config) => {
     dispatch,
     state: getState(),    
   };
-  createBasicDOMElements(api.state);
+  createBasicDOMElements(api.state);  
+//  dispatch
   log.info('Viewer Initialized');
   return api;
 };

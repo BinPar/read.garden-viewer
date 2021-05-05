@@ -21,8 +21,13 @@ describe('General', () => {
   it('should load without error', async () => {
     await page.goto(testing.baseURL);
     let state = await page.evaluate(() => {
-      window.readGardenApi = window.readGardenViewer({ layoutType: 'flow', eventHandler: window.readGardenEventHandler });
-      window.readGardenSetDispatcher(window.readGardenApi.dispatch);      
+      window.readGardenApi = window.readGardenViewer({
+        layoutType: 'flow',
+        eventHandler: window.readGardenEventHandler,
+        contentSlug: 'acuario',
+        startPageLabel: '64',
+      });
+      window.readGardenSetDispatcher(window.readGardenApi.dispatch);
       window.readGardenSetState(window.readGardenApi.state);
       return window.readGardenApi.state;
     });
