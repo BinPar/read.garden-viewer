@@ -1,3 +1,4 @@
+import { ReadGardenEventHandler } from './events';
 import { FitMode, FontSize, Margin, ViewerMode, Zoom } from './viewerSettings';
 
 /*
@@ -101,11 +102,17 @@ export interface DefaultConfig {
   showPageSeparation: boolean;
 }
 
-export interface Config extends DefaultConfig {
+export interface RequiredConfig {
   /**
    * Layout type of the content to display
    */
   layoutType: LayoutType;
+  /**
+   * Event handler to process the Viewer Events
+   */
+  eventHandler: ReadGardenEventHandler;
 }
 
-export type InitialConfig = Partial<Config> & Required<Pick<Config, 'layoutType'>>;
+export type Config = DefaultConfig & RequiredConfig;
+
+export type InitialConfig = Partial<Config> & RequiredConfig;
