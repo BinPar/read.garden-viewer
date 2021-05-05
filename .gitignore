@@ -106,4 +106,4 @@ dist
 # Download book contents for testing
 web/books/**
 
-web/js
+web/js/**
