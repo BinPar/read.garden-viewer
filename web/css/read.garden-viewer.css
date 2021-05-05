@@ -1,13 +1,21 @@
 :root {
   --border-radius: 10px;
   --debug-viewer-safe-area: 0;
-  --safe-area-border-width: calc(
-    1px * var(--debug-viewer-safe-area)
-  );
+  --safe-area-border-width: calc(1px * var(--debug-viewer-safe-area));
+  --animation-speed: 0;
+  --animation-speed-value: calc(1s * var(var(--animation-speed)));
 }
 
-div#read-garden-viewer {
+div#rg-viewer {
   width: 100vw;
   height: 100vh;
   border: solid var(--safe-area-border-width) red;
+  transition: filter var(--animation-speed-value) linear 0ms,
+    transform var(--animation-speed-value) cubic-bezier(0.175, 0.885, 0.32, 1.2)
+      0ms;
+  transform: translateX(var(--horizontalScrollFix, 0)) translateY(-30px)
+    scale(0.75);
+  filter: contrast(var(--contrastViewerColor, 1))
+    sepia(var(--sepiaViewerColor, 0)) invert(var(--invertViewerColor, 0));
+  background-color: white;
 }

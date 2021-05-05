@@ -49,6 +49,10 @@ export interface GlobalState {
    * Search terms to highlight
    */
   searchTerms: string[];
+  /**
+   * Main DOM node
+   */
+  readGardenViewer?: HTMLDivElement;
 }
 
 /**

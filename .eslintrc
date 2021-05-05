@@ -9,5 +9,8 @@
     "browser": true,
     "context": true,
     "jestPuppeteer": true
+  },
+  "rules": {
+    "no-plusplus": "off"
   }
 }
