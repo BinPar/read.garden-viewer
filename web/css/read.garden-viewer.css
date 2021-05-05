@@ -1,0 +1,13 @@
+:root {
+  --border-radius: 10px;
+  --debug-viewer-safe-area: 0;
+  --safe-area-border-width: calc(
+    1px * var(--debug-viewer-safe-area)
+  );
+}
+
+div#read-garden-viewer {
+  width: 100vw;
+  height: 100vh;
+  border: solid var(--safe-area-border-width) red;
+}

@@ -5,6 +5,8 @@ import { FitMode, Margin } from './viewerSettings';
  * Global state
  */
 export interface GlobalState {
+  basicDOMElementsCreated: boolean;
+  debugViewerSafeArea: boolean;
   /**
    * Viewer config
    */

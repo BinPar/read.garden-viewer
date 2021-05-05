@@ -174,6 +174,17 @@ eval("\nexports.__esModule = true;\nexports.FitMode = exports.ViewerMode = void 
 
 /***/ }),
 
+/***/ "./dist/viewer/createBasicDOMElements.js":
+/*!***********************************************!*\
+  !*** ./dist/viewer/createBasicDOMElements.js ***!
+  \***********************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+eval("\nexports.__esModule = true;\nvar state_1 = __webpack_require__(/*! ../lib/state */ \"./dist/lib/state/index.js\");\nvar setCSSProperty_1 = __webpack_require__(/*! ./setCSSProperty */ \"./dist/viewer/setCSSProperty.js\");\nvar createBasicDOMElements = function (state) {\n    var readGardenViewer = document.createElement('div');\n    setCSSProperty_1[\"default\"]('debug-viewer-safe-area', \"\" + (state.debugViewerSafeArea ? 1 : 0));\n    readGardenViewer.id = 'read-garden-viewer';\n    document.body.appendChild(readGardenViewer);\n    state_1.updateState({ basicDOMElementsCreated: true });\n};\nexports.default = createBasicDOMElements;\n\n\n//# sourceURL=webpack://read.garden-viewer/./dist/viewer/createBasicDOMElements.js?");
+
+/***/ }),
+
 /***/ "./dist/viewer/index.js":
 /*!******************************!*\
   !*** ./dist/viewer/index.js ***!
@@ -181,7 +192,18 @@ eval("\nexports.__esModule = true;\nexports.FitMode = exports.ViewerMode = void 
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
-eval("\nexports.__esModule = true;\nvar loglevel_1 = __webpack_require__(/*! loglevel */ \"./node_modules/loglevel/lib/loglevel.js\");\nvar state_1 = __webpack_require__(/*! ../lib/state */ \"./dist/lib/state/index.js\");\nvar dispatch_1 = __webpack_require__(/*! ../lib/state/dispatch */ \"./dist/lib/state/dispatch.js\");\nvar viewer = function (config) {\n    state_1.initializeState(config);\n    var api = {\n        dispatch: dispatch_1[\"default\"],\n        state: state_1.getState()\n    };\n    loglevel_1[\"default\"].info('Viewer Initialized');\n    return api;\n};\nexports.default = viewer;\n\n\n//# sourceURL=webpack://read.garden-viewer/./dist/viewer/index.js?");
+eval("\nexports.__esModule = true;\nvar loglevel_1 = __webpack_require__(/*! loglevel */ \"./node_modules/loglevel/lib/loglevel.js\");\nvar state_1 = __webpack_require__(/*! ../lib/state */ \"./dist/lib/state/index.js\");\nvar dispatch_1 = __webpack_require__(/*! ../lib/state/dispatch */ \"./dist/lib/state/dispatch.js\");\nvar createBasicDOMElements_1 = __webpack_require__(/*! ./createBasicDOMElements */ \"./dist/viewer/createBasicDOMElements.js\");\nvar viewer = function (config) {\n    state_1.initializeState(config);\n    var api = {\n        dispatch: dispatch_1[\"default\"],\n        state: state_1.getState()\n    };\n    createBasicDOMElements_1[\"default\"](api.state);\n    loglevel_1[\"default\"].info('Viewer Initialized');\n    return api;\n};\nexports.default = viewer;\n\n\n//# sourceURL=webpack://read.garden-viewer/./dist/viewer/index.js?");
+
+/***/ }),
+
+/***/ "./dist/viewer/setCSSProperty.js":
+/*!***************************************!*\
+  !*** ./dist/viewer/setCSSProperty.js ***!
+  \***************************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+eval("\nexports.__esModule = true;\nvar setCSSProperty = function (property, value) {\n    document.documentElement.style.setProperty(\"--\" + property, value);\n};\nexports.default = setCSSProperty;\n\n\n//# sourceURL=webpack://read.garden-viewer/./dist/viewer/setCSSProperty.js?");
 
 /***/ }),
 
