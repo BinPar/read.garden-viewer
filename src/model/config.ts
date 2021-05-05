@@ -100,6 +100,10 @@ export interface DefaultConfig {
    * If `true`, viewer will display a separation between pages
    */
   showPageSeparation: boolean;
+  /**
+   * Debug viewer safe area flag
+   */
+  debugViewerSafeArea: boolean;
 }
 
 export interface RequiredConfig {

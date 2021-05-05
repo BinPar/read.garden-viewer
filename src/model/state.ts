@@ -5,9 +5,6 @@ import { FitMode, Margin } from './viewerSettings';
  * Global state
  */
 export interface GlobalState {
-  basicDOMElementsCreated: boolean;
-  debugViewerSafeArea: boolean;
-  readGardenViewerNode?: HTMLDivElement;
   /**
    * Viewer config
    */
@@ -20,6 +17,14 @@ export interface GlobalState {
    * Needs a complete reset of the view
    */
   layoutResetRequired?: boolean;
+  /**
+   * Basic DOM elements have been created
+   */
+  basicDOMElementsCreated: boolean;
+  /**
+   * Debug viewer safe area flag
+   */
+  debugViewerSafeArea: boolean;
   /**
    * Page title
    */
@@ -46,7 +51,7 @@ export interface GlobalState {
  * Default global state
  */
 export type DefaultGlobalState = Partial<GlobalState> &
-  Required<Pick<GlobalState, 'scale'>>;
+  Required<Pick<GlobalState, 'scale' | 'debugViewerSafeArea' | 'basicDOMElementsCreated'>>;
 
 /**
  * Layout types
