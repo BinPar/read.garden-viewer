@@ -7,18 +7,12 @@ export enum FixedActionTypes {
   SetSinglePageMode = 'setSinglePageMode',
 } 
 
-/**
- * Abstract interface for all Fixed Layout Actions
- */
-interface FixedAction extends Action {
-  type: FixedActionTypes;
-}
 
 /**
  * Set the Single Page Mode (not scroll mode)
  */
- export interface SetSinglePageMode extends FixedAction {
-  type: FixedActionTypes.SetSinglePageMode;
+export interface SetSinglePageMode extends Action {
+  type: 'setSinglePageMode';
 }
 
 /**

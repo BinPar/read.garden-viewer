@@ -10,17 +10,10 @@ export enum FlowActionTypes {
 }
 
 /**
- * Abstract interface for all Flow Layout Actions
- */
-interface FlowAction extends Action {
-  type: FlowActionTypes;
-}
-
-/**
  * Sets the Font Size of the flow layout
  */
-export interface SetFontSize extends FlowAction {
-  type: FlowActionTypes.SetFontSize;
+export interface SetFontSize extends Action {
+  type: 'setFontSize';
   /**
    * Size of the font to use (in EMs)
    */
@@ -30,8 +23,8 @@ export interface SetFontSize extends FlowAction {
 /**
  * Sets the line height of the text
  */
-export interface SetLineHeight extends FlowAction {
-  type: FlowActionTypes.SetLineHeight;
+export interface SetLineHeight extends Action {
+  type: 'setLineHeight';
   /**
    * Line Height (in EMs)
    */
@@ -41,8 +34,8 @@ export interface SetLineHeight extends FlowAction {
 /**
  * Sets the default typography for the text
  */
-export interface SetDefaultTypography extends FlowAction {
-  type: FlowActionTypes.SetDefaultTypography;
+export interface SetDefaultTypography extends Action {
+  type: 'setDefaultTypography';
   /**
    * Font family name to set (baskerville-enc, helvetica-enc, americanTypewriter-enc...)
    */
