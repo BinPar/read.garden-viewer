@@ -1,10 +1,10 @@
 import log from 'loglevel';
 import { getState, initializeState } from '../lib/state';
 import { APIInterface } from '../model/apiInterface';
-import { InitialConfig } from '../model/config';
 import dispatch from '../lib/state/dispatch';
+import { ViewerFunction } from '../model/viewerFunction';
 
-const viewer = (config: InitialConfig): APIInterface => {
+const viewer: ViewerFunction = (config) => {
   initializeState(config);
   const api: APIInterface = {
     dispatch,
