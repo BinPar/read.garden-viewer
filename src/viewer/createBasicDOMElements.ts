@@ -64,6 +64,11 @@ const createBasicDOMElements = (state: State): void => {
   readGardenViewerNode.appendChild(searchTermsHighlightsNode);
   // #endregion Content Wrapper Siblings
 
+  const dynamicStyleNode = document.createElement('link');
+  dynamicStyleNode.rel = 'stylesheet';
+  dynamicStyleNode.type = 'text/css';
+  document.head.appendChild(dynamicStyleNode);
+
   setCSSProperty(
     'debug-viewer-safe-area',
     `${state.debugViewerSafeArea ? 1 : 0}`,
@@ -79,6 +84,7 @@ const createBasicDOMElements = (state: State): void => {
     selectionHighlightsNode,
     selectionSelectorsNode,
     searchTermsHighlightsNode,
+    dynamicStyleNode,
   });
 };
 

@@ -42,6 +42,10 @@ export interface GlobalState {
    */
   searchTermsHighlightsNode?: HTMLDivElement;
   /**
+   * Dynamic styles DOM node
+   */
+  dynamicStyleNode?: HTMLLinkElement;
+  /**
    * Viewer config
    */
   config: Config;
