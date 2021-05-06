@@ -1,6 +1,7 @@
 import { ActionDispatcher } from '../../model/actions/actionDispatcher';
 import { AppendNewContent } from '../../model/actions/global';
 import { State } from '../../model/state';
+import setCSSProperty from '../../viewer/setCSSProperty';
 
 const appendNewContent: ActionDispatcher<AppendNewContent> = async (
   action,
@@ -20,22 +21,26 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async (
       cssLoaded: true,
       contentPlaceholderNode: element,
     };
-    if (!action.cssURL || action.cssURL === dynamicStyleNode.href) {
+    const done = () => {
       resolve(partialState);
+      setCSSProperty('viewer-margin-top', '0');
+    };
+    if (!action.cssURL || action.cssURL === dynamicStyleNode.href) {
+      done();
       return;
     }
     dynamicStyleNode.onload = (): void => {
       // console.log('styles loaded, fonts', document.fonts.status);
       if (document.fonts.status === 'loaded') {
         dynamicStyleNode.onload = null;
-        resolve(partialState);
+        done();
         return;
       }
       document.fonts.onloadingdone = () => {
         // console.log('fonts loaded');
         dynamicStyleNode.onload = null;
         document.fonts.onloadingdone = null;
-        resolve(partialState);
+        done();
       };
     };
     dynamicStyleNode.href = action.cssURL;
