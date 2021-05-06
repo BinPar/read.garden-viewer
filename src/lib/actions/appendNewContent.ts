@@ -30,18 +30,46 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async (
       return;
     }
     dynamicStyleNode.onload = (): void => {
-      // console.log('styles loaded, fonts', document.fonts.status);
-      if (document.fonts.status === 'loaded') {
-        dynamicStyleNode.onload = null;
-        done();
+      const checkFonts = () => {
+        if (document.fonts.status === 'loaded') {
+          dynamicStyleNode.onload = null;
+          done();
+          return;
+        }
+        document.fonts.onloadingdone = () => {
+          dynamicStyleNode.onload = null;
+          document.fonts.onloadingdone = null;
+          done();
+        };
+      };
+      const images = element.querySelectorAll('img');
+      if (!images.length) {
+        checkFonts();
         return;
       }
-      document.fonts.onloadingdone = () => {
-        // console.log('fonts loaded');
-        dynamicStyleNode.onload = null;
-        document.fonts.onloadingdone = null;
-        done();
-      };
+      const promises = new Array<Promise<void>>();
+      images.forEach((img) => {
+        promises.push(
+          new Promise<void>((imageResolve) => {
+            if (img.complete) {
+              imageResolve();
+              return;
+            }
+            const onLoad = (): void => {
+              img.removeEventListener('load', onLoad);
+              imageResolve();
+            };
+            const onError = (ev: ErrorEvent) => {
+              // eslint-disable-next-line no-console
+              console.log('Error loading image', ev.message);
+              onLoad();
+            };
+            img.addEventListener('load', onLoad);
+            img.addEventListener('error', onError);
+          }),
+        );
+      });
+      Promise.all(promises).then(checkFonts);
     };
     dynamicStyleNode.href = action.cssURL;
   });

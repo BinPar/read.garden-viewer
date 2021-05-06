@@ -55,6 +55,7 @@ export const initializeState = (initialConfig: InitialConfig): void => {
       ...defaultScrolled,
       columnGap: config.columnGap,
       readMode: config.initialReadMode,
+      fontFamily: config.initialFontFamily,
     };
   }
 
