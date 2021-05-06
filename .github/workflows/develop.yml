@@ -43,7 +43,7 @@ jobs:
           severity: info
           details: Version ${{ env.RELEASE_VERSION }} of ${{ github.event.repository.name }} is published in the Registry! at https://read-garden-viewer-beta.binpar.cloud
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
-          webhookUrl: ${{ secrets.DISCORD_AVATAR_URL }}
+          avatarUrl: ${{ secrets.DISCORD_AVATAR_URL }}
       - name: Beta update Failure
         uses: rjstone/discord-webhook-notify@v1
         if: failure()
@@ -51,7 +51,7 @@ jobs:
           severity: error
           details: Release Failed generating version ${{ env.RELEASE_VERSION }} of ${{ github.event.repository.name }}!
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
-          webhookUrl: ${{ secrets.DISCORD_AVATAR_URL }}
+          avatarUrl: ${{ secrets.DISCORD_AVATAR_URL }}
       - name: Beta update Cancelled
         uses: rjstone/discord-webhook-notify@v1
         if: cancelled()
@@ -59,4 +59,4 @@ jobs:
           severity: warn
           details: Release Cancelled!
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
-          webhookUrl: ${{ secrets.DISCORD_AVATAR_URL }}
+          avatarUrl: ${{ secrets.DISCORD_AVATAR_URL }}
