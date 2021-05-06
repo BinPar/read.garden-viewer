@@ -123,6 +123,10 @@ export interface RequiredConfig {
    * Label of the initial page or null to use the default page
    */
   startPageLabel: string | null;
+  /**
+   * Initial font family
+   */
+  initialFontFamily: string;
 }
 
 export type Config = DefaultConfig & RequiredConfig;
