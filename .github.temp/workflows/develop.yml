@@ -1,0 +1,62 @@
+name: Build Docker image and push to beta instances
+on:
+  push:
+    tags:
+      - 'v*'
+jobs:
+  push_to_registry:
+    name: Build Docker image and push it to the registry
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+      - name: Set env
+        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+      - name: Login to ECR
+        id: ecr
+        uses: elgohr/ecr-login-action@master
+        with:
+          access_key: ${{ secrets.ACCESS_KEY_ID }}
+          secret_access_key: ${{ secrets.SECRET_ACCESS_KEY }}
+          region: eu-west-1
+      - name: Publish to Registry
+        uses: elgohr/Publish-Docker-Github-Action@master
+        with:
+          name: eva-pros
+          username: ${{ steps.ecr.outputs.username }}
+          password: ${{ steps.ecr.outputs.password }}
+          registry: ${{ steps.ecr.outputs.registry }}
+          tags: 'latest,${{ env.RELEASE_VERSION }}'
+          dockerfile: Dockerfile
+      - name: Deploy to beta
+        uses: colbyhill21/Rancher-Action@1.1
+        with:
+          token: ${{ secrets.RANCHER_TOKEN }}
+          context: ${{ secrets.RANCHER_CONTEXT }}
+          url: ${{ secrets.RANCHER_URL }}
+          args: |
+            set image deployment/read-garden-viewer-deploy-beta eva-redolar="402083338966.dkr.ecr.eu-west-1.amazonaws.com/read-garden-viewer:${{ env.RELEASE_VERSION }}" --record -n read-garden-viewer-beta
+      - name: Beta update Success
+        uses: rjstone/discord-webhook-notify@v1
+        if: success()
+        with:
+          severity: info
+          details: Version ${{ env.RELEASE_VERSION }} of ${{ github.event.repository.name }} is published in the Registry! at https://read-garden-viewer-beta.binpar.cloud
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+          webhookUrl: ${{ secrets.DISCORD_AVATAR_URL }}
+      - name: Beta update Failure
+        uses: rjstone/discord-webhook-notify@v1
+        if: failure()
+        with:
+          severity: error
+          details: Release Failed generating version ${{ env.RELEASE_VERSION }} of ${{ github.event.repository.name }}!
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+          webhookUrl: ${{ secrets.DISCORD_AVATAR_URL }}
+      - name: Beta update Cancelled
+        uses: rjstone/discord-webhook-notify@v1
+        if: cancelled()
+        with:
+          severity: warn
+          details: Release Cancelled!
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+          webhookUrl: ${{ secrets.DISCORD_AVATAR_URL }}
