@@ -8,7 +8,6 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async (
   state,
 ) =>
   new Promise<Partial<State>>((resolve): void => {
-    // console.log(action.cssURL);
     const {
       contentPlaceholderNode,
       dynamicStyleNode,
