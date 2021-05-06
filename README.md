@@ -77,4 +77,12 @@ We divide the features in three different groups:
 
 ### CI/CD
 
-TODO
+- It is required to generate a new GitFlow release to automate a deployment to beta instances
+- It will automatically:
+  - Lint
+  - Audit
+  - Build
+  - Download and extract contentes
+  - Run tests
+  - Generate static website
+  - Generate a docker image with a minimalistic web server
