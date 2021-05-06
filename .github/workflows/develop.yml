@@ -2,7 +2,7 @@ name: Build Docker image and push to beta instances
 on:
   push:
     tags:
-      - 'v*'
+      - '*'
 jobs:
   push_to_registry:
     name: Build Docker image and push it to the registry
