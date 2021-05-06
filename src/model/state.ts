@@ -46,6 +46,10 @@ export interface GlobalState {
    */
   dynamicStyleNode?: HTMLLinkElement;
   /**
+   * CSS and fonts are loaded for the current content
+   */
+  cssLoaded: boolean;
+  /**
    * Viewer config
    */
   config: Config;
@@ -91,7 +95,7 @@ export interface GlobalState {
  * Default global state
  */
 export type DefaultGlobalState = Partial<GlobalState> &
-  Required<Pick<GlobalState, 'scale' | 'basicDOMElementsCreated'>>;
+  Required<Pick<GlobalState, 'scale' | 'basicDOMElementsCreated' | 'cssLoaded'>>;
 
 /**
  * Layout types
