@@ -17,8 +17,15 @@
   --search-highlights-color: #ffcf0040;
   --snap-type: x mandatory;
   --font-size: 18px;
+  --font-family: initial;
   --line-height: 1.5em;
   --text-align: initial;
+  --horizontal-translate: 0;
+  --vertical-translate: 0;
+  --scale: 1;
+  --contrast-viewer-color: 1;
+  --sepia-viewer-color: 0;
+  --invert-viewer-color: 0;
 }
 
 body {
@@ -40,15 +47,14 @@ div#rg-viewer {
   transition: filter var(--animation-speed-value) linear 0ms,
     transform var(--animation-speed-value) cubic-bezier(0.175, 0.885, 0.32, 1.2)
       0ms;
-  transform: translateX(var(--horizontalScrollFix, 0)) translateY(-30px)
-    scale(0.75);
-  filter: contrast(var(--contrastViewerColor, 1))
-    sepia(var(--sepiaViewerColor, 0)) invert(var(--invertViewerColor, 0));
+  transform: translateX(--horizontal-translate) translateY(--vertical-translate)
+    scale(--scale);
+  filter: contrast(var(--contrast-viewer-color))
+    sepia(var(--sepia-viewer-color)) invert(var(--invert-viewer-color));
   background-color: white;
   margin-top: var(--viewer-margin-top);
   scroll-snap-align: none;
   scroll-snap-type: var(--snap-type);
-  font-size: var(--font-size);
   line-height: var(--line-height);
 }
 
@@ -58,6 +64,8 @@ div.rg-content-wrapper {
   column-rule: 1px solid #eee;
   column-gap: var(--column-gap);
   height: var(--content-wrapper-height);
+  font-size: var(--font-size);
+  font-family: var(--font-family);
   hyphens: auto;
   clear: both;
   cursor: var(--drag-cursor, grab);
