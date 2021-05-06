@@ -74,3 +74,7 @@ We divide the features in three different groups:
 
 - Mouse and Touch based Zooming and Panning (avoiding iScroll)
 - Fit to width and height
+
+### CI/CD
+
+TODO
