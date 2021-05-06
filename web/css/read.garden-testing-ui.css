@@ -1,0 +1,25 @@
+div#testing-buttons-panel {
+  position: fixed;
+  top: 0px;
+  left: -1px;
+  width: 100px;
+  background-color: #334;
+  border-radius: 0 10px 10px 0;
+  margin-top: 10px;
+  padding: 4px 4px 4px 0;
+}
+
+div#testing-buttons-panel button {
+  height: 12px;
+  border: solid 1px dimgray;
+  border-radius: 0 10px 10px 0;
+  width: 100px;
+  font-size: 8px;
+  font-family: monospace;
+  font-weight: 600;
+  text-transform: uppercase;
+  background-color: darkslategray;
+  color: bisque;
+  float: left;
+  clear: both;
+}

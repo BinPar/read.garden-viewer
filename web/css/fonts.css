@@ -1,0 +1,348 @@
+@font-face {
+  font-family: 'Obf-Helvetica';
+  src: url('https://duana-cdn.read.garden/books/fnt/obfuscate-Helvetica-Bold-Oblique.ttf');
+  font-style: 'oblique';
+  font-weight: 700;
+}
+@font-face {
+  font-family: 'Helvetica';
+  src: url('https://duana-cdn.read.garden/books/fnt/Helvetica-Bold-Oblique.ttf');
+  font-style: 'oblique';
+  font-weight: 700;
+}
+@font-face {
+  font-family: 'Obf-Helvetica';
+  src: url('https://duana-cdn.read.garden/books/fnt/obfuscate-Helvetica-Bold.ttf');
+  font-style: 'normal';
+  font-weight: 700;
+}
+@font-face {
+  font-family: 'Helvetica';
+  src: url('https://duana-cdn.read.garden/books/fnt/Helvetica-Bold.ttf');
+  font-style: 'normal';
+  font-weight: 700;
+}
+@font-face {
+  font-family: 'Obf-Helvetica';
+  src: url('https://duana-cdn.read.garden/books/fnt/obfuscate-Helvetica-Light-Oblique.ttf');
+  font-style: 'oblique';
+  font-weight: 300;
+}
+@font-face {
+  font-family: 'Helvetica';
+  src: url('https://duana-cdn.read.garden/books/fnt/Helvetica-Light-Oblique.ttf');
+  font-style: 'oblique';
+  font-weight: 300;
+}
+@font-face {
+  font-family: 'Obf-Helvetica';
+  src: url('https://duana-cdn.read.garden/books/fnt/obfuscate-Helvetica-Light.ttf');
+  font-style: 'normal';
+  font-weight: 300;
+}
+@font-face {
+  font-family: 'Helvetica';
+  src: url('https://duana-cdn.read.garden/books/fnt/Helvetica-Light.ttf');
+  font-style: 'normal';
+  font-weight: 300;
+}
+@font-face {
+  font-family: 'Obf-Helvetica';
+  src: url('https://duana-cdn.read.garden/books/fnt/obfuscate-Helvetica-Oblique.ttf');
+  font-style: 'oblique';
+  font-weight: normal;
+}
+@font-face {
+  font-family: 'Helvetica';
+  src: url('https://duana-cdn.read.garden/books/fnt/Helvetica-Oblique.ttf');
+  font-style: 'oblique';
+  font-weight: normal;
+}
+@font-face {
+  font-family: 'Obf-Helvetica';
+  src: url('https://duana-cdn.read.garden/books/fnt/obfuscate-Helvetica.ttf');
+  font-style: 'normal';
+  font-weight: normal;
+}
+@font-face {
+  font-family: 'Helvetica';
+  src: url('https://duana-cdn.read.garden/books/fnt/Helvetica.ttf');
+  font-style: 'normal';
+  font-weight: normal;
+}
+@font-face {
+  font-family: 'Obf-OpenDyslexic';
+  src: url('https://duana-cdn.read.garden/books/fnt/obfuscate-OpenDyslexic-Bold-Italic.otf');
+  font-style: 'italic';
+  font-weight: 700;
+}
+@font-face {
+  font-family: 'OpenDyslexic';
+  src: url('https://duana-cdn.read.garden/books/fnt/OpenDyslexic-Bold-Italic.otf');
+  font-style: 'italic';
+  font-weight: 700;
+}
+@font-face {
+  font-family: 'Obf-OpenDyslexic';
+  src: url('https://duana-cdn.read.garden/books/fnt/obfuscate-OpenDyslexic-Bold.otf');
+  font-style: 'normal';
+  font-weight: 700;
+}
+@font-face {
+  font-family: 'OpenDyslexic';
+  src: url('https://duana-cdn.read.garden/books/fnt/OpenDyslexic-Bold.otf');
+  font-style: 'normal';
+  font-weight: 700;
+}
+@font-face {
+  font-family: 'Obf-OpenDyslexic';
+  src: url('https://duana-cdn.read.garden/books/fnt/obfuscate-OpenDyslexic-Italic.otf');
+  font-style: 'italic';
+  font-weight: normal;
+}
+@font-face {
+  font-family: 'OpenDyslexic';
+  src: url('https://duana-cdn.read.garden/books/fnt/OpenDyslexic-Italic.otf');
+  font-style: 'italic';
+  font-weight: normal;
+}
+@font-face {
+  font-family: 'Obf-OpenDyslexic';
+  src: url('https://duana-cdn.read.garden/books/fnt/obfuscate-OpenDyslexic-Regular.otf');
+  font-style: 'normal';
+  font-weight: 400;
+}
+@font-face {
+  font-family: 'OpenDyslexic';
+  src: url('https://duana-cdn.read.garden/books/fnt/OpenDyslexic-Regular.otf');
+  font-style: 'normal';
+  font-weight: 400;
+}
+@font-face {
+  font-family: 'Obf-AmericanTypewriter';
+  src: url('https://duana-cdn.read.garden/books/fnt/obfuscate-AmericanTypewriter-Bold.ttf');
+  font-style: 'normal';
+  font-weight: 700;
+}
+@font-face {
+  font-family: 'AmericanTypewriter';
+  src: url('https://duana-cdn.read.garden/books/fnt/AmericanTypewriter-Bold.ttf');
+  font-style: 'normal';
+  font-weight: 700;
+}
+@font-face {
+  font-family: 'Obf-AmericanTypewriter';
+  src: url('https://duana-cdn.read.garden/books/fnt/obfuscate-AmericanTypewriter-Light.ttf');
+  font-style: 'normal';
+  font-weight: 300;
+}
+@font-face {
+  font-family: 'AmericanTypewriter';
+  src: url('https://duana-cdn.read.garden/books/fnt/AmericanTypewriter-Light.ttf');
+  font-style: 'normal';
+  font-weight: 300;
+}
+@font-face {
+  font-family: 'Obf-AmericanTypewriter';
+  src: url('https://duana-cdn.read.garden/books/fnt/obfuscate-AmericanTypewriter-Semibold.ttf');
+  font-style: 'normal';
+  font-weight: 600;
+}
+@font-face {
+  font-family: 'AmericanTypewriter';
+  src: url('https://duana-cdn.read.garden/books/fnt/AmericanTypewriter-Semibold.ttf');
+  font-style: 'normal';
+  font-weight: 600;
+}
+@font-face {
+  font-family: 'Obf-AmericanTypewriter';
+  src: url('https://duana-cdn.read.garden/books/fnt/obfuscate-AmericanTypewriter.ttf');
+  font-style: 'normal';
+  font-weight: normal;
+}
+@font-face {
+  font-family: 'AmericanTypewriter';
+  src: url('https://duana-cdn.read.garden/books/fnt/AmericanTypewriter.ttf');
+  font-style: 'normal';
+  font-weight: normal;
+}
+@font-face {
+  font-family: 'Obf-RobotoSlab';
+  src: url('https://duana-cdn.read.garden/books/fnt/obfuscate-RobotoSlab-Bold.ttf');
+  font-style: 'normal';
+  font-weight: 700;
+}
+@font-face {
+  font-family: 'RobotoSlab';
+  src: url('https://duana-cdn.read.garden/books/fnt/RobotoSlab-Bold.ttf');
+  font-style: 'normal';
+  font-weight: 700;
+}
+@font-face {
+  font-family: 'Obf-RobotoSlab';
+  src: url('https://duana-cdn.read.garden/books/fnt/obfuscate-RobotoSlab-Light.ttf');
+  font-style: 'normal';
+  font-weight: 300;
+}
+@font-face {
+  font-family: 'RobotoSlab';
+  src: url('https://duana-cdn.read.garden/books/fnt/RobotoSlab-Light.ttf');
+  font-style: 'normal';
+  font-weight: 300;
+}
+@font-face {
+  font-family: 'Obf-RobotoSlab';
+  src: url('https://duana-cdn.read.garden/books/fnt/obfuscate-RobotoSlab-Regular.ttf');
+  font-style: 'normal';
+  font-weight: 400;
+}
+@font-face {
+  font-family: 'RobotoSlab';
+  src: url('https://duana-cdn.read.garden/books/fnt/RobotoSlab-Regular.ttf');
+  font-style: 'normal';
+  font-weight: 400;
+}
+@font-face {
+  font-family: 'Obf-RobotoSlab';
+  src: url('https://duana-cdn.read.garden/books/fnt/obfuscate-RobotoSlab-Thin.ttf');
+  font-style: 'normal';
+  font-weight: 100;
+}
+@font-face {
+  font-family: 'RobotoSlab';
+  src: url('https://duana-cdn.read.garden/books/fnt/RobotoSlab-Thin.ttf');
+  font-style: 'normal';
+  font-weight: 100;
+}
+@font-face {
+  font-family: 'Obf-Baskerville';
+  src: url('https://duana-cdn.read.garden/books/fnt/obfuscate-Baskerville-Bold-Italic.ttf');
+  font-style: 'italic';
+  font-weight: 700;
+}
+@font-face {
+  font-family: 'Baskerville';
+  src: url('https://duana-cdn.read.garden/books/fnt/Baskerville-Bold-Italic.ttf');
+  font-style: 'italic';
+  font-weight: 700;
+}
+@font-face {
+  font-family: 'Obf-Baskerville';
+  src: url('https://duana-cdn.read.garden/books/fnt/obfuscate-Baskerville-Bold.ttf');
+  font-style: 'normal';
+  font-weight: 700;
+}
+@font-face {
+  font-family: 'Baskerville';
+  src: url('https://duana-cdn.read.garden/books/fnt/Baskerville-Bold.ttf');
+  font-style: 'normal';
+  font-weight: 700;
+}
+@font-face {
+  font-family: 'Obf-Baskerville';
+  src: url('https://duana-cdn.read.garden/books/fnt/obfuscate-Baskerville-Italic.ttf');
+  font-style: 'italic';
+  font-weight: normal;
+}
+@font-face {
+  font-family: 'Baskerville';
+  src: url('https://duana-cdn.read.garden/books/fnt/Baskerville-Italic.ttf');
+  font-style: 'italic';
+  font-weight: normal;
+}
+@font-face {
+  font-family: 'Obf-Tahoma';
+  src: url('https://duana-cdn.read.garden/books/fnt/obfuscate-Tahoma-Bold.ttf');
+  font-style: 'normal';
+  font-weight: 700;
+}
+@font-face {
+  font-family: 'Tahoma';
+  src: url('https://duana-cdn.read.garden/books/fnt/Tahoma-Bold.ttf');
+  font-style: 'normal';
+  font-weight: 700;
+}
+@font-face {
+  font-family: 'Obf-Tahoma';
+  src: url('https://duana-cdn.read.garden/books/fnt/obfuscate-Tahoma.ttf');
+  font-style: 'normal';
+  font-weight: normal;
+}
+@font-face {
+  font-family: 'Tahoma';
+  src: url('https://duana-cdn.read.garden/books/fnt/Tahoma.ttf');
+  font-style: 'normal';
+  font-weight: normal;
+}
+@font-face {
+  font-family: 'Obf-TimesNewRoman';
+  src: url('https://duana-cdn.read.garden/books/fnt/obfuscate-TimesNewRoman-Bold.ttf');
+  font-style: 'normal';
+  font-weight: 700;
+}
+@font-face {
+  font-family: 'TimesNewRoman';
+  src: url('https://duana-cdn.read.garden/books/fnt/TimesNewRoman-Bold.ttf');
+  font-style: 'normal';
+  font-weight: 700;
+}
+@font-face {
+  font-family: 'Obf-TimesNewRoman';
+  src: url('https://duana-cdn.read.garden/books/fnt/obfuscate-TimesNewRoman-Italic.ttf');
+  font-style: 'italic';
+  font-weight: normal;
+}
+@font-face {
+  font-family: 'TimesNewRoman';
+  src: url('https://duana-cdn.read.garden/books/fnt/TimesNewRoman-Italic.ttf');
+  font-style: 'italic';
+  font-weight: normal;
+}
+@font-face {
+  font-family: 'Obf-TimesNewRoman';
+  src: url('https://duana-cdn.read.garden/books/fnt/obfuscate-TimesNewRoman.ttf');
+  font-style: 'normal';
+  font-weight: normal;
+}
+@font-face {
+  font-family: 'TimesNewRoman';
+  src: url('https://duana-cdn.read.garden/books/fnt/TimesNewRoman.ttf');
+  font-style: 'normal';
+  font-weight: normal;
+}
+@font-face {
+  font-family: 'Obf-Baskerville';
+  src: url('https://duana-cdn.read.garden/books/fnt/obfuscate-Baskerville-Semibold-Italic.ttf');
+  font-style: 'italic';
+  font-weight: 600;
+}
+@font-face {
+  font-family: 'Baskerville';
+  src: url('https://duana-cdn.read.garden/books/fnt/Baskerville-Semibold-Italic.ttf');
+  font-style: 'italic';
+  font-weight: 600;
+}
+@font-face {
+  font-family: 'Obf-Baskerville';
+  src: url('https://duana-cdn.read.garden/books/fnt/obfuscate-Baskerville-Semibold.ttf');
+  font-style: 'normal';
+  font-weight: 600;
+}
+@font-face {
+  font-family: 'Baskerville';
+  src: url('https://duana-cdn.read.garden/books/fnt/Baskerville-Semibold.ttf');
+  font-style: 'normal';
+  font-weight: 600;
+}
+@font-face {
+  font-family: 'Obf-Baskerville';
+  src: url('https://duana-cdn.read.garden/books/fnt/obfuscate-Baskerville.ttf');
+  font-style: 'normal';
+  font-weight: normal;
+}
+@font-face {
+  font-family: 'Baskerville';
+  src: url('https://duana-cdn.read.garden/books/fnt/Baskerville.ttf');
+  font-style: 'normal';
+  font-weight: normal;
+}

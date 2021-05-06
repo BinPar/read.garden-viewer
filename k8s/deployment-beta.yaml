@@ -1,0 +1,103 @@
+# Namespace
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: demos
+  labels:
+    app.kubernetes.io/name: beta
+    app.kubernetes.io/instance: beta
+---
+# Service - bi-productive-service
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    run: read-garden-viewer-beta
+  name: read-garden-viewer-service-beta
+  namespace: demos
+spec:
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 8043
+  selector:
+    run: read-garden-viewer-beta
+  sessionAffinity: None
+  type: ClusterIP
+---
+# Issuer - letsencrypt
+apiVersion: cert-manager.io/v1alpha2
+kind: Issuer
+metadata:
+  name: letsencrypt-prod
+  namespace: demos
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    email: soporte@binpar.com
+    privateKeySecretRef:
+      name: letsencrypt-prod
+    solvers:
+      - http01:
+          ingress:
+            class: nginx
+---
+# Ingress - ingress-pre
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/ssl-passthrough: 'false'
+    cert-manager.io/issuer: 'letsencrypt-prod'
+  generation: 2
+  name: ingress-beta
+  namespace: demos
+spec:
+  rules:
+    - host: read-garden-viewer-beta.binpar.cloud
+      http:
+        paths:
+          - backend:
+              serviceName: read-garden-viewer-service-beta
+              servicePort: 80
+            path: /
+  tls:
+    - hosts:
+        - read-garden-viewer-beta.binpar.cloud
+      secretName: read-garden-viewer-cert-beta
+---
+# Deploy - bi-productive-deploy
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    run: read-garden-viewer-beta
+  name: read-garden-viewer-deploy-beta
+  namespace: demos
+spec:
+  replicas: 1
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      run: read-garden-viewer-beta
+  template:
+    metadata:
+      labels:
+        run: read-garden-viewer-beta
+    spec:
+      imagePullSecrets:
+        - name: pipeline-docker-registry
+      containers:
+        - image: 402083338966.dkr.ecr.eu-west-1.amazonaws.com/read-garden-viewer:latest
+          name: read-garden-viewer-beta
+          ports:
+            - containerPort: 8043
+          resources:
+            requests:
+              memory: '40Mi'
+              cpu: '10m'
+            limits:
+              memory: '100Mi'
+              cpu: '100m'
