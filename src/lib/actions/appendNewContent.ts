@@ -7,7 +7,7 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async (
   state,
 ) =>
   new Promise<Partial<State>>((resolve): void => {
-    console.log(action.cssURL);
+    // console.log(action.cssURL);
     const {
       contentPlaceholderNode,
       dynamicStyleNode,
@@ -25,14 +25,14 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async (
       return;
     }
     dynamicStyleNode.onload = (): void => {
-      console.log('styles loaded, fonts', document.fonts.status);
+      // console.log('styles loaded, fonts', document.fonts.status);
       if (document.fonts.status === 'loaded') {
         dynamicStyleNode.onload = null;
         resolve(partialState);
         return;
       }
       document.fonts.onloadingdone = () => {
-        console.log('fonts loaded');
+        // console.log('fonts loaded');
         dynamicStyleNode.onload = null;
         document.fonts.onloadingdone = null;
         resolve(partialState);
