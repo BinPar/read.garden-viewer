@@ -5,8 +5,6 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async (
   action,
   state,
 ) => {
-  console.log(action.cssURL);
-//   console.log(action.htmlContent);
   const { contentPlaceholderNode, dynamicStyleNode } = state;
   const parser = new DOMParser();
   const element = parser.parseFromString(action.htmlContent, 'text/html').body
