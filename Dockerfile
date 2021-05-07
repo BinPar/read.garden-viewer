@@ -14,8 +14,7 @@ COPY web ./web
 COPY ["./.eslintignore", "./.eslintrc", "./jest-puppeteer.config.js", "./jest.config.js", "./tsconfig.jest.json", "./tsconfig.json", "./webpack.config.prod.js", "./"]
 RUN npm run generate-contents
 RUN npm run lint
-RUN npm audit
+RUN npm audit --production
 RUN npm run build
-
 FROM pierrezemb/gostatic
 COPY --from=compile /usr/src/app/web /srv/http
