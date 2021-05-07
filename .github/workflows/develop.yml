@@ -25,7 +25,7 @@ jobs:
           CDN_DOMAIN: ${{ secrets.CDN_DOMAIN }}
           INDEXES: ${{ secrets.INDEXES }}
         with:
-          name: eva-pros
+          name: read-garden-viewer
           username: ${{ steps.ecr.outputs.username }}
           password: ${{ steps.ecr.outputs.password }}
           registry: ${{ steps.ecr.outputs.registry }}
