@@ -1,6 +1,7 @@
 import { ActionDispatcher } from '../../model/actions/actionDispatcher';
 import { SetDebugViewerSafeArea } from '../../model/actions/global';
-import setCSSProperty from '../../viewer/setCSSProperty';
+
+import setCSSProperty from '../../utils/setCSSProperty';
 
 /**
  * Draws a red border around the viewer

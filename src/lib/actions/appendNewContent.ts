@@ -1,7 +1,8 @@
 import { ActionDispatcher } from '../../model/actions/actionDispatcher';
 import { AppendNewContent } from '../../model/actions/global';
 import { State } from '../../model/state';
-import setCSSProperty from '../../viewer/setCSSProperty';
+
+import setCSSProperty from '../../utils/setCSSProperty';
 
 const appendNewContent: ActionDispatcher<AppendNewContent> = async (
   action,

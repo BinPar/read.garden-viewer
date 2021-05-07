@@ -3,8 +3,9 @@ import { getState, initializeState } from '../lib/state';
 import { APIInterface } from '../model/apiInterface';
 import dispatch from '../lib/state/dispatch';
 import { ViewerFunction } from '../model/viewer';
-import createBasicDOMElements from './createBasicDOMElements';
+import createBasicDOMElements from '../utils/createBasicDOMElements';
 import { LoadNewContent } from '../model/events';
+import setInitialProperties from '../lib/styles/setInitialProperties';
 
 const viewer: ViewerFunction = (config) => {
   initializeState(config);
@@ -13,13 +14,14 @@ const viewer: ViewerFunction = (config) => {
     dispatch,
     state,
   };
-  createBasicDOMElements(api.state);
+  setInitialProperties(state);
+  createBasicDOMElements();
   const loadNewContent: LoadNewContent = {
     type: 'loadNewContent',
     contentSlug: config.contentSlug,
     label: config.startPageLabel,
   };  
-  state.config.eventHandler(loadNewContent);
+  state.config.eventHandler!(loadNewContent);
   log.info('Viewer Initialized');
   return api;
 };
