@@ -13,6 +13,7 @@ COPY tests ./tests
 COPY web ./web
 COPY ["./.eslintignore", "./.eslintrc", "./jest-puppeteer.config.js", "./jest.config.js", "./tsconfig.jest.json", "./tsconfig.json", "./webpack.config.prod.js", "./"]
 RUN npm run generate-contents
+RUN npm run use-prod-settings
 RUN npm run lint
 RUN npm audit --production --audit-level=high
 RUN npm run build
