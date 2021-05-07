@@ -1,17 +1,19 @@
-import { State } from '../../model/state';
+import { LayoutTypes, State } from '../../model/state';
 import setCSSProperty from '../../utils/setCSSProperty';
 
 const setInitialProperties = (state: State): void => {
+  if (state.layout === LayoutTypes.Flow) {
+    setCSSProperty('font-family', state.fontFamily);
+  }
   setCSSProperty(
     'debug-viewer-safe-area',
     `${state.debugViewerSafeArea ? 1 : 0}`,
   );
   setCSSProperty('viewer-margin-top', '200vh');
-  setCSSProperty('font-family', state.config.initialFontFamily);
   setCSSProperty('border-radius', '10px');
   setCSSProperty(
     'debug-viewer-safe-area',
-    'calc(1px * var(--debug-viewer-safe-area)',
+    'calc(1px * var(--debug-viewer-safe-area))',
   );
   setCSSProperty(
     'safe-area-margin-correction',
@@ -31,7 +33,6 @@ const setInitialProperties = (state: State): void => {
   setCSSProperty('search-highlights-color', '#ffcf0040');
   setCSSProperty('snap-type', 'x mandatory');
   setCSSProperty('font-size', '18px');
-  setCSSProperty('font-family', 'initial');
   setCSSProperty('line-height', '1.5em');
   setCSSProperty('text-align', 'initial');
   setCSSProperty('horizontal-translate', '0');
