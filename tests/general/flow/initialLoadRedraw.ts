@@ -16,7 +16,7 @@ describe('Initial Load Draw', () => {
       JSON.stringify(testing.longFlowLayoutContentConfig),
     );
     // We check that the css is not loaded
-    expect(state.cssLoaded).toBeFalsy();
+    expect(state.cssLoaded).toBeFalsy();    
     // Wait for the viewer to inform that the CSS is loaded
     await page.waitForFunction(() => window.readGardenApi.state.cssLoaded);
     // Get the position of the end of the chapter marker
@@ -24,7 +24,7 @@ describe('Initial Load Draw', () => {
       getEndOfChapterPositionString,
     );
     // Wait 500 milliseconds
-    await page.waitForTimeout(500);
+    await page.waitForTimeout(500);    
     // Get the position of the end of the chapter marker again
     const delayedEndOfChapterPosition = await page.evaluate(
       getEndOfChapterPositionString,
