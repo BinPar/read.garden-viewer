@@ -13,7 +13,6 @@ import { setConfig } from '../../config';
 let state: State;
 
 export const initializeState = (initialConfig: InitialConfig): void => {
-  console.log({ initialConfig });
   const config = setConfig({
     ...defaultConfig,
     ...initialConfig,
