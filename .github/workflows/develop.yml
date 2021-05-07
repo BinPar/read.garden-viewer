@@ -21,6 +21,9 @@ jobs:
           region: eu-west-1
       - name: Publish to Registry
         uses: elgohr/Publish-Docker-Github-Action@master
+        env:
+          CDN_DOMAIN: ${{ secrets.CDN_DOMAIN }}
+          INDEXES: ${{ secrets.INDEXES }}
         with:
           name: eva-pros
           username: ${{ steps.ecr.outputs.username }}
@@ -28,7 +31,7 @@ jobs:
           registry: ${{ steps.ecr.outputs.registry }}
           tags: 'latest,${{ env.RELEASE_VERSION }}'
           dockerfile: Dockerfile
-          buildargs: CDN_DOMAIN=${{ secrets.CDN_DOMAIN }},INDEXES=${{ secrets.INDEXES }}
+          buildargs: CDN_DOMAIN,INDEXES
       - name: Deploy to beta
         uses: colbyhill21/Rancher-Action@1.1
         with:
