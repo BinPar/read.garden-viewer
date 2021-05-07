@@ -5,7 +5,7 @@
   --safe-area-margin-correction: calc(-1px * var(--debug-viewer-safe-area));
   --animation-speed: 0;
   --animation-speed-value: calc(1s * var(--animation-speed));
-  --viewer-margin-top: 100vh;
+  --viewer-margin-top: 0;
   --column-count: 2;
   --column-gap: 0px;
   --content-wrapper-height: 100vh;
@@ -63,7 +63,7 @@ div.rg-content-wrapper {
   column-count: var(--column-count);
   column-rule: 1px solid #eee;
   column-gap: var(--column-gap);
-  height: var(--content-wrapper-height);
+  height: 100%;
   font-size: var(--font-size);
   font-family: var(--font-family);
   hyphens: auto;

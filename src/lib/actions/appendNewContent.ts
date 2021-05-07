@@ -1,7 +1,6 @@
 import { ActionDispatcher } from '../../model/actions/actionDispatcher';
 import { AppendNewContent } from '../../model/actions/global';
 import { State } from '../../model/state';
-import waitForStylesheetToBeReady from '../../utils/waitForStylesheetToBeReady';
 import setCSSProperty from '../../viewer/setCSSProperty';
 
 const appendNewContent: ActionDispatcher<AppendNewContent> = async (
@@ -12,74 +11,71 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async (
     const {
       contentPlaceholderNode,
       dynamicStyleNode,
-      mainStyleNode,
     } = state as Required<State>;
 
-    setCSSProperty('viewer-margin-top', '100vh');
+    setCSSProperty('viewer-margin-top', '200vh');
     window.requestAnimationFrame(() => {
       const parser = new DOMParser();
-      const element = parser.parseFromString(action.htmlContent, 'text/html').body
-        .firstChild as HTMLDivElement;
+      const element = parser.parseFromString(action.htmlContent, 'text/html')
+        .body.firstChild as HTMLDivElement;
       contentPlaceholderNode.replaceWith(element);
-      waitForStylesheetToBeReady(mainStyleNode.sheet!).then(() => {
-        const partialState: Partial<State> = {
-          cssLoaded: true,
-          contentPlaceholderNode: element,
+      const partialState: Partial<State> = {
+        cssLoaded: true,
+        contentPlaceholderNode: element,
+      };
+
+      window.requestAnimationFrame(() => {
+        const done = () => {
+          resolve(partialState);
+          setCSSProperty('viewer-margin-top', '0');
         };
-  
-        window.requestAnimationFrame(() => {
-          const done = () => {
-            resolve(partialState);
-            setCSSProperty('viewer-margin-top', '0');
-          };
-          if (!action.cssURL || action.cssURL === dynamicStyleNode.href) {
-            done();
-            return;
-          }
-          dynamicStyleNode.onload = (): void => {
-            const checkFonts = () => {
-              if (document.fonts.status === 'loaded') {
-                dynamicStyleNode.onload = null;
-                done();
-                return;
-              }
-              document.fonts.onloadingdone = () => {
-                dynamicStyleNode.onload = null;
-                document.fonts.onloadingdone = null;
-                done();
-              };
-            };
-            const images = element.querySelectorAll('img');
-            if (!images.length) {
-              checkFonts();
+        if (!action.cssURL || action.cssURL === dynamicStyleNode.href) {
+          done();
+          return;
+        }
+        dynamicStyleNode.onload = (): void => {
+          const checkFonts = () => {
+            if (document.fonts.status === 'loaded') {
+              dynamicStyleNode.onload = null;
+              done();
               return;
             }
-            const promises = new Array<Promise<void>>();
-            images.forEach((img) => {
-              promises.push(
-                new Promise<void>((imageResolve) => {
-                  if (img.complete) {
-                    imageResolve();
-                    return;
-                  }
-                  const onLoad = (): void => {
-                    img.removeEventListener('load', onLoad);
-                    imageResolve();
-                  };
-                  const onError = (ev: ErrorEvent) => {
-                    // eslint-disable-next-line no-console
-                    console.log('Error loading image', ev.message);
-                    onLoad();
-                  };
-                  img.addEventListener('load', onLoad);
-                  img.addEventListener('error', onError);
-                }),
-              );
-            });
-            Promise.all(promises).then(checkFonts);
+            document.fonts.onloadingdone = () => {
+              dynamicStyleNode.onload = null;
+              document.fonts.onloadingdone = null;
+              done();
+            };
           };
-          dynamicStyleNode.href = action.cssURL;
-        });
+          const images = element.querySelectorAll('img');
+          if (!images.length) {
+            checkFonts();
+            return;
+          }
+          const promises = new Array<Promise<void>>();
+          images.forEach((img) => {
+            promises.push(
+              new Promise<void>((imageResolve) => {
+                if (img.complete) {
+                  imageResolve();
+                  return;
+                }
+                const onLoad = (): void => {
+                  img.removeEventListener('load', onLoad);
+                  imageResolve();
+                };
+                const onError = (ev: ErrorEvent) => {
+                  // eslint-disable-next-line no-console
+                  console.log('Error loading image', ev.message);
+                  onLoad();
+                };
+                img.addEventListener('load', onLoad);
+                img.addEventListener('error', onError);
+              }),
+            );
+          });
+          Promise.all(promises).then(checkFonts);
+        };
+        dynamicStyleNode.href = action.cssURL;
       });
     });
   });
