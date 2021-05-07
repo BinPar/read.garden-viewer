@@ -17,7 +17,7 @@ describe('Initial Load Draw', () => {
     );
     // We check that the css is not loaded
     expect(state.cssLoaded).toBeFalsy();
-    // Wait for the page to tell that the CSS is loaded
+    // Wait for the viewer to inform that the CSS is loaded
     await page.waitForFunction(() => window.readGardenApi.state.cssLoaded);
     // Get the position of the end of the chapter marker
     const initialEndOfChapterPosition = await page.evaluate(
