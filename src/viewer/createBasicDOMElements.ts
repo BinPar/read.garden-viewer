@@ -69,12 +69,18 @@ const createBasicDOMElements = (state: State): void => {
   dynamicStyleNode.type = 'text/css';
   document.head.appendChild(dynamicStyleNode);
 
+  const mainStylesheet = Array.from(document.styleSheets).find(
+    (s) => s.href?.indexOf('read.garden-viewer.css') !== -1,
+  );
+
   setCSSProperty(
     'debug-viewer-safe-area',
     `${state.debugViewerSafeArea ? 1 : 0}`,
   );
+  
   updateState({
     basicDOMElementsCreated: true,
+    mainStyleNode: mainStylesheet?.ownerNode as HTMLLinkElement,
     readGardenViewerNode,
     contentWrapperNode,
     totalWidthCalculatorNode,

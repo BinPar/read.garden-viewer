@@ -5,7 +5,7 @@
   --safe-area-margin-correction: calc(-1px * var(--debug-viewer-safe-area));
   --animation-speed: 0;
   --animation-speed-value: calc(1s * var(--animation-speed));
-  --viewer-margin-top: 300vh;
+  --viewer-margin-top: 100vh;
   --column-count: 2;
   --column-gap: 0px;
   --content-wrapper-height: 100vh;
