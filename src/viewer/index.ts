@@ -20,8 +20,10 @@ const viewer: ViewerFunction = (config) => {
     type: 'loadNewContent',
     contentSlug: config.contentSlug,
     label: config.startPageLabel,
-  };  
-  state.config.eventHandler!(loadNewContent);
+  };
+  if (state.config.eventHandler) {
+    state.config.eventHandler(loadNewContent);
+  }
   log.info('Viewer Initialized');
   return api;
 };
