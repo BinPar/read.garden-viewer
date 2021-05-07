@@ -1,13 +1,13 @@
 FROM node:12-alpine AS base
 WORKDIR /usr/src/app
+ENV CDN_DOMAIN=$CDN_DOMAIN
+ENV INDEXES=$INDEXES
 COPY package*.json ./
 
 FROM base as build-base
 RUN npm install
 
 FROM build-base AS compile
-ENV CDN_DOMAIN=$CDN_DOMAIN
-ENV INDEXES=$INDEXES
 COPY src ./src
 COPY tests ./tests
 COPY web ./web
