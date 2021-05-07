@@ -21,6 +21,9 @@ jobs:
           region: eu-west-1
       - name: Publish to Registry
         uses: elgohr/Publish-Docker-Github-Action@master
+        env:
+          CDN_DOMAIN: ${{ secrets.CDN_DOMAIN }}
+          INDEXES: ${{ secrets.INDEXES }}
         with:
           name: eva-pros
           username: ${{ steps.ecr.outputs.username }}
@@ -28,6 +31,7 @@ jobs:
           registry: ${{ steps.ecr.outputs.registry }}
           tags: 'latest,${{ env.RELEASE_VERSION }}'
           dockerfile: Dockerfile
+          buildargs: CDN_DOMAIN,INDEXES
       - name: Deploy to beta
         uses: colbyhill21/Rancher-Action@1.1
         with:
@@ -35,7 +39,7 @@ jobs:
           context: ${{ secrets.RANCHER_CONTEXT }}
           url: ${{ secrets.RANCHER_URL }}
           args: |
-            set image deployment/read-garden-viewer-deploy-beta eva-redolar="402083338966.dkr.ecr.eu-west-1.amazonaws.com/read-garden-viewer:${{ env.RELEASE_VERSION }}" --record -n read-garden-viewer-beta
+            set image deployment/read-garden-viewer-deploy-beta read-garden-viewer-beta="402083338966.dkr.ecr.eu-west-1.amazonaws.com/read-garden-viewer:${{ env.RELEASE_VERSION }}" --record -n demos
       - name: Beta update Success
         uses: rjstone/discord-webhook-notify@v1
         if: success()

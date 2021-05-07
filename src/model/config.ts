@@ -114,7 +114,7 @@ export interface RequiredConfig {
   /**
    * Event handler to process the Viewer Events
    */
-  eventHandler: ReadGardenEventHandler;
+  eventHandler?: ReadGardenEventHandler;
   /**
    * Current content slug
    */
