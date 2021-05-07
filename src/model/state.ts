@@ -46,6 +46,10 @@ export interface GlobalState {
    */
   dynamicStyleNode?: HTMLLinkElement;
   /**
+   * Main styles DOM node (read.garden-viewer.css)
+   */
+  mainStyleNode?: HTMLLinkElement;
+  /**
    * CSS and fonts are loaded for the current content
    */
   cssLoaded: boolean;

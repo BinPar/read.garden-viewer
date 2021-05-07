@@ -1,10 +1,11 @@
 import { updateState } from '../lib/state';
-import { State } from '../model/state';
-import setCSSProperty from './setCSSProperty';
 
 const endingAdditionalPages = 10;
 
-const createBasicDOMElements = (state: State): void => {
+/**
+ * Creates basic DOM elements for viewer
+ */
+const createBasicDOMElements = (): void => {
   // #region Main node
   const readGardenViewerNode = document.createElement('div');
   readGardenViewerNode.id = 'rg-viewer';
@@ -69,12 +70,13 @@ const createBasicDOMElements = (state: State): void => {
   dynamicStyleNode.type = 'text/css';
   document.head.appendChild(dynamicStyleNode);
 
-  setCSSProperty(
-    'debug-viewer-safe-area',
-    `${state.debugViewerSafeArea ? 1 : 0}`,
+  const mainStylesheet = Array.from(document.styleSheets).find(
+    (s) => s.href?.indexOf('read.garden-viewer.css') !== -1,
   );
+
   updateState({
     basicDOMElementsCreated: true,
+    mainStyleNode: mainStylesheet?.ownerNode as HTMLLinkElement,
     readGardenViewerNode,
     contentWrapperNode,
     totalWidthCalculatorNode,

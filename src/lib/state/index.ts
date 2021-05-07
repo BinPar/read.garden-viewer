@@ -9,11 +9,11 @@ import defaultFixed from './defaultFixed';
 import defaultPaginated from './defaultPaginated';
 import defaultConfig from '../../config/default';
 import { setConfig } from '../../config';
-import setCSSProperty from '../../viewer/setCSSProperty';
 
 let state: State;
 
 export const initializeState = (initialConfig: InitialConfig): void => {
+  console.log({ initialConfig });
   const config = setConfig({
     ...defaultConfig,
     ...initialConfig,
@@ -26,8 +26,6 @@ export const initializeState = (initialConfig: InitialConfig): void => {
       ...(initialConfig.fontSize || {}),
     },
   });
-
-  setCSSProperty('font-family', config.initialFontFamily);
 
   const defaultInitialMargins = config.initialReadMode
     ? defaultConfig.readModeMargin
@@ -89,7 +87,7 @@ export const getState = (): State => state;
 
 export const updateState = (newState: Partial<State>): void => {
   const updatableState = state as any;
-  Object.keys(newState).forEach(key => {
+  Object.keys(newState).forEach((key) => {
     updatableState[key] = (newState as any)[key];
   });
 };

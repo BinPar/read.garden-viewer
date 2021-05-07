@@ -1,33 +1,3 @@
-:root {
-  --border-radius: 10px;
-  --debug-viewer-safe-area: 0;
-  --safe-area-border-width: calc(1px * var(--debug-viewer-safe-area));
-  --safe-area-margin-correction: calc(-1px * var(--debug-viewer-safe-area));
-  --animation-speed: 0;
-  --animation-speed-value: calc(1s * var(--animation-speed));
-  --viewer-margin-top: 300vh;
-  --column-count: 2;
-  --column-gap: 0px;
-  --content-wrapper-height: 100vh;
-  --content-wrapper-padding: 0;
-  --total-width: 0;
-  --column-width: 0;
-  --current-selection-highlights-color: #0030ff46;
-  --current-selection-extensors-color: #0030ff46;
-  --search-highlights-color: #ffcf0040;
-  --snap-type: x mandatory;
-  --font-size: 18px;
-  --font-family: initial;
-  --line-height: 1.5em;
-  --text-align: initial;
-  --horizontal-translate: 0;
-  --vertical-translate: 0;
-  --scale: 1;
-  --contrast-viewer-color: 1;
-  --sepia-viewer-color: 0;
-  --invert-viewer-color: 0;
-}
-
 body {
   height: 100vh;
   margin: 0;
@@ -63,7 +33,7 @@ div.rg-content-wrapper {
   column-count: var(--column-count);
   column-rule: 1px solid #eee;
   column-gap: var(--column-gap);
-  height: var(--content-wrapper-height);
+  height: 100%;
   font-size: var(--font-size);
   font-family: var(--font-family);
   hyphens: auto;
