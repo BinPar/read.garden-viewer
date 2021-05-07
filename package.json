@@ -13,7 +13,9 @@
     "test": "jest --runInBand",
     "test-firefox": "PUPPETEER_EXECUTABLE_PATH=/usr/bin/firefox FIREFOX=true jest --runInBand",
     "test-ui": "HEADLESS=false jest --runInBand",
-    "test-dev": "NODE_ENV=development npx jest --watchAll --runInBand"
+    "test-dev": "NODE_ENV=development npx jest --watchAll --runInBand",
+    "use-dev-settings": "cp ./src/config/settings/settings.dev.json ./src/config/settings/settings.json",
+    "use-prod-settings": "cp ./src/config/settings/settings.prod.json ./src/config/settings/settings.json"
   },
   "repository": {
     "type": "git",

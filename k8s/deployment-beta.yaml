@@ -75,7 +75,7 @@ metadata:
   labels:
     run: read-garden-viewer-beta
   name: read-garden-viewer-deploy-beta
-  namespace: demos	
+  namespace: demos
 spec:
   replicas: 1
   revisionHistoryLimit: 2
