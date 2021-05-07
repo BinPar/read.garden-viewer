@@ -75,7 +75,7 @@ metadata:
   labels:
     run: read-garden-viewer-beta
   name: read-garden-viewer-deploy-beta
-  namespace: demos
+  namespace: demos	
 spec:
   replicas: 1
   revisionHistoryLimit: 2
@@ -92,6 +92,9 @@ spec:
       containers:
         - image: 402083338966.dkr.ecr.eu-west-1.amazonaws.com/read-garden-viewer:latest
           name: read-garden-viewer-beta
+          envFrom:
+            - configMapRef:
+                name: read-garden-viewer-beta
           ports:
             - containerPort: 8043
           resources:

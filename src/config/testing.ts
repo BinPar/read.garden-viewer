@@ -10,7 +10,7 @@ export interface TestingConfig {
 }
 
 const testingConfig: TestingConfig ={
-  baseURL: 'http://localhost:3000/',
+  baseURL: process.env.BASEURL || 'http://localhost:3000/',
   longFlowLayoutContentConfig: {
     layoutType: 'flow',
     contentSlug: 'acuario',

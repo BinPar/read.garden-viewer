@@ -1,7 +1,5 @@
 import { updateState } from '../lib/state';
 
-const endingAdditionalPages = 10;
-
 /**
  * Creates basic DOM elements for viewer
  */
@@ -25,10 +23,6 @@ const createBasicDOMElements = (): void => {
   backgroundCleaner.classList.add('rg-bg-cleaner');
   contentWrapperNode.appendChild(backgroundCleaner);
 
-  const additionalPage = document.createElement('div');
-  additionalPage.classList.add('rg-additional-page');
-  contentWrapperNode.appendChild(additionalPage.cloneNode(true));
-
   const contentPlaceholderNode = document.createElement('div');
   contentWrapperNode.appendChild(contentPlaceholderNode);
 
@@ -37,14 +31,10 @@ const createBasicDOMElements = (): void => {
   endOfChapterCalculatorNode.dataset.page = '-';
   contentWrapperNode.appendChild(endOfChapterCalculatorNode);
 
-  for (let i = 0; i < endingAdditionalPages; i++) {
-    const clone = additionalPage.cloneNode(true) as HTMLDivElement;
-    if (i === endingAdditionalPages - 1) {
-      clone.classList.add('rg-real-end-of-chapter');
-      clone.textContent = 'realEndOfChapter';
-    }
-    contentWrapperNode.appendChild(clone);
-  }
+  const additionalPage = document.createElement('div');
+  additionalPage.classList.add('rg-additional-page', 'rg-real-end-of-chapter');
+  additionalPage.textContent = 'realEndOfChapter';
+  contentWrapperNode.appendChild(additionalPage);
   // #endregion Content Wrapper and child nodes
 
   // #region Content Wrapper Siblings
