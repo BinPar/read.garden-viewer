@@ -31,7 +31,8 @@ export const setSize = async (size: number, state: State): Promise<Partial<State
 
 /**
  * Sets font size to specific provided value (after normalizing with max and min)
- * @param param0 Viewer action containing new desired font size
+ * @param context.state Viewer state
+ * @param context.action Viewer action, containing content HTML and CSS URL
  * @returns Update state
  */
 const setFontSize: ActionDispatcher<SetFontSize> = async ({ state, action }) => {
