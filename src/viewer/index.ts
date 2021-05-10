@@ -18,8 +18,8 @@ const viewer: ViewerFunction = (config) => {
   createBasicDOMElements(state);
   const loadNewContent: LoadNewContent = {
     type: 'loadNewContent',
+    slug: config.slug,
     contentSlug: config.contentSlug,
-    label: config.startPageLabel,
   };
   if (state.config.eventHandler) {
     state.config.eventHandler(loadNewContent);
