@@ -23,8 +23,10 @@ export const setSize = async (size: number, state: State): Promise<Partial<State
   setCSSProperty('viewer-margin-top', '0');
   return {
     ...recalculateUpdate,
+    layout: state.layout,
+    scrollMode: state.scrollMode,
     fontSize: size,
-  } as Partial<State>;
+  };
 };
 
 /**
