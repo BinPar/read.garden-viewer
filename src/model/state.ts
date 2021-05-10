@@ -123,7 +123,7 @@ export type TextAlignModes = 'start' | 'justify' | null;
  */
 export type ScrollModes = 'vertical' | 'horizontal';
 
-export interface FixedState extends GlobalState {
+export interface FixedState {
   /**
    * Layout type
    */
@@ -168,7 +168,7 @@ export interface FixedState extends GlobalState {
   // loadedPages: string[];
 }
 
-export interface FlowState extends GlobalState {
+export interface FlowState {
   /**
    * Layout type
    */
@@ -267,4 +267,8 @@ export interface ScrolledState {
   labelByPosition: Map<number, string>;
 }
 
-export type State = (FixedState & (PaginatedState | ScrolledState)) | (FlowState & ScrolledState);
+export type State = GlobalState &
+  (
+    | (FixedState & (PaginatedState | ScrolledState))
+    | (FlowState & ScrolledState)
+  );
