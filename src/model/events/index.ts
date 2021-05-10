@@ -16,7 +16,7 @@ export interface PageChange extends ReadGardenEvent{
 export interface LoadNewContent extends ReadGardenEvent {
   type: 'loadNewContent';
   /**
-   * Slug of the content to load
+   * Slug of the content (book, work...) to load
    */
   contentSlug: string;
   /**

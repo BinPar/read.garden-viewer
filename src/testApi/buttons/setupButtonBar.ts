@@ -1,6 +1,7 @@
 import { DispatchAPIAction } from '../../model/apiInterface';
 import { State } from '../../model/state';
 import debugViewerSafeArea from './debugViewerSafeArea';
+import flowChapterSelect from './flowChapterSelect';
 import fontFamilyButtons from './fontFamilyButtons';
 import fontSizeButtons from './fontSizeButtons';
 
@@ -11,6 +12,7 @@ const setupButtonBar = (state: State, dispatcher: DispatchAPIAction): void => {
   debugViewerSafeArea(testingButtonsPanel, state, dispatcher);
   fontSizeButtons(testingButtonsPanel, state, dispatcher);
   fontFamilyButtons(testingButtonsPanel, state, dispatcher);
+  flowChapterSelect(testingButtonsPanel, state);
 };
 
 export default setupButtonBar;

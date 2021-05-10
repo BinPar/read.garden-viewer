@@ -3,7 +3,7 @@ import { AppendNewContent } from '../../model/actions/global';
 import { State } from '../../model/state';
 
 import setCSSProperty from '../../utils/setCSSProperty';
-import checkImagesHeight from '../../viewer/checkImagesHeight';
+import checkImagesHeight from '../../utils/checkImagesHeight';
 import recalculate from '../../viewer/recalculate';
 
 /**
