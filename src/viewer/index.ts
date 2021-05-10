@@ -15,7 +15,7 @@ const viewer: ViewerFunction = (config) => {
     state,
   };
   setInitialProperties(state);
-  createBasicDOMElements();
+  createBasicDOMElements(state);
   const loadNewContent: LoadNewContent = {
     type: 'loadNewContent',
     contentSlug: config.contentSlug,
