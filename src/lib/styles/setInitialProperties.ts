@@ -19,11 +19,9 @@ const setInitialProperties = (state: State): void => {
   setCSSProperty('content-wrapper-padding', '0');
   setCSSProperty('contrast-viewer-color', '1');
   setCSSProperty('column-width', '0px');
-  setCSSProperty('total-column-width', '0px');
   setCSSProperty('current-selection-extensors-color', '#0030ff46');
   setCSSProperty('current-selection-highlights-color', '#0030ff46');
   setCSSProperty('debug-viewer-safe-area', `${state.debugViewerSafeArea ? 1 : 0}`);
-  setCSSProperty('font-size', '18px');
   setCSSProperty('horizontal-translate', '0');
   setCSSProperty('invert-viewer-color', '0');
   setCSSProperty('line-height', '1.5em');
@@ -35,12 +33,14 @@ const setInitialProperties = (state: State): void => {
   setCSSProperty('search-highlights-color', '#ffcf0040');
   setCSSProperty('sepia-viewer-color', '0');
   setCSSProperty('text-align', 'initial');
+  setCSSProperty('total-column-width', '0px');
   setCSSProperty('total-width', '0px');
   setCSSProperty('vertical-translate', '0');
   setCSSProperty('viewer-margin-top', '200vh');
 
   if (state.layout === LayoutTypes.Flow) {
     setCSSProperty('font-family', state.fontFamily);
+    setCSSProperty('font-size', `${state.fontSize}px`);
   }
 };
 
