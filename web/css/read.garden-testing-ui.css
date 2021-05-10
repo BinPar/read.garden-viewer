@@ -24,7 +24,8 @@ div#testing-buttons-panel button {
   clear: both;
 }
 
-div#testing-buttons-panel input {
+div#testing-buttons-panel input,
+div#testing-buttons-panel select {
   width: 100px;
   margin: 0;
   padding: 0;

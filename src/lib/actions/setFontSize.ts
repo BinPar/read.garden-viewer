@@ -1,8 +1,10 @@
 import { ActionDispatcher } from '../../model/actions/actionDispatcher';
 import { SetFontSize } from '../../model/actions/flow';
 import { LayoutTypes, State } from '../../model/state';
+
 import setCSSProperty from '../../utils/setCSSProperty';
 import recalculate from '../../viewer/recalculate';
+import { getState, updateState } from '../state';
 
 /**
  * Sets font size to provided value and recalculates
@@ -16,10 +18,9 @@ export const setSize = async (size: number, state: State): Promise<Partial<State
   }
   setCSSProperty('viewer-margin-top', '200vh');
   setCSSProperty('font-size', `${size}px`);
-  const recalculateUpdate = await recalculate({
-    ...state,
-    fontSize: size,
-  });
+  updateState({ fontSize: size });
+  const newState = getState();
+  const recalculateUpdate = await recalculate(newState);
   setCSSProperty('viewer-margin-top', '0');
   return {
     ...recalculateUpdate,
@@ -31,7 +32,8 @@ export const setSize = async (size: number, state: State): Promise<Partial<State
 
 /**
  * Sets font size to specific provided value (after normalizing with max and min)
- * @param param0 Viewer action containing new desired font size
+ * @param context.state Viewer state
+ * @param context.action Viewer action, containing desired new font size
  * @returns Update state
  */
 const setFontSize: ActionDispatcher<SetFontSize> = async ({ state, action }) => {

@@ -1,6 +1,7 @@
 import { DispatchAPIAction } from '../../model/apiInterface';
 import { State } from '../../model/state';
 import debugViewerSafeArea from './debugViewerSafeArea';
+import fontFamilyButtons from './fontFamilyButtons';
 import fontSizeButtons from './fontSizeButtons';
 
 const setupButtonBar = (state: State, dispatcher: DispatchAPIAction): void => {
@@ -9,6 +10,7 @@ const setupButtonBar = (state: State, dispatcher: DispatchAPIAction): void => {
   document.body.appendChild(testingButtonsPanel);
   debugViewerSafeArea(testingButtonsPanel, state, dispatcher);
   fontSizeButtons(testingButtonsPanel, state, dispatcher);
+  fontFamilyButtons(testingButtonsPanel, state, dispatcher);
 };
 
 export default setupButtonBar;

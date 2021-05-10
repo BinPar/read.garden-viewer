@@ -15,7 +15,7 @@ export enum FlowActionTypes {
 export interface SetFontSize extends Action {
   type: 'setFontSize';
   /**
-   * New font size
+   * Desired new font size
    */
   size: number;
 }
@@ -48,10 +48,10 @@ export interface SetLineHeight extends Action {
 /**
  * Sets the default typography for the text
  */
-export interface SetDefaultTypography extends Action {
-  type: 'setDefaultTypography';
+export interface SetFontFamily extends Action {
+  type: 'setFontFamily';
   /**
-   * Font family name to set (baskerville-enc, helvetica-enc, americanTypewriter-enc...)
+   * Desired new font family (baskerville-enc, helvetica-enc, americanTypewriter-enc...)
    */
   fontFamily: string;
 }
@@ -64,4 +64,4 @@ export type FlowActions =
   | IncreaseFontSize
   | DecreaseFontSize
   | SetLineHeight
-  | SetDefaultTypography;
+  | SetFontFamily;

@@ -13,12 +13,12 @@ const fontSizeButtons = (
   increaseButton.innerText = 'F+';
   controls.appendChild(increaseButton);
 
-  const fontSizeDisplay = document.createElement('input');
-  controls.appendChild(fontSizeDisplay);
-
   const decreaseButton = document.createElement('button');
   decreaseButton.innerText = 'F-';
   controls.appendChild(decreaseButton);
+
+  const fontSizeDisplay = document.createElement('input');
+  controls.appendChild(fontSizeDisplay);
 
   const updateValue = (): void => {
     if (state.layout === LayoutTypes.Flow) {
@@ -62,10 +62,8 @@ const fontSizeButtons = (
   fontSizeDisplay.onkeydown = onKeyDown;
   increaseButton.onclick = onIncrease;
   decreaseButton.onclick = onDecrease;
-
-  updateValue();
-
   container.appendChild(controls);
+  updateValue();
 };
 
 export default fontSizeButtons;

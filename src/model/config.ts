@@ -127,6 +127,10 @@ export interface RequiredConfig {
    * Initial font family
    */
   initialFontFamily: string;
+  /**
+   * Available font families
+   */
+  availableFontFamilies: string[];
 }
 
 export type Config = DefaultConfig & RequiredConfig;
