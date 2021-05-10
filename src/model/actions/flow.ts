@@ -1,12 +1,16 @@
 import { Action } from './common';
+import { TextAlignModes } from '../state';
 
 /**
  * Names of the action types for Flow Layout Actions
  */
 export enum FlowActionTypes {
   SetFontSize = 'setFontSize',
+  IncreaseFontSize = 'increaseFontSize',
+  DecreaseFontSize = 'decreaseFontSize',
   SetLineHeight = 'setLineHeight',
-  SetDefaultTypography = 'setDefaultTypography',
+  SetFontFamily = 'setFontFamily',
+  SetTextAlign = 'setTextAlign',
 }
 
 /**
@@ -56,6 +60,14 @@ export interface SetFontFamily extends Action {
   fontFamily: string;
 }
 
+export interface SetTextAlign extends Action {
+  type: 'setTextAlign';
+  /**
+   * Desired new text align (`null` will preserve work original align)
+   */
+  textAlign: TextAlignModes;
+}
+
 /**
  * Actions for FlowLayout
  */
@@ -64,4 +76,5 @@ export type FlowActions =
   | IncreaseFontSize
   | DecreaseFontSize
   | SetLineHeight
-  | SetFontFamily;
+  | SetFontFamily
+  | SetTextAlign;

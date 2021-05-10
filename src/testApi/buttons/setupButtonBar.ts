@@ -4,6 +4,7 @@ import debugViewerSafeArea from './debugViewerSafeArea';
 import flowChapterSelect from './flowChapterSelect';
 import fontFamilyButtons from './fontFamilyButtons';
 import fontSizeButtons from './fontSizeButtons';
+import textAlignButtons from './textAlignButtons';
 
 const setupButtonBar = (state: State, dispatcher: DispatchAPIAction): void => {
   const testingButtonsPanel = document.createElement('div');
@@ -12,6 +13,7 @@ const setupButtonBar = (state: State, dispatcher: DispatchAPIAction): void => {
   debugViewerSafeArea(testingButtonsPanel, state, dispatcher);
   fontSizeButtons(testingButtonsPanel, state, dispatcher);
   fontFamilyButtons(testingButtonsPanel, state, dispatcher);
+  textAlignButtons(testingButtonsPanel, state, dispatcher);
   flowChapterSelect(testingButtonsPanel, state);
 };
 

@@ -79,7 +79,7 @@ div.rg-content-wrapper {
   }
 }
 
-div.rg-content-wrapper.rg-force-text-align {
+div.rg-content-wrapper.rg-force-text-align * {
   text-align: var(--text-align) !important;
 }
 
