@@ -24,6 +24,8 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
       contentPlaceholderNode.appendChild(endingGap);
 
       window.requestAnimationFrame(() => {
+        let replace = true;
+        const newLink = document.createElement('link');
         const done = async (): Promise<void> => {
           const recalculateState = await recalculate(state);
           setCSSProperty('viewer-margin-top', '0');
@@ -31,13 +33,18 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
             ...recalculateState,
             cssLoaded: true,
           };
+          if (replace) {
+            finalPartialState.dynamicStyleNode = newLink;
+          }
           resolve(finalPartialState);
         };
         if (!action.cssURL || action.cssURL === dynamicStyleNode.href) {
+          replace = false;
           done();
           return;
         }
-        dynamicStyleNode.onload = (): void => {
+        const onStylesLoad = (): void => {
+          dynamicStyleNode.removeEventListener('load', onStylesLoad);
           const checkFonts = () => {
             if (document.fonts.status === 'loaded') {
               dynamicStyleNode.onload = null;
@@ -81,7 +88,11 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
             .then(() => checkImagesHeight(images))
             .then(checkFonts);
         };
-        dynamicStyleNode.href = action.cssURL;
+        newLink.rel = 'stylesheet';
+        newLink.type = 'text/css';
+        newLink.addEventListener('load', onStylesLoad);
+        dynamicStyleNode.replaceWith(newLink);
+        newLink.href = action.cssURL;
       });
     });
   });
