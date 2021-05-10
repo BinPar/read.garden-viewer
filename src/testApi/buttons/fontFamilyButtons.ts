@@ -24,7 +24,6 @@ const fontFamilyButtons = (
   };
 
   const onChange = async (): Promise<void> => {
-    console.log('onChange', select.value);
     const action: SetFontFamily = {
       type: 'setFontFamily',
       fontFamily: select.value,
