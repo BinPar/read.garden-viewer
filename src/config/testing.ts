@@ -1,16 +1,17 @@
-import { APIInterface, DispatchAPIAction } from "../model/apiInterface";
-import { InitialConfig } from "../model/config";
-import { ReadGardenEventHandler } from "../model/events";
-import { State } from "../model/state";
-import { ViewerFunction } from "../model/viewer";
+import { APIInterface, DispatchAPIAction } from '../model/apiInterface';
+import { InitialConfig } from '../model/config';
+import { ReadGardenEventHandler } from '../model/events';
+import { State } from '../model/state';
+import { ViewerFunction } from '../model/viewer';
+import settings from './settings/settings.json';
 
 export interface TestingConfig {
   baseURL: string;
   longFlowLayoutContentConfig: InitialConfig;
 }
 
-const testingConfig: TestingConfig ={
-  baseURL: 'http://localhost:3000/',
+const testingConfig: TestingConfig = {
+  ...settings,
   longFlowLayoutContentConfig: {
     layoutType: 'flow',
     contentSlug: 'acuario',

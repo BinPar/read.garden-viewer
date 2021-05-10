@@ -92,6 +92,9 @@ spec:
       containers:
         - image: 402083338966.dkr.ecr.eu-west-1.amazonaws.com/read-garden-viewer:latest
           name: read-garden-viewer-beta
+          envFrom:
+            - configMapRef:
+                name: read-garden-viewer-beta
           ports:
             - containerPort: 8043
           resources:
