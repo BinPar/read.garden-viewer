@@ -23,3 +23,11 @@ div#testing-buttons-panel button {
   float: left;
   clear: both;
 }
+
+div#testing-buttons-panel input {
+  width: 100px;
+  margin: 0;
+  padding: 0;
+  border: none;
+  text-align: center;
+}

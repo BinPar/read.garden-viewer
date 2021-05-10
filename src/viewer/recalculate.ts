@@ -29,7 +29,7 @@ const recalculate = async (state: State): Promise<Partial<State>> =>
             config: { minCharsPerColumn, maxCharsPerColumn, columnGap: desiredColumnGap },
           } = state;
 
-          let { columnGap } = state;
+          let columnGap = desiredColumnGap;
           const charWidth = fontSize / charWidthFactor;
           const minWidth = minCharsPerColumn * charWidth;
           const doubleColumnWidth = containerWidth / 2 - desiredColumnGap;
@@ -101,7 +101,10 @@ const recalculate = async (state: State): Promise<Partial<State>> =>
           });
         });
       });
+      return;
     }
+
+    resolve({});
   });
 
 export default recalculate;

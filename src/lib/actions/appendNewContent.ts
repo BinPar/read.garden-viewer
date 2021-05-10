@@ -8,11 +8,11 @@ import recalculate from '../../viewer/recalculate';
 
 /**
  * Appends new content to viewer
- * @param action Viewer action, containing content HTML and CSS URL
- * @param state Viewer state
+ * @param context.state Viewer state
+ * @param context.action Viewer action, containing content HTML and CSS URL
  * @returns Partial state with updated properties
  */
-const appendNewContent: ActionDispatcher<AppendNewContent> = async (action, state) =>
+const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, action }) =>
   new Promise<Partial<State>>((resolve): void => {
     const { contentPlaceholderNode, dynamicStyleNode } = state as Required<State>;
 
@@ -22,15 +22,16 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async (action, stat
       const endingGap = document.createElement('div');
       endingGap.classList.add('rg-ending-gap');
       contentPlaceholderNode.appendChild(endingGap);
-      const partialState: Partial<State> = {
-        cssLoaded: true,
-      };
 
       window.requestAnimationFrame(() => {
         const done = async (): Promise<void> => {
-          await recalculate(state);
+          const recalculateState = await recalculate(state);
           setCSSProperty('viewer-margin-top', '0');
-          resolve(partialState);
+          const finalPartialState: Partial<State> = {
+            ...recalculateState,
+            cssLoaded: true,
+          };
+          resolve(finalPartialState);
         };
         if (!action.cssURL || action.cssURL === dynamicStyleNode.href) {
           done();

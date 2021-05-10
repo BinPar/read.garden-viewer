@@ -10,14 +10,28 @@ export enum FlowActionTypes {
 }
 
 /**
- * Sets the Font Size of the flow layout
+ * Sets the font size of the flow layout
  */
 export interface SetFontSize extends Action {
   type: 'setFontSize';
   /**
-   * Size of the font to use (in EMs)
+   * New font size
    */
-  fontSize: number;
+  size: number;
+}
+
+/**
+ * Increases the font size by the defined step
+ */
+export interface IncreaseFontSize extends Action {
+  type: 'increaseFontSize';
+}
+
+/**
+ * Decreases the font size by the defined step
+ */
+export interface DecreaseFontSize extends Action {
+  type: 'decreaseFontSize';
 }
 
 /**
@@ -45,4 +59,9 @@ export interface SetDefaultTypography extends Action {
 /**
  * Actions for FlowLayout
  */
-export type FlowActions = SetFontSize | SetLineHeight | SetDefaultTypography;
+export type FlowActions =
+  | SetFontSize
+  | IncreaseFontSize
+  | DecreaseFontSize
+  | SetLineHeight
+  | SetDefaultTypography;
