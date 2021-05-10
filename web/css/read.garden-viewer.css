@@ -38,9 +38,19 @@ div.rg-content-wrapper {
   column-count: var(--column-count);
   column-rule: 1px solid #eee;
   column-gap: var(--column-gap);
+  padding: 0 calc(var(--column-gap) / 2) 0;
   font-size: var(--font-size);
   font-family: var(--font-family);
   hyphens: auto;
+}
+
+.rg-flow-layout div.rg-content-wrapper div.rg-content-placeholder {
+  width: var(--total-width);
+}
+
+.rg-ending-gap {
+  width: calc(var(--total-column-width) - (var(--column-gap) / 2));
+  margin-right: calc(var(--column-gap) / 2);
 }
 
 .rg-flow-layout div.rg-content-wrapper img.rg-ready,
@@ -87,15 +97,15 @@ div.rg-pages-labels {
   overflow: visible;
 }
 
-div.rg-pages-labels > .label {
+div.rg-pages-labels > .rg-label {
   position: relative;
-  width: var(--column-width);
+  width: var(--total-column-width);
   float: left;
   height: 2em;
   pointer-events: none;
 }
 
-div.rg-pages-labels > .label p {
+div.rg-pages-labels > .rg-label p {
   border-top: 1px solid #eee;
   margin: 0 1em;
   text-align: center;

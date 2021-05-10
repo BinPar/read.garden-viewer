@@ -37,8 +37,8 @@ const defaultConfig: DefaultConfig = {
   columnGap: 216,
   pageChangeThreshold: 40,
   chapterChangeThreshold: 40,
-  minCharsPerColumn: 50,
-  maxCharsPerColumn: 70,
+  minCharsPerColumn: 60,
+  maxCharsPerColumn: 80,
   initialFontSize: 16,
   initialScale: 1,
   readModeMargin: {

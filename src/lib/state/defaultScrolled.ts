@@ -7,6 +7,8 @@ const defaultScrolled: ScrolledState = {
   totalWidth: 0,
   totalHeight: 0,
   showPageSeparation: false,
+  labelByPosition: new Map<number, string>(),
+  positionByLabel: new Map<string, number>(),
 };
 
 export default defaultScrolled;

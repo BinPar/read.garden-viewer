@@ -13,12 +13,13 @@ const setInitialProperties = (state: State): void => {
   setCSSProperty('animation-speed-value', 'calc(1s * var(--animation-speed))');
   setCSSProperty('border-radius', '10px');
   setCSSProperty('column-count', '2');
-  setCSSProperty('column-gap', '0px');
+  setCSSProperty('column-gap', `${state.config.columnGap}px`);
   setCSSProperty('column-gap-compensation', '0px');
   setCSSProperty('content-wrapper-height', '100vh');
   setCSSProperty('content-wrapper-padding', '0');
   setCSSProperty('contrast-viewer-color', '1');
   setCSSProperty('column-width', '0px');
+  setCSSProperty('total-column-width', '0px');
   setCSSProperty('current-selection-extensors-color', '#0030ff46');
   setCSSProperty('current-selection-highlights-color', '#0030ff46');
   setCSSProperty('debug-viewer-safe-area', `${state.debugViewerSafeArea ? 1 : 0}`);

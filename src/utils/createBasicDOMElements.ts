@@ -19,10 +19,6 @@ const createBasicDOMElements = (state: State): void => {
   contentWrapperNode.classList.add('rg-content-wrapper');
   readGardenViewerNode.appendChild(contentWrapperNode);
 
-  const totalWidthCalculatorNode = document.createElement('div');
-  totalWidthCalculatorNode.classList.add('rg-total-width-calculator');
-  contentWrapperNode.appendChild(totalWidthCalculatorNode);
-
   const backgroundCleaner = document.createElement('div');
   backgroundCleaner.classList.add('rg-bg-cleaner');
   contentWrapperNode.appendChild(backgroundCleaner);
@@ -69,7 +65,6 @@ const createBasicDOMElements = (state: State): void => {
     mainStyleNode: mainStylesheet?.ownerNode as HTMLLinkElement,
     readGardenViewerNode,
     contentWrapperNode,
-    totalWidthCalculatorNode,
     contentPlaceholderNode,
     endOfChapterCalculatorNode,
     pagesLabelsNode,

@@ -8,7 +8,7 @@ const defaultFlow: DefaultFlowState = {
   textAlign: null,
   labels: [],
   snaps: [],
-  totalChapterWidth: 0,
+  columnWidth: 0,
   totalColumnWidth: 0,
   totalColumns: 0,
 };
