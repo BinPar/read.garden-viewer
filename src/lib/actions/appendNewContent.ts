@@ -1,3 +1,4 @@
+import log from 'loglevel';
 import { ActionDispatcher } from '../../model/actions/actionDispatcher';
 import { AppendNewContent } from '../../model/actions/global';
 import { State } from '../../model/state';
@@ -81,8 +82,7 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
                   imageResolve();
                 };
                 const onError = (ev: ErrorEvent) => {
-                  // eslint-disable-next-line no-console
-                  console.log('Error loading image', ev.message);
+                  log.info('Error loading image', ev.message);
                   onLoad();
                 };
                 img.addEventListener('load', onLoad);
