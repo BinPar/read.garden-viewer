@@ -8,11 +8,11 @@ Es un tema ampliamente solicitado y tratado para el estándar. ([https://github.
 
 Esencialmente el problema se origina porque nos podemos encontrar distintos tipos de contenidos que, siendo imágenes, deberían tratarse de modos distintos:
 
-Fotografías sin más: que invertidas son un negativo carente de sentido (un árbol morado es raro)
+- **Fotografías sin más**: que invertidas son un negativo carente de sentido (un árbol morado es raro)
 
-Ilustraciones, gráficos, etc… : que sin invertir te dejan sin retina en el mejor de los casos y en el peor son ilegibles al tener texto negro sobre fondo negro.
+- **Ilustraciones, gráficos, etc…** : que sin invertir te dejan sin retina en el mejor de los casos y en el peor son ilegibles al tener texto negro sobre fondo negro.
 
-Otras cosas pensadas para fondos transparentes: adornos, etc. (son muy parecidas al anterior).
+- **Otras cosas pensadas para fondos transparentes**: adornos, etc. (son muy parecidas al anterior).
 
 ## Soluciones sencillas (CSS)
 
