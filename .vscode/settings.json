@@ -6,6 +6,7 @@
     "binpar",
     "buildargs",
     "colbyhill",
+    "debouncer",
     "deepmerge",
     "dumpio",
     "elgohr",

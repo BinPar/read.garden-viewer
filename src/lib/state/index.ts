@@ -9,6 +9,7 @@ import defaultFixed from './defaultFixed';
 import defaultPaginated from './defaultPaginated';
 import defaultConfig from '../../config/default';
 import { setConfig } from '../../config';
+import { cssLoaded } from '../events/onCssLoaded';
 
 let state: State;
 
@@ -39,7 +40,7 @@ export const initializeState = (initialConfig: InitialConfig): void => {
       ...(initialMargins || {}),
     },
     title: 'Title', // From initial config
-    pageLabel: '1', // From initial config
+    pageLabel: config.contentSlug,
     pageNumber: 1, // From initial config
     scale: config.initialScale || defaultGlobal.scale,
     searchTerms: [],
@@ -89,7 +90,10 @@ export const updateState = (newState: Partial<State>): void => {
   Object.keys(newState).forEach((key) => {
     const newValue = (newState as any)[key];
     if (newValue !== updatableState[key]) {
-      updatableState[key] = newValue;  
+      updatableState[key] = newValue;
+      if (key === 'cssLoaded' && newValue === true) {
+        cssLoaded();
+      }
     }
   });
 };

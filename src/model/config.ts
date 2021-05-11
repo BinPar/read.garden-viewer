@@ -122,7 +122,7 @@ export interface RequiredConfig {
   /**
    * Initial content slug (virtual page in flow, page in fixed)
    */
-  contentSlug: string | null;
+  contentSlug: string;
   /**
    * Initial font family
    */

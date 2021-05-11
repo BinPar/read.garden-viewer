@@ -5,6 +5,8 @@ import { State } from '../../model/state';
 import setCSSProperty from '../../utils/setCSSProperty';
 import checkImagesHeight from '../../utils/checkImagesHeight';
 import recalculate from '../../viewer/recalculate';
+import { onCssLoaded } from '../events/onCssLoaded';
+import { updateState } from '../state';
 
 /**
  * Appends new content to viewer
@@ -12,10 +14,18 @@ import recalculate from '../../viewer/recalculate';
  * @param context.action Viewer action, containing content HTML and CSS URL
  * @returns Partial state with updated properties
  */
-const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, action }) =>
-  new Promise<Partial<State>>((resolve): void => {
+const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, action }) => {
+  if (!state.cssLoaded) {
+    try {
+      await onCssLoaded();
+    } catch (ex) {
+      console.log('rejected new content append', action.cssURL);
+      return {};
+    }
+  }
+  updateState({ cssLoaded: false });
+  return new Promise<Partial<State>>((resolve): void => {
     const { contentPlaceholderNode, dynamicStyleNode } = state as Required<State>;
-
     setCSSProperty('viewer-margin-top', '200vh');
     window.requestAnimationFrame(() => {
       contentPlaceholderNode.innerHTML = action.htmlContent;
@@ -96,5 +106,6 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
       });
     });
   });
+};
 
 export default appendNewContent;
