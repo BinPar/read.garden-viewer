@@ -272,3 +272,24 @@ export type State = GlobalState &
     | (FixedState & (PaginatedState | ScrolledState))
     | (FlowState & ScrolledState)
   );
+
+export type PropChangeHandler = () => void;
+
+export interface StatePropChangeHandler<K extends keyof State> {
+  property: K;
+  value: State[K];
+  handler: PropChangeHandler;
+}
+
+export interface PropertyChangeHandler {
+  /**
+   * Method that gets executed once property is updated to desired value. Should be passed as
+   * `handler` property in `StatePropChangeHandler`
+   */
+  resolver: PropChangeHandler;
+  /**
+   * Method that can be used to wait until property is updated to desired value. Should be used
+   * inside related viewer action
+   */
+  waiter: (uniqueKey?: string) => Promise<void>;
+}

@@ -5,7 +5,7 @@ import { State } from '../../model/state';
 import setCSSProperty from '../../utils/setCSSProperty';
 import checkImagesHeight from '../../utils/checkImagesHeight';
 import recalculate from '../../viewer/recalculate';
-import { onCssLoaded } from '../events/onCssLoaded';
+import { onCssLoaded } from '../state/changeHandlers/cssLoaderHandler';
 import { updateState } from '../state';
 
 /**

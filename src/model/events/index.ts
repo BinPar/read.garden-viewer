@@ -31,3 +31,11 @@ export interface LoadNewContent extends ReadGardenEvent {
 export type ReadGardenEvents = PageChange | LoadNewContent;
 
 export type ReadGardenEventHandler = (event: ReadGardenEvents) => Promise<void>;
+
+export type CurrentPromiseEnder = (() => void) | null;
+
+export interface UniqueKeyPromiseEnder {
+  key?: string;
+  resolve: () => void;
+  reject: () => void;
+}

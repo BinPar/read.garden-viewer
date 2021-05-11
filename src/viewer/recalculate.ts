@@ -1,4 +1,4 @@
-import { LayoutTypes, State } from '../model/state';
+import { GlobalState, LayoutTypes, State } from '../model/state';
 import setCSSProperty from '../utils/setCSSProperty';
 
 const charWidthFactor = 1.65;
@@ -14,6 +14,11 @@ const recalculate = async (state: State): Promise<Partial<State>> =>
     const containerWidth = contentWrapperNode!.clientWidth;
     const containerHeight = contentWrapperNode!.clientHeight;
 
+    const globalUpdate: Partial<GlobalState> = {
+      containerWidth,
+      containerHeight,
+    };
+
     if (state.layout === LayoutTypes.Flow) {
       setCSSProperty('total-width', `0px`);
       setCSSProperty('total-column-width', `0px`);
@@ -28,6 +33,8 @@ const recalculate = async (state: State): Promise<Partial<State>> =>
             pagesLabelsNode,
             config: { minCharsPerColumn, maxCharsPerColumn, columnGap: desiredColumnGap },
           } = state;
+
+          pagesLabelsNode!.innerHTML = '';
 
           let columnGap = desiredColumnGap;
           const charWidth = fontSize / charWidthFactor;
@@ -63,8 +70,6 @@ const recalculate = async (state: State): Promise<Partial<State>> =>
 
             let lastPosition: number | null = null;
 
-            pagesLabelsNode!.innerHTML = '';
-
             contentPlaceholderNode?.querySelectorAll('[data-page]').forEach((item) => {
               const element = item as HTMLElement;
               const rawPosition = element.getBoundingClientRect().left;
@@ -90,8 +95,7 @@ const recalculate = async (state: State): Promise<Partial<State>> =>
             setCSSProperty('column-count', `${columnsInViewport}`);
 
             resolve({
-              containerWidth,
-              containerHeight,
+              ...globalUpdate,
               totalWidth,
               totalColumnWidth,
               totalColumns,
@@ -110,8 +114,7 @@ const recalculate = async (state: State): Promise<Partial<State>> =>
             setCSSProperty('column-gap', `${columnGap}px`);
             
             resolve({
-              containerWidth,
-              containerHeight,
+              ...globalUpdate,
               columnGap
             });
           }
