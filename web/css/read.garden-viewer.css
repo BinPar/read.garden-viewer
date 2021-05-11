@@ -52,12 +52,8 @@ div.rg-content-wrapper {
 }
 
 .rg-flow-layout.rg-horizontal-scroll div.rg-content-wrapper div.rg-content-placeholder {
+  height: 100%;
   width: var(--total-width);
-}
-
-.rg-ending-gap {
-  width: calc(var(--total-column-width) - (var(--column-gap) / 2));
-  margin-right: calc(var(--column-gap) / 2);
 }
 
 .rg-flow-layout.rg-horizontal-scroll div.rg-content-wrapper img.rg-ready,

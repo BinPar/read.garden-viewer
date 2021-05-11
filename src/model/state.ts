@@ -50,6 +50,10 @@ export interface GlobalState {
    */
   cssLoaded: boolean;
   /**
+   * Viewer is recalculating
+   */
+  recalculating: boolean;
+  /**
    * Viewer config
    */
   config: Config;
@@ -103,7 +107,7 @@ export interface GlobalState {
  * Default global state
  */
 export type DefaultGlobalState = Partial<GlobalState> &
-  Required<Pick<GlobalState, 'scale' | 'basicDOMElementsCreated' | 'cssLoaded'>>;
+  Required<Pick<GlobalState, 'scale' | 'basicDOMElementsCreated' | 'cssLoaded' | 'recalculating'>>;
 
 /**
  * Layout types
@@ -268,10 +272,7 @@ export interface ScrolledState {
 }
 
 export type State = GlobalState &
-  (
-    | (FixedState & (PaginatedState | ScrolledState))
-    | (FlowState & ScrolledState)
-  );
+  ((FixedState & (PaginatedState | ScrolledState)) | (FlowState & ScrolledState));
 
 export type PropChangeHandler = () => void;
 

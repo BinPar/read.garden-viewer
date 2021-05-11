@@ -28,9 +28,6 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
     setCSSProperty('viewer-margin-top', '200vh');
     window.requestAnimationFrame(() => {
       contentPlaceholderNode.innerHTML = action.htmlContent;
-      const endingGap = document.createElement('div');
-      endingGap.classList.add('rg-ending-gap');
-      contentPlaceholderNode.appendChild(endingGap);
 
       window.requestAnimationFrame(() => {
         let replace = true;

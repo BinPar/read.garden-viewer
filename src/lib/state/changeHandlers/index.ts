@@ -1,8 +1,11 @@
 import { State, StatePropChangeHandler } from '../../../model/state';
-import cssLoaded from './cssLoaderHandler';
+
+import cssLoaderHandler from './cssLoaderHandler';
+import recalculatingHandler from './recalculatingHandler';
 
 const handlers: StatePropChangeHandler<keyof State>[] = [
-  cssLoaded,
+  cssLoaderHandler,
+  recalculatingHandler,
 ];
 
 export default handlers;

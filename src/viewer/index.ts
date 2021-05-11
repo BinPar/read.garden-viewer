@@ -6,6 +6,7 @@ import { ViewerFunction } from '../model/viewer';
 import createBasicDOMElements from '../utils/createBasicDOMElements';
 import { LoadNewContent } from '../model/events';
 import setInitialProperties from '../lib/styles/setInitialProperties';
+import setupGlobalEvents from '../utils/setupGlobalEvents';
 
 const viewer: ViewerFunction = (config) => {
   initializeState(config);
@@ -16,6 +17,7 @@ const viewer: ViewerFunction = (config) => {
   };
   setInitialProperties(state);
   createBasicDOMElements(state);
+  setupGlobalEvents(api.dispatch);
   const loadNewContent: LoadNewContent = {
     type: 'loadNewContent',
     slug: config.slug,
