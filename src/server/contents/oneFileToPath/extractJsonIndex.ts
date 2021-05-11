@@ -1,4 +1,5 @@
 import { Base64 } from 'js-base64';
+import log from 'loglevel';
 
 import { JSONIndex, ExtractedJSONIndexInfo } from '../../../model/oneFileToPath';
 
@@ -12,9 +13,7 @@ const JSON_INDEX_BYTES = 32;
  * @param pathToFile Path to compressed file
  * @returns Extracted JSON Index info
  */
-const extractJsonIndex = async (
-  pathToFile: string,
-): Promise<ExtractedJSONIndexInfo> => {
+const extractJsonIndex = async (pathToFile: string): Promise<ExtractedJSONIndexInfo> => {
   const fileStats = await stat(pathToFile);
   if (fileStats && fileStats.size) {
     const { size } = fileStats;
@@ -24,17 +23,16 @@ const extractJsonIndex = async (
       JSON_INDEX_BYTES,
       size - JSON_INDEX_BYTES,
     );
-    const [jsonIndexPosition, jsonIndexLength] = Base64.fromBase64(
-      base64JsonIndexPosition,
-    )
+    const [jsonIndexPosition, jsonIndexLength] = Base64.fromBase64(base64JsonIndexPosition)
       .split('-')
       .map((bytes) => parseInt(bytes, 10));
 
-    let base64JsonIndex = await readFileBytes(
-      fd,
+    log.info({
       jsonIndexLength,
       jsonIndexPosition,
-    );
+    });
+
+    let base64JsonIndex = await readFileBytes(fd, jsonIndexLength, jsonIndexPosition);
 
     const encrypted = base64JsonIndex.indexOf('ey') !== 0;
 
