@@ -16,11 +16,13 @@ const download = (url: string, filePath: string): Promise<void> =>
           reject(new Error(`Response status was ${response.statusCode}`));
         } else {
           log.info(`Downloading ${url}...`);
+          file.on('close', (): void => {
+            resolve();
+          });
           response.on('close', (): void => {
             log.info(`Downloaded ${url}...`);
             file.close();
-            return resolve();
-          });
+          });          
           response.pipe(file);
         }
       })
