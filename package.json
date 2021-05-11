@@ -1,6 +1,6 @@
 {
   "name": "read.garden-viewer",
-  "version": "0.15.0",
+  "version": "0.16.0",
   "description": "Universal EBook Reader for EPUB2, EPUB3, HTML5 and PDF contents",
   "scripts": {
     "dev": "concurrently --kill-others \"npm run build-dev\" \"npm run server-dev\"",
