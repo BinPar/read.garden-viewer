@@ -12,7 +12,7 @@ const securityTime = 10000;
  * Sets font family to provided value and recalculates
  * @param context.state  Viewer state
  * @param context.action  Viewer action, containing desired new font family
- * @returns
+ * @returns State update
  */
 const setFontFamily: ActionDispatcher<SetFontFamily> = async ({ state, action }) => {
   if (state.layout === LayoutTypes.Fixed) {

@@ -34,17 +34,24 @@ div.rg-content-wrapper {
   -webkit-user-select: none;
 }
 
+.rg-vertical-scroll div.rg-content-wrapper {
+  overflow-y: scroll;
+}
+
 .rg-flow-layout div.rg-content-wrapper {
-  column-count: var(--column-count);
-  column-rule: 1px solid #eee;
-  column-gap: var(--column-gap);
   padding: 0 calc(var(--column-gap) / 2) 0;
   font-size: var(--font-size);
   font-family: var(--font-family);
   hyphens: auto;
 }
 
-.rg-flow-layout div.rg-content-wrapper div.rg-content-placeholder {
+.rg-flow-layout.rg-horizontal-scroll div.rg-content-wrapper {
+  column-count: var(--column-count);
+  column-rule: 1px solid #eee;
+  column-gap: var(--column-gap);
+}
+
+.rg-flow-layout.rg-horizontal-scroll div.rg-content-wrapper div.rg-content-placeholder {
   width: var(--total-width);
 }
 
@@ -53,19 +60,19 @@ div.rg-content-wrapper {
   margin-right: calc(var(--column-gap) / 2);
 }
 
-.rg-flow-layout div.rg-content-wrapper img.rg-ready,
-.rg-flow-layout div.rg-content-wrapper video,
-.rg-flow-layout div.rg-content-wrapper table,
-.rg-flow-layout div.rg-content-wrapper iframe {
+.rg-flow-layout.rg-horizontal-scroll div.rg-content-wrapper img.rg-ready,
+.rg-flow-layout.rg-horizontal-scroll div.rg-content-wrapper video,
+.rg-flow-layout.rg-horizontal-scroll div.rg-content-wrapper table,
+.rg-flow-layout.rg-horizontal-scroll div.rg-content-wrapper iframe {
   max-width: calc(var(--column-width) - var(--column-gap) - var(--column-gap-compensation));
 }
 
-.rg-flow-layout div.rg-content-wrapper img {
+.rg-flow-layout.rg-horizontal-scroll div.rg-content-wrapper img {
   pointer-events: none;
   cursor: pointer;
 }
 
-.rg-flow-layout div.rg-content-wrapper img.rg-fit-height {
+.rg-flow-layout.rg-horizontal-scroll div.rg-content-wrapper img.rg-fit-height {
   max-height: calc(100vh - var(--padding-top) - var(--padding-bottom)) !important;
   width: unset !important;
   margin-left: auto !important;
@@ -74,7 +81,7 @@ div.rg-content-wrapper {
 }
 
 @media (max-width: 48em) {
-  .rg-flow-layout div.rg-content-wrapper img.rg-fit-height {
+  .rg-flow-layout.rg-horizontal-scroll div.rg-content-wrapper img.rg-fit-height {
     max-height: calc(100vh - var(--padding-top) - var(--padding-bottom) - 65px) !important;
   }
 }
