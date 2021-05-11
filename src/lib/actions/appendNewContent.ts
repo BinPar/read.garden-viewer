@@ -3,38 +3,48 @@ import { AppendNewContent } from '../../model/actions/global';
 import { State } from '../../model/state';
 
 import setCSSProperty from '../../utils/setCSSProperty';
+import checkImagesHeight from '../../utils/checkImagesHeight';
+import recalculate from '../../viewer/recalculate';
 
-const appendNewContent: ActionDispatcher<AppendNewContent> = async (
-  action,
-  state,
-) =>
+/**
+ * Appends new content to viewer
+ * @param context.state Viewer state
+ * @param context.action Viewer action, containing content HTML and CSS URL
+ * @returns Partial state with updated properties
+ */
+const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, action }) =>
   new Promise<Partial<State>>((resolve): void => {
-    const {
-      contentPlaceholderNode,
-      dynamicStyleNode,
-    } = state as Required<State>;
+    const { contentPlaceholderNode, dynamicStyleNode } = state as Required<State>;
 
     setCSSProperty('viewer-margin-top', '200vh');
     window.requestAnimationFrame(() => {
-      const parser = new DOMParser();
-      const element = parser.parseFromString(action.htmlContent, 'text/html')
-        .body.firstChild as HTMLDivElement;
-      contentPlaceholderNode.replaceWith(element);
-      const partialState: Partial<State> = {
-        cssLoaded: true,
-        contentPlaceholderNode: element,
-      };
+      contentPlaceholderNode.innerHTML = action.htmlContent;
+      const endingGap = document.createElement('div');
+      endingGap.classList.add('rg-ending-gap');
+      contentPlaceholderNode.appendChild(endingGap);
 
       window.requestAnimationFrame(() => {
-        const done = () => {
-          resolve(partialState);
+        let replace = true;
+        const newLink = document.createElement('link');
+        const done = async (): Promise<void> => {
+          const recalculateState = await recalculate(state);
           setCSSProperty('viewer-margin-top', '0');
+          const finalPartialState: Partial<State> = {
+            ...recalculateState,
+            cssLoaded: true,
+          };
+          if (replace) {
+            finalPartialState.dynamicStyleNode = newLink;
+          }
+          resolve(finalPartialState);
         };
         if (!action.cssURL || action.cssURL === dynamicStyleNode.href) {
+          replace = false;
           done();
           return;
         }
-        dynamicStyleNode.onload = (): void => {
+        const onStylesLoad = (): void => {
+          dynamicStyleNode.removeEventListener('load', onStylesLoad);
           const checkFonts = () => {
             if (document.fonts.status === 'loaded') {
               dynamicStyleNode.onload = null;
@@ -47,7 +57,7 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async (
               done();
             };
           };
-          const images = element.querySelectorAll('img');
+          const images = contentPlaceholderNode.querySelectorAll('img');
           if (!images.length) {
             checkFonts();
             return;
@@ -74,9 +84,15 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async (
               }),
             );
           });
-          Promise.all(promises).then(checkFonts);
+          Promise.all(promises)
+            .then(() => checkImagesHeight(images))
+            .then(checkFonts);
         };
-        dynamicStyleNode.href = action.cssURL;
+        newLink.rel = 'stylesheet';
+        newLink.type = 'text/css';
+        newLink.addEventListener('load', onStylesLoad);
+        dynamicStyleNode.replaceWith(newLink);
+        newLink.href = action.cssURL;
       });
     });
   });

@@ -13,16 +13,19 @@ export interface PageChange extends ReadGardenEvent{
   label: string;
 }
 
+/**
+ * On new content needed
+ */
 export interface LoadNewContent extends ReadGardenEvent {
   type: 'loadNewContent';
   /**
-   * Slug of the content to load
+   * Slug of the content (book, work...) to load
    */
-  contentSlug: string;
+  slug: string;
   /**
    * Label of the page of the content to load (null for the default page)
    */
-  label: string | null;
+  contentSlug: string | null;
 }
 
 export type ReadGardenEvents = PageChange | LoadNewContent;

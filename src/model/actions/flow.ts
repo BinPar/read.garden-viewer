@@ -1,23 +1,41 @@
 import { Action } from './common';
+import { TextAlignModes } from '../state';
 
 /**
  * Names of the action types for Flow Layout Actions
  */
 export enum FlowActionTypes {
   SetFontSize = 'setFontSize',
+  IncreaseFontSize = 'increaseFontSize',
+  DecreaseFontSize = 'decreaseFontSize',
   SetLineHeight = 'setLineHeight',
-  SetDefaultTypography = 'setDefaultTypography',
+  SetFontFamily = 'setFontFamily',
+  SetTextAlign = 'setTextAlign',
 }
 
 /**
- * Sets the Font Size of the flow layout
+ * Sets the font size of the flow layout
  */
 export interface SetFontSize extends Action {
   type: 'setFontSize';
   /**
-   * Size of the font to use (in EMs)
+   * Desired new font size
    */
-  fontSize: number;
+  size: number;
+}
+
+/**
+ * Increases the font size by the defined step
+ */
+export interface IncreaseFontSize extends Action {
+  type: 'increaseFontSize';
+}
+
+/**
+ * Decreases the font size by the defined step
+ */
+export interface DecreaseFontSize extends Action {
+  type: 'decreaseFontSize';
 }
 
 /**
@@ -34,15 +52,29 @@ export interface SetLineHeight extends Action {
 /**
  * Sets the default typography for the text
  */
-export interface SetDefaultTypography extends Action {
-  type: 'setDefaultTypography';
+export interface SetFontFamily extends Action {
+  type: 'setFontFamily';
   /**
-   * Font family name to set (baskerville-enc, helvetica-enc, americanTypewriter-enc...)
+   * Desired new font family (baskerville-enc, helvetica-enc, americanTypewriter-enc...)
    */
   fontFamily: string;
+}
+
+export interface SetTextAlign extends Action {
+  type: 'setTextAlign';
+  /**
+   * Desired new text align (`null` will preserve work original align)
+   */
+  textAlign: TextAlignModes;
 }
 
 /**
  * Actions for FlowLayout
  */
-export type FlowActions = SetFontSize | SetLineHeight | SetDefaultTypography;
+export type FlowActions =
+  | SetFontSize
+  | IncreaseFontSize
+  | DecreaseFontSize
+  | SetLineHeight
+  | SetFontFamily
+  | SetTextAlign;

@@ -14,10 +14,6 @@ export interface GlobalState {
    */
   contentWrapperNode?: HTMLDivElement;
   /**
-   * Total content width calculator DOM node 
-   */
-  totalWidthCalculatorNode?: HTMLDivElement;
-  /**
    * Content placeholder DOM node
    */
   contentPlaceholderNode?: HTMLDivElement;
@@ -61,6 +57,14 @@ export interface GlobalState {
    * Viewport margins
    */
   margin: Margin;
+  /**
+   * Container width
+   */
+  containerWidth: number;
+  /**
+   * Container height
+   */
+  containerHeight: number;
   /**
    * Needs a complete reset of the view
    */
@@ -194,9 +198,9 @@ export interface FlowState {
    */
   columnGap: number;
   /**
-   * Total chapter width (pixels)
+   * Column width without gap (pixels)
    */
-  totalChapterWidth: number;
+  columnWidth: number;
   /**
    * Total column width including gap (pixels)
    */
@@ -253,6 +257,14 @@ export interface ScrolledState {
    * Whether page separation should be visible or not
    */
   showPageSeparation: boolean;
+  /**
+   * Map where labels are keys and position is value (left for horizontal, top for vertical)
+   */
+  positionByLabel: Map<string, number>;
+  /**
+   * Map where positions are keys (left for horizontal, top for vertical) and labels are values
+   */
+  labelByPosition: Map<number, string>;
 }
 
 export type State = GlobalState &

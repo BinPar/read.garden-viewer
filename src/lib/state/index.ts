@@ -29,9 +29,7 @@ export const initializeState = (initialConfig: InitialConfig): void => {
   const defaultInitialMargins = config.initialReadMode
     ? defaultConfig.readModeMargin
     : defaultConfig.uiModeMargin;
-  const initialMargins = config.initialReadMode
-    ? config.readModeMargin
-    : config.uiModeMargin;
+  const initialMargins = config.initialReadMode ? config.readModeMargin : config.uiModeMargin;
 
   const globalState: GlobalState = {
     ...defaultGlobal,
@@ -46,6 +44,8 @@ export const initializeState = (initialConfig: InitialConfig): void => {
     scale: config.initialScale || defaultGlobal.scale,
     searchTerms: [],
     debugViewerSafeArea: config.debugViewerSafeArea,
+    containerWidth: 0,
+    containerHeight: 0,
   };
 
   if (config.layoutType === 'flow') {
@@ -87,6 +87,9 @@ export const getState = (): State => state;
 export const updateState = (newState: Partial<State>): void => {
   const updatableState = state as any;
   Object.keys(newState).forEach((key) => {
-    updatableState[key] = (newState as any)[key];
+    const newValue = (newState as any)[key];
+    if (newValue !== updatableState[key]) {
+      updatableState[key] = newValue;  
+    }
   });
 };

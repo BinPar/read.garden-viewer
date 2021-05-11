@@ -15,11 +15,11 @@ const viewer: ViewerFunction = (config) => {
     state,
   };
   setInitialProperties(state);
-  createBasicDOMElements();
+  createBasicDOMElements(state);
   const loadNewContent: LoadNewContent = {
     type: 'loadNewContent',
+    slug: config.slug,
     contentSlug: config.contentSlug,
-    label: config.startPageLabel,
   };
   if (state.config.eventHandler) {
     state.config.eventHandler(loadNewContent);

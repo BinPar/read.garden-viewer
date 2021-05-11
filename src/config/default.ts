@@ -30,8 +30,8 @@ const defaultConfig: DefaultConfig = {
   },
   loadedContentsNumber: 5,
   fontSize: {
-    min: 8,
-    max: 32,
+    min: 12,
+    max: 36,
     step: 2,
   },
   columnGap: 216,

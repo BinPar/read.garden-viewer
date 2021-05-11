@@ -14,9 +14,10 @@ const testingConfig: TestingConfig = {
   ...settings,
   longFlowLayoutContentConfig: {
     layoutType: 'flow',
-    contentSlug: 'acuario',
-    startPageLabel: '64',
+    slug: 'acuario',
+    contentSlug: '64',
     initialFontFamily: 'Obf-Helvetica',
+    availableFontFamilies: ['Obf-Helvetica', 'Obf-OpenDyslexic', 'Obf-AmericanTypewriter', 'Obf-RobotoSlab', 'Obf-Baskerville', 'Obf-Tahoma', 'Obf-TimesNewRoman'],
   }
 };
 

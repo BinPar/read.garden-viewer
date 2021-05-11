@@ -1,12 +1,16 @@
+import { State } from '../model/state';
+
 import { updateState } from '../lib/state';
 
 /**
  * Creates basic DOM elements for viewer
+ * @param state Viewer state
  */
-const createBasicDOMElements = (): void => {
+const createBasicDOMElements = (state: State): void => {
   // #region Main node
   const readGardenViewerNode = document.createElement('div');
   readGardenViewerNode.id = 'rg-viewer';
+  readGardenViewerNode.classList.add(`rg-${state.layout}-layout`, `rg-${state.scrollMode}-scroll`);
   document.body.appendChild(readGardenViewerNode);
   // #endregion Main node
 
@@ -15,26 +19,18 @@ const createBasicDOMElements = (): void => {
   contentWrapperNode.classList.add('rg-content-wrapper');
   readGardenViewerNode.appendChild(contentWrapperNode);
 
-  const totalWidthCalculatorNode = document.createElement('div');
-  totalWidthCalculatorNode.classList.add('rg-total-width-calculator');
-  contentWrapperNode.appendChild(totalWidthCalculatorNode);
-
   const backgroundCleaner = document.createElement('div');
   backgroundCleaner.classList.add('rg-bg-cleaner');
   contentWrapperNode.appendChild(backgroundCleaner);
 
   const contentPlaceholderNode = document.createElement('div');
+  contentPlaceholderNode.id = 'rg-content-placeholder';
   contentWrapperNode.appendChild(contentPlaceholderNode);
 
   const endOfChapterCalculatorNode = document.createElement('div');
   endOfChapterCalculatorNode.classList.add('rg-end-of-chapter-calculator');
   endOfChapterCalculatorNode.dataset.page = '-';
   contentWrapperNode.appendChild(endOfChapterCalculatorNode);
-
-  const additionalPage = document.createElement('div');
-  additionalPage.classList.add('rg-additional-page', 'rg-real-end-of-chapter');
-  additionalPage.textContent = 'realEndOfChapter';
-  contentWrapperNode.appendChild(additionalPage);
   // #endregion Content Wrapper and child nodes
 
   // #region Content Wrapper Siblings
@@ -69,7 +65,6 @@ const createBasicDOMElements = (): void => {
     mainStyleNode: mainStylesheet?.ownerNode as HTMLLinkElement,
     readGardenViewerNode,
     contentWrapperNode,
-    totalWidthCalculatorNode,
     contentPlaceholderNode,
     endOfChapterCalculatorNode,
     pagesLabelsNode,

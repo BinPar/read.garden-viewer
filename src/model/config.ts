@@ -116,17 +116,21 @@ export interface RequiredConfig {
    */
   eventHandler?: ReadGardenEventHandler;
   /**
-   * Current content slug
+   * Initial slug (book, work, etc)
    */
-  contentSlug: string;
+  slug: string;
   /**
-   * Label of the initial page or null to use the default page
+   * Initial content slug (virtual page in flow, page in fixed)
    */
-  startPageLabel: string | null;
+  contentSlug: string | null;
   /**
    * Initial font family
    */
   initialFontFamily: string;
+  /**
+   * Available font families
+   */
+  availableFontFamilies: string[];
 }
 
 export type Config = DefaultConfig & RequiredConfig;
