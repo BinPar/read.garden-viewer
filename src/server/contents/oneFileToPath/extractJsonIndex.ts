@@ -14,7 +14,7 @@ const JSON_INDEX_BYTES = 32;
  * @returns Extracted JSON Index info
  */
 const extractJsonIndex = async (pathToFile: string): Promise<ExtractedJSONIndexInfo> => {
-  const fileStats = await stat(pathToFile);
+  const fileStats = await stat(pathToFile);  
   if (fileStats && fileStats.size) {
     const { size } = fileStats;
     const fd = await open(pathToFile, 'r');
