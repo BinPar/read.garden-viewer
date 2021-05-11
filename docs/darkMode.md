@@ -1,4 +1,4 @@
-# Dark Mode
+# Dark Mode (Fear Of The Dark)
 
 ![Dark Mode](https://pa1.narvii.com/7754/4477bb19440804a6e56464952e8a942657849bcer1-600-429_hq.gif)
 
