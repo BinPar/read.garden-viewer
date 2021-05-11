@@ -5,7 +5,7 @@ import { State } from '../../model/state';
 import setCSSProperty from '../../utils/setCSSProperty';
 import checkImagesHeight from '../../utils/checkImagesHeight';
 import recalculate from '../../viewer/recalculate';
-import { onCssLoaded } from '../events/onCssLoaded';
+import { onCssLoaded } from '../state/changeHandlers/cssLoaderHandler';
 import { updateState } from '../state';
 
 /**
@@ -28,9 +28,6 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
     setCSSProperty('viewer-margin-top', '200vh');
     window.requestAnimationFrame(() => {
       contentPlaceholderNode.innerHTML = action.htmlContent;
-      const endingGap = document.createElement('div');
-      endingGap.classList.add('rg-ending-gap');
-      contentPlaceholderNode.appendChild(endingGap);
 
       window.requestAnimationFrame(() => {
         let replace = true;

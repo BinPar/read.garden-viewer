@@ -66,6 +66,10 @@ export interface NavigateToPage extends Action {
   pageLabel: string;
 }
 
+export interface Resize extends Action {
+  type: 'resize';
+}
+
 /**
  * Actions that affect Fixed and Flow Layout
  */
@@ -74,4 +78,5 @@ export type GlobalActions =
   | SetDarkMode
   | NavigateToPage
   | SetDebugViewerSafeArea
-  | AppendNewContent;
+  | AppendNewContent
+  | Resize;
