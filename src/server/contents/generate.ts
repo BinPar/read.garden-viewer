@@ -14,11 +14,12 @@ import { cdnDomain } from '../config';
  */
 const generate = async (cdn?: string, destDir?: string): Promise<void> => {
   log.setLevel('info');
+  const cndToUse = cdn || cdnDomain;
   const booksPath = destDir || path.join(__dirname, '../../../web/books');
   await ensureDir(booksPath);
   for(let i=0; i< books.length;i++) {
     const book = books[i];
-    const remoteURI = `https://${cdnDomain}/books/${book}/${book}.bp`;
+    const remoteURI = `https://${cndToUse}/books/${book}/${book}.bp`;
     const bookPath = `${booksPath}/${book}`;
     const bookFile = `${booksPath}/${book}/${book}.bp`;
     try {
