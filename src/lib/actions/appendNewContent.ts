@@ -19,7 +19,6 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
     try {
       await onCssLoaded();
     } catch (ex) {
-      console.log('rejected new content append', action.cssURL);
       return {};
     }
   }
