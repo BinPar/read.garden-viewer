@@ -7,12 +7,12 @@ import { encryptIndexes } from '../../config';
 const fastEncrypt = (input: string): string => {
   let result = '';
   let lastEqual = input.indexOf('=');
-  while (input.length > 7 && (lastEqual === -1 || lastEqual > 7)) {
+  while (input.length > 7 && (lastEqual < 0 || lastEqual > 7)) {
     result += `${input[encryptIndexes[0]]}${input[encryptIndexes[1]]}${input[encryptIndexes[2]]}${
       input[encryptIndexes[3]]
     }${input[encryptIndexes[4]]}${input[encryptIndexes[5]]}${input[encryptIndexes[6]]}`;
     input = input.substring(7);
-    lastEqual = input.indexOf('=');
+    lastEqual -= 7;
   }
   if (input) {
     result += input;

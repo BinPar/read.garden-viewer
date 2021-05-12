@@ -28,7 +28,7 @@ const extractJsonIndex = async (pathToFile: string): Promise<ExtractedJSONIndexI
       .split('-')
       .map((bytes) => parseInt(bytes, 10));
 
-    log.info({
+    log.trace({
       jsonPositions,
       jsonIndexPosition,
       jsonIndexLength,
