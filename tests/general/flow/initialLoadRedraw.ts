@@ -11,12 +11,12 @@ describe('Initial Load Draw', () => {
     // Navigate to the viewer
     await page.goto(testing.baseURL);
     // Setup the flow layout
-    const state = await page.evaluate(
+    await page.evaluate(
       setupViewerConfig,
       JSON.stringify(testing.longFlowLayoutContentConfig),
     );
-    // We check that the css is not loaded
-    expect(state.cssLoaded).toBeFalsy();    
+    // Wait for the viewer to inform that the CSS is not loaded
+    await page.waitForFunction(() => !window.readGardenApi.state.cssLoaded);
     // Wait for the viewer to inform that the CSS is loaded
     await page.waitForFunction(() => window.readGardenApi.state.cssLoaded);
     // Get the position of the end of the chapter marker
