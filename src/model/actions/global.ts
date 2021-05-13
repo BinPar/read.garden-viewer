@@ -10,6 +10,8 @@ export enum GlobalActionTypes {
   NavigateToPage = 'navigateToPage',
   SetDebugViewerSafeArea = 'setDebugViewerSafeArea',
   AppendNewContent = 'appendNewContent',
+  Resize = 'resize',
+  HighlightSearchTerms = 'highlightSearchTerms',
 }
 
 /**
@@ -70,6 +72,14 @@ export interface Resize extends Action {
   type: 'resize';
 }
 
+export interface HighlightSearchTerms extends Action {
+  type: 'highlightSearchTerms';
+  /**
+   * Terms to highlight
+   */
+  terms: string[];
+}
+
 /**
  * Actions that affect Fixed and Flow Layout
  */
@@ -79,4 +89,5 @@ export type GlobalActions =
   | NavigateToPage
   | SetDebugViewerSafeArea
   | AppendNewContent
-  | Resize;
+  | Resize
+  | HighlightSearchTerms;

@@ -28,7 +28,19 @@ export interface LoadNewContent extends ReadGardenEvent {
   contentSlug: string | null;
 }
 
-export type ReadGardenEvents = PageChange | LoadNewContent;
+export interface GetTerms extends ReadGardenEvent {
+  type: 'getTerms';
+  /**
+   * Slug of the content (book, work...) to load
+   */
+  slug: string;
+  /**
+   * Text to look for
+   */
+  text: string;
+}
+
+export type ReadGardenEvents = PageChange | LoadNewContent | GetTerms;
 
 export type ReadGardenEventHandler = (event: ReadGardenEvents) => Promise<void>;
 

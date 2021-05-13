@@ -7,6 +7,7 @@ import setFontSize from './setFontSize';
 import setFontFamily from './setFontFamily';
 import setTextAlign from './setTextAlign';
 import resize from './resize';
+import highlightSearchTerms from './highlightSearchTerms';
 
 /**
  * List of all action dispatchers
@@ -21,6 +22,7 @@ const actionDispatchers  = {
   setFontFamily,
   setTextAlign,
   resize,
+  highlightSearchTerms,
 };
 
 export default actionDispatchers;
