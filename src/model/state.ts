@@ -14,6 +14,23 @@ export interface GlobalState {
    */
   contentSlug: string;
   /**
+   * Read mode
+   */
+  readMode: boolean;
+  /**
+   * Security Margins
+   */
+  securityMargins: {
+    /**
+     * Read Mode Safe Margins
+     */
+    readMode: Margin;
+    /**
+     * User Interface Mode Safe Margins
+     */
+    uiMode: Margin;
+  };
+  /**
    * Main viewer DOM node
    */
   readGardenViewerNode?: HTMLDivElement;
@@ -122,7 +139,13 @@ export type DefaultGlobalState = Partial<GlobalState> &
   Required<
     Pick<
       GlobalState,
-      'scale' | 'basicDOMElementsCreated' | 'cssLoaded' | 'recalculating' | 'wrapperReady'
+      | 'scale'
+      | 'basicDOMElementsCreated'
+      | 'cssLoaded'
+      | 'recalculating'
+      | 'wrapperReady'
+      | 'securityMargins'
+      | 'readMode'
     >
   >;
 
@@ -220,10 +243,6 @@ export interface FlowState {
    * Needs to recalculate pagination
    */
   invalidatedPagination?: boolean;
-  /**
-   * Read mode
-   */
-  readMode: boolean;
   /**
    * Current font size (pixels)
    */
