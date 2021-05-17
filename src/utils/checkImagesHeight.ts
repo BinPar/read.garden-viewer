@@ -3,9 +3,9 @@
  * vertical space. Also provides
  * @param images Node list of images (result from `querySelectorAll`)
  */
-const checkImagesHeight = async (images: NodeListOf<HTMLImageElement>): Promise<void> => {
+const checkImagesHeight = async (images: NodeListOf<HTMLImageElement> | HTMLImageElement[]): Promise<void> => {
   const checkImagesHeightPromises = new Array<Promise<void>>();
-  images.forEach((img) => {
+  images.forEach((img: HTMLImageElement) => {
     checkImagesHeightPromises.push(
       new Promise<void>((imageResolve) => {
         const check = (): void => {

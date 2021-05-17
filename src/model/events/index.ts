@@ -19,13 +19,13 @@ export interface PageChange extends ReadGardenEvent{
 export interface LoadNewContent extends ReadGardenEvent {
   type: 'loadNewContent';
   /**
-   * Slug of the content (book, work...) to load
+   * Slug of the first level content (book, work...) to load
    */
   slug: string;
   /**
-   * Label of the page of the content to load (null for the default page)
+   * Slug of the second level content (page, chapter...) to load
    */
-  contentSlug: string | null;
+  contentSlug: string;
 }
 
 export interface GetTerms extends ReadGardenEvent {

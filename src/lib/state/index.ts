@@ -57,6 +57,7 @@ export const initializeState = (initialConfig: InitialConfig): void => {
       ...(initialMargins || {}),
     },
     title: 'Title', // From initial config
+    slug: config.slug,
     pageLabel: config.contentSlug,
     pageNumber: 1, // From initial config
     scale: config.initialScale || defaultGlobal.scale,

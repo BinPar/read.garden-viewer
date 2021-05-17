@@ -19,7 +19,21 @@ export enum GlobalActionTypes {
  */
  export interface AppendNewContent extends Action {
   type: 'appendNewContent';
-  cssURL?: string;
+  /**
+   * First level content slug (book, work...)
+   */
+  slug: string;
+  /**
+   * Second level content slug (page, chapter...)
+   */
+  contentSlug: string;
+  /**
+   * Content CSS URL
+   */
+  cssURL: string;
+  /**
+   * Content HTML
+   */
   htmlContent: string;
 }
 

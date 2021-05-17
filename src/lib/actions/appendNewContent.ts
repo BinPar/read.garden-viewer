@@ -69,17 +69,17 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
             checkFonts();
             return;
           }
-          const promises = new Array<Promise<void>>();
+          const promises = new Array<Promise<HTMLImageElement>>();
           images.forEach((img) => {
             promises.push(
-              new Promise<void>((imageResolve) => {
+              new Promise<HTMLImageElement>((imageResolve) => {
                 if (img.complete) {
-                  imageResolve();
+                  imageResolve(img);
                   return;
                 }
                 const onLoad = (): void => {
                   img.removeEventListener('load', onLoad);
-                  imageResolve();
+                  imageResolve(img);
                 };
                 const onError = (ev: ErrorEvent) => {
                   log.info('Error loading image', ev.message);
@@ -90,9 +90,7 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
               }),
             );
           });
-          Promise.all(promises)
-            .then(() => checkImagesHeight(images))
-            .then(checkFonts);
+          Promise.all(promises).then(checkImagesHeight).then(checkFonts);
         };
         newLink.rel = 'stylesheet';
         newLink.type = 'text/css';
