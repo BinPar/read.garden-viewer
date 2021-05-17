@@ -50,6 +50,10 @@ export interface GlobalState {
    */
   mainStyleNode?: HTMLLinkElement;
   /**
+   * Content wrapper is ready
+   */
+  wrapperReady: boolean;
+  /**
    * CSS and fonts are loaded for the current content
    */
   cssLoaded: boolean;
@@ -111,7 +115,7 @@ export interface GlobalState {
  * Default global state
  */
 export type DefaultGlobalState = Partial<GlobalState> &
-  Required<Pick<GlobalState, 'scale' | 'basicDOMElementsCreated' | 'cssLoaded' | 'recalculating'>>;
+  Required<Pick<GlobalState, 'scale' | 'basicDOMElementsCreated' | 'cssLoaded' | 'recalculating' | 'wrapperReady'>>;
 
 /**
  * Layout types
@@ -130,6 +134,21 @@ export type TextAlignModes = 'start' | 'justify' | null;
  * Available scroll modes
  */
 export type ScrollModes = 'vertical' | 'horizontal';
+
+export interface FixedContentInfo {
+  /**
+   * Content height
+   */
+  height: number;
+  /**
+   * Content width
+   */
+  width: number;
+  /**
+   * Content label
+   */
+  label: string;
+}
 
 export interface FixedState {
   /**
@@ -172,7 +191,10 @@ export interface FixedState {
    * Current horizontal translate
    */
   horizontalTranslate: number;
-
+  /**
+   * Container by label map
+   */
+  containerByLabel: Map<string, HTMLDivElement>;
   // loadedPages: string[];
 }
 

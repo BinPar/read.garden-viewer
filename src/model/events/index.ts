@@ -28,10 +28,18 @@ export interface LoadNewContent extends ReadGardenEvent {
   contentSlug: string;
 }
 
+export interface GetContentsInfo extends ReadGardenEvent {
+  type: 'getContentsInfo';
+  /**
+   * Slug of the first level content (book, work...)
+   */
+  slug: string;
+}
+
 export interface GetTerms extends ReadGardenEvent {
   type: 'getTerms';
   /**
-   * Slug of the content (book, work...) to load
+   * Slug of the first level  content (book, work...)
    */
   slug: string;
   /**
@@ -40,7 +48,7 @@ export interface GetTerms extends ReadGardenEvent {
   text: string;
 }
 
-export type ReadGardenEvents = PageChange | LoadNewContent | GetTerms;
+export type ReadGardenEvents = PageChange | LoadNewContent | GetContentsInfo | GetTerms;
 
 export type ReadGardenEventHandler = (event: ReadGardenEvents) => Promise<void>;
 
