@@ -112,6 +112,7 @@ const recalculate = async (state: State): Promise<Partial<State>> => {
                           const page = element.dataset.page!;
                           positionByLabel.set(page, position);
                           labelByPosition.set(position, page);
+                          lastLabel = page;
                           // console.log()
                           if (lastPosition !== position) {
                             const label = document.createElement('div');
@@ -121,7 +122,6 @@ const recalculate = async (state: State): Promise<Partial<State>> => {
                             labelP.innerText = page;
                             pagesLabelsNode!.appendChild(label);
                             labelsCount++;
-                            lastLabel = page;
                           }
                           lastPosition = position;
                         });
