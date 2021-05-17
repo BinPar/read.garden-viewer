@@ -54,9 +54,19 @@ div.rg-content-wrapper {
   column-gap: var(--column-gap);
 }
 
-.rg-flow-layout.rg-horizontal-scroll div.rg-content-wrapper div.rg-content-placeholder {
-  height: 100%;
+.rg-fixed-layout.rg-horizontal-scroll div.rg-content-wrapper div#rg-content-placeholder {
   width: var(--total-width);
+  height: auto;
+}
+
+.rg-fixed-layout.rg-horizontal-scroll div.rg-content-wrapper div#rg-content-placeholder > * {
+  background-color: #ccc;
+  float: left;
+}
+
+.rg-fixed-layout.rg-vertical-scroll div.rg-content-wrapper div#rg-content-placeholder {
+  height: var(--total-height);
+  width: auto;
 }
 
 .rg-flow-layout.rg-horizontal-scroll div.rg-content-wrapper img.rg-ready,

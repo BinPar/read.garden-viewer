@@ -75,49 +75,53 @@ const recalculate = async (state: State): Promise<Partial<State>> => {
                   }
                 }
     
-                const columnsPositions = Array(totalColumns)
-                  .fill(0)
-                  .map((_, i) => i * totalColumnWidth)
-                  .reverse();
-                const positionByLabel = new Map<string, number>();
-                const labelByPosition = new Map<number, string>();
-    
-                let lastPosition: number | null = null;
-    
-                contentPlaceholderNode?.querySelectorAll('[data-page]').forEach((item) => {
-                  const element = item as HTMLElement;
-                  const rawPosition = element.getBoundingClientRect().left;
-                  const position = columnsPositions.find((p) => p < rawPosition)!;
-                  const page = element.dataset.page!;
-                  positionByLabel.set(page, position);
-                  labelByPosition.set(position, page);
-                  if (lastPosition !== position) {
-                    const label = document.createElement('div');
-                    label.classList.add('rg-label');
-                    const labelP = document.createElement('p');
-                    label.appendChild(labelP);
-                    labelP.innerText = page;
-                    pagesLabelsNode!.appendChild(label);
-                  }
-                  lastPosition = position;
-                });
-    
                 setCSSProperty('total-width', `${totalWidth}px`);
                 setCSSProperty('total-column-width', `${totalColumnWidth}px`);
                 setCSSProperty('column-width', `${columnWidth}px`);
                 setCSSProperty('column-gap', `${columnGap}px`);
                 setCSSProperty('column-count', `${columnsInViewport}`);
-    
-                resolve({
-                  ...globalUpdate,
-                  totalWidth,
-                  totalColumnWidth,
-                  totalColumns,
-                  columnsInViewport,
-                  columnWidth,
-                  columnGap,
-                  positionByLabel,
-                  labelByPosition,
+
+                window.requestAnimationFrame(() => {
+                  window.requestAnimationFrame(() => {
+                    const columnsPositions = Array(totalColumns)
+                      .fill(0)
+                      .map((_, i) => i * totalColumnWidth)
+                      .reverse();
+                    const positionByLabel = new Map<string, number>();
+                    const labelByPosition = new Map<number, string>();
+        
+                    let lastPosition: number | null = null;
+        
+                    contentPlaceholderNode!.querySelectorAll('[data-page]').forEach((item) => {
+                      const element = item as HTMLElement;
+                      const rawPosition = element.getBoundingClientRect().left;
+                      const position = columnsPositions.find((p) => p < rawPosition)!;
+                      const page = element.dataset.page!;
+                      positionByLabel.set(page, position);
+                      labelByPosition.set(position, page);
+                      if (lastPosition !== position) {
+                        const label = document.createElement('div');
+                        label.classList.add('rg-label');
+                        const labelP = document.createElement('p');
+                        label.appendChild(labelP);
+                        labelP.innerText = page;
+                        pagesLabelsNode!.appendChild(label);
+                      }
+                      lastPosition = position;
+                    });
+        
+                    resolve({
+                      ...globalUpdate,
+                      totalWidth,
+                      totalColumnWidth,
+                      totalColumns,
+                      columnsInViewport,
+                      columnWidth,
+                      columnGap,
+                      positionByLabel,
+                      labelByPosition,
+                    });
+                  });
                 });
                 return;
               }

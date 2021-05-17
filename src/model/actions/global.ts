@@ -1,4 +1,4 @@
-import { ScrollModes } from '../state';
+import { LayoutTypes, ScrollModes } from '../state';
 import { Action } from './common';
 
 /**
@@ -20,6 +20,10 @@ export enum GlobalActionTypes {
  export interface AppendNewContent extends Action {
   type: 'appendNewContent';
   /**
+   * Layout type
+   */
+  layout: LayoutTypes;
+  /**
    * First level content slug (book, work...)
    */
   slug: string;
@@ -27,6 +31,10 @@ export enum GlobalActionTypes {
    * Second level content slug (page, chapter...)
    */
   contentSlug: string;
+  /**
+   * Second level content label (page, chapter...)
+   */
+  label: string;
   /**
    * Content CSS URL
    */
