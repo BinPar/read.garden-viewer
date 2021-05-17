@@ -28,6 +28,7 @@ const createBasicDOMElements = (state: State): void => {
   contentWrapperNode.appendChild(contentPlaceholderNode);
 
   const endOfChapterCalculatorNode = document.createElement('div');
+  endOfChapterCalculatorNode.innerText = 'realEndOfChapter';
   endOfChapterCalculatorNode.classList.add('rg-end-of-chapter-calculator');
   endOfChapterCalculatorNode.dataset.page = '-';
   contentWrapperNode.appendChild(endOfChapterCalculatorNode);

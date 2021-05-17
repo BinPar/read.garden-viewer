@@ -1,3 +1,5 @@
+import { LayoutTypes } from '../../model/state';
+
 export type ResourceTypes = 'video' | 'image' | 'doc' | 'interactive' | 'link';
 
 export interface ContentFile {
@@ -43,19 +45,13 @@ export interface ResourceData {
   title: string;
 }
 
-export enum ContentType {
-  flow = 'flow',
-  fixed = 'fixed',
-  audio = 'audio',
-}
-
 export interface Content {
   title: string;
   isbn: string;
   slug: string;
   initialContentSlug: string;
   cssURL: string;
-  type: ContentType;
+  type: LayoutTypes;
   contents: ContentFile[];
   spine: SpineNode[];
   resourceTypes: ResourceTypes[];

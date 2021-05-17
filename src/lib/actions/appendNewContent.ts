@@ -1,3 +1,4 @@
+import log from 'loglevel';
 import { ActionDispatcher } from '../../model/actions/actionDispatcher';
 import { AppendNewContent } from '../../model/actions/global';
 import { State } from '../../model/state';
@@ -5,6 +6,8 @@ import { State } from '../../model/state';
 import setCSSProperty from '../../utils/setCSSProperty';
 import checkImagesHeight from '../../utils/checkImagesHeight';
 import recalculate from '../../viewer/recalculate';
+import { onCssLoaded } from '../state/changeHandlers/cssLoaderHandler';
+import { updateState } from '../state';
 
 /**
  * Appends new content to viewer
@@ -12,16 +15,20 @@ import recalculate from '../../viewer/recalculate';
  * @param context.action Viewer action, containing content HTML and CSS URL
  * @returns Partial state with updated properties
  */
-const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, action }) =>
-  new Promise<Partial<State>>((resolve): void => {
+const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, action }) => {
+  if (!state.cssLoaded) {
+    try {
+      await onCssLoaded();
+    } catch (ex) {
+      return {};
+    }
+  }
+  updateState({ cssLoaded: false });
+  return new Promise<Partial<State>>((resolve): void => {
     const { contentPlaceholderNode, dynamicStyleNode } = state as Required<State>;
-
     setCSSProperty('viewer-margin-top', '200vh');
     window.requestAnimationFrame(() => {
       contentPlaceholderNode.innerHTML = action.htmlContent;
-      const endingGap = document.createElement('div');
-      endingGap.classList.add('rg-ending-gap');
-      contentPlaceholderNode.appendChild(endingGap);
 
       window.requestAnimationFrame(() => {
         let replace = true;
@@ -62,21 +69,20 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
             checkFonts();
             return;
           }
-          const promises = new Array<Promise<void>>();
+          const promises = new Array<Promise<HTMLImageElement>>();
           images.forEach((img) => {
             promises.push(
-              new Promise<void>((imageResolve) => {
+              new Promise<HTMLImageElement>((imageResolve) => {
                 if (img.complete) {
-                  imageResolve();
+                  imageResolve(img);
                   return;
                 }
                 const onLoad = (): void => {
                   img.removeEventListener('load', onLoad);
-                  imageResolve();
+                  imageResolve(img);
                 };
                 const onError = (ev: ErrorEvent) => {
-                  // eslint-disable-next-line no-console
-                  console.log('Error loading image', ev.message);
+                  log.info('Error loading image', ev.message);
                   onLoad();
                 };
                 img.addEventListener('load', onLoad);
@@ -84,9 +90,7 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
               }),
             );
           });
-          Promise.all(promises)
-            .then(() => checkImagesHeight(images))
-            .then(checkFonts);
+          Promise.all(promises).then(checkImagesHeight).then(checkFonts);
         };
         newLink.rel = 'stylesheet';
         newLink.type = 'text/css';
@@ -96,5 +100,6 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
       });
     });
   });
+};
 
 export default appendNewContent;

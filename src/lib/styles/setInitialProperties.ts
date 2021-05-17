@@ -35,6 +35,7 @@ const setInitialProperties = (state: State): void => {
   setCSSProperty('text-align', 'initial');
   setCSSProperty('total-column-width', '0px');
   setCSSProperty('total-width', '0px');
+  setCSSProperty('user-select', 'auto');
   setCSSProperty('vertical-translate', '0');
   setCSSProperty('viewer-margin-top', '200vh');
 

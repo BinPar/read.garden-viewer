@@ -1,4 +1,4 @@
-import { FixedState, GlobalState, State } from '../../model/state';
+import { FixedState, GlobalState, PropChangeHandler, State } from '../../model/state';
 import { InitialConfig } from '../../model/config';
 import { ViewerMode } from '../../model/viewerSettings';
 
@@ -9,6 +9,24 @@ import defaultFixed from './defaultFixed';
 import defaultPaginated from './defaultPaginated';
 import defaultConfig from '../../config/default';
 import { setConfig } from '../../config';
+import changeHandlers from './changeHandlers';
+
+const handlers = new Map<string, Map<any, PropChangeHandler>>();
+
+for (let i = 0, l = changeHandlers.length; i < l; i++) {
+  const { property, value, handler } = changeHandlers[i];
+  let map = handlers.get(property);
+  if (!map) {
+    map = new Map<any, PropChangeHandler>();
+    handlers.set(property, map);
+  }
+  if (!map.has(value)) {
+    map.set(value, handler);
+  } else {
+    // eslint-disable-next-line no-console
+    console.warn(`Duplicated handler for property ${property} and value ${value}`);
+  }
+}
 
 let state: State;
 
@@ -39,7 +57,8 @@ export const initializeState = (initialConfig: InitialConfig): void => {
       ...(initialMargins || {}),
     },
     title: 'Title', // From initial config
-    pageLabel: '1', // From initial config
+    slug: config.slug,
+    pageLabel: config.contentSlug,
     pageNumber: 1, // From initial config
     scale: config.initialScale || defaultGlobal.scale,
     searchTerms: [],
@@ -89,7 +108,14 @@ export const updateState = (newState: Partial<State>): void => {
   Object.keys(newState).forEach((key) => {
     const newValue = (newState as any)[key];
     if (newValue !== updatableState[key]) {
-      updatableState[key] = newValue;  
+      updatableState[key] = newValue;
+      const propertyHandlers = handlers.get(key);
+      if (propertyHandlers) {
+        const changeHandler = propertyHandlers.get(newValue);
+        if (changeHandler) {
+          changeHandler();
+        }
+      }
     }
   });
 };

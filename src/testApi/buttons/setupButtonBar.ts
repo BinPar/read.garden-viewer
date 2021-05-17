@@ -4,6 +4,8 @@ import debugViewerSafeArea from './debugViewerSafeArea';
 import flowChapterSelect from './flowChapterSelect';
 import fontFamilyButtons from './fontFamilyButtons';
 import fontSizeButtons from './fontSizeButtons';
+import scrollModeButtons from './scrollModeButtons';
+import searchButtons from './searchButtons';
 import textAlignButtons from './textAlignButtons';
 
 const setupButtonBar = (state: State, dispatcher: DispatchAPIAction): void => {
@@ -14,6 +16,8 @@ const setupButtonBar = (state: State, dispatcher: DispatchAPIAction): void => {
   fontSizeButtons(testingButtonsPanel, state, dispatcher);
   fontFamilyButtons(testingButtonsPanel, state, dispatcher);
   textAlignButtons(testingButtonsPanel, state, dispatcher);
+  scrollModeButtons(testingButtonsPanel, state, dispatcher);
+  searchButtons(testingButtonsPanel, state);
   flowChapterSelect(testingButtonsPanel, state);
 };
 

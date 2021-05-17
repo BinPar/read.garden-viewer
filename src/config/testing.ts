@@ -6,7 +6,9 @@ import { ViewerFunction } from '../model/viewer';
 import settings from './settings/settings.json';
 
 export interface TestingConfig {
+  isDev: boolean;
   baseURL: string;
+  cdnDomain: string;
   longFlowLayoutContentConfig: InitialConfig;
 }
 

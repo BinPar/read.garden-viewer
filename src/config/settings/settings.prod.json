@@ -1,3 +1,5 @@
 {
-  "baseURL": "https://read-garden-viewer-beta.binpar.cloud/"
+  "isDev": false,
+  "baseURL": "https://read-garden-viewer-beta.binpar.cloud/",
+  "cdnDomain": "d11zk9dmr3stda.cloudfront.net"
 }

@@ -10,6 +10,8 @@ export enum GlobalActionTypes {
   NavigateToPage = 'navigateToPage',
   SetDebugViewerSafeArea = 'setDebugViewerSafeArea',
   AppendNewContent = 'appendNewContent',
+  Resize = 'resize',
+  HighlightSearchTerms = 'highlightSearchTerms',
 }
 
 /**
@@ -17,7 +19,21 @@ export enum GlobalActionTypes {
  */
  export interface AppendNewContent extends Action {
   type: 'appendNewContent';
-  cssURL?: string;
+  /**
+   * First level content slug (book, work...)
+   */
+  slug: string;
+  /**
+   * Second level content slug (page, chapter...)
+   */
+  contentSlug: string;
+  /**
+   * Content CSS URL
+   */
+  cssURL: string;
+  /**
+   * Content HTML
+   */
   htmlContent: string;
 }
 
@@ -66,6 +82,18 @@ export interface NavigateToPage extends Action {
   pageLabel: string;
 }
 
+export interface Resize extends Action {
+  type: 'resize';
+}
+
+export interface HighlightSearchTerms extends Action {
+  type: 'highlightSearchTerms';
+  /**
+   * Terms to highlight
+   */
+  terms: string[];
+}
+
 /**
  * Actions that affect Fixed and Flow Layout
  */
@@ -74,4 +102,6 @@ export type GlobalActions =
   | SetDarkMode
   | NavigateToPage
   | SetDebugViewerSafeArea
-  | AppendNewContent;
+  | AppendNewContent
+  | Resize
+  | HighlightSearchTerms;
