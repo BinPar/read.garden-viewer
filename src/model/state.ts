@@ -10,6 +10,10 @@ export interface GlobalState {
    */
   slug: string;
   /**
+   * Current content slug
+   */
+  contentSlug: string;
+  /**
    * Main viewer DOM node
    */
   readGardenViewerNode?: HTMLDivElement;
@@ -115,7 +119,12 @@ export interface GlobalState {
  * Default global state
  */
 export type DefaultGlobalState = Partial<GlobalState> &
-  Required<Pick<GlobalState, 'scale' | 'basicDOMElementsCreated' | 'cssLoaded' | 'recalculating' | 'wrapperReady'>>;
+  Required<
+    Pick<
+      GlobalState,
+      'scale' | 'basicDOMElementsCreated' | 'cssLoaded' | 'recalculating' | 'wrapperReady'
+    >
+  >;
 
 /**
  * Layout types
@@ -148,6 +157,10 @@ export interface FixedContentInfo {
    * Content label
    */
   label: string;
+  /**
+   * Content slug
+   */
+  slug: string;
 }
 
 export interface FixedState {

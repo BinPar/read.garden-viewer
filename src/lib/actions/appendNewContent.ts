@@ -159,6 +159,7 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
                 });
               });
             };
+            // TODO: In fixed (when book is epub), there will be multiple CSS
             if (!action.cssURL || action.cssURL === dynamicStyleNode!.href) {
               replace = false;
               checkFonts();

@@ -31,7 +31,6 @@ const recalculate = async (state: State): Promise<Partial<State>> => {
       recalculating: false,
     };
 
-    setCSSProperty('viewer-margin-top', '200vh');
     if (state.layout === LayoutTypes.Flow) {
       setCSSProperty('total-width', `0px`);
       setCSSProperty('total-column-width', `0px`);

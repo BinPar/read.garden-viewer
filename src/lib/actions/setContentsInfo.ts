@@ -14,13 +14,14 @@ const setContentsInfo: ActionDispatcher<SetContentsInfo> = async ({ state, actio
   let totalHeight = 0;
   const containerByLabel = new Map<string, HTMLDivElement>();
   for (let i = 0, l = info.length; i < l; i++) {
-    const { width, height, label } = info[i];
+    const { width, height, label, slug } = info[i];
     totalHeight += height;
     totalWidth += width;
     const container = document.createElement('div');
     container.style.width = `${width}px`;
     container.style.height = `${height}px`;
     container.dataset.label = label;
+    container.dataset.slug = slug;
     containerByLabel.set(label, container);
     contentPlaceholderNode.appendChild(container);
   }

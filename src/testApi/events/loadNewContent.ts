@@ -14,10 +14,9 @@ const loadNewContent: EventHandler<LoadNewContent> = async (event, dispatch) => 
   const { slug, contentSlug } = event;
   const index = await loadIndexFile(slug);
   const { type: layout, contents } = index;
-  const currentPageLabel = contentSlug;
   // The following line DOES NOT work like this in RG viewer, because labels ARE NOT slugs
   const currentContent = contents.find((content) =>
-    content.labels.map((l) => l.toLowerCase()).includes(currentPageLabel),
+    content.labels.map((l) => l.toLowerCase()).includes(contentSlug),
   );
   if (!currentContent) {
     log.error(`No label "${contentSlug}" found in content "${slug}"`);

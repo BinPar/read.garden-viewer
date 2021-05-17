@@ -58,7 +58,8 @@ export const initializeState = (initialConfig: InitialConfig): void => {
     },
     title: 'Title', // From initial config
     slug: config.slug,
-    pageLabel: config.contentSlug,
+    contentSlug: config.contentSlug,
+    pageLabel: config.contentSlug, // Should be different (maybe we need to add `initialPageLabel`)
     pageNumber: 1, // From initial config
     scale: config.initialScale || defaultGlobal.scale,
     searchTerms: [],
