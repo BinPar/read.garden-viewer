@@ -1,7 +1,7 @@
 import clientToContentWrapperCoordinates from './clientToContentWrapperCoordinates';
 import deduplicateRects from './deduplicateRects';
 
-const drawHighlights = (container: HTMLDivElement, ranges: Range[]): void => {
+const drawHighlights = (container: HTMLDivElement, ranges = new Array<Range>()): void => {
   let resultRects = new Array<DOMRect>();
 
   ranges.forEach((selectionRange): void => {
@@ -23,10 +23,10 @@ const drawHighlights = (container: HTMLDivElement, ranges: Range[]): void => {
       y: rect.top,
     });
     const fixZoom = zoomPanelCoordinates.zoomFix || 1;
-    highlight.style.left = `${zoomPanelCoordinates.x - 1}px`;
-    highlight.style.top = `${zoomPanelCoordinates.y - 1}px`;
-    highlight.style.width = `${rect.width * fixZoom + 2}px`;
-    highlight.style.height = `${rect.height * fixZoom + 2}px`;
+    highlight.style.left = `${zoomPanelCoordinates.x - 3}px`;
+    highlight.style.top = `${zoomPanelCoordinates.y - 3}px`;
+    highlight.style.width = `${rect.width * fixZoom + 5}px`;
+    highlight.style.height = `${rect.height * fixZoom + 5}px`;
     container.append(highlight);
   }
 };

@@ -2,20 +2,17 @@ import log from 'loglevel';
 
 import { ActionDispatcher } from '../../model/actions/actionDispatcher';
 import { HighlightSearchTerms } from '../../model/actions/global';
-import { State } from '../../model/state';
-import { getSearchHighlightsRanges } from '../../utils/highlights/search';
-import { drawHighlights } from '../../utils/highlights';
+import { highlightTerms } from '../../utils/highlights/search';
 
-const highlightSearchTerms: ActionDispatcher<HighlightSearchTerms> = async ({ state, action }) => {
+/**
+ * Highlights search terms in content
+ * @param state.action Viewer action 
+ * @returns Partial state update
+ */
+const highlightSearchTerms: ActionDispatcher<HighlightSearchTerms> = async ({ action }) => {
   log.info('Highlight terms', action.terms);
-
-  const { contentWrapperNode, searchTermsHighlightsNode } = state as Required<State>;
   const { terms } = action;
-
-  const ranges = getSearchHighlightsRanges(contentWrapperNode, terms);
-  log.info('Highlight ranges', ranges.length);
-  drawHighlights(searchTermsHighlightsNode, ranges);
-
+  highlightTerms(terms);
   return { searchTerms: terms };
 };
 
