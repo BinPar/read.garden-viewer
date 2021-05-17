@@ -117,6 +117,7 @@ div.rg-pages-labels {
 
 div.rg-pages-labels > .rg-label {
   position: relative;
+  padding-top: 1px;
   width: var(--total-column-width);
   float: left;
   height: 2em;
