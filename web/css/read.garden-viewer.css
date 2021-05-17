@@ -103,7 +103,8 @@ div.rg-total-width-calculator,
 div.rg-end-of-chapter-calculator {
   width: 100%;
   height: 0px;
-  overflow: hidden;
+  color: transparent;
+  user-select: var(--user-select-end);
 }
 
 div.rg-pages-labels {

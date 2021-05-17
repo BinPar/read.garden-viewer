@@ -13,6 +13,7 @@ const highlightSearchTerms: ActionDispatcher<HighlightSearchTerms> = async ({ st
   const { terms } = action;
 
   const ranges = getSearchHighlightsRanges(contentWrapperNode, terms);
+  log.info('Highlight ranges', ranges.length);
   drawHighlights(searchTermsHighlightsNode, ranges);
 
   return { searchTerms: terms };

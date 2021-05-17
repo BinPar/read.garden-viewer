@@ -1,3 +1,4 @@
+import log from 'loglevel';
 import setCSSProperty from '../../setCSSProperty';
 import cleanText from './cleanText';
 import getSortedTerms from './getSortedTerms';
@@ -14,6 +15,7 @@ const getSearchHighlightsRanges = (
 ): Range[] => {
   const sortedTerms = getSortedTerms(terms);
   setCSSProperty('user-select', 'auto');
+  setCSSProperty('user-select-end', 'auto');
   // Reset current caret position
   const currentSelection = window.getSelection();
   const range = document.createRange();
@@ -56,7 +58,7 @@ const getSearchHighlightsRanges = (
                 currentRanges[i] = null;
                 if (selectionRange) {
                   selectionRange.setEnd(endRange.endContainer, endRange.endOffset);
-                  if (selectionRange.toString().endsWith(' ')) {
+                  while (selectionRange.toString().match(/[.,/#¡!¿?$%^&*;:{}=«»\-_`~()\][ ]+$/)) {
                     if (selectionRange.endOffset < 2) {
                       // Special case of empty tag selection ("[selection]<tag> ")
                       selectionRange.setEndBefore(selectionRange.endContainer);
@@ -68,7 +70,7 @@ const getSearchHighlightsRanges = (
                       );
                     }
                   }
-                  if (selectionRange.toString().startsWith(' ')) {
+                  while (selectionRange.toString().match(/^[.,/#¡!¿?$%^&*;:{}=«»\-_`~()\][ ]+/)) {
                     // Starting space (" [selection]")
                     // Starting space in different tag?
                     selectionRange.setStart(
@@ -92,7 +94,7 @@ const getSearchHighlightsRanges = (
       const backupRange = window.getSelection()!.getRangeAt(0);
       modifySelection('move', 'forward', 'character');
       modifySelection('extend', 'forward', 'word');
-      const newRange = window.getSelection()!.getRangeAt(0);
+      let newRange = window.getSelection()!.getRangeAt(0);
       if (
         backupRange.startOffset === newRange.startOffset &&
         backupRange.startContainer === newRange.startContainer
@@ -101,14 +103,25 @@ const getSearchHighlightsRanges = (
         modifySelection('move', 'forward', 'character');
         modifySelection('move', 'forward', 'character');
         modifySelection('extend', 'forward', 'word');
+        newRange = window.getSelection()!.getRangeAt(0);
+        if (
+          backupRange.startOffset === newRange.startOffset &&
+          backupRange.startContainer === newRange.startContainer
+        ) {
+          modifySelection('extend', 'forward', 'line');
+        }
       }
       currentText = currentSelection.toString();
       if (currentText.trim().startsWith('realEndOfChapter') || iteratorLimit++ > 10000) {
+        if (iteratorLimit > 10000) {
+          log.warn('Iteration limit reached in getSearchHighlightsRanges');
+        }
         searching = false;
       }
-      currentText = currentText.trim().replace(/([.,/#!$%^&*;:{}=\-_`~()\][])+$/g, '');
+      currentText = currentText.trim().replace(/([.,/#¡!¿?$%^&*;:{}=«»\-_`~()\][])+$/g, '');
     }
     currentSelection.removeAllRanges();
+    setCSSProperty('user-select-end', 'none');
     return resultRanges;
   }
   return [];

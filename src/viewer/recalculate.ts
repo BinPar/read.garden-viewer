@@ -12,7 +12,6 @@ const charWidthFactor = 1.65;
  */
 const recalculate = async (state: State): Promise<Partial<State>> => {
   if (state.recalculating) {
-    console.log('waiting');
     try {
       await onRecalculateFinish();
     } catch (ex) {
@@ -101,7 +100,6 @@ const recalculate = async (state: State): Promise<Partial<State>> => {
           positionByLabel.set(page, position);
           labelByPosition.set(position, page);
           lastLabel = page;
-          // console.log()
           if (lastPosition !== position) {
             const label = document.createElement('div');
             label.classList.add('rg-label');
