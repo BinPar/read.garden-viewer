@@ -22,17 +22,15 @@ const setScrollMode: ActionDispatcher<SetScrollMode> = async ({ state, action })
       setCSSProperty('viewer-margin-top', '200vh');
       readGardenViewerNode.classList.remove(`rg-${state.scrollMode}-scroll`);
       readGardenViewerNode.classList.add(`rg-${scrollMode}-scroll`);
-      window.requestAnimationFrame(() => {
-        window.requestAnimationFrame(async (): Promise<void> => {
-          updateState({ scrollMode });
-          const newState = getState();
-          const recalculateUpdate = await recalculate(newState);
-          setCSSProperty('viewer-margin-top', '0');
-          resolve({
-            ...recalculateUpdate,
-            layout: state.layout,
-            scrollMode,
-          })
+      window.requestAnimationFrame(async (): Promise<void> => {
+        updateState({ scrollMode });
+        const newState = getState();
+        const recalculateUpdate = await recalculate(newState);
+        setCSSProperty('viewer-margin-top', '0');
+        resolve({
+          ...recalculateUpdate,
+          layout: state.layout,
+          scrollMode,
         });
       });
     });
