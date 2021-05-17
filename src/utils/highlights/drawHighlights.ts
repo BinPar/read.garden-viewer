@@ -1,4 +1,4 @@
-import clientToZoomPanelCoordinates from './clientToZoomPanelCoordinates';
+import clientToContentWrapperCoordinates from './clientToContentWrapperCoordinates';
 import deduplicateRects from './deduplicateRects';
 
 const drawHighlights = (container: HTMLDivElement, ranges: Range[]): void => {
@@ -18,7 +18,7 @@ const drawHighlights = (container: HTMLDivElement, ranges: Range[]): void => {
     const rect = resultRects[i];
     const highlight = document.createElement('div');
     highlight.classList.add('rg-highlight');
-    const zoomPanelCoordinates = clientToZoomPanelCoordinates({
+    const zoomPanelCoordinates = clientToContentWrapperCoordinates({
       x: rect.left,
       y: rect.top,
     });

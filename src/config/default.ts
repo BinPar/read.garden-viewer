@@ -40,7 +40,7 @@ const defaultConfig: DefaultConfig = {
   minCharsPerColumn: 50,
   maxCharsPerColumn: 70,
   initialFontSize: 16,
-  initialScale: 1,
+  initialScale: 0.8,
   readModeMargin: {
     top: 0,
     right: 0,

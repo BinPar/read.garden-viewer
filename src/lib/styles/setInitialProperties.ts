@@ -29,7 +29,7 @@ const setInitialProperties = (state: State): void => {
   setCSSProperty('padding-top', '0px');
   setCSSProperty('safe-area-border-width', 'calc(1px * var(--debug-viewer-safe-area))');
   setCSSProperty('safe-area-margin-correction', 'calc(-1px * var(--debug-viewer-safe-area))');
-  setCSSProperty('scale', '1');
+  setCSSProperty('scale', `${state.scale}`);
   setCSSProperty('search-highlights-color', '#ffcf0040');
   setCSSProperty('sepia-viewer-color', '0');
   setCSSProperty('text-align', 'initial');
