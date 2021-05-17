@@ -3,15 +3,25 @@
  * vertical space. Also provides
  * @param images Node list of images (result from `querySelectorAll`)
  */
-const checkImagesHeight = async (images: NodeListOf<HTMLImageElement> | HTMLImageElement[]): Promise<void> => {
+const checkImagesHeight = async (
+  images: NodeListOf<HTMLImageElement> | HTMLImageElement[],
+): Promise<void> => {
   const checkImagesHeightPromises = new Array<Promise<void>>();
   images.forEach((img: HTMLImageElement) => {
     checkImagesHeightPromises.push(
       new Promise<void>((imageResolve) => {
+        let checkTimeout: NodeJS.Timeout | null = null;
+        const securityTimeout = setTimeout(() => {
+          if (checkTimeout) {
+            clearTimeout(checkTimeout);
+          }
+          imageResolve();
+        }, 5000);
         const check = (): void => {
           const { height: fullHeight } = img;
           const visibleHeight = img.getClientRects()[0]?.height;
           if (fullHeight || visibleHeight) {
+            clearTimeout(securityTimeout);
             if (fullHeight > Math.ceil(visibleHeight)) {
               img.classList.add('rg-fit-height');
               /**
@@ -25,7 +35,7 @@ const checkImagesHeight = async (images: NodeListOf<HTMLImageElement> | HTMLImag
              */
             imageResolve();
           } else {
-            setTimeout(check, 10);
+            checkTimeout = setTimeout(check, 10);
           }
         };
         check();

@@ -34,6 +34,7 @@ const setInitialProperties = (state: State): void => {
   setCSSProperty('sepia-viewer-color', '0');
   setCSSProperty('text-align', 'initial');
   setCSSProperty('total-column-width', '0px');
+  setCSSProperty('total-height', '0px');
   setCSSProperty('total-width', '0px');
   setCSSProperty('user-select', 'auto');
   setCSSProperty('vertical-translate', '0');

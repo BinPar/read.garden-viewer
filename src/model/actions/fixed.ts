@@ -1,4 +1,5 @@
 import { Action } from './common';
+import { FixedContentInfo } from '../state';
 
 /**
  * Names of the action types for Fixed Layout Actions
@@ -15,6 +16,17 @@ export interface SetSinglePageMode extends Action {
 }
 
 /**
+ * Set fixed contents info
+ */
+export interface SetContentsInfo extends Action {
+  type: 'setContentsInfo';
+  /**
+   * Info for every content
+   */
+  info: FixedContentInfo[];
+}
+
+/**
  * Actions for FixedLayout
  */
-export type FixedActions = SetSinglePageMode;
+export type FixedActions = SetSinglePageMode | SetContentsInfo;

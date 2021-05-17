@@ -13,9 +13,12 @@ import testingConfig from '../../config/testing';
 const loadNewContent: EventHandler<LoadNewContent> = async (event, dispatch) => {
   const { slug, contentSlug } = event;
   const index = await loadIndexFile(slug);
-  const { type, contents } = index;
+  const { type: layout, contents } = index;
   const currentPageLabel = contentSlug;
-  const currentContent = contents.find((content) => content.labels.includes(currentPageLabel));
+  // The following line DOES NOT work like this in RG viewer, because labels ARE NOT slugs
+  const currentContent = contents.find((content) =>
+    content.labels.map((l) => l.toLowerCase()).includes(currentPageLabel),
+  );
   if (!currentContent) {
     log.error(`No label "${contentSlug}" found in content "${slug}"`);
     return;
@@ -24,19 +27,21 @@ const loadNewContent: EventHandler<LoadNewContent> = async (event, dispatch) => 
   const response = await fetch(url);
   let htmlContent = await response.text();
   let cssURL = '';
-  if (type === LayoutTypes.Flow) {
+  if (layout === LayoutTypes.Flow) {
     const chapterNumber = parseInt(currentContent.cssUrl!.split('/')[1]!, 10);
     htmlContent = htmlContent.replace('<div', `<div class="c${chapterNumber + 1}"`);
     cssURL = `${testingConfig.baseURL}books/${slug}/${currentContent.cssUrl}`;
   }
-  if (type === LayoutTypes.Fixed) {
+  if (layout === LayoutTypes.Fixed) {
     htmlContent = replaceUrls(htmlContent);
     cssURL = `${testingConfig.baseURL}books/${slug}/${index.cssURL || currentContent.cssUrl}`;
   }
   const action: AppendNewContent = {
     type: 'appendNewContent',
+    layout,
     slug,
     contentSlug,
+    label: currentContent.labels[0],
     cssURL,
     htmlContent,
   };
