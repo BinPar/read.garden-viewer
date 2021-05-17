@@ -25,19 +25,21 @@ export const setDispatcher = (newDispatcher: DispatchAPIAction): void => {
 export const eventHandler: ReadGardenEventHandler = (event) =>
   new Promise<void>((resolve) => {
     if (dispatcher) {
-      const eventReference = (events as {
-        [key: string]: EventHandler<ReadGardenEvents>;
-      })[event.type];
+      const eventReference = (
+        events as {
+          [key: string]: EventHandler<ReadGardenEvents>;
+        }
+      )[event.type];
       if (!eventReference) {
         log.warn(`Event not implemented ${event.type}`);
       } else {
-        eventReference(event, dispatcher).then(resolve);
+        const promise = eventReference(event, dispatcher);
+        if (promise) {
+          promise.then(resolve);
+        }
       }
     } else {
-      setTimeout(
-        () => eventHandler(event).then(resolve),
-        0
-      );
+      setTimeout(() => eventHandler(event).then(resolve), 0);
     }
   });
 
