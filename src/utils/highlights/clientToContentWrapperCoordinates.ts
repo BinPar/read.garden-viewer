@@ -26,10 +26,13 @@ export const clientToContentWrapperTop = (top: number): number => {
  * @param {Coordinates} client Client coordinates
  * @returns Zoom Panel coordinates
  */
-const clientToContentWrapperCoordinates = (client: Coordinates): Coordinates => ({
-  ...client,
-  x: clientToContentWrapperLeft(client.x),
-  y: clientToContentWrapperTop(client.y),
-});
+const clientToContentWrapperCoordinates = (client: Coordinates): Coordinates => {
+  const state = getState();
+  return {
+    zoomFix: 1 / state.scale,
+    x: clientToContentWrapperLeft(client.x),
+    y: clientToContentWrapperTop(client.y),
+  };
+};
 
 export default clientToContentWrapperCoordinates;
