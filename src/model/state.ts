@@ -10,10 +10,13 @@ export interface GlobalState {
    */
   slug: string;
   /**
+   * Current content slug
+   */
+  contentSlug: string;
+  /**
    * Read mode
    */
   readMode: boolean;
-
   /**
    * Security Margins
    */
@@ -27,7 +30,6 @@ export interface GlobalState {
      */
     uiMode: Margin;
   };
-
   /**
    * Main viewer DOM node
    */
@@ -137,7 +139,13 @@ export type DefaultGlobalState = Partial<GlobalState> &
   Required<
     Pick<
       GlobalState,
-      'scale' | 'basicDOMElementsCreated' | 'cssLoaded' | 'recalculating' | 'wrapperReady' | 'securityMargins' | 'readMode'
+      | 'scale'
+      | 'basicDOMElementsCreated'
+      | 'cssLoaded'
+      | 'recalculating'
+      | 'wrapperReady'
+      | 'securityMargins'
+      | 'readMode'
     >
   >;
 
