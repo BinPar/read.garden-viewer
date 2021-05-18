@@ -6,10 +6,11 @@ const handleFlowCssAndLoad = (url: string, callback: () => any): void => {
   if (state.layout === LayoutTypes.Flow) {
     throw new Error('No need for CSS special handler in flow layout');
   }
-  const { loadedCssUrls } = state;
-  if (loadedCssUrls.has(url)) {
+  if (state.loadedCssUrls.has(url)) {
     callback();
+    return;
   }
+  state.loadedCssUrls.add(url);
   const link = document.createElement('link');
   link.rel = 'stylesheet';
   link.type = 'text/css';
