@@ -1,6 +1,6 @@
 import { ActionDispatcher } from '../../model/actions/actionDispatcher';
 import { SetContentsInfo } from '../../model/actions/fixed';
-import { LayoutTypes, State } from '../../model/state';
+import { FixedViewerContentInfo, LayoutTypes, State } from '../../model/state';
 import setCSSProperty from '../../utils/setCSSProperty';
 
 const setContentsInfo: ActionDispatcher<SetContentsInfo> = async ({ state, action }) => {
@@ -10,11 +10,13 @@ const setContentsInfo: ActionDispatcher<SetContentsInfo> = async ({ state, actio
   const { contentPlaceholderNode } = state as Required<State>;
 
   const { info } = action;
+  let currentContentIndex = 0;
   let totalWidth = 0;
   let totalHeight = 0;
-  const containerByLabel = new Map<string, HTMLDivElement>();
+  const contentsByLabel = new Map<string, FixedViewerContentInfo>();
+  const contentsByOrder = new Map<number, FixedViewerContentInfo>();
   for (let i = 0, l = info.length; i < l; i++) {
-    const { width, height, label, slug } = info[i];
+    const { width, height, label, slug, order, html, cssURL } = info[i];
     totalHeight += height;
     totalWidth += width;
     const container = document.createElement('div');
@@ -22,8 +24,22 @@ const setContentsInfo: ActionDispatcher<SetContentsInfo> = async ({ state, actio
     container.style.height = `${height}px`;
     container.dataset.label = label;
     container.dataset.slug = slug;
-    containerByLabel.set(label, container);
     contentPlaceholderNode.appendChild(container);
+    if (!currentContentIndex && slug === state.contentSlug) {
+      currentContentIndex = order;
+    }
+    const contentInfo: FixedViewerContentInfo = {
+      width,
+      height,
+      label,
+      slug,
+      order,
+      container,
+      html,
+      cssURL,
+    };
+    contentsByOrder.set(order, contentInfo);
+    contentsByLabel.set(label, contentInfo);
   }
 
   setCSSProperty('total-width', `${totalWidth}px`);
@@ -33,7 +49,9 @@ const setContentsInfo: ActionDispatcher<SetContentsInfo> = async ({ state, actio
     layout: LayoutTypes.Fixed,
     totalHeight,
     totalWidth,
-    containerByLabel,
+    contentsByLabel,
+    contentsByOrder,
+    currentContentIndex,
     wrapperReady: true,
   };
 };

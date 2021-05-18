@@ -7,11 +7,10 @@ import { updateState } from '../lib/state';
  * @param state Viewer state
  */
 const createBasicDOMElements = (state: State): void => {
-
-  // #region Main node
+  // #region Container node
   const readGardenContainerNode = document.createElement('div');
-  readGardenContainerNode.id = 'rg-container';  
-  // #endregion Main node
+  readGardenContainerNode.id = 'rg-container';
+  // #endregion Container node
 
   // #region Main node
   const readGardenViewerNode = document.createElement('div');

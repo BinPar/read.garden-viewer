@@ -54,6 +54,7 @@ const defaultConfig: DefaultConfig = {
     bottom: 20,
   },
   toggleReadModeOnClick: true,
+  fixedViewerPreloadOrder: [0, 1, 2, 3, -1, 4, -2, 5, -3, 6, -4],
 };
 
 export default defaultConfig;

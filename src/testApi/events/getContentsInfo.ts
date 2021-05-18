@@ -14,10 +14,11 @@ const getContentsInfo: EventHandler<GetContentsInfo> = async (event, dispatch): 
   const index = await loadIndexFile(slug);
   const action: SetContentsInfo = {
     type: 'setContentsInfo',
-    info: index.contents.map(({ width, height, labels }): FixedContentInfo => {
+    info: index.contents.map(({ width, height, labels }, i): FixedContentInfo => {
       const [label] = labels;
       return {
         label,
+        order: i,
         slug: label.toLowerCase(),
         width: width!,
         height: height!,

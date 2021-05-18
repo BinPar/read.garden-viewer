@@ -83,6 +83,7 @@ export const initializeState = (initialConfig: InitialConfig): void => {
     const fixedState: FixedState = {
       ...defaultFixed,
       fitMode: config.initialFitMode,
+      loadingContent: true,
     };
 
     if (config.initialFixedMode === ViewerMode.Paginated) {

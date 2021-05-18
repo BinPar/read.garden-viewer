@@ -189,6 +189,25 @@ export interface FixedContentInfo {
    * Content slug
    */
   slug: string;
+  /**
+   * Content order (base 0)
+   */
+  order: number;
+  /**
+   * HTML content
+   */
+  html?: string;
+  /**
+   * Content CSS URL
+   */
+  cssURL?: string;
+}
+
+export interface FixedViewerContentInfo extends FixedContentInfo {
+  /**
+   * Content container
+   */
+  container: HTMLDivElement;
 }
 
 export interface FixedState {
@@ -233,9 +252,21 @@ export interface FixedState {
    */
   horizontalTranslate: number;
   /**
-   * Container by label map
+   * Content info by number
    */
-  containerByLabel: Map<string, HTMLDivElement>;
+  contentsByOrder: Map<number, FixedViewerContentInfo>;
+  /**
+   * Content info by label
+   */
+  contentsByLabel: Map<string, FixedViewerContentInfo>;
+  /**
+   * Current content index (order, base 0)
+   */
+  currentContentIndex: number;
+  /**
+   * Viewer is loading content
+   */
+  loadingContent: boolean;
   // loadedPages: string[];
 }
 
@@ -289,6 +320,7 @@ export interface FlowState {
    */
   labels: string[];
 }
+
 /**
  * Default global state
  */

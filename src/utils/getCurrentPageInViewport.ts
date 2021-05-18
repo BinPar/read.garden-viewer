@@ -3,8 +3,8 @@ import { getState } from '../lib/state';
 import { LayoutTypes } from '../model/state';
 
 /**
- * Gets current page in viewer and returns its slug
- * @returns Current content slug
+ * Gets current page in viewer and returns its label
+ * @returns Current content label
  */
 const getCurrentPageInViewport = (): string => {
   const state = getState();
@@ -15,8 +15,8 @@ const getCurrentPageInViewport = (): string => {
     const elements = document.elementsFromPoint(x, y);
     for (let i = 0, l = elements.length; i < l && !result; i++) {
       const element = elements[i] as HTMLElement;
-      if (element.dataset.slug) {
-        result = element.dataset.slug;
+      if (element.dataset.label) {
+        result = element.dataset.label;
       }
     }
   }
