@@ -6,7 +6,7 @@ import { ViewerFunction } from '../model/viewer';
 import createBasicDOMElements from '../utils/createBasicDOMElements';
 import { LoadNewContent } from '../model/events';
 import setInitialProperties from '../lib/styles/setInitialProperties';
-import setupGlobalEvents from '../utils/setupGlobalEvents';
+import setupGlobalEvents, { removeGlobalEvents } from '../utils/setupGlobalEvents';
 
 const viewer: ViewerFunction = (config) => {
   initializeState(config);
@@ -14,6 +14,7 @@ const viewer: ViewerFunction = (config) => {
   const api: APIInterface = {
     dispatch,
     state,
+    unmount: removeGlobalEvents,
   };
   setInitialProperties(state);
   createBasicDOMElements(state);

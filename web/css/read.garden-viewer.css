@@ -6,7 +6,7 @@ body {
   height: 100vh;
   padding: 0;
   overflow-y: hidden;
-  overflow-x: scroll;
+  overflow-x: hidden;
   background-color: #fff;
   overscroll-behavior-y: contain;
   scrollbar-width: none;

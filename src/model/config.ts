@@ -104,6 +104,10 @@ export interface DefaultConfig {
    * Debug viewer safe area flag
    */
   debugViewerSafeArea: boolean;
+  /**
+   * Alternates read mode on document click
+   */
+  toggleReadModeOnClick: boolean;
 }
 
 export interface RequiredConfig {

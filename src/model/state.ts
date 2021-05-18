@@ -10,6 +10,10 @@ export interface GlobalState {
    */
   slug: string;
   /**
+   * Alternates read mode on document click
+   */
+  toggleReadModeOnClick: boolean;
+  /**
    * Current content slug
    */
   contentSlug: string;
@@ -146,6 +150,7 @@ export type DefaultGlobalState = Partial<GlobalState> &
       | 'wrapperReady'
       | 'securityMargins'
       | 'readMode'
+      | 'toggleReadModeOnClick'
     >
   >;
 
