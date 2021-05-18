@@ -5,22 +5,23 @@ const defaultGlobal: DefaultGlobalState = {
   readMode: false,
   securityMargins: {
     readMode: {
-      top: 0,
-      bottom: 0,
-      left: 0,
-      right: 0,
+      top: 10,
+      bottom: 10,
+      left: 10,
+      right: 10,
     },
     uiMode: {
-      top: 0,
-      bottom: 0,
-      left: 0,
-      right: 0,
+      top: 20,
+      bottom: 20,
+      left: 124,
+      right: 20,
     },
   },
   basicDOMElementsCreated: false,
   wrapperReady: false,
   cssLoaded: true,
   recalculating: false,
+  toggleReadModeOnClick: true,
 };
 
 export default defaultGlobal;

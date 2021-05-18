@@ -102,6 +102,15 @@ export interface HighlightSearchTerms extends Action {
   terms: string[];
 }
 
+export interface SetReadMode extends Action {
+  type: 'setReadMode';
+  /**
+   * True for read mode and false for ui mode
+   */
+  readModeActive: boolean;
+}
+
+
 /**
  * Actions that affect Fixed and Flow Layout
  */
@@ -112,4 +121,5 @@ export type GlobalActions =
   | SetDebugViewerSafeArea
   | AppendNewContent
   | Resize
-  | HighlightSearchTerms;
+  | HighlightSearchTerms
+  | SetReadMode;

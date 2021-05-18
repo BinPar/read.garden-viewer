@@ -9,6 +9,7 @@ import setTextAlign from './setTextAlign';
 import resize from './resize';
 import highlightSearchTerms from './highlightSearchTerms';
 import setContentsInfo from './setContentsInfo';
+import setReadMode from './setReadMode';
 
 /**
  * List of all action dispatchers
@@ -25,6 +26,7 @@ const actionDispatchers  = {
   resize,
   highlightSearchTerms,
   setContentsInfo,
+  setReadMode,
 };
 
 export default actionDispatchers;

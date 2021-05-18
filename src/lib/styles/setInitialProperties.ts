@@ -9,9 +9,6 @@ const setInitialProperties = (state: State): void => {
   /**
    * Properties are in alphabetical to assist looking for a specific one. Please, keep it like that
    */
-  setCSSProperty('animation-speed', '0');
-  setCSSProperty('animation-speed-value', 'calc(1s * var(--animation-speed))');
-  setCSSProperty('border-radius', '10px');
   setCSSProperty('column-count', '2');
   setCSSProperty('column-gap', `${state.config.columnGap}px`);
   setCSSProperty('column-gap-compensation', '0px');
@@ -27,8 +24,6 @@ const setInitialProperties = (state: State): void => {
   setCSSProperty('line-height', '1.5em');
   setCSSProperty('padding-bottom', '0px');
   setCSSProperty('padding-top', '0px');
-  setCSSProperty('safe-area-border-width', 'calc(1px * var(--debug-viewer-safe-area))');
-  setCSSProperty('safe-area-margin-correction', 'calc(-1px * var(--debug-viewer-safe-area))');
   setCSSProperty('scale', `${state.scale}`);
   setCSSProperty('search-highlights-color', '#ffcf0040');
   setCSSProperty('sepia-viewer-color', '0');

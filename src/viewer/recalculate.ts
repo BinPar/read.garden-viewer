@@ -122,6 +122,10 @@ const recalculate = async (state: State): Promise<Partial<State>> => {
           }
         }
 
+        if (document.scrollingElement?.scrollTop) {
+          document.scrollingElement.scrollTop = 0;
+        }
+        
         resolve({
           ...globalUpdate,
           totalWidth,
