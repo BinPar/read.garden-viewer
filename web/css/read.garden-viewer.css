@@ -1,4 +1,11 @@
-html, body {
+:root {
+  --debug-viewer-safe-area: 0;
+  --safe-area-border-width: calc(2px * var(--debug-viewer-safe-area));
+  --safe-area-margin-correction: calc(-1px * var(--debug-viewer-safe-area));
+}
+
+html,
+body {
   margin: 0;
 }
 
@@ -12,23 +19,26 @@ body {
   scrollbar-width: none;
 }
 
+div#rg-container {
+  width: 100vw;
+  height: 100vh;
+  filter: contrast(var(--contrast-viewer-color)) sepia(var(--sepia-viewer-color))
+  invert(var(--invert-viewer-color));
+}
+
 div#rg-viewer {
   width: 100vw;
   height: 100vh;
-  border: solid var(--safe-area-border-width) red;
-  margin: var(--safe-area-margin-correction);
-  margin-top: var(--viewer-margin-top);
-  transition: filter var(--animation-speed-value) linear 0ms,
-    transform var(--animation-speed-value) cubic-bezier(0.175, 0.885, 0.32, 1.2) 0ms;
+  margin-top: calc(var(--viewer-margin-top) + var(--safe-area-margin-correction));
   transform: translateX(var(--horizontal-translate)) translateY(var(--vertical-translate))
     scale(var(--scale));
-  filter: contrast(var(--contrast-viewer-color)) sepia(var(--sepia-viewer-color))
-    invert(var(--invert-viewer-color));
   background-color: white;
   line-height: var(--line-height);
 }
 
 div.rg-content-wrapper {
+  border: solid var(--safe-area-border-width) red;
+  margin: var(--safe-area-margin-correction);
   height: 100%;
   padding: var(--content-wrapper-padding);
   clear: both;
