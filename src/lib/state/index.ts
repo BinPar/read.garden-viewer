@@ -57,7 +57,9 @@ export const initializeState = (initialConfig: InitialConfig): void => {
       ...(initialMargins || {}),
     },
     title: 'Title', // From initial config
-    pageLabel: config.contentSlug,
+    slug: config.slug,
+    contentSlug: config.contentSlug,
+    pageLabel: config.contentSlug, // Should be different (maybe we need to add `initialPageLabel`)
     pageNumber: 1, // From initial config
     scale: config.initialScale || defaultGlobal.scale,
     searchTerms: [],
@@ -81,6 +83,8 @@ export const initializeState = (initialConfig: InitialConfig): void => {
     const fixedState: FixedState = {
       ...defaultFixed,
       fitMode: config.initialFitMode,
+      loadingContent: true,
+      loadedCssUrls: new Set<string>(),
     };
 
     if (config.initialFixedMode === ViewerMode.Paginated) {

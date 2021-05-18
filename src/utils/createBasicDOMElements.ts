@@ -7,11 +7,16 @@ import { updateState } from '../lib/state';
  * @param state Viewer state
  */
 const createBasicDOMElements = (state: State): void => {
+  // #region Container node
+  const readGardenContainerNode = document.createElement('div');
+  readGardenContainerNode.id = 'rg-container';
+  // #endregion Container node
+
   // #region Main node
   const readGardenViewerNode = document.createElement('div');
   readGardenViewerNode.id = 'rg-viewer';
   readGardenViewerNode.classList.add(`rg-${state.layout}-layout`, `rg-${state.scrollMode}-scroll`);
-  document.body.appendChild(readGardenViewerNode);
+  readGardenContainerNode.appendChild(readGardenViewerNode);
   // #endregion Main node
 
   // #region Content Wrapper and child nodes
@@ -28,6 +33,7 @@ const createBasicDOMElements = (state: State): void => {
   contentWrapperNode.appendChild(contentPlaceholderNode);
 
   const endOfChapterCalculatorNode = document.createElement('div');
+  endOfChapterCalculatorNode.innerText = 'realEndOfChapter';
   endOfChapterCalculatorNode.classList.add('rg-end-of-chapter-calculator');
   endOfChapterCalculatorNode.dataset.page = '-';
   contentWrapperNode.appendChild(endOfChapterCalculatorNode);
@@ -59,6 +65,8 @@ const createBasicDOMElements = (state: State): void => {
   const mainStylesheet = Array.from(document.styleSheets).find(
     (s) => s.href?.indexOf('read.garden-viewer.css') !== -1,
   );
+
+  document.body.appendChild(readGardenContainerNode);
 
   updateState({
     basicDOMElementsCreated: true,

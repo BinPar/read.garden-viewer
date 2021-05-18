@@ -1,5 +1,6 @@
 import { ActionDispatcher } from '../../model/actions/actionDispatcher';
 import { Resize } from '../../model/actions/global';
+import checkCurrentPage from '../../utils/checkCurrentPage';
 import setCSSProperty from '../../utils/setCSSProperty';
 
 import recalculate from '../../viewer/recalculate';
@@ -10,6 +11,7 @@ const resize: ActionDispatcher<Resize> = async ({ state }) => {
   if (recalculateUpdate.recalculating === false) {
     setCSSProperty('viewer-margin-top', '0');
   }
+  checkCurrentPage();
   return recalculateUpdate;
 };
 

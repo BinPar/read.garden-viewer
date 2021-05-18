@@ -1,6 +1,7 @@
 import { FixedState, LayoutTypes } from '../../model/state';
 
 const defaultFixed: FixedState = {
+  containerByLabel: new Map<string, HTMLDivElement>(),
   layout: LayoutTypes.Fixed,
   hasHorizontalScroll: false,
   hasVerticalScroll: false,

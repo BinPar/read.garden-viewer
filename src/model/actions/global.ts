@@ -1,4 +1,4 @@
-import { ScrollModes } from '../state';
+import { LayoutTypes, ScrollModes } from '../state';
 import { Action } from './common';
 
 /**
@@ -10,6 +10,8 @@ export enum GlobalActionTypes {
   NavigateToPage = 'navigateToPage',
   SetDebugViewerSafeArea = 'setDebugViewerSafeArea',
   AppendNewContent = 'appendNewContent',
+  Resize = 'resize',
+  HighlightSearchTerms = 'highlightSearchTerms',
 }
 
 /**
@@ -17,7 +19,29 @@ export enum GlobalActionTypes {
  */
  export interface AppendNewContent extends Action {
   type: 'appendNewContent';
-  cssURL?: string;
+  /**
+   * Layout type
+   */
+  layout: LayoutTypes;
+  /**
+   * First level content slug (book, work...)
+   */
+  slug: string;
+  /**
+   * Second level content slug (page, chapter...)
+   */
+  contentSlug: string;
+  /**
+   * Second level content label (page, chapter...)
+   */
+  label: string;
+  /**
+   * Content CSS URL
+   */
+  cssURL: string;
+  /**
+   * Content HTML
+   */
   htmlContent: string;
 }
 
@@ -70,6 +94,23 @@ export interface Resize extends Action {
   type: 'resize';
 }
 
+export interface HighlightSearchTerms extends Action {
+  type: 'highlightSearchTerms';
+  /**
+   * Terms to highlight
+   */
+  terms: string[];
+}
+
+export interface SetReadMode extends Action {
+  type: 'setReadMode';
+  /**
+   * True for read mode and false for ui mode
+   */
+  readModeActive: boolean;
+}
+
+
 /**
  * Actions that affect Fixed and Flow Layout
  */
@@ -79,4 +120,6 @@ export type GlobalActions =
   | NavigateToPage
   | SetDebugViewerSafeArea
   | AppendNewContent
-  | Resize;
+  | Resize
+  | HighlightSearchTerms
+  | SetReadMode;

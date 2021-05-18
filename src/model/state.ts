@@ -6,6 +6,35 @@ import { FitMode, Margin } from './viewerSettings';
  */
 export interface GlobalState {
   /**
+   * Current slug
+   */
+  slug: string;
+  /**
+   * Alternates read mode on document click
+   */
+  toggleReadModeOnClick: boolean;
+  /**
+   * Current content slug
+   */
+  contentSlug: string;
+  /**
+   * Read mode
+   */
+  readMode: boolean;
+  /**
+   * Security Margins
+   */
+  securityMargins: {
+    /**
+     * Read Mode Safe Margins
+     */
+    readMode: Margin;
+    /**
+     * User Interface Mode Safe Margins
+     */
+    uiMode: Margin;
+  };
+  /**
    * Main viewer DOM node
    */
   readGardenViewerNode?: HTMLDivElement;
@@ -45,6 +74,10 @@ export interface GlobalState {
    * Main styles DOM node (read.garden-viewer.css)
    */
   mainStyleNode?: HTMLLinkElement;
+  /**
+   * Content wrapper is ready
+   */
+  wrapperReady: boolean;
   /**
    * CSS and fonts are loaded for the current content
    */
@@ -107,7 +140,19 @@ export interface GlobalState {
  * Default global state
  */
 export type DefaultGlobalState = Partial<GlobalState> &
-  Required<Pick<GlobalState, 'scale' | 'basicDOMElementsCreated' | 'cssLoaded' | 'recalculating'>>;
+  Required<
+    Pick<
+      GlobalState,
+      | 'scale'
+      | 'basicDOMElementsCreated'
+      | 'cssLoaded'
+      | 'recalculating'
+      | 'wrapperReady'
+      | 'securityMargins'
+      | 'readMode'
+      | 'toggleReadModeOnClick'
+    >
+  >;
 
 /**
  * Layout types
@@ -126,6 +171,52 @@ export type TextAlignModes = 'start' | 'justify' | null;
  * Available scroll modes
  */
 export type ScrollModes = 'vertical' | 'horizontal';
+
+export interface FixedContentInfo {
+  /**
+   * Content height
+   */
+  height: number;
+  /**
+   * Content width
+   */
+  width: number;
+  /**
+   * Content label
+   */
+  label: string;
+  /**
+   * Content slug
+   */
+  slug: string;
+  /**
+   * Content order (base 0)
+   */
+  order: number;
+  /**
+   * HTML content
+   */
+  html?: string;
+  /**
+   * Content CSS URL
+   */
+  cssURL?: string;
+}
+
+export interface FixedViewerContentInfo extends FixedContentInfo {
+  /**
+   * Content container
+   */
+  container: HTMLDivElement;
+  /**
+   * Max left position (to identify current page on scroll)
+   */
+  maxLeft: number;
+  /**
+   * Max top position (to identify current page on scroll)
+   */
+  maxTop: number;
+}
 
 export interface FixedState {
   /**
@@ -168,7 +259,30 @@ export interface FixedState {
    * Current horizontal translate
    */
   horizontalTranslate: number;
-
+  /**
+   * Content info by number
+   */
+  contentsByOrder: Map<number, FixedViewerContentInfo>;
+  /**
+   * Content info by label
+   */
+  contentsByLabel: Map<string, FixedViewerContentInfo>;
+  /**
+   * Contents info array
+   */
+  contentsInfo: FixedViewerContentInfo[];
+  /**
+   * Current content index (order, base 0)
+   */
+  currentContentIndex: number;
+  /**
+   * Viewer is loading content
+   */
+  loadingContent: boolean;
+  /**
+   * Loaded CSS URLs
+   */
+  loadedCssUrls: Set<string>;
   // loadedPages: string[];
 }
 
@@ -181,10 +295,6 @@ export interface FlowState {
    * Needs to recalculate pagination
    */
   invalidatedPagination?: boolean;
-  /**
-   * Read mode
-   */
-  readMode: boolean;
   /**
    * Current font size (pixels)
    */
@@ -226,6 +336,7 @@ export interface FlowState {
    */
   labels: string[];
 }
+
 /**
  * Default global state
  */
