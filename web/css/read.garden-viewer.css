@@ -152,10 +152,6 @@ div.rg-highlights-layer {
   left: 0;
   right: 0;
   bottom: 0;
-  border-style: solid;
-  border-width: thin;
-  border-color: #fffff7;
-  border-radius: 2px;
   pointer-events: none;
   user-select: none;
   -webkit-user-select: none;
@@ -163,6 +159,10 @@ div.rg-highlights-layer {
 
 div.rg-highlights-layer > div {
   position: absolute;
+  border-style: solid;
+  border-width: thin;
+  border-color: #fffff7;
+  border-radius: 2px;
 }
 
 div.rg-highlights-layer.rg-selection > div {
