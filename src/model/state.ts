@@ -279,6 +279,10 @@ export interface FixedState {
    * Viewer is loading content
    */
   loadingContent: boolean;
+  /**
+   * Loaded CSS URLs
+   */
+  loadedCssUrls: Set<string>;
   // loadedPages: string[];
 }
 

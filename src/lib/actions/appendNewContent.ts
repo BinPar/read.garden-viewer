@@ -13,6 +13,7 @@ import layoutSetup from '../../viewer/layoutSetup';
 import { drawHighlights } from '../../utils/highlights';
 import { highlightTerms } from '../../utils/highlights/search';
 import loadContentsInBackground from '../../utils/loadContentsInBackground';
+import handleFlowCssAndLoad from '../../utils/handleFlowCssAndLoad';
 
 /**
  * Appends new content to viewer
@@ -135,13 +136,13 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
       const { container } = content;
       content.html = action.htmlContent;
       content.cssURL = action.cssURL;
+      container.classList.add('rg-loading');
       container!.innerHTML = action.htmlContent;
 
       window.requestAnimationFrame(() => {
         window.requestAnimationFrame(() => {
-          let replace = true;
-          const newLink = document.createElement('link');
           const done = async (): Promise<void> => {
+            container.classList.remove('rg-loading');
             const recalculateState = await recalculate(state);
             setCSSProperty('viewer-margin-top', '0');
             const finalPartialState: Partial<State> = {
@@ -149,9 +150,6 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
               layout: state.layout,
               cssLoaded: true,
             };
-            if (replace) {
-              finalPartialState.dynamicStyleNode = newLink;
-            }
             updateState({ loadingContent: false });
             resolve(finalPartialState);
             loadContentsInBackground();
@@ -173,17 +171,11 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
               });
             });
           };
-          // TODO: In fixed (when book is epub), there will be multiple CSS
-          if (!action.cssURL || action.cssURL === dynamicStyleNode!.href) {
-            replace = false;
+          if (!action.cssURL) {
             checkFonts();
             return;
           }
-          newLink.rel = 'stylesheet';
-          newLink.type = 'text/css';
-          newLink.addEventListener('load', checkFonts);
-          dynamicStyleNode!.replaceWith(newLink);
-          newLink.href = action.cssURL;
+          handleFlowCssAndLoad(action.cssURL, checkFonts);
         });
       });
     }

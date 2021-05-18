@@ -70,8 +70,21 @@ div.rg-content-wrapper {
 }
 
 .rg-fixed-layout.rg-horizontal-scroll div.rg-content-wrapper div#rg-content-placeholder > * {
-  background-color: #ccc;
+  position: relative;
   float: left;
+  contain: size;
+  background-color: #ccc;
+}
+
+.rg-loading::before {
+  position: absolute;
+  content: '';
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  background-color: #ccc;
 }
 
 .rg-fixed-layout.rg-vertical-scroll div.rg-content-wrapper div#rg-content-placeholder {
