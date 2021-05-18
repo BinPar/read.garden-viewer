@@ -35,9 +35,9 @@ const setupGlobalEvents = (dispatcher: DispatchAPIAction): void => {
     }
   };
 
-  const viewer = document.getElementById('rg-viewer');
-  if (viewer) {
-    viewer.addEventListener('click', onViewportClick);
+  const container = document.getElementById('rg-container');
+  if (container) {
+    container.addEventListener('click', onViewportClick);
   }
 };
 
@@ -48,9 +48,9 @@ export const removeGlobalEvents = (): void => {
   if (onScroll) {
     window.removeEventListener('scroll', onScroll);
   }
-  const viewer = document.getElementById('rg-viewer');
-  if (viewer && onViewportClick) {
-    viewer.removeEventListener('click', onViewportClick);
+  const container = document.getElementById('rg-container');
+  if (container && onViewportClick) {
+    container.removeEventListener('click', onViewportClick);
   }
 };
 
