@@ -15,6 +15,7 @@ const setContentsInfo: ActionDispatcher<SetContentsInfo> = async ({ state, actio
   let totalHeight = 0;
   const contentsByLabel = new Map<string, FixedViewerContentInfo>();
   const contentsByOrder = new Map<number, FixedViewerContentInfo>();
+  const contentsInfo = new Array<FixedViewerContentInfo>();
   for (let i = 0, l = info.length; i < l; i++) {
     const { width, height, label, slug, order, html, cssURL } = info[i];
     totalHeight += height;
@@ -37,9 +38,12 @@ const setContentsInfo: ActionDispatcher<SetContentsInfo> = async ({ state, actio
       container,
       html,
       cssURL,
+      maxLeft: totalWidth,
+      maxTop: totalHeight,
     };
     contentsByOrder.set(order, contentInfo);
     contentsByLabel.set(label, contentInfo);
+    contentsInfo.push(contentInfo);
   }
 
   setCSSProperty('total-width', `${totalWidth}px`);
@@ -49,6 +53,7 @@ const setContentsInfo: ActionDispatcher<SetContentsInfo> = async ({ state, actio
     layout: LayoutTypes.Fixed,
     totalHeight,
     totalWidth,
+    contentsInfo,
     contentsByLabel,
     contentsByOrder,
     currentContentIndex,

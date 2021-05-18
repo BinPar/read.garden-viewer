@@ -13,7 +13,6 @@ const charWidthFactor = 1.65;
 const recalculate = async (state: State): Promise<Partial<State>> => {
   if (state.recalculating) {
     try {
-      console.log('Waiting for recalculate finish');
       await onRecalculateFinish();
     } catch (ex) {
       return {};

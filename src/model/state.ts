@@ -208,6 +208,14 @@ export interface FixedViewerContentInfo extends FixedContentInfo {
    * Content container
    */
   container: HTMLDivElement;
+  /**
+   * Max left position (to identify current page on scroll)
+   */
+  maxLeft: number;
+  /**
+   * Max top position (to identify current page on scroll)
+   */
+  maxTop: number;
 }
 
 export interface FixedState {
@@ -259,6 +267,10 @@ export interface FixedState {
    * Content info by label
    */
   contentsByLabel: Map<string, FixedViewerContentInfo>;
+  /**
+   * Contents info array
+   */
+  contentsInfo: FixedViewerContentInfo[];
   /**
    * Current content index (order, base 0)
    */
