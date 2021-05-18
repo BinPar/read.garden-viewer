@@ -26,4 +26,4 @@ const getCurrentPageInViewport = (): string => {
   return result;
 };
 
-export default getCurrentPageInViewport
+export default getCurrentPageInViewport;
