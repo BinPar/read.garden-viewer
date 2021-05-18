@@ -11,6 +11,9 @@ const getCurrentPageInViewport = (): string => {
   const state = getState();
   if (state.layout === LayoutTypes.Fixed) {
     const { contentsInfo, scrollMode } = state;
+    if (!contentsInfo?.length) {
+      return '';
+    }
     if (scrollMode === 'horizontal') {
       const position = getScrollLeftPosition();
       return (contentsInfo.find(c => c.maxLeft > position)?.label) || '';

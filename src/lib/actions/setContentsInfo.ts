@@ -3,6 +3,12 @@ import { SetContentsInfo } from '../../model/actions/fixed';
 import { FixedViewerContentInfo, LayoutTypes, State } from '../../model/state';
 import setCSSProperty from '../../utils/setCSSProperty';
 
+/**
+ * Sets contents info and setups needed DOM elements
+ * @param context.state Viewer state
+ * @param context.action Viewer action 
+ * @returns Partial state update
+ */
 const setContentsInfo: ActionDispatcher<SetContentsInfo> = async ({ state, action }) => {
   if (state.layout === LayoutTypes.Flow) {
     throw new Error('Action not allowed in flow mode');
@@ -23,8 +29,9 @@ const setContentsInfo: ActionDispatcher<SetContentsInfo> = async ({ state, actio
     const container = document.createElement('div');
     container.style.width = `${width}px`;
     container.style.height = `${height}px`;
-    container.dataset.label = label;
+    container.dataset.order = `${order}`;
     container.dataset.slug = slug;
+    container.dataset.label = label;
     contentPlaceholderNode.appendChild(container);
     if (!currentContentIndex && slug === state.contentSlug) {
       currentContentIndex = order;
