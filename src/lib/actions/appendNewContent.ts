@@ -153,6 +153,7 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
             updateState({ loadingContent: false });
             resolve(finalPartialState);
             loadContentsInBackground();
+            highlightTerms(state.searchTerms);
           };
           const checkFonts = () => {
             dynamicStyleNode!.removeEventListener('load', checkFonts);

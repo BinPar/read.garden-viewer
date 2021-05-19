@@ -1,6 +1,7 @@
 import { getState, updateState } from '../lib/state';
 import { LoadNewContent } from '../model/events';
 import { LayoutTypes } from '../model/state';
+import { highlightTerms } from './highlights/search';
 
 const loadContentsInBackground = async (): Promise<void> => {
   const state = getState();
@@ -35,6 +36,8 @@ const loadContentsInBackground = async (): Promise<void> => {
         updateState({ loadingContent: true });
         state.config.eventHandler(event);
       }
+    } else {
+      highlightTerms(state.searchTerms);
     }
   }
 };

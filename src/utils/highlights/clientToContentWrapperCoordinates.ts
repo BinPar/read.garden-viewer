@@ -1,6 +1,7 @@
 import { getState } from '../../lib/state';
 import { Coordinates } from '../../model/highlights';
-import { getScrollLeftPosition, getScrollTopPosition } from './getScrollPosition';
+import getScrollLeftPosition from './getScrollLeftPosition';
+import getScrollTopPosition from './getScrollTopPosition';
 
 export const clientToContentWrapperLeft = (left: number): number => {
   const state = getState();

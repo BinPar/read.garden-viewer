@@ -1,7 +1,7 @@
 import log from 'loglevel';
 import { getState } from '../lib/state';
 import { LayoutTypes } from '../model/state';
-import { getScrollLeftPosition, getScrollTopPosition } from './highlights/getScrollPosition';
+import { getScrollLeftPosition, getScrollTopPosition } from './highlights';
 
 /**
  * Gets current page in viewer and returns its label
