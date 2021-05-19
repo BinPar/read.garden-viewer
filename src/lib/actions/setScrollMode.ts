@@ -3,7 +3,7 @@ import { SetScrollMode } from '../../model/actions/global';
 import { State } from '../../model/state';
 import setCSSProperty from '../../utils/setCSSProperty';
 import recalculate from '../../viewer/recalculate';
-import { getState, updateState } from '../state';
+import { updateState } from '../state';
 
 /**
  * Sets scroll mode to provided mode and recalculates
@@ -12,20 +12,15 @@ import { getState, updateState } from '../state';
  * @returns State update
  */
 const setScrollMode: ActionDispatcher<SetScrollMode> = async ({ state, action }) => {
-  if (state.scrollMode === 'fixed') {
-    throw new Error('Action not allowed in fixed mode');
-  }
   const { scrollMode } = action;
   if (state.scrollMode !== scrollMode) {
     return new Promise<Partial<State>>((resolve) => {
-      const { readGardenViewerNode } = state as Required<State>;
       setCSSProperty('viewer-margin-top', '200vh');
-      readGardenViewerNode.classList.remove(`rg-${state.scrollMode}-scroll`);
-      readGardenViewerNode.classList.add(`rg-${scrollMode}-scroll`);
+      document.body.classList.remove(`rg-${state.scrollMode}-scroll`);
+      document.body.classList.add(`rg-${scrollMode}-scroll`);
       window.requestAnimationFrame(async (): Promise<void> => {
         updateState({ scrollMode });
-        const newState = getState();
-        const recalculateUpdate = await recalculate(newState);
+        const recalculateUpdate = await recalculate(state);
         setCSSProperty('viewer-margin-top', '0');
         resolve({
           ...recalculateUpdate,

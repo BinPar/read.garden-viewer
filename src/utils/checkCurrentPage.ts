@@ -15,7 +15,7 @@ const checkCurrentPage = (): void => {
       const content = state.contentsByLabel.get(label);
       if (content && content.slug && state.contentSlug !== content.slug) {
         log.info('Page changed by scroll', content.slug);
-        updateState({ currentContentIndex: content.order });
+        updateState({ currentContentIndex: content.order, contentSlug: content.slug });
         loadContentsInBackground();
       }
     }

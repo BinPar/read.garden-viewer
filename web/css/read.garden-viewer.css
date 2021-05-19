@@ -13,10 +13,18 @@ body {
   height: 100vh;
   padding: 0;
   overflow-y: hidden;
-  overflow-x: scroll;
+  overflow-x: hidden;
   background-color: #fff;
   overscroll-behavior-y: contain;
   scrollbar-width: none;
+}
+
+body.rg-horizontal-scroll {
+  overflow-x: scroll;
+}
+
+body.rg-vertical-scroll {
+  overflow-y: scroll;
 }
 
 div#rg-container {
@@ -47,9 +55,9 @@ div.rg-content-wrapper {
   -webkit-user-select: var(--user-select);
 }
 
-.rg-vertical-scroll div.rg-content-wrapper {
+/* .rg-vertical-scroll div.rg-content-wrapper {
   overflow-y: scroll;
-}
+} */
 
 .rg-flow-layout div.rg-content-wrapper {
   padding: 0 calc(var(--column-gap) / 2) 0;
