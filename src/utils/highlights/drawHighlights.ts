@@ -1,7 +1,19 @@
 import clientToContentWrapperCoordinates from './clientToContentWrapperCoordinates';
 import deduplicateRects from './deduplicateRects';
+import removeHighlights from './removeHighlights';
 
-const drawHighlights = (container: HTMLDivElement, ranges = new Array<Range>()): void => {
+/**
+ * Transforms provided selection ranges into coordinates to render highlights inside provided
+ * container
+ * @param container DOM Element that will contain highlights
+ * @param ranges Selection ranges that will be turned into highlights
+ * @param keepExisting Keep existing highlights in container
+ */
+const drawHighlights = (
+  container: HTMLDivElement,
+  ranges = new Array<Range>(),
+  keepExisting = false,
+): void => {
   let resultRects = new Array<DOMRect>();
 
   ranges.forEach((selectionRange): void => {
@@ -9,10 +21,9 @@ const drawHighlights = (container: HTMLDivElement, ranges = new Array<Range>()):
     resultRects = resultRects.concat(deduplicateRects(rects));
   });
 
-  // Removes all the previous highlights
-  container.querySelectorAll('.rg-highlight').forEach((hl): void => {
-    hl.remove();
-  });
+  if (!keepExisting) {
+    removeHighlights(container);
+  }
 
   for (let i = 0; i < resultRects.length; i++) {
     const rect = resultRects[i];
@@ -24,8 +35,8 @@ const drawHighlights = (container: HTMLDivElement, ranges = new Array<Range>()):
     });
     const fixZoom = zoomPanelCoordinates.zoomFix || 1;
     highlight.style.left = `${zoomPanelCoordinates.x - 3}px`;
-    highlight.style.top = `${zoomPanelCoordinates.y - 3}px`;
-    highlight.style.width = `${rect.width * fixZoom + 5}px`;
+    highlight.style.top = `${zoomPanelCoordinates.y - 4}px`;
+    highlight.style.width = `${rect.width * fixZoom + 4}px`;
     highlight.style.height = `${rect.height * fixZoom + 5}px`;
     container.append(highlight);
   }

@@ -126,7 +126,7 @@ div.rg-total-width-calculator,
 div.rg-end-of-chapter-calculator {
   width: 100%;
   height: 0px;
-  color: transparent;
+  font-size: 0px;
   user-select: var(--user-select-end);
 }
 
