@@ -71,6 +71,7 @@ const createBasicDOMElements = (state: State): void => {
   updateState({
     basicDOMElementsCreated: true,
     mainStyleNode: mainStylesheet?.ownerNode as HTMLLinkElement,
+    readGardenContainerNode,
     readGardenViewerNode,
     contentWrapperNode,
     contentPlaceholderNode,

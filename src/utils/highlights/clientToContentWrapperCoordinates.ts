@@ -3,6 +3,11 @@ import { Coordinates } from '../../model/highlights';
 import getScrollLeftPosition from './getScrollLeftPosition';
 import getScrollTopPosition from './getScrollTopPosition';
 
+/**
+ * Translates client left coordinate to main node left coordinate
+ * @param left Left coordinate
+ * @returns Zoom panel left coordinate
+ */
 export const clientToContentWrapperLeft = (left: number): number => {
   const state = getState();
   let result = left;
@@ -12,6 +17,11 @@ export const clientToContentWrapperLeft = (left: number): number => {
   return result;
 };
 
+/**
+ * Translates client top coordinate to main node top coordinate
+ * @param top Top coordinate
+ * @returns Zoom panel top coordinate
+ */
 export const clientToContentWrapperTop = (top: number): number => {
   const state = getState();
   let result = top;

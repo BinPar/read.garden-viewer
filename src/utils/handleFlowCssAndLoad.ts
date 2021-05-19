@@ -1,6 +1,11 @@
 import { getState } from '../lib/state';
 import { LayoutTypes } from '../model/state';
 
+/**
+ * Handles contents CSS urls and waits for load before calling provided callback
+ * @param url CSS url
+ * @param callback Callback that will be called after CSS are handled and loaded
+ */
 const handleFlowCssAndLoad = (url: string, callback: () => any): void => {
   const state = getState();
   if (state.layout === LayoutTypes.Flow) {

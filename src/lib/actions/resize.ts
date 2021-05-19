@@ -5,6 +5,10 @@ import setCSSProperty from '../../utils/setCSSProperty';
 
 import recalculate from '../../viewer/recalculate';
 
+/**
+ * Resize action
+ * @param context.state Viewer state
+ */
 const resize: ActionDispatcher<Resize> = async ({ state }) => {
   setCSSProperty('viewer-margin-top', '200vh');
   const recalculateUpdate = await recalculate(state);

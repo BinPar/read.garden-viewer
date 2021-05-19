@@ -5,6 +5,12 @@ import { State } from '../../model/state';
 
 import dispatchers from '../actions/actionDispatchers';
 
+/**
+ * Main viewer actions reducer
+ * @param state Viewer state
+ * @param action Viewer action
+ * @returns Partial viewer state update
+ */
 const reducer = async (state: State, action: Action): Promise<Partial<State>> => {
   const dispatcher = (dispatchers as { [key: string]: ActionDispatcher<Actions> })[action.type];
   if (dispatcher) {
