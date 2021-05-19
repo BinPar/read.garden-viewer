@@ -7,6 +7,8 @@ import { updateState } from '../lib/state';
  * @param state Viewer state
  */
 const createBasicDOMElements = (state: State): void => {
+  document.body.classList.add(`rg-${state.layout}-layout`, `rg-${state.scrollMode}-scroll`);
+
   // #region Container node
   const readGardenContainerNode = document.createElement('div');
   readGardenContainerNode.id = 'rg-container';
@@ -15,7 +17,6 @@ const createBasicDOMElements = (state: State): void => {
   // #region Main node
   const readGardenViewerNode = document.createElement('div');
   readGardenViewerNode.id = 'rg-viewer';
-  readGardenViewerNode.classList.add(`rg-${state.layout}-layout`, `rg-${state.scrollMode}-scroll`);
   readGardenContainerNode.appendChild(readGardenViewerNode);
   // #endregion Main node
 
@@ -71,6 +72,7 @@ const createBasicDOMElements = (state: State): void => {
   updateState({
     basicDOMElementsCreated: true,
     mainStyleNode: mainStylesheet?.ownerNode as HTMLLinkElement,
+    readGardenContainerNode,
     readGardenViewerNode,
     contentWrapperNode,
     contentPlaceholderNode,

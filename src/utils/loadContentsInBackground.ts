@@ -3,6 +3,9 @@ import { LoadNewContent } from '../model/events';
 import { LayoutTypes } from '../model/state';
 import { highlightTerms } from './highlights/search';
 
+/**
+ * Loads contents in background. Meant for fixed viewer in scroll mode
+ */
 const loadContentsInBackground = async (): Promise<void> => {
   const state = getState();
   if (state.layout === LayoutTypes.Flow) {

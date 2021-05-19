@@ -35,6 +35,10 @@ export interface GlobalState {
     uiMode: Margin;
   };
   /**
+   * Main container DOM node
+   */
+  readGardenContainerNode?: HTMLDivElement;
+  /**
    * Main viewer DOM node
    */
   readGardenViewerNode?: HTMLDivElement;

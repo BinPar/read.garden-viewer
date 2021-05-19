@@ -3,9 +3,8 @@
  * @param container DOM Element containing highlights
  */
 const removeHighlights = (container: HTMLDivElement): void => {
-  container.querySelectorAll('.rg-highlight').forEach((hl): void => {
-    hl.remove();
-  });
+  // eslint-disable-next-line no-param-reassign
+  container.innerHTML = '';
 };
 
 export default removeHighlights;
