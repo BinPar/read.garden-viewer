@@ -35,9 +35,9 @@ const drawHighlights = (
     });
     const fixZoom = zoomPanelCoordinates.zoomFix || 1;
     highlight.style.left = `${zoomPanelCoordinates.x - 3}px`;
-    highlight.style.top = `${zoomPanelCoordinates.y - 4}px`;
+    highlight.style.top = `${zoomPanelCoordinates.y}px`;
     highlight.style.width = `${rect.width * fixZoom + 4}px`;
-    highlight.style.height = `${rect.height * fixZoom + 5}px`;
+    highlight.style.height = `${rect.height * fixZoom}px`;
     container.append(highlight);
   }
 };

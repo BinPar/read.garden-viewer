@@ -2,16 +2,16 @@ import getSearchHighlightsRanges from './getSearchHighlightsRanges';
 
 const getRangesRecursively = (container: HTMLElement, terms: string[], firstCall = false): Range[] => {
   const termsKey = terms.join('|');
-  if (container.dataset.highlighted === termsKey) {
+  if (container.dataset && container.dataset.highlighted === termsKey) {
     return [];
   }
-  if (firstCall) {
+  if (firstCall && container.dataset) {
     // eslint-disable-next-line no-param-reassign
     container.dataset.highlighted = termsKey;
   }
   if (
     !terms.length ||
-    !terms.some((t) => container.innerText.indexOf(t) !== -1)
+    !terms.some((t) => container.innerText && container.innerText.indexOf(t) !== -1)
   ) {
     return [];
   }
