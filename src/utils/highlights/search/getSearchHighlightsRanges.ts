@@ -13,11 +13,13 @@ import getSortedTerms from './getSortedTerms';
  */
 const getSearchHighlightsRanges = (contentWrapper: HTMLElement, terms: string[]): Range[] => {
   const termsKey = terms.join('|');
-  if (contentWrapper.dataset.highlighted === termsKey) {
+  if (contentWrapper.dataset && contentWrapper.dataset.highlighted === termsKey) {
     return [];
   }
-  // eslint-disable-next-line no-param-reassign
-  contentWrapper.dataset.highlighted = termsKey;
+  if (contentWrapper.dataset) {
+    // eslint-disable-next-line no-param-reassign
+    contentWrapper.dataset.highlighted = termsKey;
+  }
   if (
     !terms.length ||
     !terms.some((t) => contentWrapper.innerText.indexOf(t) !== -1)
