@@ -1,10 +1,11 @@
 import { ActionDispatcher } from '../../model/actions/actionDispatcher';
 import { SetFontSize } from '../../model/actions/flow';
 import { LayoutTypes, State } from '../../model/state';
+import { clean, highlightTerms } from '../../utils/highlights/search';
 
 import setCSSProperty from '../../utils/setCSSProperty';
 import recalculate from '../../viewer/recalculate';
-import { getState, updateState } from '../state';
+import { updateState } from '../state';
 
 /**
  * Sets font size to provided value and recalculates
@@ -16,18 +17,22 @@ export const setSize = async (size: number, state: State): Promise<Partial<State
   if (state.layout === LayoutTypes.Fixed) {
     throw new Error('Action not allowed in fixed mode');
   }
-  setCSSProperty('viewer-margin-top', '200vh');
-  setCSSProperty('font-size', `${size}px`);
-  updateState({ fontSize: size });
-  const newState = getState();
-  const recalculateUpdate = await recalculate(newState);
-  setCSSProperty('viewer-margin-top', '0');
-  return {
-    ...recalculateUpdate,
-    layout: state.layout,
-    scrollMode: state.scrollMode,
-    fontSize: size,
-  };
+  return new Promise<Partial<State>>((resolve) => {
+    setCSSProperty('viewer-margin-top', '200vh');
+    clean();
+    setCSSProperty('font-size', `${size}px`);
+    updateState({ fontSize: size });
+    recalculate(state).then((recalculateUpdate) => {
+      setCSSProperty('viewer-margin-top', '0');
+      resolve({
+        ...recalculateUpdate,
+        layout: state.layout,
+        scrollMode: state.scrollMode,
+        fontSize: size,
+      });
+      highlightTerms(state.searchTerms);
+    });
+  });
 };
 
 /**

@@ -4,27 +4,41 @@
   --safe-area-margin-correction: calc(-1px * var(--debug-viewer-safe-area));
 }
 
-html,
-body {
+* {
   margin: 0;
+  padding: 0;
+}
+
+*:before,
+*:after {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: none;
 }
 
 body {
-  height: 100vh;
+  min-height: 100vh;
+  max-height: 100vh;
   padding: 0;
   overflow-y: hidden;
   overflow-x: hidden;
   background-color: #fff;
   overscroll-behavior-y: contain;
   scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+body::-webkit-scrollbar {
+  display: none;
 }
 
 body.rg-horizontal-scroll {
-  overflow-x: scroll;
+  overflow-x: auto;
 }
 
 body.rg-vertical-scroll {
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 div#rg-container {
@@ -58,6 +72,10 @@ div.rg-content-wrapper {
 /* .rg-vertical-scroll div.rg-content-wrapper {
   overflow-y: scroll;
 } */
+
+div#rg-content-placeholder {
+  overflow: hidden;
+}
 
 .rg-flow-layout div.rg-content-wrapper {
   padding: 0 calc(var(--column-gap) / 2) 0;
