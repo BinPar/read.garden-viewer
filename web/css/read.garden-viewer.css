@@ -29,9 +29,10 @@ body {
   -ms-overflow-style: none;
 }
 
-body::-webkit-scrollbar {
+/* TODO: uncomment when scroll is ready */
+/* body::-webkit-scrollbar {
   display: none;
-}
+} */
 
 body.rg-horizontal-scroll {
   overflow-x: auto;
@@ -73,10 +74,6 @@ div.rg-content-wrapper {
   overflow-y: scroll;
 } */
 
-div#rg-content-placeholder {
-  overflow: hidden;
-}
-
 .rg-flow-layout div.rg-content-wrapper {
   padding: 0 calc(var(--column-gap) / 2) 0;
   font-size: var(--font-size);
@@ -90,6 +87,10 @@ div#rg-content-placeholder {
   column-gap: var(--column-gap);
 }
 
+.rg-flow-layout.rg-vertical-scroll div#rg-content-placeholder {
+  overflow: hidden;
+}
+
 .rg-fixed-layout.rg-horizontal-scroll div.rg-content-wrapper div#rg-content-placeholder {
   width: var(--total-width);
   height: auto;
@@ -99,17 +100,6 @@ div#rg-content-placeholder {
   position: relative;
   float: left;
   contain: size;
-  background-color: #ccc;
-}
-
-.rg-loading::before {
-  position: absolute;
-  content: '';
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 1;
   background-color: #ccc;
 }
 
@@ -136,6 +126,17 @@ div#rg-content-placeholder {
   margin-left: auto !important;
   margin-right: auto !important;
   display: block !important;
+}
+
+.rg-loading::before {
+  position: absolute;
+  content: '';
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  background-color: #ccc;
 }
 
 @media (max-width: 48em) {

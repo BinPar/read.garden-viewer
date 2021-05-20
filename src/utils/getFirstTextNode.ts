@@ -3,7 +3,10 @@
  * @param element DOM Element
  * @returns First text node or `null`
  */
-const getFirstTextNode = (element: Element): Node | null => {
+const getFirstTextNode = (element: Node): Node | null => {
+  if (element.nodeType === Node.TEXT_NODE) {
+    return element;
+  }
   let result: Node | null = null;
   const children = Array.from(element.childNodes);
   for (let i = 0, l = children.length; i < l && !result; i++) {

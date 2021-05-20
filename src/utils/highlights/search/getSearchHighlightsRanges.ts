@@ -1,5 +1,6 @@
 import log from 'loglevel';
 import getFirstTextNode from '../../getFirstTextNode';
+import getNextSibling from '../../getNextSibling';
 import setCSSProperty from '../../setCSSProperty';
 import extendToWord from '../extendToWord';
 import cleanText from './cleanText';
@@ -20,10 +21,7 @@ const getSearchHighlightsRanges = (contentWrapper: HTMLElement, terms: string[])
     // eslint-disable-next-line no-param-reassign
     contentWrapper.dataset.highlighted = termsKey;
   }
-  if (
-    !terms.length ||
-    !terms.some((t) => contentWrapper.innerText.indexOf(t) !== -1)
-  ) {
+  if (!terms.length || !terms.some((t) => contentWrapper.innerText.indexOf(t) !== -1)) {
     return [];
   }
   const sortedTerms = getSortedTerms(terms);
@@ -83,12 +81,28 @@ const getSearchHighlightsRanges = (contentWrapper: HTMLElement, terms: string[])
                     }
                   }
                   while (selectionRange.toString().match(/^[.,/#¡!¿?$%^&*;:{}=«»\-_`~()\][ \n]+/)) {
-                    // Starting space (" [selection]")
-                    // Starting space in different tag?
-                    selectionRange.setStart(
-                      selectionRange.startContainer,
-                      selectionRange.startOffset + 1,
-                    );
+                    if (
+                      selectionRange.startContainer.nodeType === Node.TEXT_NODE &&
+                      (selectionRange.startContainer as Text).length === selectionRange.startOffset
+                    ) {
+                      // Starting space in different node
+                      const nextSibling = getNextSibling(selectionRange.startContainer);
+                      const nextSiblingTextNode = nextSibling && getFirstTextNode(nextSibling);
+                      if (nextSiblingTextNode) {
+                        selectionRange.setStart(
+                          nextSiblingTextNode,
+                          0,
+                        );
+                      } else {
+                        selectionRange.setStartAfter(selectionRange.startContainer);
+                      }
+                    } else {
+                      // Starting space (" [selection]")
+                      selectionRange.setStart(
+                        selectionRange.startContainer,
+                        selectionRange.startOffset + 1,
+                      );
+                    }
                   }
                   resultRanges.push(selectionRange);
                 }
