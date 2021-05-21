@@ -4,6 +4,10 @@ import testingConfig from '../../config/testing';
 let lastSlug: string;
 let lastContent: Content;
 
+/**
+ * Loads and returns index file for desired book
+ * @param slug Book slug
+ */
 const loadIndexFile = async (slug: string): Promise<Content> => {
   if (lastSlug === slug) {
     return lastContent;

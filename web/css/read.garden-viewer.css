@@ -4,19 +4,42 @@
   --safe-area-margin-correction: calc(-1px * var(--debug-viewer-safe-area));
 }
 
-html,
-body {
+* {
   margin: 0;
+  padding: 0;
+}
+
+*:before,
+*:after {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: none;
 }
 
 body {
-  height: 100vh;
+  min-height: 100vh;
+  max-height: 100vh;
   padding: 0;
   overflow-y: hidden;
-  overflow-x: scroll;
+  overflow-x: hidden;
   background-color: #fff;
   overscroll-behavior-y: contain;
   scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+/* TODO: uncomment when scroll is ready */
+/* body::-webkit-scrollbar {
+  display: none;
+} */
+
+body.rg-horizontal-scroll {
+  overflow-x: auto;
+}
+
+body.rg-vertical-scroll {
+  overflow-y: auto;
 }
 
 div#rg-container {
@@ -47,9 +70,9 @@ div.rg-content-wrapper {
   -webkit-user-select: var(--user-select);
 }
 
-.rg-vertical-scroll div.rg-content-wrapper {
+/* .rg-vertical-scroll div.rg-content-wrapper {
   overflow-y: scroll;
-}
+} */
 
 .rg-flow-layout div.rg-content-wrapper {
   padding: 0 calc(var(--column-gap) / 2) 0;
@@ -64,14 +87,20 @@ div.rg-content-wrapper {
   column-gap: var(--column-gap);
 }
 
+.rg-flow-layout.rg-vertical-scroll div#rg-content-placeholder {
+  overflow: hidden;
+}
+
 .rg-fixed-layout.rg-horizontal-scroll div.rg-content-wrapper div#rg-content-placeholder {
   width: var(--total-width);
   height: auto;
 }
 
 .rg-fixed-layout.rg-horizontal-scroll div.rg-content-wrapper div#rg-content-placeholder > * {
-  background-color: #ccc;
+  position: relative;
   float: left;
+  contain: size;
+  background-color: #ccc;
 }
 
 .rg-fixed-layout.rg-vertical-scroll div.rg-content-wrapper div#rg-content-placeholder {
@@ -99,6 +128,17 @@ div.rg-content-wrapper {
   display: block !important;
 }
 
+.rg-loading::before {
+  position: absolute;
+  content: '';
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  background-color: #ccc;
+}
+
 @media (max-width: 48em) {
   .rg-flow-layout.rg-horizontal-scroll div.rg-content-wrapper img.rg-fit-height {
     max-height: calc(100vh - var(--padding-top) - var(--padding-bottom) - 65px) !important;
@@ -113,7 +153,7 @@ div.rg-total-width-calculator,
 div.rg-end-of-chapter-calculator {
   width: 100%;
   height: 0px;
-  color: transparent;
+  font-size: 0px;
   user-select: var(--user-select-end);
 }
 
@@ -152,10 +192,6 @@ div.rg-highlights-layer {
   left: 0;
   right: 0;
   bottom: 0;
-  border-style: solid;
-  border-width: thin;
-  border-color: #fffff7;
-  border-radius: 2px;
   pointer-events: none;
   user-select: none;
   -webkit-user-select: none;
@@ -163,6 +199,10 @@ div.rg-highlights-layer {
 
 div.rg-highlights-layer > div {
   position: absolute;
+  border-style: solid;
+  border-width: thin;
+  border-color: #fffff7;
+  border-radius: 2px;
 }
 
 div.rg-highlights-layer.rg-selection > div {

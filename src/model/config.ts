@@ -108,6 +108,10 @@ export interface DefaultConfig {
    * Alternates read mode on document click
    */
   toggleReadModeOnClick: boolean;
+  /**
+   * Preload order for fixed viewer with scroll
+   */
+  fixedViewerPreloadOrder: number[];
 }
 
 export interface RequiredConfig {

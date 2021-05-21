@@ -6,6 +6,12 @@ import setCSSProperty from '../../utils/setCSSProperty';
 import recalculate from '../../viewer/recalculate';
 import { getState, updateState } from '../state';
 
+/**
+ * Sets viewer text align mode
+ * @param context.state Viewer state 
+ * @param context.action Viewer action
+ * @returns Viewer partial state update
+ */
 const setTextAlign: ActionDispatcher<SetTextAlign> = async ({ state, action }) => {
   if (state.layout === LayoutTypes.Fixed) {
     throw new Error('Action not allowed in fixed mode');

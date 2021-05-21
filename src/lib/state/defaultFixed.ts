@@ -1,7 +1,12 @@
-import { FixedState, LayoutTypes } from '../../model/state';
+import { FixedState, FixedViewerContentInfo, LayoutTypes } from '../../model/state';
 
 const defaultFixed: FixedState = {
-  containerByLabel: new Map<string, HTMLDivElement>(),
+  contentsByOrder: new Map<number, FixedViewerContentInfo>(),
+  contentsByLabel: new Map<string, FixedViewerContentInfo>(),
+  contentsInfo: [],
+  currentContentIndex: 0,
+  loadingContent: true,
+  loadedCssUrls: new Set<string>(),
   layout: LayoutTypes.Fixed,
   hasHorizontalScroll: false,
   hasVerticalScroll: false,

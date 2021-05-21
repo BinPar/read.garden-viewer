@@ -1,13 +1,20 @@
 import log from 'loglevel';
-import { getState, initializeState } from '../lib/state';
-import { APIInterface } from '../model/apiInterface';
-import dispatch from '../lib/state/dispatch';
-import { ViewerFunction } from '../model/viewer';
-import createBasicDOMElements from '../utils/createBasicDOMElements';
-import { LoadNewContent } from '../model/events';
-import setInitialProperties from '../lib/styles/setInitialProperties';
-import setupGlobalEvents, { removeGlobalEvents } from '../utils/setupGlobalEvents';
 
+import { APIInterface } from '../model/apiInterface';
+import { ViewerFunction } from '../model/viewer';
+import { LoadNewContent } from '../model/events';
+
+import dispatch from '../lib/state/dispatch';
+import { getState, initializeState } from '../lib/state';
+import setInitialProperties from '../lib/styles/setInitialProperties';
+import createBasicDOMElements from '../utils/createBasicDOMElements';
+import { setupGlobalEvents, removeGlobalEvents } from '../utils/globalEvents';
+
+/**
+ * Main viewer function
+ * @param config Viewer config
+ * @returns API Interface
+ */
 const viewer: ViewerFunction = (config) => {
   initializeState(config);
   const state = getState();

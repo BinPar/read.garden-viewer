@@ -35,6 +35,10 @@ export interface GlobalState {
     uiMode: Margin;
   };
   /**
+   * Main container DOM node
+   */
+  readGardenContainerNode?: HTMLDivElement;
+  /**
    * Main viewer DOM node
    */
   readGardenViewerNode?: HTMLDivElement;
@@ -189,6 +193,33 @@ export interface FixedContentInfo {
    * Content slug
    */
   slug: string;
+  /**
+   * Content order (base 0)
+   */
+  order: number;
+  /**
+   * HTML content
+   */
+  html?: string;
+  /**
+   * Content CSS URL
+   */
+  cssURL?: string;
+}
+
+export interface FixedViewerContentInfo extends FixedContentInfo {
+  /**
+   * Content container
+   */
+  container: HTMLDivElement;
+  /**
+   * Max left position (to identify current page on scroll)
+   */
+  maxLeft: number;
+  /**
+   * Max top position (to identify current page on scroll)
+   */
+  maxTop: number;
 }
 
 export interface FixedState {
@@ -233,9 +264,29 @@ export interface FixedState {
    */
   horizontalTranslate: number;
   /**
-   * Container by label map
+   * Content info by number
    */
-  containerByLabel: Map<string, HTMLDivElement>;
+  contentsByOrder: Map<number, FixedViewerContentInfo>;
+  /**
+   * Content info by label
+   */
+  contentsByLabel: Map<string, FixedViewerContentInfo>;
+  /**
+   * Contents info array
+   */
+  contentsInfo: FixedViewerContentInfo[];
+  /**
+   * Current content index (order, base 0)
+   */
+  currentContentIndex: number;
+  /**
+   * Viewer is loading content
+   */
+  loadingContent: boolean;
+  /**
+   * Loaded CSS URLs
+   */
+  loadedCssUrls: Set<string>;
   // loadedPages: string[];
 }
 
@@ -289,6 +340,7 @@ export interface FlowState {
    */
   labels: string[];
 }
+
 /**
  * Default global state
  */

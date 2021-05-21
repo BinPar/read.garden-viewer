@@ -1,6 +1,9 @@
+import { getScrollLeftPosition } from '..';
 import { getState } from '../../../lib/state';
+import { LayoutTypes } from '../../../model/state';
 import drawHighlights from '../drawHighlights';
-import getSearchHighlightsRanges from './getSearchHighlightsRanges';
+import getScrollTopPosition from '../getScrollTopPosition';
+import getRangesRecursively from './getRangesRecursively';
 
 /**
  * Looks for appearances of terms and draws highlights
@@ -9,11 +12,89 @@ import getSearchHighlightsRanges from './getSearchHighlightsRanges';
 const highlightTerms = (terms: string[]): void => {
   const state = getState();
 
-  const { contentWrapperNode, searchTermsHighlightsNode } = state;
+  const { contentPlaceholderNode, searchTermsHighlightsNode } = state;
 
-  if (contentWrapperNode && searchTermsHighlightsNode && terms.length) {
-    const ranges = getSearchHighlightsRanges(contentWrapperNode, terms);
-    drawHighlights(searchTermsHighlightsNode, ranges);
+  if (searchTermsHighlightsNode && terms.length) {
+    if (state.layout === LayoutTypes.Flow) {
+      if (contentPlaceholderNode) {
+        const ranges = getRangesRecursively(contentPlaceholderNode, terms, true);
+        drawHighlights(searchTermsHighlightsNode, ranges);
+      }
+    }
+
+    if (
+      state.layout === LayoutTypes.Fixed &&
+      state.scrollMode !== 'fixed' &&
+      !state.loadingContent
+    ) {
+      const { contentsInfo, scrollMode, contentsByOrder, totalWidth, totalHeight } = state;
+      let startFound = false;
+      let endFound = false;
+      const ranges: Range[] = [];
+      if (scrollMode === 'horizontal') {
+        const leftLimit = getScrollLeftPosition();
+        const rightLimit = leftLimit + window.innerWidth;
+        const startingElementIndex = Math.floor((leftLimit * contentsInfo.length) / totalWidth) - 2;
+        for (
+          let i = Math.max(0, startingElementIndex), l = contentsInfo.length;
+          i < l && (!startFound || !endFound);
+          i++
+        ) {
+          const { maxLeft, order, container } = contentsInfo[i];
+          if (startFound) {
+            ranges.push(...getRangesRecursively(container, terms, true));
+            if (maxLeft > rightLimit) {
+              endFound = true;
+              const next = contentsByOrder.get(order + 1);
+              if (next) {
+                ranges.push(...getRangesRecursively(next.container, terms, true));
+              }
+            }
+          } else if (maxLeft > leftLimit) {
+            startFound = true;
+            if (order > 0) {
+              const previous = contentsByOrder.get(order - 1);
+              if (previous) {
+                ranges.push(...getRangesRecursively(previous.container, terms, true));
+              }
+            }
+            ranges.push(...getRangesRecursively(container, terms, true));
+          }
+        }
+      }
+      if (scrollMode === 'vertical') {
+        const topLimit = getScrollTopPosition();
+        const bottomLimit = topLimit + document.body.clientHeight;
+        const startingElementIndex = Math.floor((topLimit * contentsInfo.length) / totalHeight) - 2;
+        for (
+          let i = Math.max(0, startingElementIndex), l = contentsInfo.length;
+          i < l && (!startFound || !endFound);
+          i++
+        ) {
+          const { maxTop, order, container } = contentsInfo[i];
+          if (startFound) {
+            ranges.push(...getRangesRecursively(container, terms, true));
+            if (maxTop > bottomLimit) {
+              endFound = true;
+              const next = contentsByOrder.get(order + 1);
+              if (next) {
+                ranges.push(...getRangesRecursively(next.container, terms, true));
+              }
+            }
+          } else if (maxTop > topLimit) {
+            startFound = true;
+            if (order > 0) {
+              const previous = contentsByOrder.get(order - 1);
+              if (previous) {
+                ranges.push(...getRangesRecursively(previous.container, terms, true));
+              }
+            }
+            ranges.push(...getRangesRecursively(container, terms, true));
+          }
+        }
+      }
+      drawHighlights(searchTermsHighlightsNode, ranges, true);
+    }
   }
 };
 

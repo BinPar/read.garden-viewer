@@ -153,12 +153,11 @@ const recalculate = async (state: State): Promise<Partial<State>> => {
         return;
       }
 
-      resolve({});
-
+      resolve(globalUpdate);
       return;
     }
 
-    resolve({});
+    resolve(globalUpdate);
   });
 };
 

@@ -8,10 +8,12 @@ import checkImagesHeight from '../../utils/checkImagesHeight';
 import recalculate from '../../viewer/recalculate';
 import { onCssLoaded } from '../state/changeHandlers/cssLoaderHandler';
 import { onWrapperReady } from '../state/changeHandlers/wrapperReadyHandler';
-import { getState, updateState } from '../state';
+import { updateState } from '../state';
 import layoutSetup from '../../viewer/layoutSetup';
 import { drawHighlights } from '../../utils/highlights';
 import { highlightTerms } from '../../utils/highlights/search';
+import loadContentsInBackground from '../../utils/loadContentsInBackground';
+import handleFlowCssAndLoad from '../../utils/handleFlowCssAndLoad';
 
 /**
  * Appends new content to viewer
@@ -54,7 +56,7 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
               let replace = true;
               const newLink = document.createElement('link');
               const done = async (): Promise<void> => {
-                const recalculateState = await recalculate(getState());
+                const recalculateState = await recalculate(state);
                 setCSSProperty('viewer-margin-top', '0');
                 const finalPartialState: Partial<State> = {
                   ...recalculateState,
@@ -129,25 +131,29 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
     }
 
     if (state.layout === LayoutTypes.Fixed) {
-      const { containerByLabel } = state;
-      const container = containerByLabel.get(action.label);
+      const { contentsByLabel } = state;
+      const content = contentsByLabel.get(action.label)!;
+      const { container } = content;
+      content.html = action.htmlContent;
+      content.cssURL = action.cssURL;
+      container.classList.add('rg-loading');
       container!.innerHTML = action.htmlContent;
 
       window.requestAnimationFrame(() => {
         window.requestAnimationFrame(() => {
-          let replace = true;
-          const newLink = document.createElement('link');
           const done = async (): Promise<void> => {
-            const recalculateState = await recalculate(getState());
+            container.classList.remove('rg-loading');
+            const recalculateState = await recalculate(state);
             setCSSProperty('viewer-margin-top', '0');
             const finalPartialState: Partial<State> = {
               ...recalculateState,
+              layout: state.layout,
               cssLoaded: true,
             };
-            if (replace) {
-              finalPartialState.dynamicStyleNode = newLink;
-            }
+            updateState({ loadingContent: false });
             resolve(finalPartialState);
+            loadContentsInBackground();
+            highlightTerms(state.searchTerms);
           };
           const checkFonts = () => {
             dynamicStyleNode!.removeEventListener('load', checkFonts);
@@ -166,17 +172,11 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
               });
             });
           };
-          // TODO: In fixed (when book is epub), there will be multiple CSS
-          if (!action.cssURL || action.cssURL === dynamicStyleNode!.href) {
-            replace = false;
+          if (!action.cssURL) {
             checkFonts();
             return;
           }
-          newLink.rel = 'stylesheet';
-          newLink.type = 'text/css';
-          newLink.addEventListener('load', checkFonts);
-          dynamicStyleNode!.replaceWith(newLink);
-          newLink.href = action.cssURL;
+          handleFlowCssAndLoad(action.cssURL, checkFonts);
         });
       });
     }
