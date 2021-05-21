@@ -1,7 +1,8 @@
 import { ActionDispatcher } from '../../model/actions/actionDispatcher';
 import { SetFontFamily } from '../../model/actions/flow';
 import { LayoutTypes, State } from '../../model/state';
-import { clean, highlightTerms } from '../../utils/highlights/search';
+import { drawHighlights } from '../../utils/highlights';
+import { clean } from '../../utils/highlights/search';
 
 import setCSSProperty from '../../utils/setCSSProperty';
 import recalculate from '../../viewer/recalculate';
@@ -48,7 +49,9 @@ const setFontFamily: ActionDispatcher<SetFontFamily> = async ({ state, action })
           scrollMode: state.scrollMode,
           fontFamily,
         });
-        highlightTerms(state.searchTerms);
+        if (state.searchRanges.length && state.searchTermsHighlightsNode) {
+          drawHighlights(state.searchTermsHighlightsNode, state.searchRanges);
+        }
       };
       const checkFonts = (): void => {
         if (document.fonts.status === 'loaded') {

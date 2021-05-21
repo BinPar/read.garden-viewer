@@ -63,6 +63,7 @@ export const initializeState = (initialConfig: InitialConfig): void => {
     pageNumber: 1, // From initial config
     scale: config.initialScale || defaultGlobal.scale,
     searchTerms: [],
+    searchRanges: [],
     debugViewerSafeArea: config.debugViewerSafeArea,
     containerWidth: 0,
     containerHeight: 0,
