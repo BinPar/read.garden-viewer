@@ -393,6 +393,11 @@ export interface ScrolledState {
 export type State = GlobalState &
   ((FixedState & (PaginatedState | ScrolledState)) | (FlowState & ScrolledState));
 
+export type FullState = GlobalState &
+  Omit<FlowState, 'layout'> &
+  Omit<FixedState, 'layout'> & { layout: LayoutTypes } & Omit<PaginatedState, 'scrollMode'> &
+  Omit<FlowState, 'scrollMode'> & { scrollMode: ScrollModes };
+
 export type PropChangeHandler = () => void;
 
 export interface StatePropChangeHandler<K extends keyof State> {

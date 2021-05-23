@@ -5,6 +5,7 @@ import { addOnChangeEventListener } from '../state/stateChangeEvents';
 
 /**
  * Adds event that fires when the viewer state changes
+ * this method must only be used by the API, and not by the viewer
  * @param state.action AddOnChangeEven action
  * @returns 
  */

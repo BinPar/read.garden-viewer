@@ -5,6 +5,7 @@ import { removeOnChangeEventListener } from '../state/stateChangeEvents';
 
 /**
  * Removes event that fires when the viewer state changes
+ * this method must only be used by the API, and not by the viewer
  * @param state.action RemoveOnChangeEven action
  * @returns 
  */

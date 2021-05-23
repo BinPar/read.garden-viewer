@@ -1,4 +1,4 @@
-import { LayoutTypes, ScrollModes, State } from '../state';
+import { LayoutTypes, ScrollModes, FullState } from '../state';
 import { Action } from './common';
 
 type FilterPropertyNames<Base, Condition> = {
@@ -6,7 +6,7 @@ type FilterPropertyNames<Base, Condition> = {
 };
 type AllowedPropertyNamesNames<Base, Condition> = FilterPropertyNames<Base, Condition>[keyof Base];
 
-export type StatePropertyNames<T> = AllowedPropertyNamesNames<State, T>;
+export type StatePropertyNames<T> = AllowedPropertyNamesNames<FullState, T>;
 
 /**
  * Names of the action types for global actions
@@ -108,11 +108,17 @@ export interface AddOnChangeEvent<T> extends Action {
   propertyName: StatePropertyNames<T>;
   event: PropertyChangeEvent<T>; 
 }
+
 export interface RemoveOnChangeEvent<T> extends Action {
   type: 'removeOnChangeEvent';
   propertyName: StatePropertyNames<T>;
   event: PropertyChangeEvent<T>; 
 }
+
+export interface RemoveAllChangeEvents extends Action {
+  type: 'removeAllChangeEvents';
+}
+
 export interface HighlightSearchTerms extends Action {
   type: 'highlightSearchTerms';
   /**
@@ -143,4 +149,5 @@ export type GlobalActions =
   | HighlightSearchTerms
   | SetReadMode
   | AddOnChangeEvent<any>
-  | RemoveOnChangeEvent<any>;
+  | RemoveOnChangeEvent<any>
+  | RemoveAllChangeEvents;

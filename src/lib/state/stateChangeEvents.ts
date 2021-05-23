@@ -67,3 +67,11 @@ export const notifyEventHandler = <T>(
     });
   }
 };
+
+/**
+ * Removes all event listener stop notifying events
+ * typically when the user interface is unmounted
+ */
+export const removeAllChangeEvents = (): void => {
+  handlers.clear();
+};

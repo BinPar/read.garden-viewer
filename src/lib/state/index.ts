@@ -9,7 +9,8 @@ import defaultPaginated from './defaultPaginated';
 import defaultConfig from '../../config/default';
 import { setConfig } from '../../config';
 import changeHandlers from './changeHandlers';
-import { notifyEventHandler, StatePropertyNames } from './stateChangeEvents';
+import { notifyEventHandler } from './stateChangeEvents';
+import { StatePropertyNames } from '../../model/actions/global';
 
 const handlers = new Map<string, Map<any, PropChangeHandler>>();
 
