@@ -20,6 +20,20 @@ export interface DefaultConfig {
    */
   initialFixedMode: ViewerMode.WithScroll | ViewerMode.Paginated;
   /**
+   * Speed of the animation in milliseconds
+   * representing the amount of time that will take to
+   * reach de desired state
+   */
+  animationSpeed: number;
+  /**
+   * Animation inertia (or tension)
+   */
+  animationInertia: number;
+  /**
+   * The friction (or resistance) used for the movement in the scroll and animations
+   */
+  animationFriction: number;
+  /**
    * Initial fit mode. Will be used at viewer first load.
    * @scope Fixed
    */

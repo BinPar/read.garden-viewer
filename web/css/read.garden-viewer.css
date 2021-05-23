@@ -29,10 +29,9 @@ body {
   -ms-overflow-style: none;
 }
 
-/* TODO: uncomment when scroll is ready */
-/* body::-webkit-scrollbar {
+body::-webkit-scrollbar {
   display: none;
-} */
+}
 
 body.rg-horizontal-scroll {
   overflow-x: auto;

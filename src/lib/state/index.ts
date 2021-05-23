@@ -9,7 +9,8 @@ import defaultPaginated from './defaultPaginated';
 import defaultConfig from '../../config/default';
 import { setConfig } from '../../config';
 import changeHandlers from './changeHandlers';
-import { notifyEventHandler, StatePropertyNames } from './stateChangeEvents';
+import { notifyEventHandler } from './stateChangeEvents';
+import { StatePropertyNames } from '../../model/actions/global';
 
 const handlers = new Map<string, Map<any, PropChangeHandler>>();
 
@@ -59,6 +60,11 @@ export const initializeState = (initialConfig: InitialConfig): void => {
     title: 'Title', // From initial config
     slug: config.slug,
     contentSlug: config.contentSlug,
+    animate: false,
+    animating: false,
+    animationFriction: config.animationFriction,
+    animationSpeed: config.animationSpeed,
+    animationInertia: config.animationInertia,
     pageLabel: config.contentSlug, // Should be different (maybe we need to add `initialPageLabel`)
     pageNumber: 1, // From initial config
     scale: config.initialScale || defaultGlobal.scale,

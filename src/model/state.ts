@@ -22,6 +22,32 @@ export interface GlobalState {
    */
   readMode: boolean;
   /**
+   * True when the viewer is doing an animation
+   * probably it is a good idea to wait until it ends for
+   * measuring hight-lights and other items
+   */
+  animating: boolean;
+  /**
+   * True when the viewer can do animations   
+   * if it is set to false, any view transition will be
+   * applied directly without any animation
+   */
+  animate: boolean;
+  /**
+   * Speed of the animation in milliseconds
+   * representing the amount of time that will take to
+   * reach de desired state
+   */
+  animationSpeed: number;
+  /**
+   * Animation inertia (or tension)
+   */
+  animationInertia: number;
+  /**
+   * The friction (or resistance) used for the movement in the scroll and animations
+   */
+  animationFriction: number;
+  /**
    * Security Margins
    */
   securityMargins: {
@@ -392,6 +418,11 @@ export interface ScrolledState {
 
 export type State = GlobalState &
   ((FixedState & (PaginatedState | ScrolledState)) | (FlowState & ScrolledState));
+
+export type FullState = GlobalState &
+  Omit<FlowState, 'layout'> &
+  Omit<FixedState, 'layout'> & { layout: LayoutTypes } & Omit<PaginatedState, 'scrollMode'> &
+  Omit<FlowState, 'scrollMode'> & { scrollMode: ScrollModes };
 
 export type PropChangeHandler = () => void;
 

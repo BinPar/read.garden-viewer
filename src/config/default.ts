@@ -1,32 +1,19 @@
 import { DefaultConfig } from '../model/config';
 import { FitMode, ViewerMode } from '../model/viewerSettings';
 
-const defaultConfig: DefaultConfig = {  
+const defaultConfig: DefaultConfig = {
   debugViewerSafeArea: false,
   initialFixedMode: ViewerMode.WithScroll,
   initialFitMode: FitMode.Height,
   initialReadMode: true,
   showPageSeparation: false,
+  animationFriction: 0.15,
+  animationSpeed: 300,
+  animationInertia: 0.8,
   zoom: {
     max: 4,
     min: 0.1,
-    steps: [
-      0.1,
-      0.2,
-      0.3,
-      0.4,
-      0.5,
-      0.75,
-      1,
-      1.25,
-      1.5,
-      1.75,
-      2,
-      2.5,
-      3,
-      3.5,
-      4,
-    ],
+    steps: [0.1, 0.2, 0.3, 0.4, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.5, 3, 3.5, 4],
   },
   loadedContentsNumber: 5,
   fontSize: {
