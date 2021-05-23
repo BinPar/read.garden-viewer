@@ -10,6 +10,8 @@ import resize from './resize';
 import highlightSearchTerms from './highlightSearchTerms';
 import setContentsInfo from './setContentsInfo';
 import setReadMode from './setReadMode';
+import addOnChangeEvent from './addOnChangeEvent'
+import removeOnChangeEvent from './removeOnChangeEvent';
 
 /**
  * List of all action dispatchers
@@ -27,6 +29,8 @@ const actionDispatchers  = {
   highlightSearchTerms,
   setContentsInfo,
   setReadMode,
+  addOnChangeEvent,
+  removeOnChangeEvent,
 };
 
 export default actionDispatchers;

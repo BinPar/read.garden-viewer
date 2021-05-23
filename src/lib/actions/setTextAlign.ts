@@ -1,6 +1,7 @@
 import { ActionDispatcher } from '../../model/actions/actionDispatcher';
 import { SetTextAlign } from '../../model/actions/flow';
 import { LayoutTypes, State } from '../../model/state';
+import { drawHighlights } from '../../utils/highlights';
 import removeCSSProperty from '../../utils/removeCSSProperty';
 import setCSSProperty from '../../utils/setCSSProperty';
 import recalculate from '../../viewer/recalculate';
@@ -40,6 +41,9 @@ const setTextAlign: ActionDispatcher<SetTextAlign> = async ({ state, action }) =
             scrollMode: state.scrollMode,
             textAlign,
           });
+          if (state.searchRanges.length && state.searchTermsHighlightsNode) {
+            drawHighlights(state.searchTermsHighlightsNode, state.searchRanges);
+          }
         });
       });
     });

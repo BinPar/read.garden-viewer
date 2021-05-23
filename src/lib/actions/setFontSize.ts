@@ -1,7 +1,8 @@
 import { ActionDispatcher } from '../../model/actions/actionDispatcher';
 import { SetFontSize } from '../../model/actions/flow';
 import { LayoutTypes, State } from '../../model/state';
-import { clean, highlightTerms } from '../../utils/highlights/search';
+import { drawHighlights } from '../../utils/highlights';
+import { clean } from '../../utils/highlights/search';
 
 import setCSSProperty from '../../utils/setCSSProperty';
 import recalculate from '../../viewer/recalculate';
@@ -30,7 +31,9 @@ export const setSize = async (size: number, state: State): Promise<Partial<State
         scrollMode: state.scrollMode,
         fontSize: size,
       });
-      highlightTerms(state.searchTerms);
+      if (state.searchRanges.length && state.searchTermsHighlightsNode) {
+        drawHighlights(state.searchTermsHighlightsNode, state.searchRanges);
+      }
     });
   });
 };

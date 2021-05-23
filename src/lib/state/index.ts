@@ -1,7 +1,6 @@
 import { FixedState, GlobalState, PropChangeHandler, State } from '../../model/state';
 import { InitialConfig } from '../../model/config';
 import { ViewerMode } from '../../model/viewerSettings';
-
 import defaultGlobal from './defaultGlobal';
 import defaultFlow from './defaultFlow';
 import defaultScrolled from './defaultScrolled';
@@ -10,6 +9,7 @@ import defaultPaginated from './defaultPaginated';
 import defaultConfig from '../../config/default';
 import { setConfig } from '../../config';
 import changeHandlers from './changeHandlers';
+import { notifyEventHandler, StatePropertyNames } from './stateChangeEvents';
 
 const handlers = new Map<string, Map<any, PropChangeHandler>>();
 
@@ -63,6 +63,7 @@ export const initializeState = (initialConfig: InitialConfig): void => {
     pageNumber: 1, // From initial config
     scale: config.initialScale || defaultGlobal.scale,
     searchTerms: [],
+    searchRanges: [],
     debugViewerSafeArea: config.debugViewerSafeArea,
     containerWidth: 0,
     containerHeight: 0,
@@ -111,6 +112,7 @@ export const updateState = (newState: Partial<State>): void => {
   Object.keys(newState).forEach((key) => {
     const newValue = (newState as any)[key];
     if (newValue !== updatableState[key]) {
+      const oldValue = updatableState[key];
       updatableState[key] = newValue;
       const propertyHandlers = handlers.get(key);
       if (propertyHandlers) {
@@ -119,6 +121,11 @@ export const updateState = (newState: Partial<State>): void => {
           changeHandler();
         }
       }
+      notifyEventHandler<typeof newValue>(
+        key as StatePropertyNames<typeof newValue>,
+        newValue,
+        oldValue,
+      );
     }
   });
 };

@@ -96,10 +96,13 @@ div.rg-content-wrapper {
 }
 
 .rg-fixed-layout.rg-horizontal-scroll div.rg-content-wrapper div#rg-content-placeholder > * {
-  position: relative;
   float: left;
   contain: size;
   background-color: #ccc;
+}
+
+.rg-fixed-layout div.rg-content-wrapper div#rg-content-placeholder > * {
+  position: relative;
 }
 
 .rg-fixed-layout.rg-vertical-scroll div.rg-content-wrapper div#rg-content-placeholder {
