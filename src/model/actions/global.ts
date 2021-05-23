@@ -1,5 +1,12 @@
-import { LayoutTypes, ScrollModes } from '../state';
+import { LayoutTypes, ScrollModes, State } from '../state';
 import { Action } from './common';
+
+type FilterPropertyNames<Base, Condition> = {
+  [Key in keyof Base]: Base[Key] extends Condition ? Key : never;
+};
+type AllowedPropertyNamesNames<Base, Condition> = FilterPropertyNames<Base, Condition>[keyof Base];
+
+export type StatePropertyNames<T> = AllowedPropertyNamesNames<State, T>;
 
 /**
  * Names of the action types for global actions
@@ -94,6 +101,18 @@ export interface Resize extends Action {
   type: 'resize';
 }
 
+export type PropertyChangeEvent<T = any> = (newValue: T, oldValue: T) => void;
+
+export interface AddOnChangeEvent<T> extends Action {
+  type: 'addOnChangeEvent';
+  propertyName: StatePropertyNames<T>;
+  event: PropertyChangeEvent<T>; 
+}
+export interface RemoveOnChangeEvent<T> extends Action {
+  type: 'removeOnChangeEvent';
+  propertyName: StatePropertyNames<T>;
+  event: PropertyChangeEvent<T>; 
+}
 export interface HighlightSearchTerms extends Action {
   type: 'highlightSearchTerms';
   /**
@@ -122,4 +141,6 @@ export type GlobalActions =
   | AppendNewContent
   | Resize
   | HighlightSearchTerms
-  | SetReadMode;
+  | SetReadMode
+  | AddOnChangeEvent<any>
+  | RemoveOnChangeEvent<any>;

@@ -1,14 +1,5 @@
 import log from 'loglevel';
-import { State } from '../../model/state';
-
-type FilterPropertyNames<Base, Condition> = {
-  [Key in keyof Base]: Base[Key] extends Condition ? Key : never;
-};
-type AllowedPropertyNamesNames<Base, Condition> = FilterPropertyNames<Base, Condition>[keyof Base];
-
-export type StatePropertyNames<T> = AllowedPropertyNamesNames<State, T>;
-
-export type PropertyChangeEvent<T = any> = (newValue: T, oldValue: T) => void;
+import { PropertyChangeEvent, StatePropertyNames } from '../../model/actions/global';
 
 const handlers = new Map<string, PropertyChangeEvent[]>();
 
