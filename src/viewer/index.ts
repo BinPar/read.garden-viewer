@@ -9,6 +9,7 @@ import { getState, initializeState } from '../lib/state';
 import setInitialProperties from '../lib/styles/setInitialProperties';
 import createBasicDOMElements from '../utils/createBasicDOMElements';
 import { setupGlobalEvents, removeGlobalEvents } from '../utils/globalEvents';
+import animationController from '../lib/animation/animationController';
 
 /**
  * Main viewer function
@@ -17,7 +18,7 @@ import { setupGlobalEvents, removeGlobalEvents } from '../utils/globalEvents';
  */
 const viewer: ViewerFunction = (config) => {
   initializeState(config);
-  const state = getState();
+  const state = getState();  
   const api: APIInterface = {
     dispatch,
     state,
@@ -26,6 +27,7 @@ const viewer: ViewerFunction = (config) => {
   setInitialProperties(state);
   createBasicDOMElements(state);
   setupGlobalEvents(api.dispatch);
+  animationController(state, api.dispatch);
   const loadNewContent: LoadNewContent = {
     type: 'loadNewContent',
     slug: config.slug,

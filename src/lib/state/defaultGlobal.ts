@@ -11,9 +11,9 @@ const defaultGlobal: DefaultGlobalState = {
       right: 10,
     },
     uiMode: {
-      top: 20,
-      bottom: 20,
-      left: 124,
+      top: 50,
+      bottom: 100,
+      left: 200,
       right: 20,
     },
   },

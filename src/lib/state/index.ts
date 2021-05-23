@@ -60,6 +60,11 @@ export const initializeState = (initialConfig: InitialConfig): void => {
     title: 'Title', // From initial config
     slug: config.slug,
     contentSlug: config.contentSlug,
+    animate: false,
+    animating: false,
+    animationFriction: config.animationFriction,
+    animationSpeed: config.animationSpeed,
+    animationInertia: config.animationInertia,
     pageLabel: config.contentSlug, // Should be different (maybe we need to add `initialPageLabel`)
     pageNumber: 1, // From initial config
     scale: config.initialScale || defaultGlobal.scale,
