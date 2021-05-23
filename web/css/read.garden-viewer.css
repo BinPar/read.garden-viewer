@@ -4,27 +4,42 @@
   --safe-area-margin-correction: calc(-1px * var(--debug-viewer-safe-area));
 }
 
-html,
-body {
+* {
   margin: 0;
+  padding: 0;
+}
+
+*:before,
+*:after {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: none;
 }
 
 body {
-  height: 100vh;
+  min-height: 100vh;
+  max-height: 100vh;
   padding: 0;
   overflow-y: hidden;
   overflow-x: hidden;
   background-color: #fff;
   overscroll-behavior-y: contain;
   scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
+/* TODO: uncomment when scroll is ready */
+/* body::-webkit-scrollbar {
+  display: none;
+} */
+
 body.rg-horizontal-scroll {
-  overflow-x: scroll;
+  overflow-x: auto;
 }
 
 body.rg-vertical-scroll {
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 div#rg-container {
@@ -72,27 +87,23 @@ div.rg-content-wrapper {
   column-gap: var(--column-gap);
 }
 
+.rg-flow-layout.rg-vertical-scroll div#rg-content-placeholder {
+  overflow: hidden;
+}
+
 .rg-fixed-layout.rg-horizontal-scroll div.rg-content-wrapper div#rg-content-placeholder {
   width: var(--total-width);
   height: auto;
 }
 
 .rg-fixed-layout.rg-horizontal-scroll div.rg-content-wrapper div#rg-content-placeholder > * {
-  position: relative;
   float: left;
   contain: size;
   background-color: #ccc;
 }
 
-.rg-loading::before {
-  position: absolute;
-  content: '';
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 1;
-  background-color: #ccc;
+.rg-fixed-layout div.rg-content-wrapper div#rg-content-placeholder > * {
+  position: relative;
 }
 
 .rg-fixed-layout.rg-vertical-scroll div.rg-content-wrapper div#rg-content-placeholder {
@@ -118,6 +129,17 @@ div.rg-content-wrapper {
   margin-left: auto !important;
   margin-right: auto !important;
   display: block !important;
+}
+
+.rg-loading::before {
+  position: absolute;
+  content: '';
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  background-color: #ccc;
 }
 
 @media (max-width: 48em) {

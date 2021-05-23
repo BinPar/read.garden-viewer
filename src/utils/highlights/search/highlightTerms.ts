@@ -1,5 +1,5 @@
 import { getScrollLeftPosition } from '..';
-import { getState } from '../../../lib/state';
+import { getState, updateState } from '../../../lib/state';
 import { LayoutTypes } from '../../../model/state';
 import drawHighlights from '../drawHighlights';
 import getScrollTopPosition from '../getScrollTopPosition';
@@ -19,6 +19,7 @@ const highlightTerms = (terms: string[]): void => {
       if (contentPlaceholderNode) {
         const ranges = getRangesRecursively(contentPlaceholderNode, terms, true);
         drawHighlights(searchTermsHighlightsNode, ranges);
+        updateState({ searchRanges: ranges });
       }
     }
 
@@ -94,6 +95,7 @@ const highlightTerms = (terms: string[]): void => {
         }
       }
       drawHighlights(searchTermsHighlightsNode, ranges, true);
+      updateState({ searchRanges: [...state.searchRanges, ...ranges] });
     }
   }
 };

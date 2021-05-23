@@ -1,5 +1,6 @@
 import log from 'loglevel';
 import getFirstTextNode from '../../getFirstTextNode';
+import getNextSibling from '../../getNextSibling';
 import setCSSProperty from '../../setCSSProperty';
 import extendToWord from '../extendToWord';
 import cleanText from './cleanText';
@@ -20,10 +21,7 @@ const getSearchHighlightsRanges = (contentWrapper: HTMLElement, terms: string[])
     // eslint-disable-next-line no-param-reassign
     contentWrapper.dataset.highlighted = termsKey;
   }
-  if (
-    !terms.length ||
-    !terms.some((t) => contentWrapper.innerText.indexOf(t) !== -1)
-  ) {
+  if (!terms.length || !terms.some((t) => contentWrapper.innerText.indexOf(t) !== -1)) {
     return [];
   }
   const sortedTerms = getSortedTerms(terms);
@@ -39,7 +37,7 @@ const getSearchHighlightsRanges = (contentWrapper: HTMLElement, terms: string[])
     range.setEnd(firstTextNode, 0);
     currentSelection.addRange(range);
     currentSelection.modify('extend', 'forward', 'character');
-    extendToWord(currentSelection);
+    extendToWord(currentSelection, contentWrapper);
     let searching = true;
     let rangeIsOutside = false;
     const resultRanges = new Array<Range>();
@@ -52,7 +50,7 @@ const getSearchHighlightsRanges = (contentWrapper: HTMLElement, terms: string[])
       texts.length > 0 && texts[0] === currentText;
     const currentRanges = searchWords.map((): Range | null => null);
     let iteratorLimit = 0;
-    while (searching && !rangeIsOutside) {
+    while (searching) {
       if (currentText) {
         let termFound = false;
         wordsToSearch.forEach((words, i): void => {
@@ -83,12 +81,28 @@ const getSearchHighlightsRanges = (contentWrapper: HTMLElement, terms: string[])
                     }
                   }
                   while (selectionRange.toString().match(/^[.,/#¡!¿?$%^&*;:{}=«»\-_`~()\][ \n]+/)) {
-                    // Starting space (" [selection]")
-                    // Starting space in different tag?
-                    selectionRange.setStart(
-                      selectionRange.startContainer,
-                      selectionRange.startOffset + 1,
-                    );
+                    if (
+                      selectionRange.startContainer.nodeType === Node.TEXT_NODE &&
+                      (selectionRange.startContainer as Text).length === selectionRange.startOffset
+                    ) {
+                      // Starting space in different node
+                      const nextSibling = getNextSibling(selectionRange.startContainer);
+                      const nextSiblingTextNode = nextSibling && getFirstTextNode(nextSibling);
+                      if (nextSiblingTextNode) {
+                        selectionRange.setStart(
+                          nextSiblingTextNode,
+                          0,
+                        );
+                      } else {
+                        selectionRange.setStartAfter(selectionRange.startContainer);
+                      }
+                    } else {
+                      // Starting space (" [selection]")
+                      selectionRange.setStart(
+                        selectionRange.startContainer,
+                        selectionRange.startOffset + 1,
+                      );
+                    }
                   }
                   resultRanges.push(selectionRange);
                 }
@@ -101,41 +115,46 @@ const getSearchHighlightsRanges = (contentWrapper: HTMLElement, terms: string[])
           }
         });
       }
-      // The selected text is empty or we can find any word to highlight
-      // we must keep searching
-      const backupRange = window.getSelection()!.getRangeAt(0);
-      currentSelection.modify('move', 'forward', 'character');
-      extendToWord(currentSelection);
-      let newRange = window.getSelection()!.getRangeAt(0);
-      if (
-        backupRange.startOffset === newRange.startOffset &&
-        backupRange.startContainer === newRange.startContainer
-      ) {
-        // Chrome infernal loop
+
+      if (rangeIsOutside) {
+        searching = false;
+      } else {
+        // The selected text is empty or we can find any word to highlight
+        // we must keep searching
+        const backupRange = window.getSelection()!.getRangeAt(0);
         currentSelection.modify('move', 'forward', 'character');
-        currentSelection.modify('move', 'forward', 'character');
-        currentSelection.modify('extend', 'forward', 'word');
-        newRange = window.getSelection()!.getRangeAt(0);
+        extendToWord(currentSelection, contentWrapper);
+        let newRange = window.getSelection()!.getRangeAt(0);
         if (
           backupRange.startOffset === newRange.startOffset &&
           backupRange.startContainer === newRange.startContainer
         ) {
-          currentSelection.modify('extend', 'forward', 'line');
+          // Chrome infernal loop
+          currentSelection.modify('move', 'forward', 'character');
+          currentSelection.modify('move', 'forward', 'character');
+          currentSelection.modify('extend', 'forward', 'word');
+          newRange = window.getSelection()!.getRangeAt(0);
+          if (
+            backupRange.startOffset === newRange.startOffset &&
+            backupRange.startContainer === newRange.startContainer
+          ) {
+            currentSelection.modify('extend', 'forward', 'line');
+          }
         }
-      }
-      currentText = currentSelection.toString();
-      if (iteratorLimit++ > 10000) {
-        log.warn('Iteration limit reached in getSearchHighlightsRanges');
-        searching = false;
-      }
-      currentText = currentText.trim().replace(/([.,/#¡!¿?$%^&*;:{}=«»\-_`~()\][])+$/g, '');
-      const { startContainer } = currentSelection.getRangeAt(0);
-      try {
-        rangeIsOutside =
-          contentWrapper === document.body ||
-          (!contentWrapper.contains(startContainer) && contentWrapper !== startContainer);
-      } catch (ex) {
-        rangeIsOutside = true;
+        currentText = currentSelection.toString();
+        if (iteratorLimit++ > 10000) {
+          log.warn('Iteration limit reached in getSearchHighlightsRanges');
+          searching = false;
+        }
+        currentText = currentText.trim().replace(/([.,/#¡!¿?$%^&*;:{}=«»\-_`~()\][])+$/g, '');
+        const { startContainer } = currentSelection.getRangeAt(0);
+        try {
+          rangeIsOutside =
+            contentWrapper === document.body ||
+            (!contentWrapper.contains(startContainer) && contentWrapper !== startContainer);
+        } catch (ex) {
+          rangeIsOutside = true;
+        }
       }
     }
     currentSelection.removeAllRanges();

@@ -138,6 +138,10 @@ export interface GlobalState {
    * Search terms to highlight
    */
   searchTerms: string[];
+  /**
+   * Search ranges
+   */
+  searchRanges: Range[];
 }
 
 /**
