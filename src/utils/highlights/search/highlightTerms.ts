@@ -33,7 +33,7 @@ const highlightTerms = (terms: string[]): void => {
       let endFound = false;
       const ranges: Range[] = [];
       if (scrollMode === 'horizontal') {
-        const leftLimit = getScrollLeftPosition();
+        const leftLimit = getScrollLeftPosition(state);
         const rightLimit = leftLimit + window.innerWidth;
         const startingElementIndex = Math.floor((leftLimit * contentsInfo.length) / totalWidth) - 2;
         for (
@@ -64,7 +64,7 @@ const highlightTerms = (terms: string[]): void => {
         }
       }
       if (scrollMode === 'vertical') {
-        const topLimit = getScrollTopPosition();
+        const topLimit = getScrollTopPosition(state);
         const bottomLimit = topLimit + document.body.clientHeight;
         const startingElementIndex = Math.floor((topLimit * contentsInfo.length) / totalHeight) - 2;
         for (
