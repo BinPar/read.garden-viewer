@@ -52,3 +52,5 @@ declare global {
 }
 
 window.readGardenViewer = viewer;
+
+export default viewer;
