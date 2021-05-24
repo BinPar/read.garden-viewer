@@ -44,8 +44,11 @@ body.rg-vertical-scroll {
 div#rg-container {
   width: 100vw;
   height: 100vh;
+  /*
+  There are performance issues that will make us do this inline
   filter: contrast(var(--contrast-viewer-color)) sepia(var(--sepia-viewer-color))
   invert(var(--invert-viewer-color));
+  */
 }
 
 div#rg-viewer {
