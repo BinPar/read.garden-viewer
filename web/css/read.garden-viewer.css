@@ -2,6 +2,7 @@
   --debug-viewer-safe-area: 0;
   --safe-area-border-width: calc(2px * var(--debug-viewer-safe-area));
   --safe-area-margin-correction: calc(-1px * var(--debug-viewer-safe-area));
+  overflow: hidden;
 }
 
 * {
@@ -21,8 +22,7 @@ body {
   min-height: 100vh;
   max-height: 100vh;
   padding: 0;
-  overflow-y: hidden;
-  overflow-x: hidden;
+  overflow: hidden;
   background-color: #fff;
   overscroll-behavior-y: contain;
   scrollbar-width: none;
@@ -32,6 +32,8 @@ body {
 body::-webkit-scrollbar {
   display: none;
 }
+/*
+Not required with virtual scroll.
 
 body.rg-horizontal-scroll {
   overflow-x: auto;
@@ -40,6 +42,7 @@ body.rg-horizontal-scroll {
 body.rg-vertical-scroll {
   overflow-y: auto;
 }
+*/
 
 div#rg-container {
   width: 100vw;

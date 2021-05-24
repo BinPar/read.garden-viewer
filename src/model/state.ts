@@ -10,6 +10,18 @@ export interface GlobalState {
    */
   slug: string;
   /**
+   * True if the user id dragging the scroll
+   */
+  dragging: boolean;
+  /**
+   * Scroll left position
+   */
+  scrollLeft: number;
+  /**
+   * Scroll left position
+   */
+  scrollTop: number;
+  /**
    * Alternates read mode on document click
    */
   toggleReadModeOnClick: boolean;
@@ -28,7 +40,7 @@ export interface GlobalState {
    */
   animating: boolean;
   /**
-   * True when the viewer can do animations   
+   * True when the viewer can do animations
    * if it is set to false, any view transition will be
    * applied directly without any animation
    */

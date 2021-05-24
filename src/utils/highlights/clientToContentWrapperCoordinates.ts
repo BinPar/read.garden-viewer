@@ -11,7 +11,7 @@ import getScrollTopPosition from './getScrollTopPosition';
 export const clientToContentWrapperLeft = (left: number): number => {
   const state = getState();
   let result = left;
-  result += getScrollLeftPosition();
+  result += getScrollLeftPosition(state);
   result -= (document.body.clientWidth * (1 - state.scale)) / 2;
   result /= state.scale;
   return result;
@@ -25,7 +25,7 @@ export const clientToContentWrapperLeft = (left: number): number => {
 export const clientToContentWrapperTop = (top: number): number => {
   const state = getState();
   let result = top;
-  result += getScrollTopPosition();
+  result += getScrollTopPosition(state);
   result -= (document.body.clientHeight * (1 - state.scale)) / 2;
   result /= state.scale;
   return result;

@@ -15,11 +15,11 @@ const getCurrentPageInViewport = (): string => {
       return '';
     }
     if (scrollMode === 'horizontal') {
-      const position = getScrollLeftPosition();
+      const position = getScrollLeftPosition(state);
       return (contentsInfo.find(c => c.maxLeft > position)?.label) || '';
     }
     if (scrollMode === 'vertical') {
-      const position = getScrollTopPosition();
+      const position = getScrollTopPosition(state);
       return (contentsInfo.find(c => c.maxTop > position)?.label) || '';
     }
     log.warn(`Method getCurrentPageInViewport called in fixed layout but scrollMode is not valid value: ${scrollMode}`);

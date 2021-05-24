@@ -60,6 +60,9 @@ export const initializeState = (initialConfig: InitialConfig): void => {
     title: 'Title', // From initial config
     slug: config.slug,
     contentSlug: config.contentSlug,
+    dragging: false,
+    scrollLeft: 0,
+    scrollTop: 0,
     animate: false,
     animating: false,
     animationFriction: config.animationFriction,
