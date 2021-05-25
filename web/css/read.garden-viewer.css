@@ -82,7 +82,6 @@ div.rg-content-wrapper {
   padding: 0 calc(var(--column-gap) / 2) 0;
   font-size: var(--font-size);
   font-family: var(--font-family);
-  hyphens: auto;
 }
 
 .rg-flow-layout.rg-horizontal-scroll div.rg-content-wrapper {
