@@ -43,7 +43,7 @@ export const initializeState = (initialConfig: InitialConfig): void => {
       ...defaultConfig.fontSize,
       ...(initialConfig.fontSize || {}),
     },
-  });
+  });  
 
   const defaultInitialMargins = config.initialReadMode
     ? defaultConfig.readModeMargin
@@ -70,7 +70,8 @@ export const initializeState = (initialConfig: InitialConfig): void => {
     animationInertia: config.animationInertia,
     pageLabel: config.contentSlug, // Should be different (maybe we need to add `initialPageLabel`)
     pageNumber: 1, // From initial config
-    scale: config.initialScale || defaultGlobal.scale,
+    scale: config.initialScale ?? defaultGlobal.scale,
+    toggleReadModeOnClick: config.toggleReadModeOnClick ?? defaultGlobal.toggleReadModeOnClick,
     searchTerms: [],
     searchRanges: [],
     debugViewerSafeArea: config.debugViewerSafeArea,
