@@ -37,7 +37,7 @@ const defaultConfig: DefaultConfig = {
   uiModeMargin: {
     top: 0,
     right: 0,
-    left: 400,
+    left: 140,
     bottom: 0,
   },
   toggleReadModeOnClick: true,

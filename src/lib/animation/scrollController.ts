@@ -50,8 +50,7 @@ const scrollController = (
       scroll.forceUpdate = false;      
     }
   };
-
-  window.addEventListener('mousedown', onDragStart);
+  state.readGardenContainerNode?.addEventListener('mousedown', onDragStart);
   window.addEventListener('mouseup', onDragEnd);
   window.addEventListener('mousemove', onDragMove);
 };
