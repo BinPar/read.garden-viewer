@@ -1,6 +1,7 @@
-import { getState, updateState } from '../lib/state';
 import { LoadNewContent } from '../model/events';
-import { LayoutTypes } from '../model/state';
+import { LayoutTypes } from '../model/viewerSettings';
+
+import { getState, updateState } from '../lib/state';
 import { highlightTerms } from './highlights/search';
 
 /**

@@ -24,6 +24,10 @@ div#testing-buttons-panel button {
   clear: both;
 }
 
+div#testing-buttons-panel button.active {
+  filter: brightness(2);
+}
+
 div#testing-buttons-panel input,
 div#testing-buttons-panel select {
   width: 100px;

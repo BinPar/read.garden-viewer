@@ -1,6 +1,8 @@
 import { AddOnChangeEvent, RemoveAllChangeEvents } from '../../model/actions/global';
 import { DispatchAPIAction } from '../../model/apiInterface';
-import { LayoutTypes, State } from '../../model/state';
+import { State } from '../../model/state';
+import { LayoutTypes } from '../../model/viewerSettings';
+
 import debugViewerSafeArea from './debugViewerSafeArea';
 import flowChapterSelect from './flowChapterSelect';
 import fontFamilyButtons from './fontFamilyButtons';
@@ -9,6 +11,7 @@ import readModeToggle from './readModeToggle';
 import scrollModeButtons from './scrollModeButtons';
 import searchButtons from './searchButtons';
 import textAlignButtons from './textAlignButtons';
+import themeButtons from './themeButtons';
 
 const setupButtonBar = async (state: State, dispatcher: DispatchAPIAction): Promise<void> => {
   const redrawToolbar = async (): Promise<void> => {
@@ -27,6 +30,7 @@ const setupButtonBar = async (state: State, dispatcher: DispatchAPIAction): Prom
     debugViewerSafeArea(testingButtonsPanel, state, dispatcher);
     scrollModeButtons(testingButtonsPanel, state, dispatcher);
     searchButtons(testingButtonsPanel, state);
+    themeButtons(testingButtonsPanel, state, dispatcher);
     if (state.layout === LayoutTypes.Flow) {
       fontSizeButtons(testingButtonsPanel, state, dispatcher);
       fontFamilyButtons(testingButtonsPanel, state, dispatcher);

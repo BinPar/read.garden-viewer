@@ -1,6 +1,8 @@
 import log from 'loglevel';
+
+import { LayoutTypes } from '../model/viewerSettings';
+
 import { getState } from '../lib/state';
-import { LayoutTypes } from '../model/state';
 import { getScrollLeftPosition, getScrollTopPosition } from './highlights';
 
 /**

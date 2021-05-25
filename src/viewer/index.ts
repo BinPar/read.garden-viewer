@@ -10,6 +10,7 @@ import setInitialProperties from '../lib/styles/setInitialProperties';
 import createBasicDOMElements from '../utils/createBasicDOMElements';
 import { setupGlobalEvents, removeGlobalEvents } from '../utils/globalEvents';
 import animationController from '../lib/animation/animationController';
+import { AppendNewContent } from '../model/actions/global';
 
 /**
  * Main viewer function
@@ -28,12 +29,18 @@ const viewer: ViewerFunction = (config) => {
   createBasicDOMElements(state);
   setupGlobalEvents(api.dispatch);
   animationController(state, api.dispatch);
-  const loadNewContent: LoadNewContent = {
-    type: 'loadNewContent',
-    slug: config.slug,
-    contentSlug: config.contentSlug,
-  };
-  if (state.config.eventHandler) {
+  if (config.initialContent) {
+    const action: AppendNewContent = {
+      type: 'appendNewContent',
+      ...config.initialContent,
+    };
+    dispatch(action);
+  } else if (state.config.eventHandler) {
+    const loadNewContent: LoadNewContent = {
+      type: 'loadNewContent',
+      slug: config.slug,
+      contentSlug: config.contentSlug,
+    };
     state.config.eventHandler(loadNewContent);
   }
   log.info('Viewer Initialized');

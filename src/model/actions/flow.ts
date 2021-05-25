@@ -1,5 +1,5 @@
+import { TextAlignModes } from '../viewerSettings';
 import { Action } from './common';
-import { TextAlignModes } from '../state';
 
 /**
  * Names of the action types for Flow Layout Actions

@@ -1,6 +1,7 @@
-import { getScrollLeftPosition } from '..';
+import { LayoutTypes } from '../../../model/viewerSettings';
+
 import { getState, updateState } from '../../../lib/state';
-import { LayoutTypes } from '../../../model/state';
+import getScrollLeftPosition from '../getScrollLeftPosition';
 import drawHighlights from '../drawHighlights';
 import getScrollTopPosition from '../getScrollTopPosition';
 import getRangesRecursively from './getRangesRecursively';

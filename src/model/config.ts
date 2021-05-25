@@ -1,5 +1,5 @@
 import { ReadGardenEventHandler } from './events';
-import { FitMode, FontSize, Margin, ViewerMode, Zoom } from './viewerSettings';
+import { FitMode, FontSize, Margin, NewContent, ViewerMode, Zoom } from './viewerSettings';
 
 /*
 SCOPES:
@@ -126,6 +126,10 @@ export interface DefaultConfig {
    * Preload order for fixed viewer with scroll
    */
   fixedViewerPreloadOrder: number[];
+  /**
+   * Initial content. If provided, viewer won't ask for content after setup
+   */
+  initialContent?: NewContent;
 }
 
 export interface RequiredConfig {

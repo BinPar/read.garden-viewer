@@ -1,6 +1,8 @@
+import { GlobalState, State } from '../model/state';
+import { LayoutTypes } from '../model/viewerSettings';
+
 import { updateState } from '../lib/state';
 import { onRecalculateFinish } from '../lib/state/changeHandlers/recalculatingHandler';
-import { GlobalState, LayoutTypes, State } from '../model/state';
 import { clientToContentWrapperLeft } from '../utils/highlights/clientToContentWrapperCoordinates';
 import setCSSProperty from '../utils/setCSSProperty';
 
@@ -73,7 +75,7 @@ const recalculate = async (state: State): Promise<Partial<State>> => {
         setCSSProperty('total-column-width', `${totalColumnWidth}px`);
 
         const totalColumns = Math.ceil(
-          (contentPlaceholderNode!.getBoundingClientRect().width / state.scale) / totalColumnWidth,
+          contentPlaceholderNode!.getBoundingClientRect().width / state.scale / totalColumnWidth,
         );
         const totalWidth = totalColumns * totalColumnWidth;
 
@@ -93,7 +95,7 @@ const recalculate = async (state: State): Promise<Partial<State>> => {
           const element = item as HTMLElement;
           const rawPosition = element.getBoundingClientRect().left;
           const contentWrapperPosition = clientToContentWrapperLeft(rawPosition);
-          
+
           const position = columnsPositions.find((p) => p < contentWrapperPosition)!;
           const page = element.dataset.page!;
           positionByLabel.set(page, position);
@@ -125,7 +127,7 @@ const recalculate = async (state: State): Promise<Partial<State>> => {
         if (document.scrollingElement?.scrollTop) {
           document.scrollingElement.scrollTop = 0;
         }
-        
+
         resolve({
           ...globalUpdate,
           totalWidth,

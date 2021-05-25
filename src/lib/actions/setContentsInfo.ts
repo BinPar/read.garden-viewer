@@ -1,6 +1,8 @@
 import { ActionDispatcher } from '../../model/actions/actionDispatcher';
 import { SetContentsInfo } from '../../model/actions/fixed';
-import { FixedViewerContentInfo, LayoutTypes, State } from '../../model/state';
+import { FixedViewerContentInfo, State } from '../../model/state';
+import { LayoutTypes } from '../../model/viewerSettings';
+
 import setCSSProperty from '../../utils/setCSSProperty';
 
 /**

@@ -13,6 +13,7 @@ import setReadMode from './setReadMode';
 import addOnChangeEvent from './addOnChangeEvent'
 import removeOnChangeEvent from './removeOnChangeEvent';
 import removeAllOnChangeEvents from './removeAllOnChangeEvents';
+import setTheme from './setTheme';
 
 /**
  * List of all action dispatchers
@@ -33,6 +34,7 @@ const actionDispatchers  = {
   addOnChangeEvent,
   removeOnChangeEvent,
   removeAllOnChangeEvents,
+  setTheme,
 };
 
 export default actionDispatchers;

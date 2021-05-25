@@ -1,4 +1,6 @@
-import { LayoutTypes, State } from '../../model/state';
+import { State } from '../../model/state';
+import { LayoutTypes } from '../../model/viewerSettings';
+
 import setCSSProperty from '../../utils/setCSSProperty';
 
 /**

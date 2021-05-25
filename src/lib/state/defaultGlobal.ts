@@ -8,6 +8,7 @@ const defaultGlobal: DefaultGlobalState = {
   cssLoaded: true,
   recalculating: false,
   toggleReadModeOnClick: true,
+  theme: 'light',
 };
 
 export default defaultGlobal;

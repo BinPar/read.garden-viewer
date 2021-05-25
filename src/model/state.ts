@@ -1,5 +1,12 @@
 import { Config } from './config';
-import { FitMode, Margin } from './viewerSettings';
+import {
+  FitMode,
+  LayoutTypes,
+  Margin,
+  ScrollModes,
+  TextAlignModes,
+  ViewerTheme,
+} from './viewerSettings';
 
 /**
  * Global state
@@ -167,6 +174,10 @@ export interface GlobalState {
    * Search ranges
    */
   searchRanges: Range[];
+  /**
+   * Viewer theme (light, dark...)
+   */
+  theme: ViewerTheme;
 }
 
 /**
@@ -183,26 +194,9 @@ export type DefaultGlobalState = Partial<GlobalState> &
       | 'wrapperReady'
       | 'readMode'
       | 'toggleReadModeOnClick'
+      | 'theme'
     >
   >;
-
-/**
- * Layout types
- */
-export enum LayoutTypes {
-  Fixed = 'fixed',
-  Flow = 'flow',
-}
-
-/**
- * Available text align modes
- */
-export type TextAlignModes = 'start' | 'justify' | null;
-
-/**
- * Available scroll modes
- */
-export type ScrollModes = 'vertical' | 'horizontal';
 
 export interface FixedContentInfo {
   /**

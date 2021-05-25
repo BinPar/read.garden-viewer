@@ -1,9 +1,10 @@
 import { ActionDispatcher } from '../../model/actions/actionDispatcher';
 import { SetFontSize } from '../../model/actions/flow';
-import { LayoutTypes, State } from '../../model/state';
+import { State } from '../../model/state';
+import { LayoutTypes } from '../../model/viewerSettings';
+
 import { drawHighlights } from '../../utils/highlights';
 import { clean } from '../../utils/highlights/search';
-
 import setCSSProperty from '../../utils/setCSSProperty';
 import recalculate from '../../viewer/recalculate';
 import { updateState } from '../state';

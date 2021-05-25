@@ -1,6 +1,8 @@
 import { ActionDispatcher } from '../../model/actions/actionDispatcher';
 import { SetTextAlign } from '../../model/actions/flow';
-import { LayoutTypes, State } from '../../model/state';
+import { State } from '../../model/state';
+import { LayoutTypes } from '../../model/viewerSettings';
+
 import { drawHighlights } from '../../utils/highlights';
 import removeCSSProperty from '../../utils/removeCSSProperty';
 import setCSSProperty from '../../utils/setCSSProperty';

@@ -1,4 +1,5 @@
-import { LayoutTypes, ScrollModes, FullState } from '../state';
+import { FullState } from '../state';
+import { NewContent, ScrollModes, ViewerTheme } from '../viewerSettings';
 import { Action } from './common';
 
 type FilterPropertyNames<Base, Condition> = {
@@ -24,32 +25,8 @@ export enum GlobalActionTypes {
 /**
  * Appends new loaded content
  */
- export interface AppendNewContent extends Action {
+ export interface AppendNewContent extends Action, NewContent {
   type: 'appendNewContent';
-  /**
-   * Layout type
-   */
-  layout: LayoutTypes;
-  /**
-   * First level content slug (book, work...)
-   */
-  slug: string;
-  /**
-   * Second level content slug (page, chapter...)
-   */
-  contentSlug: string;
-  /**
-   * Second level content label (page, chapter...)
-   */
-  label: string;
-  /**
-   * Content CSS URL
-   */
-  cssURL: string;
-  /**
-   * Content HTML
-   */
-  htmlContent: string;
 }
 
 
@@ -78,12 +55,12 @@ export interface SetScrollMode extends Action {
 /**
  * Sets the Dark or Light Mode
  */
-export interface SetDarkMode extends Action {
-  type: 'setDarkMode';
+export interface SetTheme extends Action {
+  type: 'setTheme';
   /**
-   * True for dark mode
+   * Viewer theme (light, dark...)
    */
-  isDark: Boolean;
+  theme: ViewerTheme;
 }
 
 /**
@@ -141,7 +118,7 @@ export interface SetReadMode extends Action {
  */
 export type GlobalActions =
   | SetScrollMode
-  | SetDarkMode
+  | SetTheme
   | NavigateToPage
   | SetDebugViewerSafeArea
   | AppendNewContent

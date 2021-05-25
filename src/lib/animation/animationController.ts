@@ -1,6 +1,8 @@
 /* eslint-disable no-param-reassign */
 import { DispatchAPIAction } from '../../model/apiInterface';
-import { LayoutTypes, State } from '../../model/state';
+import { State } from '../../model/state';
+import { LayoutTypes } from '../../model/viewerSettings';
+
 import setCSSProperty from '../../utils/setCSSProperty';
 import { updateState } from '../state';
 import { addOnChangeEventListener } from '../state/stateChangeEvents';

@@ -1,4 +1,5 @@
-import { DefaultFlowState, LayoutTypes } from '../../model/state';
+import { DefaultFlowState } from '../../model/state';
+import { LayoutTypes } from '../../model/viewerSettings';
 
 const defaultFlow: DefaultFlowState = {
   layout: LayoutTypes.Flow,

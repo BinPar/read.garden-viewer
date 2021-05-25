@@ -1,4 +1,4 @@
-import { LayoutTypes } from '../../model/state';
+import { LayoutTypes } from '../../model/viewerSettings';
 
 export type ResourceTypes = 'video' | 'image' | 'doc' | 'interactive' | 'link';
 

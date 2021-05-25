@@ -1,7 +1,9 @@
 import log from 'loglevel';
+
 import { ActionDispatcher } from '../../model/actions/actionDispatcher';
 import { AppendNewContent } from '../../model/actions/global';
-import { LayoutTypes, State } from '../../model/state';
+import { State } from '../../model/state';
+import { LayoutTypes } from '../../model/viewerSettings';
 
 import setCSSProperty from '../../utils/setCSSProperty';
 import checkImagesHeight from '../../utils/checkImagesHeight';

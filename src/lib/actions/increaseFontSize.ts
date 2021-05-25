@@ -1,6 +1,8 @@
 import { ActionDispatcher } from '../../model/actions/actionDispatcher';
 import { IncreaseFontSize } from '../../model/actions/flow';
-import { LayoutTypes, State } from '../../model/state';
+import { State } from '../../model/state';
+import { LayoutTypes } from '../../model/viewerSettings';
+
 import { setSize } from './setFontSize';
 
 /**

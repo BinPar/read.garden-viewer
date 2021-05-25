@@ -1,6 +1,7 @@
 import { SetTextAlign } from '../../model/actions/flow';
 import { DispatchAPIAction } from '../../model/apiInterface';
-import { LayoutTypes, State, TextAlignModes } from '../../model/state';
+import { State } from '../../model/state';
+import { LayoutTypes, TextAlignModes } from '../../model/viewerSettings';
 
 const textAlignButtons = (
   container: HTMLDivElement,

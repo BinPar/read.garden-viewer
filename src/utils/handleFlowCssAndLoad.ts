@@ -1,5 +1,7 @@
+import { LayoutTypes } from '../model/viewerSettings';
+
 import { getState } from '../lib/state';
-import { LayoutTypes } from '../model/state';
+
 
 /**
  * Handles contents CSS urls and waits for load before calling provided callback

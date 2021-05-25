@@ -51,6 +51,11 @@ declare global {
   }
 }
 
-window.readGardenViewer = viewer;
+if (typeof window !== 'undefined') {
+  window.readGardenViewer = viewer;
+}
 
 export default viewer;
+
+export { FixedContentInfo } from './model/state';
+export { ReadGardenEventHandler } from './model/events';

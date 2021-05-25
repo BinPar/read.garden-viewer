@@ -2,7 +2,7 @@ import log from 'loglevel';
 
 import { AppendNewContent } from '../../model/actions/global';
 import { LoadNewContent } from '../../model/events';
-import { LayoutTypes } from '../../model/state';
+import { LayoutTypes } from '../../model/viewerSettings';
 
 import loadIndexFile from '../utils/loadIndexFile';
 import replaceUrls from '../utils/replaceUrls';

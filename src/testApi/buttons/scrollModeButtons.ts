@@ -1,6 +1,7 @@
 import { SetScrollMode } from '../../model/actions/global';
 import { DispatchAPIAction } from '../../model/apiInterface';
-import { LayoutTypes, ScrollModes, State } from '../../model/state';
+import { State } from '../../model/state';
+import { LayoutTypes, ScrollModes } from '../../model/viewerSettings';
 
 const scrollModeButtons = (
   container: HTMLDivElement,
