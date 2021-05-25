@@ -57,8 +57,8 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
 
   const onReadModeChangeEvent = (): void => {
     const newMargins = state.readMode
-      ? { ...state.securityMargins.readMode }
-      : { ...state.securityMargins.uiMode };
+      ? { ...state.config.readModeMargin }
+      : { ...state.config.uiModeMargin};
     if (!state.readMode && state.layout === LayoutTypes.Flow) {
       newMargins.bottom += state.fontSize * 3;
     }

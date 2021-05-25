@@ -60,19 +60,6 @@ export interface GlobalState {
    */
   animationFriction: number;
   /**
-   * Security Margins
-   */
-  securityMargins: {
-    /**
-     * Read Mode Safe Margins
-     */
-    readMode: Margin;
-    /**
-     * User Interface Mode Safe Margins
-     */
-    uiMode: Margin;
-  };
-  /**
    * Main container DOM node
    */
   readGardenContainerNode?: HTMLDivElement;
@@ -194,7 +181,6 @@ export type DefaultGlobalState = Partial<GlobalState> &
       | 'cssLoaded'
       | 'recalculating'
       | 'wrapperReady'
-      | 'securityMargins'
       | 'readMode'
       | 'toggleReadModeOnClick'
     >

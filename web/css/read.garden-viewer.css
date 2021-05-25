@@ -1,7 +1,6 @@
 :root {
   --debug-viewer-safe-area: 0;
   --safe-area-border-width: calc(2px * var(--debug-viewer-safe-area));
-  --safe-area-margin-correction: calc(-1px * var(--debug-viewer-safe-area));
   overflow: hidden;
 }
 
@@ -57,7 +56,7 @@ div#rg-container {
 div#rg-viewer {
   width: 100vw;
   height: 100vh;
-  margin-top: calc(var(--viewer-margin-top) + var(--safe-area-margin-correction));
+  margin-top: var(--viewer-margin-top);
   transform: translateX(var(--horizontal-translate)) translateY(var(--vertical-translate))
     scale(var(--scale));
   background-color: white;
@@ -65,7 +64,7 @@ div#rg-viewer {
 }
 
 div.rg-content-wrapper {
-  border: solid var(--safe-area-border-width) red;
+  outline: solid var(--safe-area-border-width) red;
   margin: var(--safe-area-margin-correction);
   height: 100%;
   padding: var(--content-wrapper-padding);
