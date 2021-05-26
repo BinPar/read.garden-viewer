@@ -37,11 +37,11 @@ export const initializeState = (initialConfig: InitialConfig): void => {
     ...initialConfig,
     zoom: {
       ...defaultConfig.zoom,
-      ...(initialConfig.zoom || {}),
+      ...(initialConfig.zoom ?? {}),
     },
     fontSize: {
       ...defaultConfig.fontSize,
-      ...(initialConfig.fontSize || {}),
+      ...(initialConfig.fontSize ?? {}),
     },
   });  
 
@@ -55,7 +55,7 @@ export const initializeState = (initialConfig: InitialConfig): void => {
     config,
     margin: {
       ...defaultInitialMargins,
-      ...(initialMargins || {}),
+      ...(initialMargins ?? {}),
     },
     title: 'Title', // From initial config
     slug: config.slug,

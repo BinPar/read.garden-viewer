@@ -7,9 +7,9 @@ const defaultConfig: DefaultConfig = {
   initialFitMode: FitMode.Height,
   initialReadMode: true,
   showPageSeparation: false,
-  animationFriction: 0.15,
+  animationFriction: 10,
   animationSpeed: 300,
-  animationInertia: 0.8,
+  animationInertia: 20,
   zoom: {
     max: 4,
     min: 0.1,

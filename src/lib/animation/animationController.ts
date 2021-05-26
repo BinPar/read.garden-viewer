@@ -60,7 +60,7 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
   const onReadModeChangeEvent = (): void => {
     const newMargins = state.readMode
       ? { ...state.config.readModeMargin }
-      : { ...state.config.uiModeMargin};
+      : { ...state.config.uiModeMargin };
     if (!state.readMode && state.layout === LayoutTypes.Flow) {
       newMargins.bottom += state.fontSize * 3;
     }
@@ -71,16 +71,19 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
     const targetHeight = currentHeight - newMargins.top - newMargins.bottom;
     const heightNeededScale = targetHeight / currentHeight;
     scale.target = Math.max(Math.min(widthNeededScale, heightNeededScale), 0);
-    const marginWidth = (currentWidth - newMargins.left) * (1 - scale.target);
-    left.target = newMargins.left - marginWidth / 2;
+    const widthReduction = currentWidth * (1 - scale.target);
+    const marginWidth = widthReduction - newMargins.left - newMargins.right;
+    left.target = newMargins.left + marginWidth / 2;
+
+    const heightReduction = currentHeight * (1 - scale.target);
+    const marginHeight = heightReduction - newMargins.top - newMargins.bottom;
+    top.target = newMargins.top + marginHeight / 2;
     if (state.scrollMode === 'horizontal') {
       left.target -= scroll.current * (1 - scale.target);
-    }
+    }    
     if (state.scrollMode === 'vertical') {
-      top.target -= scroll.current * (1 - scale.target);
+        top.target = newMargins.top - scroll.current * (1 - scale.target);
     }
-    const marginHeight = (currentHeight - newMargins.top) * (1 - scale.target);
-    top.target = newMargins.top - marginHeight / 2;
     executeTransitions();
   };
 

@@ -57,10 +57,11 @@ div#rg-viewer {
   width: 100vw;
   height: 100vh;
   margin-top: var(--viewer-margin-top);
+  transform-origin: top left;
   transform: translateX(var(--horizontal-translate)) translateY(var(--vertical-translate))
     scale(var(--scale));
   background-color: white;
-  line-height: var(--line-height);
+  line-height: var(--line-height);  
 }
 
 div.rg-content-wrapper {

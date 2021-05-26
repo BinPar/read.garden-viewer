@@ -2,19 +2,17 @@
 import { State } from "../../model/state";
 import { InterpolationValue } from "./interpolationValues";
 
-const interpolate = (state: State, value: InterpolationValue): boolean => {
-  if (value.target === value.current  && Math.abs(value.speed) < 1) {
-    return false;
-  }
+const interpolate = (state: State, value: InterpolationValue): boolean => {  
   const delta = value.target - value.current;
-  if (Math.abs(delta) < value.limit && Math.abs(value.speed) < 1) {
+  if (Math.abs(delta) < value.limit && Math.abs(value.speed) < value.limit) {
     value.current = value.target;
     value.speed = 0;
     return false;
   }
-  value.speed += delta / (state.animationSpeed / value.ratio);
+  const animationTension = state.animationSpeed / 10;
+  value.speed += delta / animationTension;
   value.current += value.speed;
-  value.speed *= 1 - state.animationFriction * (value.ratio / 10);
+  value.speed *= 1 - (state.animationFriction / animationTension) ;
   return true;
 };
 
