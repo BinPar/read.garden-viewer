@@ -3,7 +3,7 @@ import { LayoutTypes } from '../model/viewerSettings';
 
 import { updateState } from '../lib/state';
 import { onRecalculateFinish } from '../lib/state/changeHandlers/recalculatingHandler';
-import { clientToContentWrapperLeft } from '../utils/highlights/clientToContentWrapperCoordinates';
+import { clientToContentWrapperLeft, clientToContentWrapperTop } from '../utils/highlights/clientToContentWrapperCoordinates';
 import setCSSProperty from '../utils/setCSSProperty';
 
 const charWidthFactor = 1.65;
@@ -95,13 +95,12 @@ const recalculate = async (state: State): Promise<Partial<State>> => {
           const element = item as HTMLElement;
           const rawPosition = element.getBoundingClientRect().left;
           const contentWrapperPosition = clientToContentWrapperLeft(rawPosition);
-
           const position = columnsPositions.find((p) => p < contentWrapperPosition)!;
           const page = element.dataset.page!;
           positionByLabel.set(page, position);
-          labelByPosition.set(position, page);
           lastLabel = page;
           if (lastPosition !== position) {
+            labelByPosition.set(position, page);
             const label = document.createElement('div');
             label.classList.add('rg-label');
             const labelP = document.createElement('p');
@@ -154,8 +153,22 @@ const recalculate = async (state: State): Promise<Partial<State>> => {
         });
 
         window.requestAnimationFrame(() => {
+          const positionByLabel = new Map<string, number>();
+          const labelByPosition = new Map<number, string>();
+  
+          contentPlaceholderNode!.querySelectorAll('[data-page]').forEach((item) => {
+            const element = item as HTMLElement;
+            const rawPosition = element.getBoundingClientRect().top;
+            const position = clientToContentWrapperTop(rawPosition);
+            const page = element.dataset.page!;
+            positionByLabel.set(page, position);
+            labelByPosition.set(position, page);
+          });
+
           updateState({
             totalHeight: contentPlaceholderNode!.getBoundingClientRect().height,
+            positionByLabel,
+            labelByPosition,
           });
         });
         return;

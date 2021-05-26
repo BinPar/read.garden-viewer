@@ -18,16 +18,29 @@ const getCurrentPageInViewport = (): string => {
     }
     if (scrollMode === 'horizontal') {
       const position = getScrollLeftPosition(state);
-      return (contentsInfo.find(c => c.maxLeft > position)?.label) || '';
+      return contentsInfo.find((c) => c.maxLeft > position)?.label || '';
     }
     if (scrollMode === 'vertical') {
       const position = getScrollTopPosition(state);
-      return (contentsInfo.find(c => c.maxTop > position)?.label) || '';
+      return contentsInfo.find((c) => c.maxTop > position)?.label || '';
     }
-    log.warn(`Method getCurrentPageInViewport called in fixed layout but scrollMode is not valid value: ${scrollMode}`);
+    log.warn(
+      `Method getCurrentPageInViewport called in fixed layout but scrollMode is not valid value: ${scrollMode}`,
+    );
   }
   if (state.layout === LayoutTypes.Flow) {
-    log.warn('Method getCurrentPageInViewport is not implemented for flow layout');
+    const { scrollMode, labelByPosition } = state;
+    if (!labelByPosition || !labelByPosition.size) {
+      log.warn('Missing labelByPosition map, unable to get current page in viewport');
+      return '';
+    }
+    const position =
+      scrollMode === 'horizontal' ? getScrollLeftPosition(state) : getScrollTopPosition(state);
+    const [, label] = Array.from(labelByPosition.entries()).find(([pos]) => pos >= position) || [
+      0,
+      '',
+    ];
+    return label;
   }
   return '';
 };
