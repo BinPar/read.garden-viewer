@@ -74,6 +74,10 @@ div.rg-content-wrapper {
   -webkit-user-select: var(--user-select);
 }
 
+div.rg-content-wrapper #rg-content-placeholder * {
+  -webkit-backface-visibility: unset;
+}
+
 /* .rg-vertical-scroll div.rg-content-wrapper {
   overflow-y: scroll;
 } */
