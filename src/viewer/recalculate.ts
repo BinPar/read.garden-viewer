@@ -152,6 +152,12 @@ const recalculate = async (state: State): Promise<Partial<State>> => {
           ...globalUpdate,
           columnGap,
         });
+
+        window.requestAnimationFrame(() => {
+          updateState({
+            totalHeight: contentPlaceholderNode!.getBoundingClientRect().height,
+          });
+        });
         return;
       }
 
