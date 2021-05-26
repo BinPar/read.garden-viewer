@@ -17,12 +17,14 @@ const readModeToggle = async (
     event: updateInnerText,
   };
   await dispatcher(onReadModeChange);
-  const onClick = async (): Promise<void> => {
-    const action: SetReadMode = {
-      type: 'setReadMode',
-      readModeActive: !state.readMode,
-    };
-    await dispatcher(action);
+  const onClick = async (ev: MouseEvent): Promise<void> => {
+    if (ev.button === 0) {
+      const action: SetReadMode = {
+        type: 'setReadMode',
+        readModeActive: !state.readMode,
+      };
+      await dispatcher(action);
+    }
   };
   button.onclick = onClick;
   updateInnerText();
