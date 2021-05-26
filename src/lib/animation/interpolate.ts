@@ -4,7 +4,7 @@ import { InterpolationValue } from "./interpolationValues";
 
 const interpolate = (state: State, value: InterpolationValue): boolean => {  
   const delta = value.target - value.current;
-  if (Math.abs(delta) < value.limit && Math.abs(value.speed) < value.limit) {
+  if (Math.abs(delta) < value.limit) {
     value.current = value.target;
     value.speed = 0;
     return false;
