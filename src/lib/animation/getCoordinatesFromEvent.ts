@@ -11,7 +11,6 @@ const getCoordinatesFromEvent = (ev: MouseEvent | TouchEvent): Coordinates => {
     };
   } 
   const touch = (ev as TouchEvent).touches.length ? (ev as TouchEvent).touches[0] : (ev as TouchEvent).changedTouches[0];
-  
   return {
     x: touch.clientX,
     y: touch.clientY,

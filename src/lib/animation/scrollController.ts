@@ -1,5 +1,6 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { SetReadMode } from '../../model/actions/global';
 import { DispatchAPIAction } from '../../model/apiInterface';
 import { State } from '../../model/state';
 import setCSSProperty from '../../utils/setCSSProperty';
@@ -82,12 +83,65 @@ const scrollController = (
       lastMoveMilliseconds = new Date().getMilliseconds();
     }
   };
+
+  const onWheelStop = (): void => {
+    onWheelStopTimeout = null;
+    scrollInertiaAndLimits(state, scroll, lastDelta, executeTransitions);
+  }
+
+  let onWheelStopTimeout: NodeJS.Timeout | null = null;
+
+  const onWeel = (ev: WheelEvent): void => {
+    if (ev.ctrlKey) {
+      if (state.layout === 'flow') {
+        if (ev.deltaY < 0 && !state.readMode) {
+          const action: SetReadMode = {
+            type: 'setReadMode',
+            readModeActive: true,
+          };
+          dispatch(action);
+        }
+        if (ev.deltaY > 0 && state.readMode) {
+          const action: SetReadMode = {
+            type: 'setReadMode',
+            readModeActive: false,
+          };
+          dispatch(action);
+        }
+      }
+      ev.preventDefault();
+    } else {
+      if (!mouseDown) {
+        if (!state.dragging) {
+          updateState({
+            dragging: true,
+          });
+        }
+        scroll.forceUpdate = true;
+        if (ev.deltaX !== 0) {
+          lastDelta = ev.deltaX * -1;
+        } else {
+          lastDelta = ev.deltaY * -1;
+        }
+        scroll.current += lastDelta;
+        scroll.target = scroll.current;
+        executeTransitions();
+        scroll.forceUpdate = false;
+        if (onWheelStopTimeout) {
+          clearTimeout(onWheelStopTimeout);
+        }
+        onWheelStopTimeout = setTimeout(onWheelStop, 50);
+        ev.preventDefault();
+      }
+    };
+  }
   state.readGardenContainerNode?.addEventListener('mousedown', onDragStart);
   state.readGardenContainerNode?.addEventListener('touchstart', onDragStart);
   window.addEventListener('mouseup', onDragEnd);
   window.addEventListener('touchend', onDragEnd);
   window.addEventListener('mousemove', onDragMove);
   window.addEventListener('touchmove', onDragMove);
+  state.readGardenContainerNode?.addEventListener('wheel', onWeel);
 };
 
 export default scrollController;
