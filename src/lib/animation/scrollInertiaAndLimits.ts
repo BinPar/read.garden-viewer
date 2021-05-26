@@ -49,7 +49,6 @@ const scrollInertiaAndLimits = (
       scroll.target = target * -1;
     }
   } else {
-    console.log(lastDelta);
     scroll.target += lastDelta * state.animationInertia;
     min = 0;
   }
