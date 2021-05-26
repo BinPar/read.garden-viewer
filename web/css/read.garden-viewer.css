@@ -1,7 +1,6 @@
 :root {
   --debug-viewer-safe-area: 0;
   --safe-area-border-width: calc(2px * var(--debug-viewer-safe-area));
-  overflow: hidden;
 }
 
 * {
