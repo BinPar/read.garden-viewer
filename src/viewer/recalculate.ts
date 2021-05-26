@@ -3,10 +3,40 @@ import { LayoutTypes } from '../model/viewerSettings';
 
 import { updateState } from '../lib/state';
 import { onRecalculateFinish } from '../lib/state/changeHandlers/recalculatingHandler';
-import { clientToContentWrapperLeft, clientToContentWrapperTop } from '../utils/highlights/clientToContentWrapperCoordinates';
+import {
+  clientToContentWrapperLeft,
+  clientToContentWrapperTop,
+} from '../utils/highlights/clientToContentWrapperCoordinates';
 import setCSSProperty from '../utils/setCSSProperty';
 
 const charWidthFactor = 1.65;
+
+/**
+ * Returns label position. Created because Safari wasn't able to measure full content width
+ * properly, so another approach was needed for this particular case. If this new approach is
+ * not needed, we keep using the old one that works in the rest of browsers. 
+ * @param labelPosition Label left position (according to content wrapper)
+ * @param columnsPositions Columns positions array
+ * @param contentPlaceHolderHeight Content placeholder height (from bounding rect)
+ * @param containerHeight Container height
+ * @param columnGap Column gap
+ * @param totalColumnWidth Total column width (including gap)
+ * @returns {number} Column position
+ */
+const getLabelPosition = (
+  labelPosition: number,
+  columnsPositions: number[],
+  contentPlaceHolderHeight: number,
+  containerHeight: number,
+  columnGap: number,
+  totalColumnWidth: number,
+): number => {
+  if (columnsPositions.length === 1 && contentPlaceHolderHeight > containerHeight) {
+    const fixedPosition = labelPosition - columnGap / 2;
+    return Math.round(fixedPosition / totalColumnWidth) * totalColumnWidth;
+  }
+  return columnsPositions.find((p) => p < labelPosition)!;
+};
 
 /**
  * Recalculates viewer layout
@@ -77,9 +107,6 @@ const recalculate = async (state: State): Promise<Partial<State>> => {
         const totalColumns = Math.ceil(
           contentPlaceholderNode!.getBoundingClientRect().width / state.scale / totalColumnWidth,
         );
-        const totalWidth = totalColumns * totalColumnWidth;
-
-        setCSSProperty('total-width', `${totalWidth}px`);
         const columnsPositions = Array(totalColumns)
           .fill(0)
           .map((_, i) => i * totalColumnWidth)
@@ -91,11 +118,19 @@ const recalculate = async (state: State): Promise<Partial<State>> => {
         let labelsCount = 0;
         let lastLabel = '';
 
+        let minTotalWidth = 0;
         contentPlaceholderNode!.querySelectorAll('[data-page]').forEach((item) => {
           const element = item as HTMLElement;
           const rawPosition = element.getBoundingClientRect().left;
           const contentWrapperPosition = clientToContentWrapperLeft(rawPosition);
-          const position = columnsPositions.find((p) => p < contentWrapperPosition)!;
+          const position = getLabelPosition(
+            contentWrapperPosition,
+            columnsPositions,
+            contentPlaceholderNode!.getBoundingClientRect().height,
+            containerHeight,
+            columnGap,
+            totalColumnWidth,
+          );
           const page = element.dataset.page!;
           positionByLabel.set(page, position);
           lastLabel = page;
@@ -110,6 +145,7 @@ const recalculate = async (state: State): Promise<Partial<State>> => {
             labelsCount++;
           }
           lastPosition = position;
+          minTotalWidth = Math.max(minTotalWidth, position);
         });
 
         if (lastLabel) {
@@ -126,6 +162,13 @@ const recalculate = async (state: State): Promise<Partial<State>> => {
         if (document.scrollingElement?.scrollTop) {
           document.scrollingElement.scrollTop = 0;
         }
+
+        const totalWidth = Math.max(
+          totalColumns * totalColumnWidth,
+          minTotalWidth + totalColumnWidth,
+        );
+
+        setCSSProperty('total-width', `${totalWidth}px`);
 
         resolve({
           ...globalUpdate,
@@ -155,7 +198,7 @@ const recalculate = async (state: State): Promise<Partial<State>> => {
         window.requestAnimationFrame(() => {
           const positionByLabel = new Map<string, number>();
           const labelByPosition = new Map<number, string>();
-  
+
           contentPlaceholderNode!.querySelectorAll('[data-page]').forEach((item) => {
             const element = item as HTMLElement;
             const rawPosition = element.getBoundingClientRect().top;

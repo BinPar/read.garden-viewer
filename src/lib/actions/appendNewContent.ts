@@ -53,6 +53,14 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
           drawHighlights(searchTermsHighlightsNode!);
           contentPlaceholderNode!.innerHTML = action.htmlContent;
 
+          const div = document.createElement('div');
+          div.style.position = 'absolute';
+          div.style.top = '0';
+          div.style.right = '0';
+          div.style.bottom = '0';
+          div.style.left = '0';
+          contentPlaceholderNode!.appendChild(div);
+
           window.requestAnimationFrame(() => {
             window.requestAnimationFrame(() => {
               let replace = true;
