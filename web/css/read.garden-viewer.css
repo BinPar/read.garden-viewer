@@ -93,6 +93,7 @@ div.rg-content-wrapper #rg-content-placeholder * {
   column-count: var(--column-count);
   column-rule: 1px solid #eee;
   column-gap: var(--column-gap);
+  column-width: var(--column-width);
 }
 
 .rg-flow-layout.rg-vertical-scroll div#rg-content-placeholder {
