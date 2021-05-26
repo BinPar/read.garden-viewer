@@ -2,6 +2,7 @@ import { AddOnChangeEvent, RemoveAllChangeEvents } from '../../model/actions/glo
 import { DispatchAPIAction } from '../../model/apiInterface';
 import { State } from '../../model/state';
 import { LayoutTypes } from '../../model/viewerSettings';
+import chapterNavigationButtons from './chapterNavigationButtons';
 
 import debugViewerSafeArea from './debugViewerSafeArea';
 import flowChapterSelect from './flowChapterSelect';
@@ -35,6 +36,7 @@ const setupButtonBar = async (state: State, dispatcher: DispatchAPIAction): Prom
       fontSizeButtons(testingButtonsPanel, state, dispatcher);
       fontFamilyButtons(testingButtonsPanel, state, dispatcher);
       textAlignButtons(testingButtonsPanel, state, dispatcher);
+      chapterNavigationButtons(testingButtonsPanel, state, dispatcher);
       flowChapterSelect(testingButtonsPanel, state);
     }    
   };

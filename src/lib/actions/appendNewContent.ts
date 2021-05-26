@@ -62,6 +62,8 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
                 setCSSProperty('viewer-margin-top', '0');
                 const finalPartialState: Partial<State> = {
                   ...recalculateState,
+                  slug: action.slug,
+                  contentSlug: action.contentSlug,
                   cssLoaded: true,
                 };
                 if (replace) {
@@ -150,6 +152,8 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
             const finalPartialState: Partial<State> = {
               ...recalculateState,
               layout: state.layout,
+              slug: action.slug,
+              contentSlug: action.contentSlug,
               cssLoaded: true,
             };
             updateState({ loadingContent: false });

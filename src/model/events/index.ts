@@ -5,7 +5,7 @@ export interface ReadGardenEvent {
 /**
  * On page change event
  */
-export interface PageChange extends ReadGardenEvent{
+export interface PageChange extends ReadGardenEvent {
   type: 'pageChange';
   /**
    * New page label
@@ -39,7 +39,7 @@ export interface GetContentsInfo extends ReadGardenEvent {
 export interface GetTerms extends ReadGardenEvent {
   type: 'getTerms';
   /**
-   * Slug of the first level  content (book, work...)
+   * Slug of the first level content (book, work...)
    */
   slug: string;
   /**
@@ -48,7 +48,32 @@ export interface GetTerms extends ReadGardenEvent {
   text: string;
 }
 
-export type ReadGardenEvents = PageChange | LoadNewContent | GetContentsInfo | GetTerms;
+export interface LoadChapterInfo {
+  /**
+   * Slug of the first level content (book, work...)
+   */
+  slug: string;
+  /**
+   * Current slug of the second level content (page, chapter...)
+   */
+  currentContentSlug: string;
+}
+
+export interface LoadNextChapter extends ReadGardenEvent, LoadChapterInfo {
+  type: 'loadNextChapter';
+}
+
+export interface LoadPreviousChapter extends ReadGardenEvent, LoadChapterInfo {
+  type: 'loadPreviousChapter';
+}
+
+export type ReadGardenEvents =
+  | PageChange
+  | LoadNewContent
+  | GetContentsInfo
+  | GetTerms
+  | LoadNextChapter
+  | LoadPreviousChapter;
 
 export type ReadGardenEventHandler = (event: ReadGardenEvents) => Promise<void>;
 

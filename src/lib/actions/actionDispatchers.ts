@@ -14,6 +14,8 @@ import addOnChangeEvent from './addOnChangeEvent'
 import removeOnChangeEvent from './removeOnChangeEvent';
 import removeAllOnChangeEvents from './removeAllOnChangeEvents';
 import setTheme from './setTheme';
+import navigateToPreviousChapter from './navigateToPreviousChapter';
+import navigateToNextChapter from './navigateToNextChapter';
 
 /**
  * List of all action dispatchers
@@ -35,6 +37,8 @@ const actionDispatchers  = {
   removeOnChangeEvent,
   removeAllOnChangeEvents,
   setTheme,
+  navigateToPreviousChapter,
+  navigateToNextChapter,
 };
 
 export default actionDispatchers;

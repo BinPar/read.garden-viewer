@@ -13,7 +13,7 @@ import testingConfig from '../../config/testing';
 const loadNewContent: EventHandler<LoadNewContent> = async (event, dispatch) => {
   const { slug, contentSlug } = event;
   const index = await loadIndexFile(slug);
-  const { type: layout, contents,  } = index;
+  const { type: layout, contents } = index;
   // The following line DOES NOT work like this in RG viewer, because labels ARE NOT slugs
   const currentContent = contents.find((content) =>
     content.labels.map((l) => l.toLowerCase()).includes(contentSlug),
