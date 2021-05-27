@@ -23,20 +23,20 @@ const charWidthFactor = 1.65;
  * @param totalColumnWidth Total column width (including gap)
  * @returns {number} Column position
  */
-const getLabelPosition = (
-  labelPosition: number,
-  columnsPositions: number[],
-  contentPlaceHolderHeight: number,
-  containerHeight: number,
-  columnGap: number,
-  totalColumnWidth: number,
-): number => {
-  if (columnsPositions.length === 1 && contentPlaceHolderHeight > containerHeight) {
-    const fixedPosition = labelPosition - columnGap / 2;
-    return Math.round(fixedPosition / totalColumnWidth) * totalColumnWidth;
-  }
-  return columnsPositions.find((p) => p < labelPosition)!;
-};
+// const getLabelPosition = (
+//   labelPosition: number,
+//   columnsPositions: number[],
+//   contentPlaceHolderHeight: number,
+//   containerHeight: number,
+//   columnGap: number,
+//   totalColumnWidth: number,
+// ): number => {
+//   if (columnsPositions.length === 1 && contentPlaceHolderHeight > containerHeight) {
+//     const fixedPosition = labelPosition - columnGap / 2;
+//     return Math.round(fixedPosition / totalColumnWidth) * totalColumnWidth;
+//   }
+//   return columnsPositions.find((p) => p < labelPosition)!;
+// };
 
 /**
  * Recalculates viewer layout
@@ -73,6 +73,7 @@ const recalculate = async (state: State): Promise<Partial<State>> => {
         fontSize,
         pagesLabelsNode,
         config: { minCharsPerColumn, maxCharsPerColumn, columnGap: desiredColumnGap },
+        endOfChapterCalculatorNode,
       } = state;
 
       pagesLabelsNode!.innerHTML = '';
@@ -104,9 +105,18 @@ const recalculate = async (state: State): Promise<Partial<State>> => {
         setCSSProperty('column-width', `${columnWidth}px`);
         setCSSProperty('total-column-width', `${totalColumnWidth}px`);
 
-        const totalColumns = Math.ceil(
-          contentPlaceholderNode!.getBoundingClientRect().width / state.scale / totalColumnWidth,
-        );
+        // const totalColumns = Math.ceil(
+        //   contentPlaceholderNode!.getBoundingClientRect().width / state.scale / totalColumnWidth,
+        // );
+        
+        const endChapterRawPosition = endOfChapterCalculatorNode!.getBoundingClientRect().left;
+        const endChapterPosition = clientToContentWrapperLeft(endChapterRawPosition);
+        const lastColumnPosition = Math.round(endChapterPosition / totalColumnWidth) * totalColumnWidth;
+        const totalWidth = lastColumnPosition + totalColumnWidth;
+        const totalColumns = totalWidth / totalColumnWidth;
+
+        setCSSProperty('total-width', `${totalWidth}px`);
+
         const columnsPositions = Array(totalColumns)
           .fill(0)
           .map((_, i) => i * totalColumnWidth)
@@ -123,14 +133,15 @@ const recalculate = async (state: State): Promise<Partial<State>> => {
           const element = item as HTMLElement;
           const rawPosition = element.getBoundingClientRect().left;
           const contentWrapperPosition = clientToContentWrapperLeft(rawPosition);
-          const position = getLabelPosition(
-            contentWrapperPosition,
-            columnsPositions,
-            contentPlaceholderNode!.getBoundingClientRect().height,
-            containerHeight,
-            columnGap,
-            totalColumnWidth,
-          );
+          // const position = getLabelPosition(
+          //   contentWrapperPosition,
+          //   columnsPositions,
+          //   contentPlaceholderNode!.getBoundingClientRect().height,
+          //   containerHeight,
+          //   columnGap,
+          //   totalColumnWidth,
+          // );
+          const position = columnsPositions.find((p) => p < contentWrapperPosition)!;
           const page = element.dataset.page!;
           positionByLabel.set(page, position);
           lastLabel = page;
@@ -149,26 +160,22 @@ const recalculate = async (state: State): Promise<Partial<State>> => {
         });
 
         if (lastLabel) {
+          let position = lastPosition!;
           for (let i = labelsCount + 1, l = totalColumns; i <= l; i++) {
+            position += totalColumnWidth;
             const label = document.createElement('div');
             label.classList.add('rg-label');
             const labelP = document.createElement('p');
             label.appendChild(labelP);
             labelP.innerText = lastLabel;
             pagesLabelsNode!.appendChild(label);
+            labelByPosition.set(position, lastLabel);
           }
         }
 
         if (document.scrollingElement?.scrollTop) {
           document.scrollingElement.scrollTop = 0;
         }
-
-        const totalWidth = Math.max(
-          totalColumns * totalColumnWidth,
-          minTotalWidth + totalColumnWidth,
-        );
-
-        setCSSProperty('total-width', `${totalWidth}px`);
 
         resolve({
           ...globalUpdate,
