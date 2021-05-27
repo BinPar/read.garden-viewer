@@ -77,10 +77,11 @@ const recalculate = async (state: State): Promise<Partial<State>> => {
         setCSSProperty('column-gap', `${columnGap}px`);
         setCSSProperty('column-width', `${columnWidth}px`);
         setCSSProperty('total-column-width', `${totalColumnWidth}px`);
-        
+
         const endChapterRawPosition = endOfChapterCalculatorNode!.getBoundingClientRect().left;
         const endChapterPosition = clientToContentWrapperLeft(endChapterRawPosition);
-        const lastColumnPosition = Math.round(endChapterPosition / totalColumnWidth) * totalColumnWidth;
+        const lastColumnPosition =
+          Math.round(endChapterPosition / totalColumnWidth) * totalColumnWidth;
         const totalWidth = lastColumnPosition + totalColumnWidth;
         const totalColumns = totalWidth / totalColumnWidth;
 
