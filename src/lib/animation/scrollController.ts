@@ -84,14 +84,14 @@ const scrollController = (
     }
   };
 
+  let onWheelStopTimeout: NodeJS.Timeout | null = null;
+
   const onWheelStop = (): void => {
     onWheelStopTimeout = null;
     scrollInertiaAndLimits(state, scroll, lastDelta, executeTransitions);
   }
 
-  let onWheelStopTimeout: NodeJS.Timeout | null = null;
-
-  const onWeel = (ev: WheelEvent): void => {
+  const onWheel = (ev: WheelEvent): void => {
     if (ev.ctrlKey) {
       if (state.layout === 'flow') {
         if (ev.deltaY < 0 && !state.readMode) {
@@ -110,8 +110,7 @@ const scrollController = (
         }
       }
       ev.preventDefault();
-    } else {
-      if (!mouseDown) {
+    } else if (!mouseDown) {
         if (!state.dragging) {
           updateState({
             dragging: true,
@@ -132,8 +131,7 @@ const scrollController = (
         }
         onWheelStopTimeout = setTimeout(onWheelStop, 50);
         ev.preventDefault();
-      }
-    };
+      };
   }
   state.readGardenContainerNode?.addEventListener('mousedown', onDragStart);
   state.readGardenContainerNode?.addEventListener('touchstart', onDragStart);
@@ -141,7 +139,7 @@ const scrollController = (
   window.addEventListener('touchend', onDragEnd);
   window.addEventListener('mousemove', onDragMove);
   window.addEventListener('touchmove', onDragMove);
-  state.readGardenContainerNode?.addEventListener('wheel', onWeel);
+  state.readGardenContainerNode?.addEventListener('wheel', onWheel);
 };
 
 export default scrollController;
