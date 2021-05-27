@@ -12,33 +12,6 @@ import setCSSProperty from '../utils/setCSSProperty';
 const charWidthFactor = 1.65;
 
 /**
- * Returns label position. Created because Safari wasn't able to measure full content width
- * properly, so another approach was needed for this particular case. If this new approach is
- * not needed, we keep using the old one that works in the rest of browsers. 
- * @param labelPosition Label left position (according to content wrapper)
- * @param columnsPositions Columns positions array
- * @param contentPlaceHolderHeight Content placeholder height (from bounding rect)
- * @param containerHeight Container height
- * @param columnGap Column gap
- * @param totalColumnWidth Total column width (including gap)
- * @returns {number} Column position
- */
-// const getLabelPosition = (
-//   labelPosition: number,
-//   columnsPositions: number[],
-//   contentPlaceHolderHeight: number,
-//   containerHeight: number,
-//   columnGap: number,
-//   totalColumnWidth: number,
-// ): number => {
-//   if (columnsPositions.length === 1 && contentPlaceHolderHeight > containerHeight) {
-//     const fixedPosition = labelPosition - columnGap / 2;
-//     return Math.round(fixedPosition / totalColumnWidth) * totalColumnWidth;
-//   }
-//   return columnsPositions.find((p) => p < labelPosition)!;
-// };
-
-/**
  * Recalculates viewer layout
  * @param state Viewer state
  */
@@ -104,10 +77,6 @@ const recalculate = async (state: State): Promise<Partial<State>> => {
         setCSSProperty('column-gap', `${columnGap}px`);
         setCSSProperty('column-width', `${columnWidth}px`);
         setCSSProperty('total-column-width', `${totalColumnWidth}px`);
-
-        // const totalColumns = Math.ceil(
-        //   contentPlaceholderNode!.getBoundingClientRect().width / state.scale / totalColumnWidth,
-        // );
         
         const endChapterRawPosition = endOfChapterCalculatorNode!.getBoundingClientRect().left;
         const endChapterPosition = clientToContentWrapperLeft(endChapterRawPosition);
@@ -133,14 +102,6 @@ const recalculate = async (state: State): Promise<Partial<State>> => {
           const element = item as HTMLElement;
           const rawPosition = element.getBoundingClientRect().left;
           const contentWrapperPosition = clientToContentWrapperLeft(rawPosition);
-          // const position = getLabelPosition(
-          //   contentWrapperPosition,
-          //   columnsPositions,
-          //   contentPlaceholderNode!.getBoundingClientRect().height,
-          //   containerHeight,
-          //   columnGap,
-          //   totalColumnWidth,
-          // );
           const position = columnsPositions.find((p) => p < contentWrapperPosition)!;
           const page = element.dataset.page!;
           positionByLabel.set(page, position);
