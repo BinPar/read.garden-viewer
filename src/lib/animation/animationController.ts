@@ -88,13 +88,17 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
     executeTransitions();
   };
 
-  const onScrollModeChange = (): void => {
+  const resetPageProps = (): void => {
     left.current = 0;
     left.target = 0;
     top.current = 0;
     top.target = 0;
     scroll.current = 0;
     scroll.target = 0;
+  };
+
+  const onScrollModeChange = (): void => {
+    resetPageProps();
     applyCSSProps();
   };
 
@@ -102,6 +106,12 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
     // console.log({newSlug: slug});
   };
 
+  const onChapterChange = (): void => {
+    resetPageProps();
+    applyCSSProps();
+  }
+
+  addOnChangeEventListener('chapterNumber', onChapterChange);
   addOnChangeEventListener('contentSlug', onContentSlugChanged);
   addOnChangeEventListener('scrollMode', onScrollModeChange);
   addOnChangeEventListener('scrollMode', onScrollModeChange);

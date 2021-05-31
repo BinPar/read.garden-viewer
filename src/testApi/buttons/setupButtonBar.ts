@@ -37,7 +37,7 @@ const setupButtonBar = async (state: State, dispatcher: DispatchAPIAction): Prom
       fontFamilyButtons(testingButtonsPanel, state, dispatcher);
       textAlignButtons(testingButtonsPanel, state, dispatcher);
       chapterNavigationButtons(testingButtonsPanel, state, dispatcher);
-      flowChapterSelect(testingButtonsPanel, state);
+      flowChapterSelect(testingButtonsPanel, state, dispatcher);
     }    
   };
 
