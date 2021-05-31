@@ -57,7 +57,7 @@ const scrollController = (
       }
     }
     scroll.target = scroll.current + lastDelta * state.animationInertia;
-    scrollInertiaAndLimits(state, scroll, inertialDelta, executeTransitions);
+    scrollInertiaAndLimits(state, scroll, inertialDelta, executeTransitions, dispatch);
     setTimeout(() => {
       updateState({
         dragging: false,
@@ -87,7 +87,7 @@ const scrollController = (
 
   const onWheelStop = (): void => {
     onWheelStopTimeout = null;
-    scrollInertiaAndLimits(state, scroll, lastDelta, executeTransitions);
+    scrollInertiaAndLimits(state, scroll, lastDelta, executeTransitions, dispatch);
   };
 
   const onWheel = (ev: WheelEvent): void => {

@@ -1,14 +1,16 @@
 /* eslint-disable no-param-reassign */
+import { DispatchAPIAction } from '../../model/apiInterface';
 import { State } from '../../model/state';
 import { LayoutTypes } from '../../model/viewerSettings';
+import getMinAndMaxScroll from './getMinAndMaxScroll';
 import { InterpolationValue } from './interpolationValues';
-
 
 const scrollInertiaAndLimits = (
   state: State,
   scroll: InterpolationValue,
   lastDelta: number,
   executeTransitions: () => void,
+  dispatch: DispatchAPIAction,
 ): void => {
   let min: number | null = null;
   let max: number | null = null;
@@ -62,7 +64,13 @@ const scrollInertiaAndLimits = (
   if (max !== null && scroll.target * -1 > max) {
     scroll.target = max * -1;
   }
-  executeTransitions();
-};
-
+  const scrollLimits = getMinAndMaxScroll(state);
+  if (scroll.current >= scrollLimits.maxScroll) {    
+    dispatch({type: 'navigateToNextChapter'});
+  } else if (scroll.current <= scrollLimits.minScroll) {
+    dispatch({type: 'navigateToPreviousChapter'});
+  } else {
+    executeTransitions();
+  }
+}
 export default scrollInertiaAndLimits;
