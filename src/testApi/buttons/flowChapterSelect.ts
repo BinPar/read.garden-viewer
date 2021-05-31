@@ -1,3 +1,4 @@
+import log from 'loglevel';
 import { AddOnChangeEvent } from '../../model/actions/global';
 import { DispatchAPIAction } from '../../model/apiInterface';
 import { State } from '../../model/state';
@@ -67,7 +68,7 @@ const flowChapterSelect = (
     container.appendChild(select);
 
     const onContentSlugChanged = (contentSlug: string): void => {
-      console.log(`Move To: ${contentSlug}`);
+      log.warn(`Need to move chapter to: ${contentSlug}`);
       // @miguel: Select current node my getting the previous spine node
     };
 
