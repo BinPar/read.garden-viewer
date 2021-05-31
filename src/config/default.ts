@@ -6,6 +6,7 @@ const defaultConfig: DefaultConfig = {
   initialFixedMode: ViewerMode.WithScroll,
   initialFitMode: FitMode.Height,
   initialReadMode: true,
+  initialScrollMode: 'horizontal',
   showPageSeparation: false,
   animationFriction: 10,
   animationSpeed: 300,

@@ -1,4 +1,4 @@
-import { FixedState, GlobalState, PropChangeHandler, State } from '../../model/state';
+import { FixedState, GlobalState, PropChangeHandler, ScrolledState, State } from '../../model/state';
 import { InitialConfig } from '../../model/config';
 import { ViewerMode } from '../../model/viewerSettings';
 import defaultGlobal from './defaultGlobal';
@@ -79,11 +79,16 @@ export const initializeState = (initialConfig: InitialConfig): void => {
     containerHeight: 0,
   };
 
+  const scrolledState: ScrolledState = {
+    ...defaultScrolled,
+    scrollMode: initialConfig.initialScrollMode || defaultScrolled.scrollMode,
+  };
+
   if (config.layoutType === 'flow') {
     state = {
       ...globalState,
       ...defaultFlow,
-      ...defaultScrolled,
+      ...scrolledState,
       columnGap: config.columnGap,
       readMode: config.initialReadMode,
       fontFamily: config.initialFontFamily,
@@ -109,7 +114,7 @@ export const initializeState = (initialConfig: InitialConfig): void => {
       state = {
         ...globalState,
         ...fixedState,
-        ...defaultScrolled,
+        ...scrolledState,
       };
     }
   }

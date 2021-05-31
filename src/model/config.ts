@@ -1,5 +1,5 @@
 import { ReadGardenEventHandler } from './events';
-import { FitMode, FontSize, Margin, NewContent, ViewerMode, Zoom } from './viewerSettings';
+import { FitMode, FontSize, Margin, NewContent, ScrollModes, ViewerMode, Zoom } from './viewerSettings';
 
 /*
 SCOPES:
@@ -53,6 +53,11 @@ export interface DefaultConfig {
    * @scope Global
    */
   initialReadMode: boolean;
+  /**
+   * Initial scroll mode for first render
+   * @scope Scrolled
+   */
+  initialScrollMode: ScrollModes;
   /**
    * Zoom config
    * @scope Fixed
