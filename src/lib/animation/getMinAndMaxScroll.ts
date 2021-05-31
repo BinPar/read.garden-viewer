@@ -16,7 +16,7 @@ const getMinAndMaxScroll = (state: State, forceMargin: number | null = null): Mi
         let max = 0;
         let i = 0;
         state.labelByPosition.forEach((value, key) => {
-          if (i++ % 2 === 0) max = key;
+          if (i++ % state.columnsInViewport === 0) max = key;
         });
         minScroll = margin * -1 - max;
       }

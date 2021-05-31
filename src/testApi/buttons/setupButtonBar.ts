@@ -6,6 +6,7 @@ import chapterNavigationButtons from './chapterNavigationButtons';
 
 import debugViewerSafeArea from './debugViewerSafeArea';
 import flowChapterSelect from './flowChapterSelect';
+import contentSlugSelect from './contentSlugSelect';
 import fontFamilyButtons from './fontFamilyButtons';
 import fontSizeButtons from './fontSizeButtons';
 import readModeToggle from './readModeToggle';
@@ -20,7 +21,7 @@ const setupButtonBar = async (state: State, dispatcher: DispatchAPIAction): Prom
     if (previousTestingPanel) {
       const removeAllPreviousEvents: RemoveAllChangeEvents = {
         type: 'removeAllChangeEvents',
-      };    
+      };
       await dispatcher(removeAllPreviousEvents);
       previousTestingPanel.remove();
     }
@@ -38,7 +39,8 @@ const setupButtonBar = async (state: State, dispatcher: DispatchAPIAction): Prom
       textAlignButtons(testingButtonsPanel, state, dispatcher);
       chapterNavigationButtons(testingButtonsPanel, state, dispatcher);
       flowChapterSelect(testingButtonsPanel, state, dispatcher);
-    }    
+    }
+    contentSlugSelect(testingButtonsPanel, state, dispatcher);
   };
 
   const onLayoutChanged: AddOnChangeEvent<LayoutTypes> = {

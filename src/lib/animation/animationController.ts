@@ -3,10 +3,10 @@ import log from 'loglevel';
 import { DispatchAPIAction } from '../../model/apiInterface';
 import { State } from '../../model/state';
 import { LayoutTypes } from '../../model/viewerSettings';
-
 import setCSSProperty from '../../utils/setCSSProperty';
 import { updateState } from '../state';
 import { addOnChangeEventListener } from '../state/stateChangeEvents';
+import getScrollFromContentSlug from './getScrollFromContentSlug';
 import interpolate from './interpolate';
 import { scale, left, top, scroll } from './interpolationValues';
 import recalculateCurrentPage from './recalculateCurrentPage';
@@ -64,6 +64,9 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
   };
 
   const onReadModeChangeEvent = (): void => {
+    scroll.current = getScrollFromContentSlug(state);
+    scroll.target = scroll.current;
+    scroll.speed = 0;
     const newMargins = state.readMode
       ? { ...state.config.readModeMargin }
       : { ...state.config.uiModeMargin };
@@ -90,7 +93,7 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
     if (state.scrollMode === 'vertical') {
       top.target = newMargins.top;
     }
-    executeTransitions();
+    executeTransitions();    
   };
 
   const resetPageProps = (): void => {
@@ -98,8 +101,9 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
     left.target = 0;
     top.current = 0;
     top.target = 0;
-    scroll.current = 0;
-    scroll.target = 0;
+    scroll.current = getScrollFromContentSlug(state);
+    scroll.target = scroll.current;
+    scroll.speed = 0;
   };
 
   const onScrollModeChange = (): void => {
@@ -120,7 +124,6 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
 
   addOnChangeEventListener('chapterNumber', onChapterChange);
   addOnChangeEventListener('contentSlug', onContentSlugChanged);
-  addOnChangeEventListener('scrollMode', onScrollModeChange);
   addOnChangeEventListener('scrollMode', onScrollModeChange);
   addOnChangeEventListener('readMode', onReadModeChangeEvent);
   addOnChangeEventListener('containerWidth', onReadModeChangeEvent);
