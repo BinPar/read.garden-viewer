@@ -1,4 +1,5 @@
 /* eslint-disable no-param-reassign */
+import log from 'loglevel';
 import { DispatchAPIAction } from '../../model/apiInterface';
 import { State } from '../../model/state';
 import { LayoutTypes } from '../../model/viewerSettings';
@@ -8,6 +9,7 @@ import { updateState } from '../state';
 import { addOnChangeEventListener } from '../state/stateChangeEvents';
 import interpolate from './interpolate';
 import { scale, left, top, scroll } from './interpolationValues';
+import recalculateCurrentPage from './recalculateCurrentPage';
 import scrollController from './scrollController';
 
 const animationController = (state: State, dispatch: DispatchAPIAction): void => {
@@ -35,6 +37,9 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
       window.requestAnimationFrame(interpolateToTargetValues);
     } else {
       applyCSSProps();
+      if (state.scrollMode === 'horizontal' || state.scrollMode === 'vertical') {
+        recalculateCurrentPage(state, scroll.current);
+      }
       updateState({
         animating: false,
       });
@@ -102,14 +107,16 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
     applyCSSProps();
   };
 
-  const onContentSlugChanged = (): void => {
-    // console.log({newSlug: slug});
+  const onContentSlugChanged = (slug: string): void => {
+    if (!state.animating) {
+      log.warn(`Need to move to Slug: ${slug}`);
+    }
   };
 
   const onChapterChange = (): void => {
     resetPageProps();
     applyCSSProps();
-  }
+  };
 
   addOnChangeEventListener('chapterNumber', onChapterChange);
   addOnChangeEventListener('contentSlug', onContentSlugChanged);
