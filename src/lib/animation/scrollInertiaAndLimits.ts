@@ -66,9 +66,9 @@ const scrollInertiaAndLimits = (
   }
   const scrollLimits = getMinAndMaxScroll(state);
   if (scroll.current >= scrollLimits.maxScroll) {    
-    dispatch({type: 'navigateToNextChapter'});
+    // dispatch({type: 'navigateToNextChapter'});
   } else if (scroll.current <= scrollLimits.minScroll) {
-    dispatch({type: 'navigateToPreviousChapter'});
+    // dispatch({type: 'navigateToPreviousChapter'});
   } else {
     executeTransitions();
   }
