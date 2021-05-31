@@ -77,6 +77,7 @@ div.rg-content-wrapper {
 div.rg-content-wrapper #rg-content-placeholder * {
   backface-visibility: unset;
   -webkit-backface-visibility: unset;
+  user-select: text;
 }
 
 /* .rg-vertical-scroll div.rg-content-wrapper {
