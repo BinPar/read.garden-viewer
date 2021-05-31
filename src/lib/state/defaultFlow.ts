@@ -12,6 +12,7 @@ const defaultFlow: DefaultFlowState = {
   columnWidth: 0,
   totalColumnWidth: 0,
   totalColumns: 0,
+  chapterNumber: 0,
 };
 
 export default defaultFlow;
