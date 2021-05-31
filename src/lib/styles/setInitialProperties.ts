@@ -33,7 +33,7 @@ const setInitialProperties = (state: State): void => {
   setCSSProperty('total-column-width', '0px');
   setCSSProperty('total-height', '0px');
   setCSSProperty('total-width', '0px');
-  setCSSProperty('user-select', 'auto');
+  setCSSProperty('user-select', 'text');
   setCSSProperty('user-select-end', 'none');
   setCSSProperty('vertical-translate', '0');
   setCSSProperty('viewer-margin-top', '200vh');

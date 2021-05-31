@@ -70,19 +70,19 @@ div.rg-content-wrapper {
   padding: var(--content-wrapper-padding);
   clear: both;
   cursor: var(--drag-cursor, grab);
-  user-select: var(--user-select);
-  -webkit-user-select: var(--user-select);
+  user-select: none;
 }
 
 div.rg-content-wrapper #rg-content-placeholder * {
   backface-visibility: unset;
   -webkit-backface-visibility: unset;
-  user-select: text;
+  user-select: var(--user-select);
+  -webkit-user-select: var(--user-select);
 }
 
-/* .rg-vertical-scroll div.rg-content-wrapper {
-  overflow-y: scroll;
-} */
+div.rg-content-wrapper #rg-content-placeholder *::selection {
+  background-color: transparent;
+}
 
 .rg-flow-layout div.rg-content-wrapper {
   padding: 0 calc(var(--column-gap) / 2) 0;
@@ -168,6 +168,7 @@ div.rg-end-of-chapter-calculator {
   height: 0px;
   font-size: 0px;
   user-select: var(--user-select-end);
+  -webkit-user-select: var(--user-select-end);
 }
 
 div.rg-pages-labels {
