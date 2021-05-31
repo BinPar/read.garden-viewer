@@ -22,11 +22,13 @@ const scrollController = (
   let lastY: null | number = null;
   let lastMoveMilliseconds: number = new Date().getMilliseconds();
 
-  const onDragStart = (): void => {
-    mouseDown = true;
-    lastX = null;
-    lastY = null;
-    lastDelta = 0;
+  const onDragStart = (ev: MouseEvent  | TouchEvent): void => {
+    if (ev.type === 'touchstart' || (ev as MouseEvent).button === 0) {
+      mouseDown = true;
+      lastX = null;
+      lastY = null;
+      lastDelta = 0;
+    }
   };
 
   const updateScrollDeltas = (ev: MouseEvent | TouchEvent): void => {
@@ -46,23 +48,26 @@ const scrollController = (
   };
 
   const onDragEnd = (ev: MouseEvent | TouchEvent): void => {
-    mouseDown = false;
-    setCSSProperty('user-select', 'auto');
-    let inertialDelta = lastDelta;
-    updateScrollDeltas(ev);
-    const timeFromLastMove = new Date().getMilliseconds() - lastMoveMilliseconds;
-    if (lastDelta || timeFromLastMove > 100) {
-      if (Math.sign(lastDelta) === Math.sign(inertialDelta)) {
-        inertialDelta = lastDelta;
+    if (mouseDown) {
+      console.log('onDragEnd'); 
+      mouseDown = false;
+      setCSSProperty('user-select', 'auto');
+      let inertialDelta = lastDelta;
+      updateScrollDeltas(ev);
+      const timeFromLastMove = new Date().getMilliseconds() - lastMoveMilliseconds;
+      if (lastDelta || timeFromLastMove > 100) {
+        if (Math.sign(lastDelta) === Math.sign(inertialDelta)) {
+          inertialDelta = lastDelta;
+        }
       }
+      scroll.target = scroll.current + lastDelta * state.animationInertia;
+      scrollInertiaAndLimits(state, scroll, inertialDelta, executeTransitions, dispatch);
+      setTimeout(() => {
+        updateState({
+          dragging: false,
+        });
+      }, 0);
     }
-    scroll.target = scroll.current + lastDelta * state.animationInertia;
-    scrollInertiaAndLimits(state, scroll, inertialDelta, executeTransitions, dispatch);
-    setTimeout(() => {
-      updateState({
-        dragging: false,
-      });
-    }, 0);
   };
 
   const onDragMove = (ev: MouseEvent | TouchEvent): void => {
