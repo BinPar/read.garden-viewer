@@ -6,8 +6,8 @@ interface MinAndMaxScroll {
   maxScroll: number;
 }
 
-const getMinAndMaxScroll = (state: State): MinAndMaxScroll => {
-  let margin = window.innerWidth / 2;
+const getMinAndMaxScroll = (state: State, forceMargin : number | null = null): MinAndMaxScroll => {
+  let margin = forceMargin ?? window.innerWidth / 2;
   let minScroll = margin * -1;
   let maxScroll = margin;
   if (state.layout === LayoutTypes.Flow) {
@@ -20,7 +20,7 @@ const getMinAndMaxScroll = (state: State): MinAndMaxScroll => {
         minScroll = margin * -1 - max;
       }
     } else if (state.scrollMode === 'vertical') {
-      margin = window.innerHeight / 2;
+      margin = forceMargin ?? window.innerHeight / 2;
       maxScroll = margin;
       minScroll = window.innerHeight - state.totalHeight - margin;
     }

@@ -49,7 +49,6 @@ const scrollController = (
 
   const onDragEnd = (ev: MouseEvent | TouchEvent): void => {
     if (mouseDown) {
-      console.log('onDragEnd'); 
       mouseDown = false;
       setCSSProperty('user-select', 'auto');
       let inertialDelta = lastDelta;

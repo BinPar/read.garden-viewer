@@ -98,6 +98,12 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
     applyCSSProps();
   };
 
+  const onContentSlugChanged = (): void => {
+    // console.log({newSlug: slug});
+  };
+
+  addOnChangeEventListener('contentSlug', onContentSlugChanged);
+  addOnChangeEventListener('scrollMode', onScrollModeChange);
   addOnChangeEventListener('scrollMode', onScrollModeChange);
   addOnChangeEventListener('readMode', onReadModeChangeEvent);
   addOnChangeEventListener('containerWidth', onReadModeChangeEvent);
