@@ -361,6 +361,10 @@ export interface FlowState {
    * Pages labels
    */
   labels: string[];
+  /**
+   * Flow content chapter number
+   */
+  chapterNumber: number;
 }
 
 /**

@@ -124,6 +124,10 @@ export interface NewContent {
    */
   contentSlug: string;
   /**
+   * Chapter number (for flow)
+   */
+  chapterNumber?: number;
+  /**
    * Second level content label (page, chapter...)
    */
   label: string;

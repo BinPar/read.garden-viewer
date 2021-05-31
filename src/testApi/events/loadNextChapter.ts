@@ -12,7 +12,7 @@ const loadNextChapter: EventHandler<LoadNextChapter> = async (event, dispatch) =
   const index = await loadIndexFile(slug);
   const { type: layout, contents } = index;
   if (layout === LayoutTypes.Fixed) {
-    log.warn('Event "loadPreviousChapter" is not allowed in fixed contents');
+    log.warn('Event "loadNextChapter" is not allowed in fixed contents');
     return;
   }
   const currentContentIndex = contents.findIndex((content) =>
