@@ -20,9 +20,10 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
 
   const applyCSSProps = (): void => {
     setCSSProperty('scale', `${Math.abs(scale.current)}`);
-    const scrollLeft = left.current + (state.scrollMode === 'horizontal' ? scroll.current : 0);
+    const computedScroll = scroll.current * scale.current;
+    const scrollLeft = left.current + (state.scrollMode === 'horizontal' ? computedScroll : 0);
     setCSSProperty('horizontal-translate', `${scrollLeft}px`);
-    const scrollTop = top.current + (state.scrollMode === 'vertical' ? scroll.current : 0);
+    const scrollTop = top.current + (state.scrollMode === 'vertical' ? computedScroll : 0);
     setCSSProperty('vertical-translate', `${scrollTop}px`);
     updateState({ scrollLeft, scrollTop, scale: scale.current });
   };
@@ -79,14 +80,25 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
     const marginHeight = heightReduction - newMargins.top - newMargins.bottom;
     top.target = newMargins.top + marginHeight / 2;
     if (state.scrollMode === 'horizontal') {
-      left.target -= scroll.current * (1 - scale.target);
-    }    
+      left.target = newMargins.left + marginWidth / 2;
+    }
     if (state.scrollMode === 'vertical') {
-        top.target = newMargins.top - scroll.current * (1 - scale.target);
+      top.target = newMargins.top;
     }
     executeTransitions();
   };
 
+  const onScrollModeChange = (): void => {
+    left.current = 0;
+    left.target = 0;
+    top.current = 0;
+    top.target = 0;
+    scroll.current = 0;
+    scroll.target = 0;
+    onReadModeChangeEvent();
+  };
+
+  addOnChangeEventListener('scrollMode', onScrollModeChange);
   addOnChangeEventListener('readMode', onReadModeChangeEvent);
   addOnChangeEventListener('containerWidth', onReadModeChangeEvent);
   addOnChangeEventListener('containerHeight', onReadModeChangeEvent);

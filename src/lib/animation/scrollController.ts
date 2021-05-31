@@ -6,6 +6,7 @@ import { State } from '../../model/state';
 import setCSSProperty from '../../utils/setCSSProperty';
 import { updateState } from '../state';
 import getCoordinatesFromEvent from './getCoordinatesFromEvent';
+import getMinAndMaxScroll from './getMinAndMaxScroll';
 import { InterpolationValue } from './interpolationValues';
 import scrollInertiaAndLimits from './scrollInertiaAndLimits';
 
@@ -47,18 +48,16 @@ const scrollController = (
   const onDragEnd = (ev: MouseEvent | TouchEvent): void => {
     mouseDown = false;
     setCSSProperty('user-select', 'auto');
-    if (lastDelta) {
-      let inertialDelta = lastDelta;
-      updateScrollDeltas(ev);
-      const timeFromLastMove = new Date().getMilliseconds() - lastMoveMilliseconds;
-      if (lastDelta || timeFromLastMove > 100) {
-        if (Math.sign(lastDelta) === Math.sign(inertialDelta)) {
-          inertialDelta = lastDelta;
-        }        
+    let inertialDelta = lastDelta;
+    updateScrollDeltas(ev);
+    const timeFromLastMove = new Date().getMilliseconds() - lastMoveMilliseconds;
+    if (lastDelta || timeFromLastMove > 100) {
+      if (Math.sign(lastDelta) === Math.sign(inertialDelta)) {
+        inertialDelta = lastDelta;
       }
-      scroll.target = scroll.current + lastDelta * state.animationInertia;
-      scrollInertiaAndLimits(state, scroll, inertialDelta, executeTransitions);
     }
+    scroll.target = scroll.current + lastDelta * state.animationInertia;
+    scrollInertiaAndLimits(state, scroll, inertialDelta, executeTransitions);
     setTimeout(() => {
       updateState({
         dragging: false,
@@ -89,7 +88,7 @@ const scrollController = (
   const onWheelStop = (): void => {
     onWheelStopTimeout = null;
     scrollInertiaAndLimits(state, scroll, lastDelta, executeTransitions);
-  }
+  };
 
   const onWheel = (ev: WheelEvent): void => {
     if (ev.ctrlKey) {
@@ -111,28 +110,38 @@ const scrollController = (
       }
       ev.preventDefault();
     } else if (!mouseDown) {
-        if (!state.dragging) {
-          updateState({
-            dragging: true,
-          });
-        }
-        scroll.forceUpdate = true;
-        if (ev.deltaX !== 0) {
-          lastDelta = ev.deltaX * -1;
-        } else {
-          lastDelta = ev.deltaY * -1;
-        }
-        scroll.current += lastDelta;
-        scroll.target = scroll.current;
-        executeTransitions();
-        scroll.forceUpdate = false;
-        if (onWheelStopTimeout) {
-          clearTimeout(onWheelStopTimeout);
-        }
-        onWheelStopTimeout = setTimeout(onWheelStop, 50);
-        ev.preventDefault();
-      };
-  }
+      if (!state.dragging) {
+        updateState({
+          dragging: true,
+        });
+      }
+      scroll.forceUpdate = true;
+      if (ev.deltaX !== 0) {
+        lastDelta = ev.deltaX * -1;
+      } else {
+        lastDelta = ev.deltaY * -1;
+      }
+      scroll.current += lastDelta;
+      const scrollLimits = getMinAndMaxScroll(state);
+      if (scroll.current > scrollLimits.maxScroll) {
+        scroll.current = scrollLimits.maxScroll;
+        scroll.speed = 0;
+        lastDelta = 0;
+      } else if (scroll.current < scrollLimits.minScroll) {
+        scroll.current = scrollLimits.minScroll;
+        scroll.speed = 0;
+        lastDelta = 0;
+      }
+      scroll.target = scroll.current;
+      executeTransitions();
+      scroll.forceUpdate = false;
+      if (onWheelStopTimeout) {
+        clearTimeout(onWheelStopTimeout);
+      }
+      onWheelStopTimeout = setTimeout(onWheelStop, 50);
+      ev.preventDefault();
+    }
+  };
   state.readGardenContainerNode?.addEventListener('mousedown', onDragStart);
   state.readGardenContainerNode?.addEventListener('touchstart', onDragStart);
   window.addEventListener('mouseup', onDragEnd);

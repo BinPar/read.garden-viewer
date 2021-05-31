@@ -3,6 +3,7 @@ import { State } from '../../model/state';
 import { LayoutTypes } from '../../model/viewerSettings';
 import { InterpolationValue } from './interpolationValues';
 
+
 const scrollInertiaAndLimits = (
   state: State,
   scroll: InterpolationValue,
@@ -50,6 +51,9 @@ const scrollInertiaAndLimits = (
     }
   } else {
     scroll.target += lastDelta * state.animationInertia;
+    if (state.layout === LayoutTypes.Flow) {
+      max = state.totalHeight - window.innerHeight;
+    }
     min = 0;
   }
   if (min !== null && scroll.target * -1 < min) {
