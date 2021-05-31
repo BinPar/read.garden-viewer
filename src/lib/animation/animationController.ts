@@ -95,7 +95,7 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
     top.target = 0;
     scroll.current = 0;
     scroll.target = 0;
-    onReadModeChangeEvent();
+    applyCSSProps();
   };
 
   addOnChangeEventListener('scrollMode', onScrollModeChange);
