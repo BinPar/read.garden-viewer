@@ -29,10 +29,7 @@ const checkImagesHeight = async (
                * to work properly
                */
             }
-            /**
-             * TODO: img.classList.add('rg-ready');
-             * Needs to know available width (column width without column gap)
-             */
+            img.classList.add('rg-ready');
             imageResolve();
           } else {
             checkTimeout = setTimeout(check, 10);
