@@ -112,8 +112,9 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
   };
 
   const onContentSlugChanged = (slug: string): void => {
-    if (!state.animating) {
-      log.warn(`Need to move to Slug: ${slug}`);
+    const targetSlug =  getScrollFromContentSlug(state, slug);
+    if (targetSlug) {
+      scroll.target = targetSlug;
     }
   };
 
@@ -135,6 +136,7 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
     animate: true,
     animating: false,
   });
+  resetPageProps();
 };
 
 export default animationController;
