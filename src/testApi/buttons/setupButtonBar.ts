@@ -2,11 +2,9 @@ import { AddOnChangeEvent, RemoveAllChangeEvents } from '../../model/actions/glo
 import { DispatchAPIAction } from '../../model/apiInterface';
 import { State } from '../../model/state';
 import { LayoutTypes } from '../../model/viewerSettings';
-import chapterNavigationButtons from './chapterNavigationButtons';
 
+import chapterNavigationButtons from './chapterNavigationButtons';
 import debugViewerSafeArea from './debugViewerSafeArea';
-import flowChapterSelect from './flowChapterSelect';
-import contentSlugSelect from './contentSlugSelect';
 import fontFamilyButtons from './fontFamilyButtons';
 import fontSizeButtons from './fontSizeButtons';
 import readModeToggle from './readModeToggle';
@@ -14,6 +12,7 @@ import scrollModeButtons from './scrollModeButtons';
 import searchButtons from './searchButtons';
 import textAlignButtons from './textAlignButtons';
 import themeButtons from './themeButtons';
+import navigationButtons from './navigationButtons';
 
 const setupButtonBar = async (state: State, dispatcher: DispatchAPIAction): Promise<void> => {
   const redrawToolbar = async (): Promise<void> => {
@@ -38,9 +37,8 @@ const setupButtonBar = async (state: State, dispatcher: DispatchAPIAction): Prom
       fontFamilyButtons(testingButtonsPanel, state, dispatcher);
       textAlignButtons(testingButtonsPanel, state, dispatcher);
       chapterNavigationButtons(testingButtonsPanel, state, dispatcher);
-      flowChapterSelect(testingButtonsPanel, state, dispatcher);
     }
-    contentSlugSelect(testingButtonsPanel, state, dispatcher);
+    navigationButtons(testingButtonsPanel, state, dispatcher);
   };
 
   const onLayoutChanged: AddOnChangeEvent<LayoutTypes> = {

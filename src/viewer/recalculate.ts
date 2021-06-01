@@ -8,6 +8,7 @@ import {
   clientToContentWrapperTop,
 } from '../utils/highlights/clientToContentWrapperCoordinates';
 import setCSSProperty from '../utils/setCSSProperty';
+import updatePositionsMaps from '../utils/updatePositionsMaps';
 
 const charWidthFactor = 1.65;
 
@@ -188,6 +189,10 @@ const recalculate = async (state: State): Promise<Partial<State>> => {
 
       resolve(globalUpdate);
       return;
+    }
+
+    if (state.layout === LayoutTypes.Fixed) {
+      updatePositionsMaps(state);
     }
 
     resolve(globalUpdate);

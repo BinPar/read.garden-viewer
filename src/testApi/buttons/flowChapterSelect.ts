@@ -1,9 +1,7 @@
 import { AddOnChangeEvent } from '../../model/actions/global';
 import { DispatchAPIAction } from '../../model/apiInterface';
 import { State } from '../../model/state';
-import { SpineNode } from '../model/content';
-
-import loadIndexFile from '../utils/loadIndexFile';
+import { Content, SpineNode } from '../model/content';
 
 const values: number[] = [];
 
@@ -57,42 +55,41 @@ const flowChapterSelect = (
   container: HTMLDivElement,
   state: State,
   dispatcher: DispatchAPIAction,
+  jsonIndex: Content
 ): void => {
-  loadIndexFile(state.config.slug).then((jsonIndex) => {
-    const select = document.createElement('select');
+  const select = document.createElement('select');
 
-    const numStartPage = parseInt(state.config.contentSlug || '1', 10);
-    values.splice(0, values.length);
-    const selected = appendItems(select, jsonIndex.spine, numStartPage, false);
-    select.value = selected;
+  const numStartPage = parseInt(state.config.contentSlug || '1', 10);
+  values.splice(0, values.length);
+  const selected = appendItems(select, jsonIndex.spine, numStartPage, false);
+  select.value = selected;
 
-    const onChange = (): void => {
-      if (select.value && state.config.eventHandler) {
-        state.config.eventHandler({
-          type: 'loadNewContent',
-          slug: state.config.slug,
-          contentSlug: select.value,
-        });
-      }
-    };
+  const onChange = (): void => {
+    if (select.value && state.config.eventHandler) {
+      state.config.eventHandler({
+        type: 'loadNewContent',
+        slug: state.config.slug,
+        contentSlug: select.value,
+      });
+    }
+  };
 
-    select.onchange = onChange;
-    container.appendChild(select);
+  select.onchange = onChange;
+  container.appendChild(select);
 
-    const onContentSlugChanged = (contentSlug: string): void => {
-      const target = parseInt(contentSlug, 10);
-      const value = values.find((v, i) => target >= v && (values[i + 1] ?? Infinity) > target);
-      select.value = `${value}`;
-    };
+  const onContentSlugChanged = (contentSlug: string): void => {
+    const target = parseInt(contentSlug, 10);
+    const value = values.find((v, i) => target >= v && (values[i + 1] ?? Infinity) > target);
+    select.value = `${value}`;
+  };
 
-    const contentSlugChanged: AddOnChangeEvent<string> = {
-      type: 'addOnChangeEvent',
-      propertyName: 'contentSlug',
-      event: onContentSlugChanged,
-    };
+  const contentSlugChanged: AddOnChangeEvent<string> = {
+    type: 'addOnChangeEvent',
+    propertyName: 'contentSlug',
+    event: onContentSlugChanged,
+  };
 
-    dispatcher(contentSlugChanged);
-  });
+  dispatcher(contentSlugChanged);
 };
 
 export default flowChapterSelect;
