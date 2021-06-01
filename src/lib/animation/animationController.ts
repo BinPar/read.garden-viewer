@@ -1,5 +1,4 @@
 /* eslint-disable no-param-reassign */
-import log from 'loglevel';
 import { DispatchAPIAction } from '../../model/apiInterface';
 import { State } from '../../model/state';
 import { LayoutTypes } from '../../model/viewerSettings';

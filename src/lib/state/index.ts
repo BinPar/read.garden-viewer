@@ -1,4 +1,10 @@
-import { FixedState, GlobalState, PropChangeHandler, ScrolledState, State } from '../../model/state';
+import {
+  FixedState,
+  GlobalState,
+  PropChangeHandler,
+  ScrolledState,
+  State,
+} from '../../model/state';
 import { InitialConfig } from '../../model/config';
 import { ViewerMode } from '../../model/viewerSettings';
 import defaultGlobal from './defaultGlobal';
@@ -43,7 +49,7 @@ export const initializeState = (initialConfig: InitialConfig): void => {
       ...defaultConfig.fontSize,
       ...(initialConfig.fontSize ?? {}),
     },
-  });  
+  });
 
   const defaultInitialMargins = config.initialReadMode
     ? defaultConfig.readModeMargin
@@ -72,8 +78,8 @@ export const initializeState = (initialConfig: InitialConfig): void => {
     pageNumber: 1, // From initial config
     scale: config.initialScale ?? defaultGlobal.scale,
     toggleReadModeOnClick: config.toggleReadModeOnClick ?? defaultGlobal.toggleReadModeOnClick,
-    searchTerms: [],
-    searchRanges: [],
+    searchTerms: new Array<string>(),
+    searchRanges: new Array<Range>(),
     debugViewerSafeArea: config.debugViewerSafeArea,
     containerWidth: 0,
     containerHeight: 0,

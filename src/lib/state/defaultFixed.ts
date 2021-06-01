@@ -5,7 +5,7 @@ const defaultFixed: FixedState = {
   layout: LayoutTypes.Fixed,
   contentsByOrder: new Map<number, FixedViewerContentInfo>(),
   contentsByLabel: new Map<string, FixedViewerContentInfo>(),
-  contentsInfo: [],
+  contentsInfo: new Array<FixedViewerContentInfo>(),
   currentContentIndex: 0,
   loadingContent: true,
   loadedCssUrls: new Set<string>(),

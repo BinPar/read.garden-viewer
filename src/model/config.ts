@@ -1,5 +1,13 @@
 import { ReadGardenEventHandler } from './events';
-import { FitMode, FontSize, Margin, NewContent, ScrollModes, ViewerMode, Zoom } from './viewerSettings';
+import {
+  FitMode,
+  FontSize,
+  Margin,
+  NewContent,
+  ScrollModes,
+  ViewerMode,
+  Zoom,
+} from './viewerSettings';
 
 /*
 SCOPES:
@@ -78,6 +86,14 @@ export interface DefaultConfig {
    * @scope Global
    */
   uiModeMargin: Margin;
+  /**
+   * Viewer padding top
+   */
+  paddingTop: number;
+  /**
+   * Viewer padding top
+   */
+  paddingBottom: number;
   /**
    * [Scrolled] Loaded contents number. Viewer will always try to keep this number of contents (pages)
    * loaded. If number of visible contents (pages) is bigger than this number, this number will
