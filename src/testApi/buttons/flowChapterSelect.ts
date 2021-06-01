@@ -1,3 +1,6 @@
+import log from 'loglevel';
+import { AddOnChangeEvent } from '../../model/actions/global';
+import { DispatchAPIAction } from '../../model/apiInterface';
 import { State } from '../../model/state';
 import { SpineNode } from '../model/content';
 
@@ -8,6 +11,7 @@ const appendItems = (
   items: SpineNode[],
   numStartPage: number,
   secondLevel = false,
+  dispatcher: DispatchAPIAction,
 ): string => {
   let currentValue = '';
   for (let i = 0, l = items.length; i < l; i++) {
@@ -25,7 +29,8 @@ const appendItems = (
     if (!secondLevel && children?.length) {
       const optionGroup = document.createElement('optgroup');
       optionGroup.label = title;
-      currentValue = appendItems(optionGroup, children, numStartPage, true) || currentValue;
+      currentValue =
+        appendItems(optionGroup, children, numStartPage, true, dispatcher) || currentValue;
       container.appendChild(optionGroup);
     } else {
       const option = document.createElement('option');
@@ -37,12 +42,16 @@ const appendItems = (
   return currentValue;
 };
 
-const flowChapterSelect = (container: HTMLDivElement, state: State): void => {
+const flowChapterSelect = (
+  container: HTMLDivElement,
+  state: State,
+  dispatcher: DispatchAPIAction,
+): void => {
   loadIndexFile(state.config.slug).then((jsonIndex) => {
     const select = document.createElement('select');
 
     const numStartPage = parseInt(state.config.contentSlug || '1', 10);
-    const selected = appendItems(select, jsonIndex.spine, numStartPage);
+    const selected = appendItems(select, jsonIndex.spine, numStartPage, false, dispatcher);
     select.value = selected;
 
     const onChange = (): void => {
@@ -57,6 +66,19 @@ const flowChapterSelect = (container: HTMLDivElement, state: State): void => {
 
     select.onchange = onChange;
     container.appendChild(select);
+
+    const onContentSlugChanged = (contentSlug: string): void => {
+      log.warn(`Need to move chapter to: ${contentSlug}`);
+      // @miguel: Select current node my getting the previous spine node
+    };
+
+    const contentSlugChanged: AddOnChangeEvent<string> = {
+      type: 'addOnChangeEvent',
+      propertyName: 'contentSlug',
+      event: onContentSlugChanged,
+    };
+
+    dispatcher(contentSlugChanged);
   });
 };
 

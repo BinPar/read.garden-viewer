@@ -6,7 +6,7 @@ interface MinAndMaxScroll {
   maxScroll: number;
 }
 
-const getMinAndMaxScroll = (state: State, forceMargin : number | null = null): MinAndMaxScroll => {
+const getMinAndMaxScroll = (state: State, forceMargin: number | null = null): MinAndMaxScroll => {
   let margin = forceMargin ?? window.innerWidth / 2;
   let minScroll = margin * -1;
   let maxScroll = margin;
@@ -14,8 +14,9 @@ const getMinAndMaxScroll = (state: State, forceMargin : number | null = null): M
     if (state.scrollMode === 'horizontal') {
       if (state.labelByPosition) {
         let max = 0;
+        let i = 0;
         state.labelByPosition.forEach((value, key) => {
-          max = key;
+          if (i++ % state.columnsInViewport === 0) max = key;
         });
         minScroll = margin * -1 - max;
       }

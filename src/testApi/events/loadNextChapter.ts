@@ -26,7 +26,7 @@ const loadNextChapter: EventHandler<LoadNextChapter> = async (event, dispatch) =
   const url = `${testingConfig.baseURL}books/${slug}/${nextContent.file}`;
   const response = await fetch(url);
   const html = await response.text();
-  const chapterNumber = parseInt(nextContent.cssUrl!.split('/')[1]!, 10);
+  const chapterNumber = parseInt(nextContent.cssUrl!.split('/')[1]!, 10) + 1;
   const label = nextContent.labels.slice().shift()!;
   const action: AppendNewContent = {
     type: 'appendNewContent',
@@ -35,7 +35,8 @@ const loadNextChapter: EventHandler<LoadNextChapter> = async (event, dispatch) =
     label,
     contentSlug: label.toLowerCase(),
     cssURL: `${testingConfig.baseURL}books/${slug}/${nextContent.cssUrl}`,
-    htmlContent: html.replace('<div', `<div class="c${chapterNumber + 1}"`),
+    htmlContent: html.replace('<div', `<div class="c${chapterNumber}"`),
+    chapterNumber,
   };
   dispatch(action);
 };
