@@ -86,3 +86,57 @@ export interface Margin {
    */
   left: number;
 }
+
+export type ViewerTheme = 'dark' | 'light';
+
+/**
+ * Layout types
+ */
+ export enum LayoutTypes {
+  Fixed = 'fixed',
+  Flow = 'flow',
+}
+
+/**
+ * Available text align modes
+ */
+export type TextAlignModes = 'start' | 'justify' | null;
+
+/**
+ * Available scroll modes
+ */
+export type ScrollModes = 'vertical' | 'horizontal';
+
+/**
+ * New content for viewer
+ */
+export interface NewContent {
+  /**
+   * Layout type
+   */
+  layout: LayoutTypes;
+  /**
+   * First level content slug (book, work...)
+   */
+  slug: string;
+  /**
+   * Second level content slug (page, chapter...)
+   */
+  contentSlug: string;
+  /**
+   * Chapter number (for flow)
+   */
+  chapterNumber?: number;
+  /**
+   * Second level content label (page, chapter...)
+   */
+  label: string;
+  /**
+   * Content CSS URL
+   */
+  cssURL: string;
+  /**
+   * Content HTML
+   */
+  htmlContent: string;
+}

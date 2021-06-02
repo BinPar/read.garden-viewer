@@ -1,7 +1,9 @@
 import log from 'loglevel';
+
 import { ActionDispatcher } from '../../model/actions/actionDispatcher';
 import { AppendNewContent } from '../../model/actions/global';
-import { LayoutTypes, State } from '../../model/state';
+import { State } from '../../model/state';
+import { LayoutTypes } from '../../model/viewerSettings';
 
 import setCSSProperty from '../../utils/setCSSProperty';
 import checkImagesHeight from '../../utils/checkImagesHeight';
@@ -47,86 +49,89 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
     if (state.layout === LayoutTypes.Flow) {
       setCSSProperty('viewer-margin-top', '200vh');
       window.requestAnimationFrame(() => {
-        if (state.layout === LayoutTypes.Flow) {
-          drawHighlights(searchTermsHighlightsNode!);
-          contentPlaceholderNode!.innerHTML = action.htmlContent;
+        drawHighlights(searchTermsHighlightsNode!);
+        contentPlaceholderNode!.innerHTML = action.htmlContent;
 
+        window.requestAnimationFrame(() => {
           window.requestAnimationFrame(() => {
-            window.requestAnimationFrame(() => {
-              let replace = true;
-              const newLink = document.createElement('link');
-              const done = async (): Promise<void> => {
-                const recalculateState = await recalculate(state);
-                setCSSProperty('viewer-margin-top', '0');
-                const finalPartialState: Partial<State> = {
-                  ...recalculateState,
-                  cssLoaded: true,
-                };
-                if (replace) {
-                  finalPartialState.dynamicStyleNode = newLink;
-                }
-                resolve(finalPartialState);
-                highlightTerms(state.searchTerms);
+            let replace = true;
+            const newLink = document.createElement('link');
+            const done = async (): Promise<void> => {
+              const recalculateState = await recalculate(state);
+              setCSSProperty('viewer-margin-top', '0');
+              const finalPartialState: Partial<State> = {
+                ...recalculateState,
+                layout: LayoutTypes.Flow,
+                scrollMode: state.scrollMode,
+                slug: action.slug,
+                contentSlug: action.contentSlug,
+                chapterNumber: action.chapterNumber,
+                cssLoaded: true,
               };
-              const onStylesLoad = (): void => {
-                dynamicStyleNode!.removeEventListener('load', onStylesLoad);
-                const checkFonts = () => {
+              if (replace) {
+                finalPartialState.dynamicStyleNode = newLink;
+              }
+              resolve(finalPartialState);
+              highlightTerms(state.searchTerms);
+            };
+            const onStylesLoad = (): void => {
+              dynamicStyleNode!.removeEventListener('load', onStylesLoad);
+              const checkFonts = () => {
+                window.requestAnimationFrame(() => {
                   window.requestAnimationFrame(() => {
-                    window.requestAnimationFrame(() => {
-                      if (document.fonts.status === 'loaded') {
-                        dynamicStyleNode!.onload = null;
-                        done();
-                        return;
-                      }
-                      document.fonts.onloadingdone = () => {
-                        dynamicStyleNode!.onload = null;
-                        document.fonts.onloadingdone = null;
-                        done();
-                      };
-                    });
+                    if (document.fonts.status === 'loaded') {
+                      dynamicStyleNode!.onload = null;
+                      done();
+                      return;
+                    }
+                    document.fonts.onloadingdone = () => {
+                      dynamicStyleNode!.onload = null;
+                      document.fonts.onloadingdone = null;
+                      done();
+                    };
                   });
-                };
-                const images = contentPlaceholderNode!.querySelectorAll('img');
-                if (!images.length) {
-                  checkFonts();
-                  return;
-                }
-                const promises = new Array<Promise<HTMLImageElement>>();
-                images.forEach((img) => {
-                  promises.push(
-                    new Promise<HTMLImageElement>((imageResolve) => {
-                      if (img.complete) {
-                        imageResolve(img);
-                        return;
-                      }
-                      const onLoad = (): void => {
-                        img.removeEventListener('load', onLoad);
-                        imageResolve(img);
-                      };
-                      const onError = (ev: ErrorEvent) => {
-                        log.info('Error loading image', ev.message);
-                        onLoad();
-                      };
-                      img.addEventListener('load', onLoad);
-                      img.addEventListener('error', onError);
-                    }),
-                  );
                 });
-                Promise.all(promises).then(checkImagesHeight).then(checkFonts);
               };
-              if (!action.cssURL || action.cssURL === dynamicStyleNode!.href) {
-                replace = false;
-                onStylesLoad();
+              const images = contentPlaceholderNode!.querySelectorAll('img');
+              if (!images.length) {
+                checkFonts();
                 return;
               }
-              newLink.rel = 'stylesheet';
-              newLink.type = 'text/css';
-              newLink.addEventListener('load', onStylesLoad);
-              dynamicStyleNode!.replaceWith(newLink);
-              newLink.href = action.cssURL;
-            });
+              const promises = new Array<Promise<HTMLImageElement>>();
+              images.forEach((img) => {
+                promises.push(
+                  new Promise<HTMLImageElement>((imageResolve) => {
+                    if (img.complete) {
+                      imageResolve(img);
+                      return;
+                    }
+                    const onLoad = (): void => {
+                      img.removeEventListener('load', onLoad);
+                      imageResolve(img);
+                    };
+                    const onError = (ev: ErrorEvent) => {
+                      log.info('Error loading image', ev.message);
+                      onLoad();
+                    };
+                    img.addEventListener('load', onLoad);
+                    img.addEventListener('error', onError);
+                  }),
+                );
+              });
+              Promise.all(promises).then(checkImagesHeight).then(checkFonts);
+            };
+            if (!action.cssURL || action.cssURL === dynamicStyleNode!.href) {
+              replace = false;
+              onStylesLoad();
+              return;
+            }
+            newLink.rel = 'stylesheet';
+            newLink.type = 'text/css';
+            newLink.addEventListener('load', onStylesLoad);
+            dynamicStyleNode!.replaceWith(newLink);
+            newLink.href = action.cssURL;
           });
-        }
+        });
       });
     }
 
@@ -147,7 +152,8 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
             setCSSProperty('viewer-margin-top', '0');
             const finalPartialState: Partial<State> = {
               ...recalculateState,
-              layout: state.layout,
+              slug: action.slug,
+              contentSlug: action.contentSlug,
               cssLoaded: true,
             };
             updateState({ loadingContent: false });

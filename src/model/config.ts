@@ -1,5 +1,13 @@
 import { ReadGardenEventHandler } from './events';
-import { FitMode, FontSize, Margin, ViewerMode, Zoom } from './viewerSettings';
+import {
+  FitMode,
+  FontSize,
+  Margin,
+  NewContent,
+  ScrollModes,
+  ViewerMode,
+  Zoom,
+} from './viewerSettings';
 
 /*
 SCOPES:
@@ -19,6 +27,20 @@ export interface DefaultConfig {
    * @scope Fixed
    */
   initialFixedMode: ViewerMode.WithScroll | ViewerMode.Paginated;
+  /**
+   * Speed of the animation in milliseconds
+   * representing the amount of time that will take to
+   * reach de desired state
+   */
+  animationSpeed: number;
+  /**
+   * Animation inertia (or tension)
+   */
+  animationInertia: number;
+  /**
+   * The friction (or resistance) used for the movement in the scroll and animations
+   */
+  animationFriction: number;
   /**
    * Initial fit mode. Will be used at viewer first load.
    * @scope Fixed
@@ -40,6 +62,11 @@ export interface DefaultConfig {
    */
   initialReadMode: boolean;
   /**
+   * Initial scroll mode for first render
+   * @scope Scrolled
+   */
+  initialScrollMode: ScrollModes;
+  /**
    * Zoom config
    * @scope Fixed
    */
@@ -59,6 +86,14 @@ export interface DefaultConfig {
    * @scope Global
    */
   uiModeMargin: Margin;
+  /**
+   * Viewer padding top
+   */
+  paddingTop: number;
+  /**
+   * Viewer padding top
+   */
+  paddingBottom: number;
   /**
    * [Scrolled] Loaded contents number. Viewer will always try to keep this number of contents (pages)
    * loaded. If number of visible contents (pages) is bigger than this number, this number will
@@ -109,9 +144,17 @@ export interface DefaultConfig {
    */
   toggleReadModeOnClick: boolean;
   /**
+   * Disables user text selection
+   */
+  disableSelection?: boolean;
+  /**
    * Preload order for fixed viewer with scroll
    */
   fixedViewerPreloadOrder: number[];
+  /**
+   * Initial content. If provided, viewer won't ask for content after setup
+   */
+  initialContent?: NewContent;
 }
 
 export interface RequiredConfig {

@@ -1,6 +1,8 @@
 import log from 'loglevel';
+
 import { getState, updateState } from '../lib/state';
-import { LayoutTypes } from '../model/state';
+import { LayoutTypes } from '../model/viewerSettings';
+
 import getCurrentPageInViewport from './getCurrentPageInViewport';
 import loadContentsInBackground from './loadContentsInBackground';
 

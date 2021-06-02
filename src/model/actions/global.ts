@@ -1,5 +1,13 @@
-import { LayoutTypes, ScrollModes } from '../state';
+import { FullState } from '../state';
+import { NewContent, ScrollModes, ViewerTheme } from '../viewerSettings';
 import { Action } from './common';
+
+type FilterPropertyNames<Base, Condition> = {
+  [Key in keyof Base]: Base[Key] extends Condition ? Key : never;
+};
+type AllowedPropertyNamesNames<Base, Condition> = FilterPropertyNames<Base, Condition>[keyof Base];
+
+export type StatePropertyNames<T> = AllowedPropertyNamesNames<FullState, T>;
 
 /**
  * Names of the action types for global actions
@@ -17,32 +25,8 @@ export enum GlobalActionTypes {
 /**
  * Appends new loaded content
  */
- export interface AppendNewContent extends Action {
+ export interface AppendNewContent extends Action, NewContent {
   type: 'appendNewContent';
-  /**
-   * Layout type
-   */
-  layout: LayoutTypes;
-  /**
-   * First level content slug (book, work...)
-   */
-  slug: string;
-  /**
-   * Second level content slug (page, chapter...)
-   */
-  contentSlug: string;
-  /**
-   * Second level content label (page, chapter...)
-   */
-  label: string;
-  /**
-   * Content CSS URL
-   */
-  cssURL: string;
-  /**
-   * Content HTML
-   */
-  htmlContent: string;
 }
 
 
@@ -71,12 +55,12 @@ export interface SetScrollMode extends Action {
 /**
  * Sets the Dark or Light Mode
  */
-export interface SetDarkMode extends Action {
-  type: 'setDarkMode';
+export interface SetTheme extends Action {
+  type: 'setTheme';
   /**
-   * True for dark mode
+   * Viewer theme (light, dark...)
    */
-  isDark: Boolean;
+  theme: ViewerTheme;
 }
 
 /**
@@ -92,6 +76,24 @@ export interface NavigateToPage extends Action {
 
 export interface Resize extends Action {
   type: 'resize';
+}
+
+export type PropertyChangeEvent<T = any> = (newValue: T, oldValue: T) => void;
+
+export interface AddOnChangeEvent<T> extends Action {
+  type: 'addOnChangeEvent';
+  propertyName: StatePropertyNames<T>;
+  event: PropertyChangeEvent<T>; 
+}
+
+export interface RemoveOnChangeEvent<T> extends Action {
+  type: 'removeOnChangeEvent';
+  propertyName: StatePropertyNames<T>;
+  event: PropertyChangeEvent<T>; 
+}
+
+export interface RemoveAllChangeEvents extends Action {
+  type: 'removeAllChangeEvents';
 }
 
 export interface HighlightSearchTerms extends Action {
@@ -116,10 +118,13 @@ export interface SetReadMode extends Action {
  */
 export type GlobalActions =
   | SetScrollMode
-  | SetDarkMode
+  | SetTheme
   | NavigateToPage
   | SetDebugViewerSafeArea
   | AppendNewContent
   | Resize
   | HighlightSearchTerms
-  | SetReadMode;
+  | SetReadMode
+  | AddOnChangeEvent<any>
+  | RemoveOnChangeEvent<any>
+  | RemoveAllChangeEvents;

@@ -1,7 +1,12 @@
-import { FixedState, GlobalState, PropChangeHandler, State } from '../../model/state';
+import {
+  FixedState,
+  GlobalState,
+  PropChangeHandler,
+  ScrolledState,
+  State,
+} from '../../model/state';
 import { InitialConfig } from '../../model/config';
 import { ViewerMode } from '../../model/viewerSettings';
-
 import defaultGlobal from './defaultGlobal';
 import defaultFlow from './defaultFlow';
 import defaultScrolled from './defaultScrolled';
@@ -10,6 +15,8 @@ import defaultPaginated from './defaultPaginated';
 import defaultConfig from '../../config/default';
 import { setConfig } from '../../config';
 import changeHandlers from './changeHandlers';
+import { notifyEventHandler } from './stateChangeEvents';
+import { StatePropertyNames } from '../../model/actions/global';
 
 const handlers = new Map<string, Map<any, PropChangeHandler>>();
 
@@ -36,11 +43,11 @@ export const initializeState = (initialConfig: InitialConfig): void => {
     ...initialConfig,
     zoom: {
       ...defaultConfig.zoom,
-      ...(initialConfig.zoom || {}),
+      ...(initialConfig.zoom ?? {}),
     },
     fontSize: {
       ...defaultConfig.fontSize,
-      ...(initialConfig.fontSize || {}),
+      ...(initialConfig.fontSize ?? {}),
     },
   });
 
@@ -54,26 +61,40 @@ export const initializeState = (initialConfig: InitialConfig): void => {
     config,
     margin: {
       ...defaultInitialMargins,
-      ...(initialMargins || {}),
+      ...(initialMargins ?? {}),
     },
     title: 'Title', // From initial config
     slug: config.slug,
     contentSlug: config.contentSlug,
+    dragging: false,
+    scrollLeft: 0,
+    scrollTop: 0,
+    animate: false,
+    animating: false,
+    animationFriction: config.animationFriction,
+    animationSpeed: config.animationSpeed,
+    animationInertia: config.animationInertia,
     pageLabel: config.contentSlug, // Should be different (maybe we need to add `initialPageLabel`)
     pageNumber: 1, // From initial config
-    scale: config.initialScale || defaultGlobal.scale,
-    searchTerms: [],
-    searchRanges: [],
+    scale: config.initialScale ?? defaultGlobal.scale,
+    toggleReadModeOnClick: config.toggleReadModeOnClick ?? defaultGlobal.toggleReadModeOnClick,
+    searchTerms: new Array<string>(),
+    searchRanges: new Array<Range>(),
     debugViewerSafeArea: config.debugViewerSafeArea,
     containerWidth: 0,
     containerHeight: 0,
+  };
+
+  const scrolledState: ScrolledState = {
+    ...defaultScrolled,
+    scrollMode: initialConfig.initialScrollMode || defaultScrolled.scrollMode,
   };
 
   if (config.layoutType === 'flow') {
     state = {
       ...globalState,
       ...defaultFlow,
-      ...defaultScrolled,
+      ...scrolledState,
       columnGap: config.columnGap,
       readMode: config.initialReadMode,
       fontFamily: config.initialFontFamily,
@@ -99,7 +120,7 @@ export const initializeState = (initialConfig: InitialConfig): void => {
       state = {
         ...globalState,
         ...fixedState,
-        ...defaultScrolled,
+        ...scrolledState,
       };
     }
   }
@@ -112,6 +133,7 @@ export const updateState = (newState: Partial<State>): void => {
   Object.keys(newState).forEach((key) => {
     const newValue = (newState as any)[key];
     if (newValue !== updatableState[key]) {
+      const oldValue = updatableState[key];
       updatableState[key] = newValue;
       const propertyHandlers = handlers.get(key);
       if (propertyHandlers) {
@@ -120,6 +142,11 @@ export const updateState = (newState: Partial<State>): void => {
           changeHandler();
         }
       }
+      notifyEventHandler<typeof newValue>(
+        key as StatePropertyNames<typeof newValue>,
+        newValue,
+        oldValue,
+      );
     }
   });
 };

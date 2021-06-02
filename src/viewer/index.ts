@@ -9,6 +9,8 @@ import { getState, initializeState } from '../lib/state';
 import setInitialProperties from '../lib/styles/setInitialProperties';
 import createBasicDOMElements from '../utils/createBasicDOMElements';
 import { setupGlobalEvents, removeGlobalEvents } from '../utils/globalEvents';
+import animationController from '../lib/animation/animationController';
+import { AppendNewContent } from '../model/actions/global';
 
 /**
  * Main viewer function
@@ -17,7 +19,7 @@ import { setupGlobalEvents, removeGlobalEvents } from '../utils/globalEvents';
  */
 const viewer: ViewerFunction = (config) => {
   initializeState(config);
-  const state = getState();
+  const state = getState();  
   const api: APIInterface = {
     dispatch,
     state,
@@ -26,12 +28,19 @@ const viewer: ViewerFunction = (config) => {
   setInitialProperties(state);
   createBasicDOMElements(state);
   setupGlobalEvents(api.dispatch);
-  const loadNewContent: LoadNewContent = {
-    type: 'loadNewContent',
-    slug: config.slug,
-    contentSlug: config.contentSlug,
-  };
-  if (state.config.eventHandler) {
+  animationController(state, api.dispatch);
+  if (config.initialContent) {
+    const action: AppendNewContent = {
+      type: 'appendNewContent',
+      ...config.initialContent,
+    };
+    dispatch(action);
+  } else if (state.config.eventHandler) {
+    const loadNewContent: LoadNewContent = {
+      type: 'loadNewContent',
+      slug: config.slug,
+      contentSlug: config.contentSlug,
+    };
     state.config.eventHandler(loadNewContent);
   }
   log.info('Viewer Initialized');

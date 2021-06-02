@@ -1,5 +1,5 @@
+import { TextAlignModes } from '../viewerSettings';
 import { Action } from './common';
-import { TextAlignModes } from '../state';
 
 /**
  * Names of the action types for Flow Layout Actions
@@ -68,6 +68,14 @@ export interface SetTextAlign extends Action {
   textAlign: TextAlignModes;
 }
 
+export interface NavigateToNextChapter extends Action {
+  type: 'navigateToNextChapter';
+}
+
+export interface NavigateToPreviousChapter extends Action {
+  type: 'navigateToPreviousChapter';
+}
+
 /**
  * Actions for FlowLayout
  */
@@ -77,4 +85,6 @@ export type FlowActions =
   | DecreaseFontSize
   | SetLineHeight
   | SetFontFamily
-  | SetTextAlign;
+  | SetTextAlign
+  | NavigateToNextChapter
+  | NavigateToPreviousChapter;

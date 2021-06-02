@@ -1,4 +1,5 @@
-import { DefaultFlowState, LayoutTypes } from '../../model/state';
+import { DefaultFlowState } from '../../model/state';
+import { LayoutTypes } from '../../model/viewerSettings';
 
 const defaultFlow: DefaultFlowState = {
   layout: LayoutTypes.Flow,
@@ -6,11 +7,11 @@ const defaultFlow: DefaultFlowState = {
   fontFamily: 'Helvetica',
   fontSize: 18,
   textAlign: null,
-  labels: [],
-  snaps: [],
+  snaps: new Array<number>(),
   columnWidth: 0,
   totalColumnWidth: 0,
   totalColumns: 0,
+  chapterNumber: 0,
 };
 
 export default defaultFlow;

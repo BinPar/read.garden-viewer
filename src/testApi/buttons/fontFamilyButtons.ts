@@ -1,6 +1,7 @@
 import { SetFontFamily } from '../../model/actions/flow';
 import { DispatchAPIAction } from '../../model/apiInterface';
-import { LayoutTypes, State } from '../../model/state';
+import { State } from '../../model/state';
+import { LayoutTypes } from '../../model/viewerSettings';
 
 const fontFamilyButtons = (
   container: HTMLDivElement,

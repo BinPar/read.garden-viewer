@@ -1,5 +1,12 @@
 import { Config } from './config';
-import { FitMode, Margin } from './viewerSettings';
+import {
+  FitMode,
+  LayoutTypes,
+  Margin,
+  ScrollModes,
+  TextAlignModes,
+  ViewerTheme,
+} from './viewerSettings';
 
 /**
  * Global state
@@ -9,6 +16,22 @@ export interface GlobalState {
    * Current slug
    */
   slug: string;
+  /**
+   * True if user is dragging the scroll
+   */
+  dragging: boolean;
+  /**
+   * True if user is selecting text
+   */
+  selectingText: boolean;
+  /**
+   * Scroll left position
+   */
+  scrollLeft: number;
+  /**
+   * Scroll left position
+   */
+  scrollTop: number;
   /**
    * Alternates read mode on document click
    */
@@ -22,18 +45,31 @@ export interface GlobalState {
    */
   readMode: boolean;
   /**
-   * Security Margins
+   * True when the viewer is doing an animation
+   * probably it is a good idea to wait until it ends for
+   * measuring hight-lights and other items
    */
-  securityMargins: {
-    /**
-     * Read Mode Safe Margins
-     */
-    readMode: Margin;
-    /**
-     * User Interface Mode Safe Margins
-     */
-    uiMode: Margin;
-  };
+  animating: boolean;
+  /**
+   * True when the viewer can do animations
+   * if it is set to false, any view transition will be
+   * applied directly without any animation
+   */
+  animate: boolean;
+  /**
+   * Speed of the animation in milliseconds
+   * representing the amount of time that will take to
+   * reach de desired state
+   */
+  animationSpeed: number;
+  /**
+   * Animation inertia (or tension)
+   */
+  animationInertia: number;
+  /**
+   * The friction (or resistance) used for the movement in the scroll and animations
+   */
+  animationFriction: number;
   /**
    * Main container DOM node
    */
@@ -142,6 +178,10 @@ export interface GlobalState {
    * Search ranges
    */
   searchRanges: Range[];
+  /**
+   * Viewer theme (light, dark...)
+   */
+  theme: ViewerTheme;
 }
 
 /**
@@ -151,34 +191,18 @@ export type DefaultGlobalState = Partial<GlobalState> &
   Required<
     Pick<
       GlobalState,
+      | 'dragging'
+      | 'selectingText'
       | 'scale'
       | 'basicDOMElementsCreated'
       | 'cssLoaded'
       | 'recalculating'
       | 'wrapperReady'
-      | 'securityMargins'
       | 'readMode'
       | 'toggleReadModeOnClick'
+      | 'theme'
     >
   >;
-
-/**
- * Layout types
- */
-export enum LayoutTypes {
-  Fixed = 'fixed',
-  Flow = 'flow',
-}
-
-/**
- * Available text align modes
- */
-export type TextAlignModes = 'start' | 'justify' | null;
-
-/**
- * Available scroll modes
- */
-export type ScrollModes = 'vertical' | 'horizontal';
 
 export interface FixedContentInfo {
   /**
@@ -217,11 +241,19 @@ export interface FixedViewerContentInfo extends FixedContentInfo {
    */
   container: HTMLDivElement;
   /**
-   * Max left position (to identify current page on scroll)
+   * Left position (where content starts on horizontal scroll)
+   */
+  left: number;
+  /**
+   * Max left position (to identify current page on horizontal scroll)
    */
   maxLeft: number;
   /**
-   * Max top position (to identify current page on scroll)
+   * Top position (where content starts on vertical scroll)
+   */
+  top: number;
+  /**
+   * Max top position (to identify current page on vertical scroll)
    */
   maxTop: number;
 }
@@ -340,9 +372,9 @@ export interface FlowState {
    */
   snaps: number[];
   /**
-   * Pages labels
+   * Flow content chapter number
    */
-  labels: string[];
+  chapterNumber: number;
 }
 
 /**
@@ -392,6 +424,11 @@ export interface ScrolledState {
 
 export type State = GlobalState &
   ((FixedState & (PaginatedState | ScrolledState)) | (FlowState & ScrolledState));
+
+export type FullState = GlobalState &
+  Omit<FlowState, 'layout'> &
+  Omit<FixedState, 'layout'> & { layout: LayoutTypes } & Omit<PaginatedState, 'scrollMode'> &
+  Omit<FlowState, 'scrollMode'> & { scrollMode: ScrollModes };
 
 export type PropChangeHandler = () => void;
 

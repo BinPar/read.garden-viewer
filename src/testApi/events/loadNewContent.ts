@@ -2,7 +2,7 @@ import log from 'loglevel';
 
 import { AppendNewContent } from '../../model/actions/global';
 import { LoadNewContent } from '../../model/events';
-import { LayoutTypes } from '../../model/state';
+import { LayoutTypes } from '../../model/viewerSettings';
 
 import loadIndexFile from '../utils/loadIndexFile';
 import replaceUrls from '../utils/replaceUrls';
@@ -13,7 +13,7 @@ import testingConfig from '../../config/testing';
 const loadNewContent: EventHandler<LoadNewContent> = async (event, dispatch) => {
   const { slug, contentSlug } = event;
   const index = await loadIndexFile(slug);
-  const { type: layout, contents,  } = index;
+  const { type: layout, contents } = index;
   // The following line DOES NOT work like this in RG viewer, because labels ARE NOT slugs
   const currentContent = contents.find((content) =>
     content.labels.map((l) => l.toLowerCase()).includes(contentSlug),
@@ -26,9 +26,10 @@ const loadNewContent: EventHandler<LoadNewContent> = async (event, dispatch) => 
   const response = await fetch(url);
   let htmlContent = await response.text();
   let cssURL = '';
+  let chapterNumber: number | undefined;
   if (layout === LayoutTypes.Flow) {
-    const chapterNumber = parseInt(currentContent.cssUrl!.split('/')[1]!, 10);
-    htmlContent = htmlContent.replace('<div', `<div class="c${chapterNumber + 1}"`);
+    chapterNumber = parseInt(currentContent.cssUrl!.split('/')[1]!, 10) + 1;
+    htmlContent = htmlContent.replace('<div', `<div class="c${chapterNumber}"`);
     cssURL = `${testingConfig.baseURL}books/${slug}/${currentContent.cssUrl}`;
   }
   if (layout === LayoutTypes.Fixed) {
@@ -36,8 +37,8 @@ const loadNewContent: EventHandler<LoadNewContent> = async (event, dispatch) => 
       htmlContent = replaceUrls(htmlContent);
       cssURL = `${testingConfig.baseURL}books/${slug}/${index.cssURL}`;
     } else {
-      const chapterNumber = parseInt(currentContent.cssUrl!.split('/')[1]!, 10);
-      htmlContent = htmlContent.replace('<div', `<div class="c${chapterNumber + 1}"`);
+      const fixedChapterNumber = parseInt(currentContent.cssUrl!.split('/')[1]!, 10) + 1;
+      htmlContent = htmlContent.replace('<div', `<div class="c${fixedChapterNumber}"`);
       cssURL = `${testingConfig.baseURL}books/${slug}/${currentContent.cssUrl}`;
     }
   }
@@ -47,6 +48,7 @@ const loadNewContent: EventHandler<LoadNewContent> = async (event, dispatch) => 
     slug,
     contentSlug,
     label: currentContent.labels[0],
+    chapterNumber,
     cssURL,
     htmlContent,
   };

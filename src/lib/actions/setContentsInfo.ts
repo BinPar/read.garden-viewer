@@ -1,6 +1,8 @@
 import { ActionDispatcher } from '../../model/actions/actionDispatcher';
 import { SetContentsInfo } from '../../model/actions/fixed';
-import { FixedViewerContentInfo, LayoutTypes, State } from '../../model/state';
+import { FixedViewerContentInfo, State } from '../../model/state';
+import { LayoutTypes } from '../../model/viewerSettings';
+
 import setCSSProperty from '../../utils/setCSSProperty';
 
 /**
@@ -21,9 +23,13 @@ const setContentsInfo: ActionDispatcher<SetContentsInfo> = async ({ state, actio
   let totalHeight = 0;
   const contentsByLabel = new Map<string, FixedViewerContentInfo>();
   const contentsByOrder = new Map<number, FixedViewerContentInfo>();
+  const positionByLabel = new Map<string, number>();
+  const labelByPosition = new Map<number, string>();
   const contentsInfo = new Array<FixedViewerContentInfo>();
   for (let i = 0, l = info.length; i < l; i++) {
     const { width, height, label, slug, order, html, cssURL } = info[i];
+    const left = totalWidth;
+    const top = totalHeight;
     totalHeight += height;
     totalWidth += width;
     const container = document.createElement('div');
@@ -36,6 +42,9 @@ const setContentsInfo: ActionDispatcher<SetContentsInfo> = async ({ state, actio
     if (!currentContentIndex && slug === state.contentSlug) {
       currentContentIndex = order;
     }
+    const position = state.scrollMode === 'horizontal' ? left : top;
+    positionByLabel.set(label, position);
+    labelByPosition.set(position, label);
     const contentInfo: FixedViewerContentInfo = {
       width,
       height,
@@ -45,6 +54,8 @@ const setContentsInfo: ActionDispatcher<SetContentsInfo> = async ({ state, actio
       container,
       html,
       cssURL,
+      left,
+      top,
       maxLeft: totalWidth,
       maxTop: totalHeight,
     };
@@ -64,6 +75,8 @@ const setContentsInfo: ActionDispatcher<SetContentsInfo> = async ({ state, actio
     contentsByLabel,
     contentsByOrder,
     currentContentIndex,
+    positionByLabel,
+    labelByPosition,
     wrapperReady: true,
   };
 };

@@ -10,6 +10,13 @@ import resize from './resize';
 import highlightSearchTerms from './highlightSearchTerms';
 import setContentsInfo from './setContentsInfo';
 import setReadMode from './setReadMode';
+import addOnChangeEvent from './addOnChangeEvent'
+import removeOnChangeEvent from './removeOnChangeEvent';
+import removeAllOnChangeEvents from './removeAllOnChangeEvents';
+import setTheme from './setTheme';
+import navigateToPreviousChapter from './navigateToPreviousChapter';
+import navigateToNextChapter from './navigateToNextChapter';
+import navigateToPage from './navigateToPage';
 
 /**
  * List of all action dispatchers
@@ -27,6 +34,13 @@ const actionDispatchers  = {
   highlightSearchTerms,
   setContentsInfo,
   setReadMode,
+  addOnChangeEvent,
+  removeOnChangeEvent,
+  removeAllOnChangeEvents,
+  setTheme,
+  navigateToPreviousChapter,
+  navigateToNextChapter,
+  navigateToPage,
 };
 
 export default actionDispatchers;

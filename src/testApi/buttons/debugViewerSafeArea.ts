@@ -1,25 +1,30 @@
-import { SetDebugViewerSafeArea } from '../../model/actions/global';
+import { AddOnChangeEvent, SetDebugViewerSafeArea } from '../../model/actions/global';
 import { DispatchAPIAction } from '../../model/apiInterface';
 import { State } from '../../model/state';
 
-const debugViewerSafeArea = (
+const debugViewerSafeArea = async (
   container: HTMLDivElement,
   state: State,
   dispatcher: DispatchAPIAction,
-): void => {
+): Promise<void> => {
   const button = document.createElement('button');
   const updateInnerText = (): void => {
     button.innerText = state.debugViewerSafeArea
       ? 'Debug Safe Area'
       : 'Normal Safe Area';
   };
+  const onDebugViewerChange: AddOnChangeEvent<boolean> = {
+    type: 'addOnChangeEvent',
+    propertyName: 'debugViewerSafeArea',
+    event: updateInnerText,
+  };
+  await dispatcher(onDebugViewerChange);
   const onClick = async (): Promise<void> => {
     const action: SetDebugViewerSafeArea = {
       type: 'setDebugViewerSafeArea',
       value: !state.debugViewerSafeArea,
     };
     await dispatcher(action);
-    updateInnerText();
   };
   button.onclick = onClick;
   updateInnerText();

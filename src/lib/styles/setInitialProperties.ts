@@ -1,4 +1,6 @@
-import { LayoutTypes, State } from '../../model/state';
+import { State } from '../../model/state';
+import { LayoutTypes } from '../../model/viewerSettings';
+
 import setCSSProperty from '../../utils/setCSSProperty';
 
 /**
@@ -13,7 +15,6 @@ const setInitialProperties = (state: State): void => {
   setCSSProperty('column-gap', `${state.config.columnGap}px`);
   setCSSProperty('column-gap-compensation', '0px');
   setCSSProperty('content-wrapper-height', '100vh');
-  setCSSProperty('content-wrapper-padding', '0');
   setCSSProperty('contrast-viewer-color', '1');
   setCSSProperty('column-width', '0px');
   setCSSProperty('current-selection-extensors-color', '#0030ff46');
@@ -22,8 +23,8 @@ const setInitialProperties = (state: State): void => {
   setCSSProperty('horizontal-translate', '0');
   setCSSProperty('invert-viewer-color', '0');
   setCSSProperty('line-height', '1.5em');
-  setCSSProperty('padding-bottom', '0px');
-  setCSSProperty('padding-top', '0px');
+  setCSSProperty('padding-top', `${state.config.paddingTop}px`);
+  setCSSProperty('padding-bottom', `${state.config.paddingBottom}px`);
   setCSSProperty('scale', `${state.scale}`);
   setCSSProperty('search-highlights-color', '#ffcf0040');
   setCSSProperty('sepia-viewer-color', '0');
@@ -31,7 +32,7 @@ const setInitialProperties = (state: State): void => {
   setCSSProperty('total-column-width', '0px');
   setCSSProperty('total-height', '0px');
   setCSSProperty('total-width', '0px');
-  setCSSProperty('user-select', 'auto');
+  setCSSProperty('user-select', state.config.disableSelection ? 'none' : 'text');
   setCSSProperty('user-select-end', 'none');
   setCSSProperty('vertical-translate', '0');
   setCSSProperty('viewer-margin-top', '200vh');

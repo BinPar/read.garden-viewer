@@ -1,6 +1,8 @@
-import { updateState } from '../lib/state';
 import { GetContentsInfo } from '../model/events';
-import { LayoutTypes, State } from '../model/state';
+import { State } from '../model/state';
+import { LayoutTypes } from '../model/viewerSettings';
+
+import { updateState } from '../lib/state';
 
 /**
  * Layout setup. Every needed setup or specific initialization should happen hear for every

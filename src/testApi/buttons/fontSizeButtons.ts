@@ -1,12 +1,14 @@
 import { DecreaseFontSize, IncreaseFontSize, SetFontSize } from '../../model/actions/flow';
+import { AddOnChangeEvent } from '../../model/actions/global';
 import { DispatchAPIAction } from '../../model/apiInterface';
-import { LayoutTypes, State } from '../../model/state';
+import { State } from '../../model/state';
+import { LayoutTypes } from '../../model/viewerSettings';
 
-const fontSizeButtons = (
+const fontSizeButtons = async (
   container: HTMLDivElement,
   state: State,
   dispatcher: DispatchAPIAction,
-): void => {
+): Promise<void> => {
   const controls = document.createElement('div');
 
   const increaseButton = document.createElement('button');
@@ -26,6 +28,14 @@ const fontSizeButtons = (
     }
   };
 
+  const onFontSizeChanged: AddOnChangeEvent<number> = {
+    type: 'addOnChangeEvent',
+    propertyName: 'fontSize',
+    event: updateValue,
+  };
+
+  await dispatcher(onFontSizeChanged);
+
   const onKeyDown = async (e: KeyboardEvent): Promise<void> => {
     if (e.code === 'Enter' || e.code === 'NumpadEnter') {
       const size = parseInt(fontSizeDisplay.value, 10);
@@ -35,7 +45,6 @@ const fontSizeButtons = (
           size,
         };
         await dispatcher(action);
-        updateValue();
       } else {
         // eslint-disable-next-line no-console
         console.warn('Provided value is not a number');
@@ -48,7 +57,6 @@ const fontSizeButtons = (
       type: 'increaseFontSize',
     };
     await dispatcher(action);
-    updateValue();
   };
 
   const onDecrease = async (): Promise<void> => {
@@ -56,7 +64,6 @@ const fontSizeButtons = (
       type: 'decreaseFontSize',
     };
     await dispatcher(action);
-    updateValue();
   };
 
   fontSizeDisplay.onkeydown = onKeyDown;

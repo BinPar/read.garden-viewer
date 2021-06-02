@@ -69,6 +69,9 @@ const createBasicDOMElements = (state: State): void => {
 
   document.body.appendChild(readGardenContainerNode);
 
+  const containerWidth = contentWrapperNode!.clientWidth;
+  const containerHeight = contentWrapperNode!.clientHeight;
+
   updateState({
     basicDOMElementsCreated: true,
     mainStyleNode: mainStylesheet?.ownerNode as HTMLLinkElement,
@@ -82,6 +85,8 @@ const createBasicDOMElements = (state: State): void => {
     selectionSelectorsNode,
     searchTermsHighlightsNode,
     dynamicStyleNode,
+    containerWidth,
+    containerHeight,
   });
 };
 
