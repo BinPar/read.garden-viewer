@@ -64,11 +64,13 @@ const scrollInertiaAndLimits = (
   if (max !== null && scroll.target * -1 > max) {
     scroll.target = max * -1;
   }
-  const scrollLimits = getMinAndMaxScroll(state, 100);
-  if (scroll.current >= scrollLimits.maxScroll) {
-    dispatch({ type: 'navigateToPreviousChapter' });
-  } else if (scroll.current <= scrollLimits.minScroll) {
-    dispatch({ type: 'navigateToNextChapter' });
+  if (state.layout === LayoutTypes.Flow) {
+    const scrollLimits = getMinAndMaxScroll(state, 100);
+    if (scroll.current >= scrollLimits.maxScroll) {
+      dispatch({ type: 'navigateToPreviousChapter' });
+    } else if (scroll.current <= scrollLimits.minScroll) {
+      dispatch({ type: 'navigateToNextChapter' });
+    }
   }
   executeTransitions();
 };

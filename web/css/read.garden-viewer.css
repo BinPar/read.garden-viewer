@@ -30,26 +30,11 @@ body {
 body::-webkit-scrollbar {
   display: none;
 }
-/*
-Not required with virtual scroll.
-
-body.rg-horizontal-scroll {
-  overflow-x: auto;
-}
-
-body.rg-vertical-scroll {
-  overflow-y: auto;
-}
-*/
 
 div#rg-container {
   width: 100vw;
   height: 100vh;
-  /*
-  There are FireFox performance issues that will make us do this inline
-  filter: contrast(var(--contrast-viewer-color)) sepia(var(--sepia-viewer-color))
-  invert(var(--invert-viewer-color));
-  */
+  background-color: #fff;
 }
 
 div#rg-viewer {
@@ -59,15 +44,14 @@ div#rg-viewer {
   transform-origin: top left;
   transform: translateX(var(--horizontal-translate)) translateY(var(--vertical-translate))
     scale(var(--scale));
-  background-color: white;
   line-height: var(--line-height);  
 }
 
 div.rg-content-wrapper {
   outline: solid var(--safe-area-border-width) red;
   margin: var(--safe-area-margin-correction);
-  height: 100%;
-  padding: var(--content-wrapper-padding);
+  height: calc(100% - var(--padding-top) - var(--padding-bottom));
+  padding: var(--padding-top) 0 var(--padding-bottom) 0;
   clear: both;
   cursor: var(--drag-cursor, grab);
   user-select: none;
@@ -85,7 +69,7 @@ div.rg-content-wrapper #rg-content-placeholder *::selection {
 }
 
 .rg-flow-layout div.rg-content-wrapper {
-  padding: 0 calc(var(--column-gap) / 2) 0;
+  padding: var(--padding-top) calc(var(--column-gap) / 2) var(--padding-bottom);
   font-size: var(--font-size);
   font-family: var(--font-family);
 }

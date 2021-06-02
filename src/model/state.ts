@@ -235,11 +235,19 @@ export interface FixedViewerContentInfo extends FixedContentInfo {
    */
   container: HTMLDivElement;
   /**
-   * Max left position (to identify current page on scroll)
+   * Left position (where content starts on horizontal scroll)
+   */
+  left: number;
+  /**
+   * Max left position (to identify current page on horizontal scroll)
    */
   maxLeft: number;
   /**
-   * Max top position (to identify current page on scroll)
+   * Top position (where content starts on vertical scroll)
+   */
+  top: number;
+  /**
+   * Max top position (to identify current page on vertical scroll)
    */
   maxTop: number;
 }
@@ -357,10 +365,6 @@ export interface FlowState {
    * Scroll snaps (pixels)
    */
   snaps: number[];
-  /**
-   * Pages labels
-   */
-  labels: string[];
   /**
    * Flow content chapter number
    */

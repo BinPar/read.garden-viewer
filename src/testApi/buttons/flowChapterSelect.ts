@@ -1,17 +1,15 @@
-import log from 'loglevel';
 import { AddOnChangeEvent } from '../../model/actions/global';
 import { DispatchAPIAction } from '../../model/apiInterface';
 import { State } from '../../model/state';
-import { SpineNode } from '../model/content';
+import { Content, SpineNode } from '../model/content';
 
-import loadIndexFile from '../utils/loadIndexFile';
+const values: number[] = [];
 
 const appendItems = (
   container: HTMLElement,
   items: SpineNode[],
   numStartPage: number,
   secondLevel = false,
-  dispatcher: DispatchAPIAction,
 ): string => {
   let currentValue = '';
   for (let i = 0, l = items.length; i < l; i++) {
@@ -29,13 +27,24 @@ const appendItems = (
     if (!secondLevel && children?.length) {
       const optionGroup = document.createElement('optgroup');
       optionGroup.label = title;
+      const [firstChild] = children;
+      if (label && firstChild.target.label && firstChild.target.label !== label) {
+        const option = document.createElement('option');
+        option.innerText = `${title} (${label})`;
+        option.value = label || '';
+        optionGroup.appendChild(option);
+        values.push(parseInt(label, 10));
+      }
       currentValue =
-        appendItems(optionGroup, children, numStartPage, true, dispatcher) || currentValue;
+        appendItems(optionGroup, children, numStartPage, true) || currentValue;
       container.appendChild(optionGroup);
     } else {
       const option = document.createElement('option');
       option.innerText = `${title} (${label})`;
       option.value = label || '';
+      if (label) {
+        values.push(parseInt(label, 10));
+      }
       container.appendChild(option);
     }
   }
@@ -46,40 +55,41 @@ const flowChapterSelect = (
   container: HTMLDivElement,
   state: State,
   dispatcher: DispatchAPIAction,
+  jsonIndex: Content
 ): void => {
-  loadIndexFile(state.config.slug).then((jsonIndex) => {
-    const select = document.createElement('select');
+  const select = document.createElement('select');
 
-    const numStartPage = parseInt(state.config.contentSlug || '1', 10);
-    const selected = appendItems(select, jsonIndex.spine, numStartPage, false, dispatcher);
-    select.value = selected;
+  const numStartPage = parseInt(state.config.contentSlug || '1', 10);
+  values.splice(0, values.length);
+  const selected = appendItems(select, jsonIndex.spine, numStartPage, false);
+  select.value = selected;
 
-    const onChange = (): void => {
-      if (select.value && state.config.eventHandler) {
-        state.config.eventHandler({
-          type: 'loadNewContent',
-          slug: state.config.slug,
-          contentSlug: select.value,
-        });
-      }
-    };
+  const onChange = (): void => {
+    if (select.value && state.config.eventHandler) {
+      state.config.eventHandler({
+        type: 'loadNewContent',
+        slug: state.config.slug,
+        contentSlug: select.value,
+      });
+    }
+  };
 
-    select.onchange = onChange;
-    container.appendChild(select);
+  select.onchange = onChange;
+  container.appendChild(select);
 
-    const onContentSlugChanged = (contentSlug: string): void => {
-      log.warn(`Need to move chapter to: ${contentSlug}`);
-      // @miguel: Select current node my getting the previous spine node
-    };
+  const onContentSlugChanged = (contentSlug: string): void => {
+    const target = parseInt(contentSlug, 10);
+    const value = values.find((v, i) => target >= v && (values[i + 1] ?? Infinity) > target);
+    select.value = `${value}`;
+  };
 
-    const contentSlugChanged: AddOnChangeEvent<string> = {
-      type: 'addOnChangeEvent',
-      propertyName: 'contentSlug',
-      event: onContentSlugChanged,
-    };
+  const contentSlugChanged: AddOnChangeEvent<string> = {
+    type: 'addOnChangeEvent',
+    propertyName: 'contentSlug',
+    event: onContentSlugChanged,
+  };
 
-    dispatcher(contentSlugChanged);
-  });
+  dispatcher(contentSlugChanged);
 };
 
 export default flowChapterSelect;

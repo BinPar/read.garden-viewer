@@ -16,6 +16,7 @@ import removeAllOnChangeEvents from './removeAllOnChangeEvents';
 import setTheme from './setTheme';
 import navigateToPreviousChapter from './navigateToPreviousChapter';
 import navigateToNextChapter from './navigateToNextChapter';
+import navigateToPage from './navigateToPage';
 
 /**
  * List of all action dispatchers
@@ -39,6 +40,7 @@ const actionDispatchers  = {
   setTheme,
   navigateToPreviousChapter,
   navigateToNextChapter,
+  navigateToPage,
 };
 
 export default actionDispatchers;

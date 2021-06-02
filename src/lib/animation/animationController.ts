@@ -1,5 +1,4 @@
 /* eslint-disable no-param-reassign */
-import log from 'loglevel';
 import { DispatchAPIAction } from '../../model/apiInterface';
 import { State } from '../../model/state';
 import { LayoutTypes } from '../../model/viewerSettings';
@@ -63,10 +62,7 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
     }
   };
 
-  const onReadModeChangeEvent = (): void => {
-    scroll.current = getScrollFromContentSlug(state);
-    scroll.target = scroll.current;
-    scroll.speed = 0;
+  const onReadModeChangeEvent = (instant = false): void => {
     const newMargins = state.readMode
       ? { ...state.config.readModeMargin }
       : { ...state.config.uiModeMargin };
@@ -93,29 +89,41 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
     if (state.scrollMode === 'vertical') {
       top.target = newMargins.top;
     }
-    executeTransitions();    
+    if (instant) {
+      left.current = left.target;
+      top.current = top.target;
+      scale.current = scale.target;
+      scale.speed = 0;
+      top.speed = 0;
+      left.speed = 0;
+      applyCSSProps();
+    } else {
+      executeTransitions();
+    }
   };
 
   const resetPageProps = (): void => {
-    left.current = 0;
-    left.target = 0;
-    top.current = 0;
-    top.target = 0;
     scroll.current = getScrollFromContentSlug(state);
     scroll.target = scroll.current;
     scroll.speed = 0;
   };
 
   const onScrollModeChange = (): void => {
-    resetPageProps();
-    applyCSSProps();
+    setTimeout(() => {
+      onReadModeChangeEvent(true);
+      scroll.current = getScrollFromContentSlug(state);
+      scroll.target = scroll.current;
+      scroll.speed = 0;
+      applyCSSProps();
+    }, 0);
   };
 
   const onContentSlugChanged = (slug: string): void => {
-    const targetSlug =  getScrollFromContentSlug(state, slug);
+    const targetSlug = getScrollFromContentSlug(state, slug);
     if (targetSlug) {
       scroll.target = targetSlug;
     }
+    executeTransitions();
   };
 
   const onChapterChange = (): void => {
@@ -126,11 +134,11 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
   addOnChangeEventListener('chapterNumber', onChapterChange);
   addOnChangeEventListener('contentSlug', onContentSlugChanged);
   addOnChangeEventListener('scrollMode', onScrollModeChange);
-  addOnChangeEventListener('readMode', onReadModeChangeEvent);
-  addOnChangeEventListener('containerWidth', onReadModeChangeEvent);
-  addOnChangeEventListener('containerHeight', onReadModeChangeEvent);
-  addOnChangeEventListener('fontSize', onReadModeChangeEvent);
-  onReadModeChangeEvent();
+  addOnChangeEventListener('readMode', () => onReadModeChangeEvent());
+  addOnChangeEventListener('containerWidth', () => onReadModeChangeEvent());
+  addOnChangeEventListener('containerHeight', () => onReadModeChangeEvent());
+  addOnChangeEventListener('fontSize', () => onReadModeChangeEvent());
+  onReadModeChangeEvent(true);
   scrollController(state, dispatch, scroll, executeTransitions);
   updateState({
     animate: true,
