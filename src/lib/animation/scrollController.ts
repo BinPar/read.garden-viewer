@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { SetReadMode } from '../../model/actions/global';
 import { DispatchAPIAction } from '../../model/apiInterface';
-import { SyntheticEvent } from '../../model/dom';
+import { SelectionInfo, SyntheticEvent } from '../../model/dom';
 import { State } from '../../model/state';
 import { drawHighlights } from '../../utils/highlights';
 import removeHighlights from '../../utils/highlights/removeHighlights';
@@ -14,14 +14,6 @@ import getSyntheticEvent from './getSyntheticEvent';
 import { InterpolationValue } from './interpolationValues';
 import getWordSelection from './getWordSelection';
 import scrollInertiaAndLimits from './scrollInertiaAndLimits';
-
-interface SelectionInfo {
-  range: Range;
-  startContainer: Node;
-  startOffset: number;
-  endContainer: Node;
-  endOffset: number;
-}
 
 const scrollController = (
   state: State,
@@ -37,11 +29,10 @@ const scrollController = (
 
   const { selectionHighlightsNode } = state as Required<State>;
   let currentSelection: SelectionInfo | null = null;
-  let currentRange: Range | null = null;
 
   const isPreviousThanSelection = (event: SyntheticEvent): boolean => {
     if (currentSelection) {
-      const { top, bottom, left } = currentSelection.range.getBoundingClientRect();
+      const { top, bottom, left } = currentSelection;
       return top > event.clientY || (left > event.clientX && bottom > event.clientY);
     }
     return false;
@@ -54,8 +45,11 @@ const scrollController = (
       if (wordSelection) {
         ev.preventDefault();
         ev.stopPropagation();
+        const { top, bottom, left } = wordSelection.getBoundingClientRect();
         currentSelection = {
-          range: wordSelection,
+          top,
+          bottom,
+          left,
           startContainer: wordSelection.startContainer,
           startOffset: wordSelection.startOffset,
           endContainer: wordSelection.endContainer,
@@ -108,7 +102,6 @@ const scrollController = (
     }
     if (currentSelection) {
       currentSelection = null;
-      currentRange = null;
       updateState({
         selectingText: false,
       });
@@ -148,7 +141,6 @@ const scrollController = (
           wordSelection.setStart(startContainer, startOffset);
         }
         drawHighlights(selectionHighlightsNode, [wordSelection]);
-        currentRange = wordSelection;
       }
     }
   };
