@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { SetReadMode } from '../../model/actions/global';
 import { DispatchAPIAction } from '../../model/apiInterface';
+import { SyntheticEvent } from '../../model/dom';
 import { State } from '../../model/state';
 import { drawHighlights } from '../../utils/highlights';
 import removeHighlights from '../../utils/highlights/removeHighlights';
@@ -9,10 +10,20 @@ import setCSSProperty from '../../utils/setCSSProperty';
 import { updateState } from '../state';
 import getCoordinatesFromEvent from './getCoordinatesFromEvent';
 import getMinAndMaxScroll from './getMinAndMaxScroll';
+import getRangeFromPoint from './getRangeFromPoint';
 import getSelection from './getSelection';
+import getSyntheticEvent from './getSyntheticEvent';
 import { InterpolationValue } from './interpolationValues';
-import isSelection from './isSelection';
+import getWordSelection from './getWordSelection';
 import scrollInertiaAndLimits from './scrollInertiaAndLimits';
+
+interface SelectionInfo {
+  range: Range;
+  startContainer: Node;
+  startOffset: number;
+  endContainer: Node;
+  endOffset: number;
+}
 
 const scrollController = (
   state: State,
@@ -25,19 +36,34 @@ const scrollController = (
   let lastX: null | number = null;
   let lastY: null | number = null;
   let lastMoveMilliseconds: number = new Date().getMilliseconds();
+
   const { selectionHighlightsNode } = state as Required<State>;
+  let currentSelection: SelectionInfo | null = null;
+  let currentRange: Range | null = null;
+
+  const isPreviousThanSelection = (event: SyntheticEvent): boolean => {
+    if (currentSelection) {
+      const { top, bottom, left } = currentSelection.range.getBoundingClientRect();
+      return top > event.clientY || (left > event.clientX && bottom > event.clientY);
+    }
+    return false;
+  };
 
   const onDragStart = (ev: MouseEvent | TouchEvent): void => {
     if (ev.type === 'touchstart' || (ev as MouseEvent).button === 0) {
-      if (isSelection(ev)) {
+      removeHighlights(selectionHighlightsNode);
+      const wordSelection = getWordSelection(ev);
+      if (wordSelection) {
         ev.preventDefault();
         ev.stopPropagation();
-        const selection = getSelection();
-        if (selection) {
-          drawHighlights(selectionHighlightsNode, [selection.getRangeAt(0)]);
-        }
+        currentSelection = {
+          range: wordSelection,
+          startContainer: wordSelection.startContainer,
+          startOffset: wordSelection.startOffset,
+          endContainer: wordSelection.endContainer,
+          endOffset: wordSelection.endOffset,
+        };
       } else {
-        removeHighlights(selectionHighlightsNode);
         mouseDown = true;
         lastX = null;
         lastY = null;
@@ -82,6 +108,13 @@ const scrollController = (
         });
       }, 0);
     }
+    if (currentSelection) {
+      currentSelection = null;
+      currentRange = null;
+      updateState({
+        selectingText: false,
+      });
+    }
   };
 
   const onDragMove = (ev: MouseEvent | TouchEvent): void => {
@@ -99,6 +132,26 @@ const scrollController = (
       executeTransitions();
       scroll.forceUpdate = false;
       lastMoveMilliseconds = new Date().getMilliseconds();
+    }
+    if (currentSelection) {
+      if (!state.selectingText) {
+        updateState({
+          selectingText: true,
+        });
+      }
+      const event = getSyntheticEvent(ev);
+      const wordSelection = getWordSelection(ev, event);
+      if (wordSelection) {
+        const isPrevious = isPreviousThanSelection(event);
+        const { startContainer, startOffset, endContainer, endOffset } = currentSelection;
+        if (isPrevious) {
+          wordSelection.setEnd(endContainer, endOffset);
+        } else {
+          wordSelection.setStart(startContainer, startOffset);
+        }
+        drawHighlights(selectionHighlightsNode, [wordSelection]);
+        currentRange = wordSelection;
+      }
     }
   };
 

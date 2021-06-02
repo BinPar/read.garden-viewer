@@ -1,4 +1,5 @@
 import { SyntheticEvent } from '../../model/dom';
+import getSelection from './getSelection';
 
 /**
  * This is crazy... the selection from point is not standard jet
@@ -9,7 +10,7 @@ import { SyntheticEvent } from '../../model/dom';
  * @param {SyntheticEvent} evt - Mouse event to do the selection
  * @returns Selection Range
  */
-const getRangeFromPoint = (evt: SyntheticEvent): Range => {
+const getRangeFromPoint = (evt: SyntheticEvent, extendToWord = false): Range => {
   let range: any;
   const x = evt.clientX;
   const y = evt.clientY;
@@ -39,6 +40,17 @@ const getRangeFromPoint = (evt: SyntheticEvent): Range => {
     // Next, the WebKit way
     else if (document.caretRangeFromPoint) {
       range = document.caretRangeFromPoint(x, y);
+    }
+  }
+  if (extendToWord) {
+    const selection = getSelection();
+    if (selection) {
+      selection.removeAllRanges();
+      selection.addRange(range as Range);
+      selection.modify('move', 'backward', 'word');
+      selection.modify('extend', 'forward', 'word');
+      console.log(selection.toString());
+      return selection.getRangeAt(0);
     }
   }
   return range as Range;
