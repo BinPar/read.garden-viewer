@@ -144,6 +144,10 @@ export interface DefaultConfig {
    */
   toggleReadModeOnClick: boolean;
   /**
+   * Disables user text selection
+   */
+  disableSelection?: boolean;
+  /**
    * Preload order for fixed viewer with scroll
    */
   fixedViewerPreloadOrder: number[];

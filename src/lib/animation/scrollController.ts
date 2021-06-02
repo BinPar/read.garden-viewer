@@ -10,8 +10,6 @@ import setCSSProperty from '../../utils/setCSSProperty';
 import { updateState } from '../state';
 import getCoordinatesFromEvent from './getCoordinatesFromEvent';
 import getMinAndMaxScroll from './getMinAndMaxScroll';
-import getRangeFromPoint from './getRangeFromPoint';
-import getSelection from './getSelection';
 import getSyntheticEvent from './getSyntheticEvent';
 import { InterpolationValue } from './interpolationValues';
 import getWordSelection from './getWordSelection';
@@ -52,7 +50,7 @@ const scrollController = (
   const onDragStart = (ev: MouseEvent | TouchEvent): void => {
     if (ev.type === 'touchstart' || (ev as MouseEvent).button === 0) {
       removeHighlights(selectionHighlightsNode);
-      const wordSelection = getWordSelection(ev);
+      const wordSelection = !state.config.disableSelection && getWordSelection(ev);
       if (wordSelection) {
         ev.preventDefault();
         ev.stopPropagation();

@@ -8,6 +8,7 @@ import getSelection from './getSelection';
  * (at least for the Bi-Books needs), if anyone detects any improvement
  * for any browser please do a pool request
  * @param {SyntheticEvent} evt - Mouse event to do the selection
+ * @param {boolean} extendToWord - Extend range to select full word
  * @returns Selection Range
  */
 const getRangeFromPoint = (evt: SyntheticEvent, extendToWord = false): Range => {
@@ -49,7 +50,6 @@ const getRangeFromPoint = (evt: SyntheticEvent, extendToWord = false): Range => 
       selection.addRange(range as Range);
       selection.modify('move', 'backward', 'word');
       selection.modify('extend', 'forward', 'word');
-      console.log(selection.toString());
       return selection.getRangeAt(0);
     }
   }
