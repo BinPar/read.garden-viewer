@@ -92,7 +92,7 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
     if (state.scrollMode === 'vertical') {
       top.target = newMargins.top;
     }
-    executeTransitions();    
+    executeTransitions();
   };
 
   const resetPageProps = (): void => {
@@ -111,10 +111,11 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
   };
 
   const onContentSlugChanged = (slug: string): void => {
-    const targetSlug =  getScrollFromContentSlug(state, slug);
+    const targetSlug = getScrollFromContentSlug(state, slug);
     if (targetSlug) {
       scroll.target = targetSlug;
     }
+    executeTransitions();
   };
 
   const onChapterChange = (): void => {

@@ -3,6 +3,7 @@ import { ActionDispatcher } from '../../model/actions/actionDispatcher';
 import { NavigateToPage } from '../../model/actions/global';
 import { LoadNewContent } from '../../model/events';
 import { LayoutTypes } from '../../model/viewerSettings';
+import { updateState } from '../state';
 
 /**
  * Navigate to a specific page (by label)
@@ -15,21 +16,15 @@ const navigateToPage: ActionDispatcher<NavigateToPage> = async ({ state, action 
     const { positionByLabel } = state;
     const position = positionByLabel.get(action.pageLabel);
     if (state.layout === LayoutTypes.Fixed) {
-      log.warn('Should scroll to position: ', position);
-      /**
-       * @Nacho: la `position` siempre debería tener valor y será la correcta para el modo de
-       * scroll que esté activo. Bastará con consultar el `scrollMode` para aplicar el translate
-       * horizontal o vertical según corresponda.
-       */
+      updateState({
+        contentSlug: action.pageLabel,
+      });
     }
     if (state.layout === LayoutTypes.Flow) {
       if (position) {
-        log.warn('Should scroll to position: ', position);
-        /**
-         * @Nacho: la `position` existe, por lo que la página a la que queremos navegar YA está
-         * en el capítulo cargado. Bastará con consultar el `scrollMode` para aplicar el translate
-         * horizontal o vertical según corresponda.
-         */
+        updateState({
+          contentSlug: action.pageLabel,
+        });
       } else if (state.config.eventHandler) {
         const event: LoadNewContent = {
           type: 'loadNewContent',
