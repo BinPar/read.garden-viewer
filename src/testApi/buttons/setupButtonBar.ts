@@ -13,6 +13,7 @@ import searchButtons from './searchButtons';
 import textAlignButtons from './textAlignButtons';
 import themeButtons from './themeButtons';
 import navigationButtons from './navigationButtons';
+import zoomControls from './zoomControls';
 
 const setupButtonBar = async (state: State, dispatcher: DispatchAPIAction): Promise<void> => {
   const redrawToolbar = async (): Promise<void> => {
@@ -37,6 +38,9 @@ const setupButtonBar = async (state: State, dispatcher: DispatchAPIAction): Prom
       fontFamilyButtons(testingButtonsPanel, state, dispatcher);
       textAlignButtons(testingButtonsPanel, state, dispatcher);
       chapterNavigationButtons(testingButtonsPanel, state, dispatcher);
+    }
+    if (state.layout === LayoutTypes.Fixed) {
+      zoomControls(testingButtonsPanel, state, dispatcher);
     }
     navigationButtons(testingButtonsPanel, state, dispatcher);
   };

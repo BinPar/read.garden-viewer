@@ -106,6 +106,8 @@ export const initializeState = (initialConfig: InitialConfig): void => {
       fitMode: config.initialFitMode,
       loadingContent: true,
       loadedCssUrls: new Set<string>(),
+      minimumZoomValue: config.zoom.min ?? defaultFixed.minimumZoomValue,
+      maximumZoomValue: config.zoom.max ?? defaultFixed.maximumZoomValue,
     };
 
     if (config.initialFixedMode === ViewerMode.Paginated) {

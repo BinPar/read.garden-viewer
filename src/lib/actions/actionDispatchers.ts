@@ -17,6 +17,8 @@ import setTheme from './setTheme';
 import navigateToPreviousChapter from './navigateToPreviousChapter';
 import navigateToNextChapter from './navigateToNextChapter';
 import navigateToPage from './navigateToPage';
+import setFitMode from './setFitMode';
+import setZoom from './setZoom';
 
 /**
  * List of all action dispatchers
@@ -41,6 +43,8 @@ const actionDispatchers  = {
   navigateToPreviousChapter,
   navigateToNextChapter,
   navigateToPage,
+  setFitMode,
+  setZoom,
 };
 
 export default actionDispatchers;

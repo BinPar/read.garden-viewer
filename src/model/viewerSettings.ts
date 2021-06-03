@@ -35,15 +35,15 @@
  */
 export interface Zoom {
   /**
-   * Minimum scale value (`1` based like CSS property)
+   * Minimum zoom value (`1` based like CSS property)
    */
   min: number;
   /**
-   * Maximum scale value (`1` based like CSS property)
+   * Maximum zoom value (`1` based like CSS property)
    */
   max: number;
   /**
-   * Scale steps for range input change and controls
+   * Zoom steps for range input change and controls
    */
   steps: number[];
 }
