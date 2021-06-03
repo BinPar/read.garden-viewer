@@ -78,7 +78,7 @@ export const initializeState = (initialConfig: InitialConfig): void => {
     pageNumber: 1, // From initial config
     scale: config.initialScale ?? defaultGlobal.scale,
     toggleReadModeOnClick: config.toggleReadModeOnClick ?? defaultGlobal.toggleReadModeOnClick,
-    readMode: config.initialReadMode ?? false,
+    readMode: config.initialReadMode ?? defaultGlobal.readMode,
     searchTerms: new Array<string>(),
     searchRanges: new Array<Range>(),
     debugViewerSafeArea: config.debugViewerSafeArea,
