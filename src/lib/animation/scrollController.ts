@@ -29,7 +29,7 @@ const scrollController = (
   let altDelta = 0;
   let lastX: null | number = null;
   let lastY: null | number = null;
-  let lastMoveMilliseconds: number = new Date().getMilliseconds();
+  let lastMoveMilliseconds: number = new Date().getTime();
 
   const { selectionHighlightsNode } = state as Required<State>;
   let currentSelection: SelectionInfo | null = null;
@@ -127,10 +127,12 @@ const scrollController = (
       let inertialDelta = lastDelta;
       let altInertialDelta = altDelta;
       updateScrollDeltas(ev);
-      const timeFromLastMove = new Date().getMilliseconds() - lastMoveMilliseconds;
+      const timeFromLastMove = new Date().getTime() - lastMoveMilliseconds;      
       if (lastDelta || timeFromLastMove > 100) {
         if (Math.sign(lastDelta) === Math.sign(inertialDelta)) {
           inertialDelta = lastDelta;
+        } else {
+          inertialDelta = 0;
         }
       }
       scroll.target = scroll.current + lastDelta * state.animationInertia;
@@ -139,6 +141,8 @@ const scrollController = (
         if (altDelta || timeFromLastMove > 100) {
           if (Math.sign(altDelta) === Math.sign(altInertialDelta)) {
             altInertialDelta = altDelta;
+          } else {
+            altInertialDelta = 0;
           }
         }
         altScroll.target = altScroll.current + altDelta * state.animationInertia;
@@ -188,7 +192,7 @@ const scrollController = (
       }
       executeTransitions();
       scroll.forceUpdate = false;
-      lastMoveMilliseconds = new Date().getMilliseconds();
+      lastMoveMilliseconds = new Date().getTime();
     }
     if (currentSelection) {
       if (!state.selectingText) {
