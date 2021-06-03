@@ -21,6 +21,8 @@ const setContentsInfo: ActionDispatcher<SetContentsInfo> = async ({ state, actio
   let currentContentIndex = 0;
   let totalWidth = 0;
   let totalHeight = 0;
+  let maxWidth = 0;
+  let maxHeight = 0;
   const contentsByLabel = new Map<string, FixedViewerContentInfo>();
   const contentsByOrder = new Map<number, FixedViewerContentInfo>();
   const positionByLabel = new Map<string, number>();
@@ -32,6 +34,8 @@ const setContentsInfo: ActionDispatcher<SetContentsInfo> = async ({ state, actio
     const top = totalHeight;
     totalHeight += height;
     totalWidth += width;
+    maxWidth = Math.max(maxWidth, width);
+    maxHeight = Math.max(maxHeight, height);
     const container = document.createElement('div');
     container.style.width = `${width}px`;
     container.style.height = `${height}px`;
@@ -71,6 +75,8 @@ const setContentsInfo: ActionDispatcher<SetContentsInfo> = async ({ state, actio
     layout: LayoutTypes.Fixed,
     totalHeight,
     totalWidth,
+    maxWidth,
+    maxHeight,
     contentsInfo,
     contentsByLabel,
     contentsByOrder,

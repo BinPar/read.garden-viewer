@@ -312,6 +312,14 @@ export interface FixedState {
    */
   contentsInfo: FixedViewerContentInfo[];
   /**
+   * Contents max width
+   */
+  maxWidth: number;
+  /**
+   * Contents max height
+   */
+  maxHeight: number;
+  /**
    * Current content index (order, base 0)
    */
   currentContentIndex: number;
