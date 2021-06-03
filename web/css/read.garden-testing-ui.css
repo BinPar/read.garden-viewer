@@ -40,3 +40,10 @@ div#testing-buttons-panel select {
 div#testing-buttons-panel .search-form {
   margin: 0;
 }
+
+div#testing-buttons-panel .zoom-value {
+  display: inline-block;
+  width: 100%;
+  color: #fff;
+  text-align: center;
+}

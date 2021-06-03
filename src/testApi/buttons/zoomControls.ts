@@ -42,22 +42,23 @@ const zoomControls = async (
   increaseButton.innerText = '+';
 
   const valueHolder = document.createElement('span');
+  valueHolder.classList.add('zoom-value');
 
-  valuesControls.appendChild(decreaseButton);
+  // valuesControls.appendChild(decreaseButton);
   valuesControls.appendChild(valueHolder);
-  valuesControls.appendChild(increaseButton);
+  // valuesControls.appendChild(increaseButton);
 
   const onZoomChange: AddOnChangeEvent<number> = {
     type: 'addOnChangeEvent',
     propertyName: 'zoom',
     event: (newValue) => {
-      const zoom = newValue * 100;
+      const zoom = Math.round(newValue * 100);
       slider.value = `${zoom}`;
       valueHolder.innerText = `${zoom}%`;
     },
-  }
+  };
 
-  // container.appendChild(valuesControls);
+  container.appendChild(valuesControls);
 
   const onFitHeight = (): void => {
     const action: SetFitMode = {
