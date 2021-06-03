@@ -57,10 +57,20 @@ const scrollInertiaAndLimits = (
   } else {    
     let scrollLimits: MinAndMaxScroll;
     if (isAltScroll) {
-      scrollLimits = {
-        maxScroll: 100,
-        minScroll: 0,
-      };
+      if (state.scrollMode === 'horizontal') {
+        const verticalCenter = (window.innerHeight - state.maxHeight) / 2;
+        const midMaxHeight = state.maxHeight / 2;
+        scrollLimits = {
+          maxScroll: verticalCenter + midMaxHeight,
+          minScroll: verticalCenter - midMaxHeight,
+        };
+      } else {
+        scrollLimits = {
+          maxScroll: 100,
+          minScroll: 0,
+        };
+      }
+      
     } else {
       scrollLimits = getMinAndMaxScroll(state, 100);
     }

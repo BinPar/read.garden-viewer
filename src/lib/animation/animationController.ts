@@ -7,26 +7,53 @@ import { updateState } from '../state';
 import { addOnChangeEventListener } from '../state/stateChangeEvents';
 import getScrollFromContentSlug from './getScrollFromContentSlug';
 import interpolate from './interpolate';
-import { scale, left, top, scroll, altScroll, zoom, leftCorrector, topCorrector} from './interpolationValues';
+import {
+  scale,
+  left,
+  top,
+  scroll,
+  altScroll,
+  zoom,
+  leftCorrector,
+  topCorrector,
+} from './interpolationValues';
 import recalculateCurrentPage from './recalculateCurrentPage';
 import scrollController from './scrollController';
 
 const animationController = (state: State, dispatch: DispatchAPIAction): void => {
-  const interpolationValues = [scale, left, top, scroll, altScroll, zoom, leftCorrector, topCorrector];
-  
+  const interpolationValues = [
+    scale,
+    left,
+    top,
+    scroll,
+    altScroll,
+    zoom,
+    leftCorrector,
+    topCorrector,
+  ];
+
   updateState({
     animate: false,
     animating: false,
   });
 
   const applyCSSProps = (): void => {
-    const targetScale = state.layout === LayoutTypes.Flow ? Math.abs(scale.current) : Math.abs(scale.current * zoom.current);
+    const targetScale =
+      state.layout === LayoutTypes.Flow
+        ? Math.abs(scale.current)
+        : Math.abs(scale.current * zoom.current);
     setCSSProperty('scale', `${targetScale}`);
     const computedScroll = scroll.current * targetScale;
     const computedAltScroll = altScroll.current * targetScale;
-    const scrollLeft = left.current + leftCorrector.current + (state.scrollMode === 'horizontal' ? computedScroll : computedAltScroll);
+    const scrollLeft =
+      left.current +
+      leftCorrector.current +
+      (state.scrollMode === 'horizontal' ? computedScroll : computedAltScroll);
     setCSSProperty('horizontal-translate', `${scrollLeft}px`);
-    const scrollTop = top.current + topCorrector.current + (state.scrollMode === 'vertical' ? computedScroll : computedAltScroll);
+    const scrollTop =
+      top.current +
+      topCorrector.current +
+      (state.scrollMode === 'vertical' ? computedScroll : computedAltScroll);
     setCSSProperty('vertical-translate', `${scrollTop}px`);
     updateState({ scrollLeft, scrollTop, scale: zoom.current });
   };
@@ -108,8 +135,15 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
   };
 
   const resetPageProps = (): void => {
-    scroll.current = getScrollFromContentSlug(state) ?? 0;
-    scroll.target = scroll.current;
+    const targetSlugScrollPosition = getScrollFromContentSlug(state) ?? 0;
+    console.log({
+      wrapperReady: state.wrapperReady,
+      targetSlugScrollPosition,
+    });
+    if (targetSlugScrollPosition !== null) {
+      scroll.current = targetSlugScrollPosition;
+      scroll.target = scroll.current;
+    }
     scroll.speed = 0;
   };
 
@@ -137,6 +171,7 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
   };
 
   addOnChangeEventListener('chapterNumber', onChapterChange);
+  addOnChangeEventListener('wrapperReady', onChapterChange);
   addOnChangeEventListener('contentSlug', onContentSlugChanged);
   addOnChangeEventListener('scrollMode', onScrollModeChange);
   addOnChangeEventListener('readMode', () => onReadModeChangeEvent());
@@ -149,7 +184,6 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
     animate: true,
     animating: false,
   });
-  resetPageProps();
 };
 
 export default animationController;
