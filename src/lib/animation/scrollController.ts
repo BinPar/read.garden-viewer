@@ -11,7 +11,7 @@ import { updateState } from '../state';
 import getCoordinatesFromEvent from './getCoordinatesFromEvent';
 import getMinAndMaxScroll from './getMinAndMaxScroll';
 import getSyntheticEvent from './getSyntheticEvent';
-import { InterpolationValue } from './interpolationValues';
+import { InterpolationValue, scale } from './interpolationValues';
 import getWordSelection from './getWordSelection';
 import scrollInertiaAndLimits from './scrollInertiaAndLimits';
 
@@ -173,6 +173,9 @@ const scrollController = (
           };
           dispatch(action);
         }
+      } else {
+        scale.target += ev.deltaY * 0.001;
+        executeTransitions();
       }
       ev.preventDefault();
     } else if (!mouseDown) {

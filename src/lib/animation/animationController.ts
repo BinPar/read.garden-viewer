@@ -13,7 +13,7 @@ import scrollController from './scrollController';
 
 const animationController = (state: State, dispatch: DispatchAPIAction): void => {
   const interpolationValues = [scale, left, top, scroll];
-
+  
   updateState({
     animate: false,
     animating: false,
@@ -103,7 +103,7 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
   };
 
   const resetPageProps = (): void => {
-    scroll.current = getScrollFromContentSlug(state);
+    scroll.current = getScrollFromContentSlug(state) ?? 0;
     scroll.target = scroll.current;
     scroll.speed = 0;
   };
@@ -111,7 +111,7 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
   const onScrollModeChange = (): void => {
     setTimeout(() => {
       onReadModeChangeEvent(true);
-      scroll.current = getScrollFromContentSlug(state);
+      scroll.current = getScrollFromContentSlug(state) ?? 0;
       scroll.target = scroll.current;
       scroll.speed = 0;
       applyCSSProps();
@@ -119,9 +119,9 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
   };
 
   const onContentSlugChanged = (slug: string): void => {
-    const targetSlug = getScrollFromContentSlug(state, slug);
-    if (targetSlug) {
-      scroll.target = targetSlug;
+    const targetSlugScrollPosition = getScrollFromContentSlug(state, slug);
+    if (targetSlugScrollPosition !== null) {
+      scroll.target = targetSlugScrollPosition;
     }
     executeTransitions();
   };

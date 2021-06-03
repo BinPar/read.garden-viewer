@@ -51,12 +51,13 @@ const scrollInertiaAndLimits = (
     if (target !== null) {
       scroll.target = target * -1;
     }
+  } else if (state.layout === LayoutTypes.Flow) {
+    max = state.totalHeight - window.innerHeight;
   } else {
+    const scrollLimits = getMinAndMaxScroll(state, 100);
     scroll.target += lastDelta * state.animationInertia;
-    if (state.layout === LayoutTypes.Flow) {
-      max = state.totalHeight - window.innerHeight;
-    }
-    min = 0;
+    min = scrollLimits.maxScroll * -1;
+    max = scrollLimits.minScroll * -1;
   }
   if (min !== null && scroll.target * -1 < min) {
     scroll.target = min * -1;
