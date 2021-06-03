@@ -55,13 +55,18 @@ div.rg-content-wrapper {
   padding: var(--padding-top) 0 var(--padding-bottom) 0;
   clear: both;
   cursor: var(--drag-cursor, grab);
-  user-select: var(--user-select);
-  -webkit-user-select: var(--user-select);
+  user-select: none;
 }
 
 div.rg-content-wrapper #rg-content-placeholder * {
   backface-visibility: unset;
   -webkit-backface-visibility: unset;
+  user-select: var(--user-select);
+  -webkit-user-select: var(--user-select);
+}
+
+div.rg-content-wrapper #rg-content-placeholder *::selection {
+  background-color: transparent;
 }
 
 .rg-flow-layout div.rg-content-wrapper {
@@ -148,6 +153,7 @@ div.rg-end-of-chapter-calculator {
   height: 0px;
   font-size: 0px;
   user-select: var(--user-select-end);
+  -webkit-user-select: var(--user-select-end);
 }
 
 div.rg-pages-labels {

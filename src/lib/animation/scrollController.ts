@@ -2,12 +2,17 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { SetReadMode } from '../../model/actions/global';
 import { DispatchAPIAction } from '../../model/apiInterface';
+import { SelectionInfo, SyntheticEvent } from '../../model/dom';
 import { State } from '../../model/state';
+import { drawHighlights } from '../../utils/highlights';
+import removeHighlights from '../../utils/highlights/removeHighlights';
 import setCSSProperty from '../../utils/setCSSProperty';
 import { updateState } from '../state';
 import getCoordinatesFromEvent from './getCoordinatesFromEvent';
 import getMinAndMaxScroll from './getMinAndMaxScroll';
+import getSyntheticEvent from './getSyntheticEvent';
 import { InterpolationValue } from './interpolationValues';
+import getWordSelection from './getWordSelection';
 import scrollInertiaAndLimits from './scrollInertiaAndLimits';
 
 const scrollController = (
@@ -22,12 +27,40 @@ const scrollController = (
   let lastY: null | number = null;
   let lastMoveMilliseconds: number = new Date().getMilliseconds();
 
+  const { selectionHighlightsNode } = state as Required<State>;
+  let currentSelection: SelectionInfo | null = null;
+
+  const isPreviousThanSelection = (event: SyntheticEvent): boolean => {
+    if (currentSelection) {
+      const { top, bottom, left } = currentSelection;
+      return top > event.clientY || (left > event.clientX && bottom > event.clientY);
+    }
+    return false;
+  };
+
   const onDragStart = (ev: MouseEvent | TouchEvent): void => {
     if (ev.type === 'touchstart' || (ev as MouseEvent).button === 0) {
-      mouseDown = true;
-      lastX = null;
-      lastY = null;
-      lastDelta = 0;
+      removeHighlights(selectionHighlightsNode);
+      const wordSelection = !state.config.disableSelection && getWordSelection(ev);
+      if (wordSelection) {
+        ev.preventDefault();
+        ev.stopPropagation();
+        const { top, bottom, left } = wordSelection.getBoundingClientRect();
+        currentSelection = {
+          top,
+          bottom,
+          left,
+          startContainer: wordSelection.startContainer,
+          startOffset: wordSelection.startOffset,
+          endContainer: wordSelection.endContainer,
+          endOffset: wordSelection.endOffset,
+        };
+      } else {
+        mouseDown = true;
+        lastX = null;
+        lastY = null;
+        lastDelta = 0;
+      }
     }
   };
 
@@ -69,6 +102,12 @@ const scrollController = (
         setCSSProperty('user-select', 'auto');
       }, 0);
     }
+    if (currentSelection) {
+      currentSelection = null;
+      updateState({
+        selectingText: false,
+      });
+    }
   };
 
   const onDragMove = (ev: MouseEvent | TouchEvent): void => {
@@ -88,6 +127,25 @@ const scrollController = (
       executeTransitions();
       scroll.forceUpdate = false;
       lastMoveMilliseconds = new Date().getMilliseconds();
+    }
+    if (currentSelection) {
+      if (!state.selectingText) {
+        updateState({
+          selectingText: true,
+        });
+      }
+      const event = getSyntheticEvent(ev);
+      const wordSelection = getWordSelection(ev, event);
+      if (wordSelection) {
+        const isPrevious = isPreviousThanSelection(event);
+        const { startContainer, startOffset, endContainer, endOffset } = currentSelection;
+        if (isPrevious) {
+          wordSelection.setEnd(endContainer, endOffset);
+        } else {
+          wordSelection.setStart(startContainer, startOffset);
+        }
+        drawHighlights(selectionHighlightsNode, [wordSelection]);
+      }
     }
   };
 

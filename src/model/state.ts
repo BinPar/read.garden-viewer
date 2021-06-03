@@ -17,9 +17,13 @@ export interface GlobalState {
    */
   slug: string;
   /**
-   * True if the user id dragging the scroll
+   * True if user is dragging the scroll
    */
   dragging: boolean;
+  /**
+   * True if user is selecting text
+   */
+  selectingText: boolean;
   /**
    * Scroll left position
    */
@@ -187,6 +191,8 @@ export type DefaultGlobalState = Partial<GlobalState> &
   Required<
     Pick<
       GlobalState,
+      | 'dragging'
+      | 'selectingText'
       | 'scale'
       | 'basicDOMElementsCreated'
       | 'cssLoaded'
