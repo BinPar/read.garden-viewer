@@ -47,10 +47,10 @@ export interface DefaultConfig {
    */
   initialFitMode: FitMode;
   /**
-   * Initial scale. Will be ignored if `initialFitMode` is set. Will be used at viewer first load.
+   * Initial zoom. Will be ignored if `initialFitMode` is set. Will be used at viewer first load.
    * @scope Fixed
    */
-  initialScale: number;
+  initialZoom: number;
   /**
    * Initial font size (if it's no defined user settings)
    * @scope Flow

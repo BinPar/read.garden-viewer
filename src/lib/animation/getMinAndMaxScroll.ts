@@ -12,11 +12,11 @@ const getMinAndMaxScroll = (state: State, forceMargin: number | null = null): Mi
   let maxScroll = margin;
   if (state.layout === LayoutTypes.Flow || state.layout === LayoutTypes.Fixed) {
     if (state.scrollMode === 'horizontal') {      
-      if (state.labelByPosition) {
+      if (state.slugByPosition) {
         let max = 0;
         let i = 0;
         let endOfFirstPage = 0;
-        state.labelByPosition.forEach((value, key) => {
+        state.slugByPosition.forEach((value, key) => {
           const columns = state.layout === LayoutTypes.Flow ? state.columnsInViewport : 1;
           if (endOfFirstPage === 0) {
             endOfFirstPage = key;

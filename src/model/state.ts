@@ -306,7 +306,7 @@ export interface FixedState {
   /**
    * Content info by label
    */
-  contentsByLabel: Map<string, FixedViewerContentInfo>;
+  contentsBySlug: Map<string, FixedViewerContentInfo>;
   /**
    * Contents info array
    */
@@ -436,11 +436,11 @@ export interface ScrolledState {
   /**
    * Map where labels are keys and position is value (left for horizontal, top for vertical)
    */
-  positionByLabel: Map<string, number>;
+  positionBySlug: Map<string, number>;
   /**
    * Map where positions are keys (left for horizontal, top for vertical) and labels are values
    */
-  labelByPosition: Map<number, string>;
+  slugByPosition: Map<number, string>;
 }
 
 export type State = GlobalState &

@@ -92,8 +92,8 @@ const recalculate = async (state: State): Promise<Partial<State>> => {
           .fill(0)
           .map((_, i) => i * totalColumnWidth)
           .reverse();
-        const positionByLabel = new Map<string, number>();
-        const labelByPosition = new Map<number, string>();
+        const positionBySlug = new Map<string, number>();
+        const slugByPosition = new Map<number, string>();
 
         let lastPosition: number | null = null;
         let labelsCount = 0;
@@ -106,10 +106,10 @@ const recalculate = async (state: State): Promise<Partial<State>> => {
           const contentWrapperPosition = clientToContentWrapperLeft(rawPosition);
           const position = columnsPositions.find((p) => p < contentWrapperPosition)!;
           const page = element.dataset.page!;
-          positionByLabel.set(page, position);
+          positionBySlug.set(page, position);
           lastLabel = page;
           if (lastPosition !== position) {
-            labelByPosition.set(position, page);
+            slugByPosition.set(position, page);
             const label = document.createElement('div');
             label.classList.add('rg-label');
             const labelP = document.createElement('p');
@@ -132,7 +132,7 @@ const recalculate = async (state: State): Promise<Partial<State>> => {
             label.appendChild(labelP);
             labelP.innerText = lastLabel;
             pagesLabelsNode!.appendChild(label);
-            labelByPosition.set(position, lastLabel);
+            slugByPosition.set(position, lastLabel);
           }
         }
 
@@ -148,8 +148,8 @@ const recalculate = async (state: State): Promise<Partial<State>> => {
           columnsInViewport,
           columnWidth,
           columnGap,
-          positionByLabel,
-          labelByPosition,
+          positionBySlug,
+          slugByPosition,
         });
         return;
       }
@@ -166,22 +166,22 @@ const recalculate = async (state: State): Promise<Partial<State>> => {
         });
 
         window.requestAnimationFrame(() => {
-          const positionByLabel = new Map<string, number>();
-          const labelByPosition = new Map<number, string>();
+          const positionBySlug = new Map<string, number>();
+          const slugByPosition = new Map<number, string>();
 
           contentPlaceholderNode!.querySelectorAll('[data-page]').forEach((item) => {
             const element = item as HTMLElement;
             const rawPosition = element.getBoundingClientRect().top;
             const position = clientToContentWrapperTop(rawPosition);
             const page = element.dataset.page!;
-            positionByLabel.set(page, position);
-            labelByPosition.set(position, page);
+            positionBySlug.set(page, position);
+            slugByPosition.set(position, page);
           });
 
           updateState({
             totalHeight: contentPlaceholderNode!.getBoundingClientRect().height,
-            positionByLabel,
-            labelByPosition,
+            positionBySlug,
+            slugByPosition,
           });
         });
         return;

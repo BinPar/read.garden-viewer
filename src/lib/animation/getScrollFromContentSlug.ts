@@ -4,13 +4,13 @@ import { LayoutTypes } from "../../model/viewerSettings";
 const getScrollFromContentSlug = (state: State, contentSlug = state.contentSlug): number | null => {
   let result = 0;
   if (state.scrollMode === 'vertical' || state.scrollMode === 'horizontal' ) {
-    let labelPosition = state.positionByLabel.get(contentSlug);
+    let labelPosition = state.positionBySlug.get(contentSlug);
     if (labelPosition !== undefined) {
       let i = 0;
       let lastPosition = 0;
       let found = false;
       let nextPage = 0;
-      state.positionByLabel.forEach((position, key) => {
+      state.positionBySlug.forEach((position, key) => {
         if (!found) {
           if (lastPosition !== position) {
             i++;

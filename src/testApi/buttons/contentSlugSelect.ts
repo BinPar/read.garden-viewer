@@ -1,6 +1,7 @@
 import { AddOnChangeEvent, NavigateToPage } from '../../model/actions/global';
 import { DispatchAPIAction } from '../../model/apiInterface';
 import { State } from '../../model/state';
+import getContentSlug from '../../utils/getContentSlug';
 import { Content } from '../model/content';
 
 const contentSlugSelect = (
@@ -15,7 +16,7 @@ const contentSlugSelect = (
     content.labels.forEach((label): void => {
       const option = document.createElement('option');
       option.innerText = `${label}`;
-      option.value = label;
+      option.value = getContentSlug(jsonIndex, content, label);
       select.appendChild(option);
     });
   });
@@ -24,7 +25,7 @@ const contentSlugSelect = (
     if (select.value && state.config.eventHandler) {
       const action: NavigateToPage = {
         type: 'navigateToPage',
-        pageLabel: select.value,
+        contentSlug: select.value,
       };
       dispatcher(action);
     }

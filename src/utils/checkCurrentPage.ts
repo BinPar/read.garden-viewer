@@ -14,7 +14,7 @@ const checkCurrentPage = (): void => {
   const label = getCurrentPageInViewport();
   if (label) {
     if (state.layout === LayoutTypes.Fixed) {
-      const content = state.contentsByLabel.get(label);
+      const content = state.contentsBySlug.get(label);
       if (content && content.slug && state.contentSlug !== content.slug) {
         log.info('Page changed by scroll', content.slug);
         updateState({ currentContentIndex: content.order, contentSlug: content.slug });

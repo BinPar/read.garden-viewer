@@ -4,7 +4,7 @@ import { LayoutTypes } from '../../model/viewerSettings';
 const defaultFixed: FixedState = {
   layout: LayoutTypes.Fixed,
   contentsByOrder: new Map<number, FixedViewerContentInfo>(),
-  contentsByLabel: new Map<string, FixedViewerContentInfo>(),
+  contentsBySlug: new Map<string, FixedViewerContentInfo>(),
   contentsInfo: new Array<FixedViewerContentInfo>(),
   currentContentIndex: 0,
   loadingContent: true,

@@ -69,9 +69,9 @@ export interface SetTheme extends Action {
 export interface NavigateToPage extends Action {
   type: 'navigateToPage';
   /**
-   * Page label of the page that we want to go to
+   * Content slug of the page that we want to go to
    */
-  pageLabel: string;
+  contentSlug: string;
 }
 
 export interface Resize extends Action {

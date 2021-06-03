@@ -76,7 +76,6 @@ export const initializeState = (initialConfig: InitialConfig): void => {
     animationInertia: config.animationInertia,
     pageLabel: config.contentSlug, // Should be different (maybe we need to add `initialPageLabel`)
     pageNumber: 1, // From initial config
-    scale: config.initialScale ?? defaultGlobal.scale,
     toggleReadModeOnClick: config.toggleReadModeOnClick ?? defaultGlobal.toggleReadModeOnClick,
     readMode: config.initialReadMode ?? defaultGlobal.readMode,
     searchTerms: new Array<string>(),

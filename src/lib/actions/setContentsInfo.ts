@@ -23,10 +23,10 @@ const setContentsInfo: ActionDispatcher<SetContentsInfo> = async ({ state, actio
   let totalHeight = 0;
   let maxWidth = 0;
   let maxHeight = 0;
-  const contentsByLabel = new Map<string, FixedViewerContentInfo>();
+  const contentsBySlug = new Map<string, FixedViewerContentInfo>();
   const contentsByOrder = new Map<number, FixedViewerContentInfo>();
-  const positionByLabel = new Map<string, number>();
-  const labelByPosition = new Map<number, string>();
+  const positionBySlug = new Map<string, number>();
+  const slugByPosition = new Map<number, string>();
   const contentsInfo = new Array<FixedViewerContentInfo>();
   for (let i = 0, l = info.length; i < l; i++) {
     const { width, height, label, slug, order, html, cssURL } = info[i];
@@ -47,8 +47,8 @@ const setContentsInfo: ActionDispatcher<SetContentsInfo> = async ({ state, actio
       currentContentIndex = order;
     }
     const position = state.scrollMode === 'horizontal' ? left : top;
-    positionByLabel.set(label, position);
-    labelByPosition.set(position, label);
+    positionBySlug.set(slug, position);
+    slugByPosition.set(position, slug);
     const contentInfo: FixedViewerContentInfo = {
       width,
       height,
@@ -64,7 +64,7 @@ const setContentsInfo: ActionDispatcher<SetContentsInfo> = async ({ state, actio
       maxTop: totalHeight,
     };
     contentsByOrder.set(order, contentInfo);
-    contentsByLabel.set(label, contentInfo);
+    contentsBySlug.set(slug, contentInfo);
     contentsInfo.push(contentInfo);
   }
 
@@ -78,11 +78,11 @@ const setContentsInfo: ActionDispatcher<SetContentsInfo> = async ({ state, actio
     maxWidth,
     maxHeight,
     contentsInfo,
-    contentsByLabel,
+    contentsBySlug,
     contentsByOrder,
     currentContentIndex,
-    positionByLabel,
-    labelByPosition,
+    positionBySlug,
+    slugByPosition,
     wrapperReady: true,
   };
 };

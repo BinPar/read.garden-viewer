@@ -13,23 +13,23 @@ import { updateState } from '../state';
  */
 const navigateToPage: ActionDispatcher<NavigateToPage> = async ({ state, action }) => {
   if (state.scrollMode === 'horizontal' || state.scrollMode === 'vertical') {
-    const { positionByLabel } = state;
-    const position = positionByLabel.get(action.pageLabel);
+    const { positionBySlug } = state;
+    const position = positionBySlug.get(action.contentSlug);
     if (state.layout === LayoutTypes.Fixed) {
       updateState({
-        contentSlug: action.pageLabel,
+        contentSlug: action.contentSlug,
       });
     }
     if (state.layout === LayoutTypes.Flow) {
       if (position) {
         updateState({
-          contentSlug: action.pageLabel,
+          contentSlug: action.contentSlug,
         });
       } else if (state.config.eventHandler) {
         const event: LoadNewContent = {
           type: 'loadNewContent',
           slug: state.slug,
-          contentSlug: action.pageLabel.toLowerCase(),
+          contentSlug: action.contentSlug,
         };
         /**
          * Es posible que durante la integración tengamos que cambiar o añadir información a estos
