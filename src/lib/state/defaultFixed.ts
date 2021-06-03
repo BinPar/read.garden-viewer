@@ -21,6 +21,8 @@ const defaultFixed: FixedState = {
   minHorizontalTranslate: 0,
   minVerticalTranslate: 0,
   verticalTranslate: 0,
+  maxHeight: 0,
+  maxWidth: 0,
 };
 
 export default defaultFixed;
