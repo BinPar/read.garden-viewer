@@ -9,7 +9,7 @@ import removeHighlights from '../../utils/highlights/removeHighlights';
 import setCSSProperty from '../../utils/setCSSProperty';
 import { updateState } from '../state';
 import getCoordinatesFromEvent from './getCoordinatesFromEvent';
-import getMinAndMaxScroll from './getMinAndMaxScroll';
+import getMinAndMaxScroll, { getMinAndMaxAltScroll } from './getMinAndMaxScroll';
 import getSyntheticEvent from './getSyntheticEvent';
 import { InterpolationValue, zoom, scale } from './interpolationValues';
 import getWordSelection from './getWordSelection';
@@ -127,8 +127,8 @@ const scrollController = (
       let inertialDelta = lastDelta;
       let altInertialDelta = altDelta;
       updateScrollDeltas(ev);
-      const timeFromLastMove = new Date().getTime() - lastMoveMilliseconds;      
-      
+      const timeFromLastMove = new Date().getTime() - lastMoveMilliseconds;
+
       if (lastDelta || timeFromLastMove > 100) {
         if (Math.sign(lastDelta) === Math.sign(inertialDelta)) {
           inertialDelta = lastDelta;
@@ -241,7 +241,8 @@ const scrollController = (
           dispatch(action);
         }
       } else {
-        updateZoom(zoom.target + ev.deltaY * state.zoomSpeed, state);
+        updateState({ fitMode: undefined });
+        updateZoom(zoom.target - ev.deltaY * state.zoomSpeed, state);
         executeTransitions();
       }
       ev.preventDefault();
@@ -261,6 +262,18 @@ const scrollController = (
           altDelta = ev.deltaX * -1;
         }
         altScroll.current += altDelta;
+        const altScrollLimits = getMinAndMaxAltScroll(state);
+
+        if (altScroll.current > altScrollLimits.maxScroll) {
+          altScroll.current = altScrollLimits.maxScroll;
+          altScroll.speed = 0;
+          altDelta = 0;
+        } else if (altScroll.current < altScrollLimits.minScroll) {
+          altScroll.current = altScrollLimits.minScroll;
+          altScroll.speed = 0;
+          altDelta = 0;
+        }
+        altScroll.target = altScroll.current;
       } else if (ev.deltaX !== 0) {
         lastDelta = ev.deltaX * -1;
       } else {
@@ -282,9 +295,6 @@ const scrollController = (
       scroll.forceUpdate = false;
       if (onWheelStopTimeout) {
         clearTimeout(onWheelStopTimeout);
-      }
-      if (state.layout === LayoutTypes.Fixed) {
-        // Alternative Scroll
       }
       onWheelStopTimeout = setTimeout(onWheelStop, 50);
       ev.preventDefault();
