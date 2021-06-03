@@ -11,7 +11,7 @@ import { updateState } from '../state';
 import getCoordinatesFromEvent from './getCoordinatesFromEvent';
 import getMinAndMaxScroll from './getMinAndMaxScroll';
 import getSyntheticEvent from './getSyntheticEvent';
-import { InterpolationValue, scale } from './interpolationValues';
+import { InterpolationValue, zoom } from './interpolationValues';
 import getWordSelection from './getWordSelection';
 import scrollInertiaAndLimits from './scrollInertiaAndLimits';
 
@@ -112,7 +112,7 @@ const scrollController = (
 
   const onDragMove = (ev: MouseEvent | TouchEvent): void => {
     if (mouseDown) {
-      ev.stopPropagation();      
+      ev.stopPropagation();
       if (!state.dragging) {
         updateState({
           dragging: true,
@@ -174,7 +174,11 @@ const scrollController = (
           dispatch(action);
         }
       } else {
-        scale.target += ev.deltaY * 0.001;
+        zoom.target += ev.deltaY * state.zoomSpeed;
+        zoom.target = Math.min(
+          Math.max(zoom.target, state.minimumZoomValue),
+          state.maximumZoomValue,
+        );
         executeTransitions();
       }
       ev.preventDefault();

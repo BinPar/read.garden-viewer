@@ -324,6 +324,19 @@ export interface FixedState {
    */
   loadedCssUrls: Set<string>;
   // loadedPages: string[];
+  /**
+   * Speed of the zoom changing when pinch
+   * or ctl + scroll
+   */
+  zoomSpeed: number;
+  /**
+   * Maximum Zoom Value
+   */
+  maximumZoomValue: number;
+  /**
+   * Minimum Zoom Value
+   */
+  minimumZoomValue: number;
 }
 
 export interface FlowState {

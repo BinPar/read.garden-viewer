@@ -7,12 +7,12 @@ import { updateState } from '../state';
 import { addOnChangeEventListener } from '../state/stateChangeEvents';
 import getScrollFromContentSlug from './getScrollFromContentSlug';
 import interpolate from './interpolate';
-import { scale, left, top, scroll } from './interpolationValues';
+import { scale, left, top, scroll, altScroll, zoom } from './interpolationValues';
 import recalculateCurrentPage from './recalculateCurrentPage';
 import scrollController from './scrollController';
 
 const animationController = (state: State, dispatch: DispatchAPIAction): void => {
-  const interpolationValues = [scale, left, top, scroll];
+  const interpolationValues = [scale, left, top, scroll, altScroll, zoom];
   
   updateState({
     animate: false,
@@ -20,13 +20,15 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
   });
 
   const applyCSSProps = (): void => {
-    setCSSProperty('scale', `${Math.abs(scale.current)}`);
-    const computedScroll = scroll.current * scale.current;
-    const scrollLeft = left.current + (state.scrollMode === 'horizontal' ? computedScroll : 0);
+    const targetScale = state.layout === LayoutTypes.Flow ? Math.abs(scale.current) : Math.abs(scale.current * zoom.current);
+    setCSSProperty('scale', `${targetScale}`);
+    const computedScroll = scroll.current * targetScale;
+    const computedAltScroll = altScroll.current * targetScale;
+    const scrollLeft = left.current + (state.scrollMode === 'horizontal' ? computedScroll : computedAltScroll);
     setCSSProperty('horizontal-translate', `${scrollLeft}px`);
-    const scrollTop = top.current + (state.scrollMode === 'vertical' ? computedScroll : 0);
+    const scrollTop = top.current + (state.scrollMode === 'vertical' ? computedScroll : computedAltScroll);
     setCSSProperty('vertical-translate', `${scrollTop}px`);
-    updateState({ scrollLeft, scrollTop, scale: scale.current });
+    updateState({ scrollLeft, scrollTop, scale: zoom.current });
   };
 
   const interpolateToTargetValues = (): void => {
@@ -89,6 +91,9 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
     if (state.scrollMode === 'vertical') {
       top.target = newMargins.top;
     }
+    updateState({
+      margin: newMargins,
+    });
     if (instant) {
       left.current = left.target;
       top.current = top.target;
