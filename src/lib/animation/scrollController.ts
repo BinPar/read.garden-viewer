@@ -11,10 +11,11 @@ import { updateState } from '../state';
 import getCoordinatesFromEvent from './getCoordinatesFromEvent';
 import getMinAndMaxScroll from './getMinAndMaxScroll';
 import getSyntheticEvent from './getSyntheticEvent';
-import { InterpolationValue, zoom } from './interpolationValues';
+import { InterpolationValue, zoom, scale } from './interpolationValues';
 import getWordSelection from './getWordSelection';
 import scrollInertiaAndLimits from './scrollInertiaAndLimits';
 import { LayoutTypes } from '../../model/viewerSettings';
+import updateZoom from './updateZoom';
 
 const scrollController = (
   state: State,
@@ -69,17 +70,24 @@ const scrollController = (
   };
 
   const updateScrollDeltas = (ev: MouseEvent | TouchEvent): void => {
+    const screenToScale =
+      1 /
+      (state.layout === LayoutTypes.Flow
+        ? Math.abs(scale.current)
+        : Math.abs(scale.current * zoom.current));
     const coordinates = getCoordinatesFromEvent(ev);
     if (state.layout === LayoutTypes.Flow) {
       if (state.scrollMode === 'horizontal') {
         if (lastX !== null) {
           lastDelta = coordinates.x - lastX;
+          lastDelta *= screenToScale;
         }
         lastX = coordinates.x;
       }
       if (state.scrollMode === 'vertical') {
         if (lastY !== null) {
           lastDelta = coordinates.y - lastY;
+          lastDelta *= screenToScale;
         }
         lastY = coordinates.y;
       }
@@ -88,20 +96,24 @@ const scrollController = (
       if (state.scrollMode === 'horizontal') {
         if (lastX !== null) {
           lastDelta = coordinates.x - lastX;
+          lastDelta *= screenToScale;
         }
         lastX = coordinates.x;
         if (lastY !== null) {
           altDelta = coordinates.y - lastY;
+          altDelta *= screenToScale;
         }
         lastY = coordinates.y;
       }
       if (state.scrollMode === 'vertical') {
         if (lastX !== null) {
           altDelta = coordinates.x - lastX;
+          altDelta *= screenToScale;
         }
         lastX = coordinates.x;
         if (lastY !== null) {
           lastDelta = coordinates.y - lastY;
+          lastDelta *= screenToScale;
         }
         lastY = coordinates.y;
       }
@@ -130,7 +142,14 @@ const scrollController = (
           }
         }
         altScroll.target = altScroll.current + altDelta * state.animationInertia;
-        scrollInertiaAndLimits(state, altScroll, altInertialDelta, executeTransitions, dispatch, true);
+        scrollInertiaAndLimits(
+          state,
+          altScroll,
+          altInertialDelta,
+          executeTransitions,
+          dispatch,
+          true,
+        );
       }
 
       setTimeout(() => {
@@ -217,11 +236,7 @@ const scrollController = (
           dispatch(action);
         }
       } else {
-        zoom.target += ev.deltaY * state.zoomSpeed;
-        zoom.target = Math.min(
-          Math.max(zoom.target, state.minimumZoomValue),
-          state.maximumZoomValue,
-        );
+        updateZoom(zoom.target + ev.deltaY * state.zoomSpeed, state);
         executeTransitions();
       }
       ev.preventDefault();

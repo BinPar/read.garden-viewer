@@ -65,7 +65,6 @@ const scrollInertiaAndLimits = (
       scrollLimits = getMinAndMaxScroll(state, 100);
     }
     scroll.target += lastDelta * state.animationInertia;
-    console.log(scroll.target);
     min = scrollLimits.maxScroll * -1;
     max = scrollLimits.minScroll * -1;
   }
