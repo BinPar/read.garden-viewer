@@ -106,6 +106,10 @@ const zoomControls = async (
   // }
   // await dispatcher(onFitModeChange);
 
+  /**
+   * @Nacho: falta el onChangeEvent del fitMode para actualizar la clase "active" de los botones
+   */
+
   await dispatcher(onZoomChange);
 
   container.appendChild(fitHeight);
