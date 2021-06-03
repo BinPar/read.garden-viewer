@@ -78,6 +78,7 @@ export const initializeState = (initialConfig: InitialConfig): void => {
     pageNumber: 1, // From initial config
     scale: config.initialScale ?? defaultGlobal.scale,
     toggleReadModeOnClick: config.toggleReadModeOnClick ?? defaultGlobal.toggleReadModeOnClick,
+    readMode: config.initialReadMode ?? false,
     searchTerms: new Array<string>(),
     searchRanges: new Array<Range>(),
     debugViewerSafeArea: config.debugViewerSafeArea,
@@ -96,7 +97,6 @@ export const initializeState = (initialConfig: InitialConfig): void => {
       ...defaultFlow,
       ...scrolledState,
       columnGap: config.columnGap,
-      readMode: config.initialReadMode,
       fontFamily: config.initialFontFamily,
     };
   }
