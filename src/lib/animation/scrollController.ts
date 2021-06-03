@@ -14,15 +14,18 @@ import getSyntheticEvent from './getSyntheticEvent';
 import { InterpolationValue, zoom } from './interpolationValues';
 import getWordSelection from './getWordSelection';
 import scrollInertiaAndLimits from './scrollInertiaAndLimits';
+import { LayoutTypes } from '../../model/viewerSettings';
 
 const scrollController = (
   state: State,
   dispatch: DispatchAPIAction,
   scroll: InterpolationValue,
+  altScroll: InterpolationValue,
   executeTransitions: () => void,
 ): void => {
   let mouseDown = false;
   let lastDelta = 0;
+  let altDelta = 0;
   let lastX: null | number = null;
   let lastY: null | number = null;
   let lastMoveMilliseconds: number = new Date().getMilliseconds();
@@ -60,23 +63,48 @@ const scrollController = (
         lastX = null;
         lastY = null;
         lastDelta = 0;
+        altDelta = 0;
       }
     }
   };
 
   const updateScrollDeltas = (ev: MouseEvent | TouchEvent): void => {
     const coordinates = getCoordinatesFromEvent(ev);
-    if (state.scrollMode === 'horizontal') {
-      if (lastX !== null) {
-        lastDelta = coordinates.x - lastX;
+    if (state.layout === LayoutTypes.Flow) {
+      if (state.scrollMode === 'horizontal') {
+        if (lastX !== null) {
+          lastDelta = coordinates.x - lastX;
+        }
+        lastX = coordinates.x;
       }
-      lastX = coordinates.x;
+      if (state.scrollMode === 'vertical') {
+        if (lastY !== null) {
+          lastDelta = coordinates.y - lastY;
+        }
+        lastY = coordinates.y;
+      }
     }
-    if (state.scrollMode === 'vertical') {
-      if (lastY !== null) {
-        lastDelta = coordinates.y - lastY;
+    if (state.layout === LayoutTypes.Fixed) {
+      if (state.scrollMode === 'horizontal') {
+        if (lastX !== null) {
+          lastDelta = coordinates.x - lastX;
+        }
+        lastX = coordinates.x;
+        if (lastY !== null) {
+          altDelta = coordinates.y - lastY;
+        }
+        lastY = coordinates.y;
       }
-      lastY = coordinates.y;
+      if (state.scrollMode === 'vertical') {
+        if (lastX !== null) {
+          altDelta = coordinates.x - lastX;
+        }
+        lastX = coordinates.x;
+        if (lastY !== null) {
+          lastDelta = coordinates.y - lastY;
+        }
+        lastY = coordinates.y;
+      }
     }
   };
 
@@ -85,6 +113,7 @@ const scrollController = (
       mouseDown = false;
       setCSSProperty('user-select', 'auto');
       let inertialDelta = lastDelta;
+      let altInertialDelta = altDelta;
       updateScrollDeltas(ev);
       const timeFromLastMove = new Date().getMilliseconds() - lastMoveMilliseconds;
       if (lastDelta || timeFromLastMove > 100) {
@@ -94,6 +123,16 @@ const scrollController = (
       }
       scroll.target = scroll.current + lastDelta * state.animationInertia;
       scrollInertiaAndLimits(state, scroll, inertialDelta, executeTransitions, dispatch);
+      if (state.layout === LayoutTypes.Fixed) {
+        if (altDelta || timeFromLastMove > 100) {
+          if (Math.sign(altDelta) === Math.sign(altInertialDelta)) {
+            altInertialDelta = altDelta;
+          }
+        }
+        altScroll.target = altScroll.current + altDelta * state.animationInertia;
+        scrollInertiaAndLimits(state, altScroll, altInertialDelta, executeTransitions, dispatch, true);
+      }
+
       setTimeout(() => {
         updateState({
           dragging: false,
@@ -124,6 +163,10 @@ const scrollController = (
       updateScrollDeltas(ev);
       scroll.current += lastDelta;
       scroll.target = scroll.current;
+      if (state.layout === LayoutTypes.Fixed) {
+        altScroll.current += altDelta;
+        altScroll.target = altScroll.current;
+      }
       executeTransitions();
       scroll.forceUpdate = false;
       lastMoveMilliseconds = new Date().getMilliseconds();
@@ -189,7 +232,16 @@ const scrollController = (
         });
       }
       scroll.forceUpdate = true;
-      if (ev.deltaX !== 0) {
+      if (state.layout === LayoutTypes.Fixed) {
+        if (state.scrollMode !== 'vertical') {
+          lastDelta = ev.deltaX * -1;
+          altDelta = ev.deltaY * -1;
+        } else {
+          lastDelta = ev.deltaY * -1;
+          altDelta = ev.deltaX * -1;
+        }
+        altScroll.current += altDelta;
+      } else if (ev.deltaX !== 0) {
         lastDelta = ev.deltaX * -1;
       } else {
         lastDelta = ev.deltaY * -1;
@@ -210,6 +262,9 @@ const scrollController = (
       scroll.forceUpdate = false;
       if (onWheelStopTimeout) {
         clearTimeout(onWheelStopTimeout);
+      }
+      if (state.layout === LayoutTypes.Fixed) {
+        // Alternative Scroll
       }
       onWheelStopTimeout = setTimeout(onWheelStop, 50);
       ev.preventDefault();

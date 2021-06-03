@@ -2,7 +2,7 @@
 import { DispatchAPIAction } from '../../model/apiInterface';
 import { State } from '../../model/state';
 import { LayoutTypes } from '../../model/viewerSettings';
-import getMinAndMaxScroll from './getMinAndMaxScroll';
+import getMinAndMaxScroll, { MinAndMaxScroll } from './getMinAndMaxScroll';
 import { InterpolationValue } from './interpolationValues';
 
 const scrollInertiaAndLimits = (
@@ -11,6 +11,7 @@ const scrollInertiaAndLimits = (
   lastDelta: number,
   executeTransitions: () => void,
   dispatch: DispatchAPIAction,
+  isAltScroll = false,
 ): void => {
   let min: number | null = null;
   let max: number | null = null;
@@ -53,9 +54,18 @@ const scrollInertiaAndLimits = (
     }
   } else if (state.layout === LayoutTypes.Flow) {
     max = state.totalHeight - window.innerHeight;
-  } else {
-    const scrollLimits = getMinAndMaxScroll(state, 100);
+  } else {    
+    let scrollLimits: MinAndMaxScroll;
+    if (isAltScroll) {
+      scrollLimits = {
+        maxScroll: 100,
+        minScroll: 0,
+      };
+    } else {
+      scrollLimits = getMinAndMaxScroll(state, 100);
+    }
     scroll.target += lastDelta * state.animationInertia;
+    console.log(scroll.target);
     min = scrollLimits.maxScroll * -1;
     max = scrollLimits.minScroll * -1;
   }

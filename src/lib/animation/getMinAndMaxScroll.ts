@@ -1,7 +1,7 @@
 import { State } from '../../model/state';
 import { LayoutTypes } from '../../model/viewerSettings';
 
-interface MinAndMaxScroll {
+export interface MinAndMaxScroll {
   minScroll: number;
   maxScroll: number;
 }

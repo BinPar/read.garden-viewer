@@ -144,7 +144,7 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
   addOnChangeEventListener('containerHeight', () => onReadModeChangeEvent());
   addOnChangeEventListener('fontSize', () => onReadModeChangeEvent());
   onReadModeChangeEvent(true);
-  scrollController(state, dispatch, scroll, executeTransitions);
+  scrollController(state, dispatch, scroll, altScroll, executeTransitions);
   updateState({
     animate: true,
     animating: false,
