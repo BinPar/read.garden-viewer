@@ -9,6 +9,7 @@ const defaultFixed: FixedState = {
   currentContentIndex: 0,
   loadingContent: true,
   loadedCssUrls: new Set<string>(),
+  zoom: 1,
   zoomSpeed: 0.01,
   maximumZoomValue: 4,
   minimumZoomValue: 0.5,  

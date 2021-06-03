@@ -333,6 +333,10 @@ export interface FixedState {
   loadedCssUrls: Set<string>;
   // loadedPages: string[];
   /**
+   * Zoom Level
+   */
+  zoom: number;
+  /**
    * Speed of the zoom changing when pinch
    * or ctl + scroll
    */

@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 import { DispatchAPIAction } from '../../model/apiInterface';
 import { State } from '../../model/state';
-import { LayoutTypes } from '../../model/viewerSettings';
+import { FitMode, LayoutTypes } from '../../model/viewerSettings';
 import setCSSProperty from '../../utils/setCSSProperty';
 import { updateState } from '../state';
 import { addOnChangeEventListener } from '../state/stateChangeEvents';
@@ -21,6 +21,7 @@ import recalculateCurrentPage from './recalculateCurrentPage';
 import scrollController from './scrollController';
 
 const animationController = (state: State, dispatch: DispatchAPIAction): void => {
+  let zoomUpdatedByApplyCSSProps = false;
   const interpolationValues = [
     scale,
     left,
@@ -32,6 +33,11 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
     topCorrector,
   ];
 
+  if (state.layout === LayoutTypes.Fixed) {
+    zoom.target = state.zoom;
+    zoom.current = state.zoom;
+  }
+  
   updateState({
     animate: false,
     animating: false,
@@ -55,7 +61,9 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
       topCorrector.current +
       (state.scrollMode === 'vertical' ? computedScroll : computedAltScroll);
     setCSSProperty('vertical-translate', `${scrollTop}px`);
-    updateState({ scrollLeft, scrollTop, scale: zoom.current });
+    zoomUpdatedByApplyCSSProps = true;
+    updateState({ scrollLeft, scrollTop, scale: targetScale, zoom: zoom.current });
+    zoomUpdatedByApplyCSSProps = false;
   };
 
   const interpolateToTargetValues = (): void => {
@@ -136,10 +144,6 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
 
   const resetPageProps = (): void => {
     const targetSlugScrollPosition = getScrollFromContentSlug(state) ?? 0;
-    console.log({
-      wrapperReady: state.wrapperReady,
-      targetSlugScrollPosition,
-    });
     if (targetSlugScrollPosition !== null) {
       scroll.current = targetSlugScrollPosition;
       scroll.target = scroll.current;
@@ -166,10 +170,28 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
   };
 
   const onChapterChange = (): void => {
+    if (state.layout === LayoutTypes.Fixed) {
+      if (state.fitMode === FitMode.Height) {
+        zoom.target = window.innerHeight / state.maxHeight;
+      } else if (state.fitMode === FitMode.Width) {
+        zoom.target = state.zoom;
+      } else {
+        zoom.target = state.zoom;
+      }      
+      zoom.current = zoom.target;
+    }
     resetPageProps();
     applyCSSProps();
   };
 
+  const onZoomChange = (): void => {
+    if (!zoomUpdatedByApplyCSSProps && state.layout === LayoutTypes.Fixed) {
+      zoom.target = state.zoom;
+      applyCSSProps();
+    }
+  }
+
+  addOnChangeEventListener('zoom', onZoomChange);
   addOnChangeEventListener('chapterNumber', onChapterChange);
   addOnChangeEventListener('wrapperReady', onChapterChange);
   addOnChangeEventListener('contentSlug', onContentSlugChanged);

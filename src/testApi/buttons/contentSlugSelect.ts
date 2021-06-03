@@ -15,7 +15,7 @@ const contentSlugSelect = (
     content.labels.forEach((label): void => {
       const option = document.createElement('option');
       option.innerText = `${label}`;
-      option.value = label;
+      option.value = label.toLowerCase();
       select.appendChild(option);
     });
   });
