@@ -40,6 +40,7 @@ div#rg-container {
 div#rg-viewer {
   width: 100vw;
   height: 100vh;
+  pointer-events: var(--pointer-events);
   margin-top: var(--viewer-margin-top);
   transform-origin: top left;
   transform: translateX(var(--horizontal-translate)) translateY(var(--vertical-translate))

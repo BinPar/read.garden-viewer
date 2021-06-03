@@ -36,7 +36,7 @@ const setInitialProperties = (state: State): void => {
   setCSSProperty('user-select-end', 'none');
   setCSSProperty('vertical-translate', '0');
   setCSSProperty('viewer-margin-top', '200vh');
-
+  setCSSProperty('pointer-events', 'auto');
   if (state.layout === LayoutTypes.Flow) {
     setCSSProperty('font-family', state.fontFamily);
     setCSSProperty('font-size', `${state.fontSize}px`);

@@ -22,7 +22,7 @@ const scrollController = (
   let lastY: null | number = null;
   let lastMoveMilliseconds: number = new Date().getMilliseconds();
 
-  const onDragStart = (ev: MouseEvent  | TouchEvent): void => {
+  const onDragStart = (ev: MouseEvent | TouchEvent): void => {
     if (ev.type === 'touchstart' || (ev as MouseEvent).button === 0) {
       mouseDown = true;
       lastX = null;
@@ -65,16 +65,20 @@ const scrollController = (
         updateState({
           dragging: false,
         });
+        setCSSProperty('pointer-events', 'auto');
+        setCSSProperty('user-select', 'auto');
       }, 0);
     }
   };
 
   const onDragMove = (ev: MouseEvent | TouchEvent): void => {
     if (mouseDown) {
+      ev.stopPropagation();      
       if (!state.dragging) {
         updateState({
           dragging: true,
         });
+        setCSSProperty('pointer-events', 'none');
         setCSSProperty('user-select', 'none');
       }
       scroll.forceUpdate = true;

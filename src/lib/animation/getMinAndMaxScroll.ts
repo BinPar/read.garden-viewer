@@ -10,13 +10,16 @@ const getMinAndMaxScroll = (state: State, forceMargin: number | null = null): Mi
   let margin = forceMargin ?? window.innerWidth / 2;
   let minScroll = margin * -1;
   let maxScroll = margin;
-  if (state.layout === LayoutTypes.Flow) {
-    if (state.scrollMode === 'horizontal') {
+  if (state.layout === LayoutTypes.Flow || state.layout === LayoutTypes.Fixed) {
+    if (state.scrollMode === 'horizontal') {      
       if (state.labelByPosition) {
         let max = 0;
         let i = 0;
         state.labelByPosition.forEach((value, key) => {
-          if (i++ % state.columnsInViewport === 0) max = key;
+          const columns = state.layout === LayoutTypes.Flow ? state.columnsInViewport : 1;
+          if (i++ % columns === 0) {
+            max = key;
+          }
         });
         minScroll = margin * -1 - max;
       }
@@ -25,8 +28,7 @@ const getMinAndMaxScroll = (state: State, forceMargin: number | null = null): Mi
       maxScroll = margin;
       minScroll = window.innerHeight - state.totalHeight - margin;
     }
-  }
-
+  }  
   return { minScroll, maxScroll };
 };
 
