@@ -174,7 +174,7 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
       if (state.fitMode === FitMode.Height) {
         zoom.target = window.innerHeight / state.maxHeight;
       } else if (state.fitMode === FitMode.Width) {
-        zoom.target = state.zoom;
+        zoom.target = window.innerWidth / state.maxWidth;
       } else {
         zoom.target = state.zoom;
       }      

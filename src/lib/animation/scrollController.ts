@@ -127,8 +127,8 @@ const scrollController = (
       let inertialDelta = lastDelta;
       let altInertialDelta = altDelta;
       updateScrollDeltas(ev);
-      const timeFromLastMove = new Date().getTime() - lastMoveMilliseconds;      
-      
+      const timeFromLastMove = new Date().getTime() - lastMoveMilliseconds;
+
       if (lastDelta || timeFromLastMove > 100) {
         if (Math.sign(lastDelta) === Math.sign(inertialDelta)) {
           inertialDelta = lastDelta;
@@ -241,6 +241,7 @@ const scrollController = (
           dispatch(action);
         }
       } else {
+        updateState({ fitMode: undefined });
         updateZoom(zoom.target + ev.deltaY * state.zoomSpeed, state);
         executeTransitions();
       }
