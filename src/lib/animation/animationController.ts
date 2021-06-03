@@ -136,6 +136,10 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
 
   const resetPageProps = (): void => {
     const targetSlugScrollPosition = getScrollFromContentSlug(state) ?? 0;
+    console.log({
+      wrapperReady: state.wrapperReady,
+      targetSlugScrollPosition,
+    });
     if (targetSlugScrollPosition !== null) {
       scroll.current = targetSlugScrollPosition;
       scroll.target = scroll.current;

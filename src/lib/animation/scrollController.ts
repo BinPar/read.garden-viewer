@@ -128,20 +128,21 @@ const scrollController = (
       let altInertialDelta = altDelta;
       updateScrollDeltas(ev);
       const timeFromLastMove = new Date().getTime() - lastMoveMilliseconds;      
+      
       if (lastDelta || timeFromLastMove > 100) {
         if (Math.sign(lastDelta) === Math.sign(inertialDelta)) {
           inertialDelta = lastDelta;
-        } else {
+        } else if (timeFromLastMove > 100) {
           inertialDelta = 0;
         }
       }
-      scroll.target = scroll.current + lastDelta * state.animationInertia;
+      scroll.target = scroll.current + inertialDelta * state.animationInertia;
       scrollInertiaAndLimits(state, scroll, inertialDelta, executeTransitions, dispatch);
       if (state.layout === LayoutTypes.Fixed) {
         if (altDelta || timeFromLastMove > 100) {
           if (Math.sign(altDelta) === Math.sign(altInertialDelta)) {
             altInertialDelta = altDelta;
-          } else {
+          } else if (timeFromLastMove > 100) {
             altInertialDelta = 0;
           }
         }
