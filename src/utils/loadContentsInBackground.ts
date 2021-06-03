@@ -14,10 +14,12 @@ const loadContentsInBackground = async (): Promise<void> => {
   }
   if (!state.loadingContent) {
     const {
+      contentSlug,
       contentsByOrder,
-      currentContentIndex,
+      contentsBySlug,
       config: { fixedViewerPreloadOrder },
     } = state;
+    const { order: currentContentIndex } = contentsBySlug.get(contentSlug)!;
     const indexToLoad = fixedViewerPreloadOrder.find((i) => {
       const index = currentContentIndex + i;
       if (index < 0) {
