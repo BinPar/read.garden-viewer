@@ -40,4 +40,18 @@ const getMinAndMaxScroll = (state: State, forceMargin: number | null = null): Mi
   return { minScroll, maxScroll };
 };
 
+export const getMinAndMaxAltScroll = (state: State): MinAndMaxScroll => {
+  if (state.layout === LayoutTypes.Fixed) {
+    if (state.scrollMode === 'horizontal') {
+      const verticalCenter = (window.innerHeight - state.maxHeight) / 2;
+      const midMaxHeight = (state.maxHeight * state.zoom) / 2;
+      return {
+        maxScroll: verticalCenter + midMaxHeight,
+        minScroll: verticalCenter - midMaxHeight,
+      };
+    }
+  }
+  return { minScroll: 0, maxScroll : 0};
+};
+
 export default getMinAndMaxScroll;

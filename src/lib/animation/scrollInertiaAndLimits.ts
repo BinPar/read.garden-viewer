@@ -2,7 +2,7 @@
 import { DispatchAPIAction } from '../../model/apiInterface';
 import { State } from '../../model/state';
 import { LayoutTypes } from '../../model/viewerSettings';
-import getMinAndMaxScroll, { MinAndMaxScroll } from './getMinAndMaxScroll';
+import getMinAndMaxScroll, { getMinAndMaxAltScroll, MinAndMaxScroll } from './getMinAndMaxScroll';
 import { InterpolationValue } from './interpolationValues';
 
 const scrollInertiaAndLimits = (
@@ -57,20 +57,7 @@ const scrollInertiaAndLimits = (
   } else {    
     let scrollLimits: MinAndMaxScroll;
     if (isAltScroll) {
-      if (state.scrollMode === 'horizontal') {
-        const verticalCenter = (window.innerHeight - state.maxHeight) / 2;
-        const midMaxHeight = state.maxHeight / 2;
-        scrollLimits = {
-          maxScroll: verticalCenter + midMaxHeight,
-          minScroll: verticalCenter - midMaxHeight,
-        };
-      } else {
-        scrollLimits = {
-          maxScroll: 100,
-          minScroll: 0,
-        };
-      }
-      
+      scrollLimits = getMinAndMaxAltScroll(state);
     } else {
       scrollLimits = getMinAndMaxScroll(state, 100);
     }
