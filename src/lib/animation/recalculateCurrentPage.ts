@@ -1,7 +1,7 @@
 import { State } from '../../model/state';
 import { LayoutTypes } from '../../model/viewerSettings';
 import { updateState } from '../state';
-import { scale, zoom } from './interpolationValues';
+import calculatePagePosition from './calculatePagePossition';
 
 const recalculateCurrentPage = (
   state: State,
@@ -14,10 +14,7 @@ const recalculateCurrentPage = (
       if (state.layout === LayoutTypes.Flow) {
         target = state.slugByPosition.get(scrollPosition);
       } else {
-        const targetScale = Math.abs(scale.current * zoom.current);
-        const realWidth = window.innerWidth - state.margin.left - state.margin.right;
-        const targetScroll = scrollPosition + ((realWidth / 2) + state.margin.left) / targetScale;
-        
+        const targetScroll = calculatePagePosition(scrollPosition, state);        
         state.slugByPosition.forEach((value, key): void => {          
           if (key <= targetScroll) {
             target = value;
