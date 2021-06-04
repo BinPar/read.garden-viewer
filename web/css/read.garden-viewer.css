@@ -94,6 +94,7 @@ div.rg-content-wrapper #rg-content-placeholder *::selection {
 .rg-fixed-layout.rg-horizontal-scroll div.rg-content-wrapper div#rg-content-placeholder > * {
   float: left;
   contain: size;
+  content-visibility: auto;
   background-color: #ccc;
 }
 

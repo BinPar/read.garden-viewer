@@ -108,6 +108,10 @@ export interface DefaultConfig {
    */
   columnGap: number;
   /**
+   * For small resolutions, this will be the min column gap (and horizontal padding)
+   */
+  minColumnGap: number;
+  /**
    * Threshold for scrolling to next/prev `page` (next/prev hidden column(s)), meaning percentage of
    * new column (left or right) that must be visible to assume user wants to move to next/prev page.
    * @scope Flow

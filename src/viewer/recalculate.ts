@@ -54,8 +54,8 @@ const recalculate = async (state: State): Promise<Partial<State>> => {
 
       let columnGap = desiredColumnGap;
       const charWidth = fontSize / charWidthFactor;
-      const minWidth = minCharsPerColumn * charWidth;
-      const maxWidth = maxCharsPerColumn * charWidth + desiredColumnGap;
+      const minWidth = Math.min(minCharsPerColumn * charWidth, containerWidth);
+      const maxWidth = Math.min(maxCharsPerColumn * charWidth + desiredColumnGap, containerWidth);
 
       if (state.scrollMode === 'horizontal') {
         const doubleColumnWidth = containerWidth / 2 - desiredColumnGap;
@@ -63,14 +63,18 @@ const recalculate = async (state: State): Promise<Partial<State>> => {
         const totalColumnWidth = containerWidth / columnsInViewport;
 
         if (columnsInViewport === 1) {
+          console.log({ totalColumnWidth, maxWidth, minWidth, desiredColumnGap });
           if (totalColumnWidth > maxWidth) {
             const gapCompensation = Math.max(totalColumnWidth - desiredColumnGap - maxWidth, 0);
             columnGap += gapCompensation;
           } else if (totalColumnWidth < minWidth + desiredColumnGap) {
+            console.log(totalColumnWidth - minWidth - desiredColumnGap);
             const gapCompensation = Math.min(totalColumnWidth - minWidth - desiredColumnGap, 0);
             columnGap += gapCompensation;
           }
         }
+
+        columnGap = Math.max(columnGap, state.config.minColumnGap);
 
         const columnWidth = totalColumnWidth - columnGap;
 
