@@ -153,7 +153,7 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
             const finalPartialState: Partial<State> = {
               ...recalculateState,
               slug: action.slug,
-              contentSlug: action.contentSlug,
+              // contentSlug: action.contentSlug,
               cssLoaded: true,
             };
             updateState({ loadingContent: false });

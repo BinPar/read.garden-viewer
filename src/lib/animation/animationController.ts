@@ -186,8 +186,10 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
 
   const onZoomChange = (): void => {
     if (!zoomUpdatedByApplyCSSProps && state.layout === LayoutTypes.Fixed) {
-      zoom.target = state.zoom;
-      applyCSSProps();
+      zoom.target = state.zoom;      
+      zoom.current = zoom.target;
+      zoom.forceUpdate = true;
+      executeTransitions();
     }
   }
 

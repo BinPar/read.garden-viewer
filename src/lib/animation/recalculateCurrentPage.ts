@@ -1,7 +1,7 @@
 import { State } from '../../model/state';
 import { LayoutTypes } from '../../model/viewerSettings';
 import { updateState } from '../state';
-import calculatePagePosition from './calculatePagePossition';
+import calculatePagePosition from './calculatePagePosition';
 
 const recalculateCurrentPage = (
   state: State,
@@ -14,7 +14,7 @@ const recalculateCurrentPage = (
       if (state.layout === LayoutTypes.Flow) {
         target = state.slugByPosition.get(scrollPosition);
       } else {
-        const targetScroll = calculatePagePosition(scrollPosition, state);        
+        const targetScroll = calculatePagePosition(currentScroll, state);        
         state.slugByPosition.forEach((value, key): void => {          
           if (key <= targetScroll) {
             target = value;

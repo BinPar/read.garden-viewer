@@ -34,6 +34,7 @@ const getScrollFromContentSlug = (state: State, contentSlug = state.contentSlug)
         if (nextPage) {
           const pageWidth = nextPage - labelPosition;
           const centerFix = (window.innerWidth - pageWidth) / 2;
+          // TODO: Zoom FIX
           result += centerFix;
         }
       }      
