@@ -216,6 +216,7 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
   addOnChangeEventListener('zoom', onZoomChange);
   addOnChangeEventListener('chapterNumber', onChapterChange);
   addOnChangeEventListener('wrapperReady', onChapterChange);
+  addOnChangeEventListener('fitMode', onChapterChange);
   addOnChangeEventListener('positionBySlug', onPositionBySlugChange);
   addOnChangeEventListener('contentSlug', onContentSlugChanged);
   addOnChangeEventListener('scrollMode', onScrollModeChange);
