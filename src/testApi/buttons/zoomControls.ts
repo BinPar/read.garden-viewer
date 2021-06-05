@@ -90,26 +90,21 @@ const zoomControls = async (
     fitWidth.classList.add('active');
   }
 
-  // const onFitModeChange: AddOnChangeEvent<FitMode> = {
-  //   type: 'addOnChangeEvent',
-  //   propertyName: 'fitMode',
-  //   event: (newValue) => {
-  //     if (newValue === FitMode.Height) {
-  //       fitHeight.classList.add('active');
-  //       fitWidth.classList.remove('active');
-  //     }
-  //     if (newValue === FitMode.Width) {
-  //       fitWidth.classList.add('active');
-  //       fitHeight.classList.remove('active');
-  //     }
-  //   }
-  // }
-  // await dispatcher(onFitModeChange);
-
-  /**
-   * @Nacho: falta el onChangeEvent del fitMode para actualizar la clase "active" de los botones
-   */
-
+  const onFitModeChange: AddOnChangeEvent<FitMode | undefined> = {
+    type: 'addOnChangeEvent',
+    propertyName: 'fitMode',
+    event: (newValue) => {
+      if (newValue === FitMode.Height) {
+        fitHeight.classList.add('active');
+        fitWidth.classList.remove('active');
+      }
+      if (newValue === FitMode.Width) {
+        fitWidth.classList.add('active');
+        fitHeight.classList.remove('active');
+      }
+    }
+  }
+  await dispatcher(onFitModeChange);
   await dispatcher(onZoomChange);
 
   container.appendChild(fitHeight);
