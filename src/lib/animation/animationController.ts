@@ -37,7 +37,7 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
     zoom.target = state.zoom;
     zoom.current = state.zoom;
   }
-  
+
   updateState({
     animate: false,
     animating: false,
@@ -169,7 +169,12 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
     executeTransitions();
   };
 
+  const resetPageScroll = (): void => {
+    const scrollingElement = document.scrollingElement ?? document.body;
+    scrollingElement.scrollTop = 0;
+  };
   const onChapterChange = (): void => {
+    resetPageScroll();
     if (state.layout === LayoutTypes.Fixed) {
       if (state.fitMode === FitMode.Height) {
         zoom.target = window.innerHeight / state.maxHeight;
@@ -177,7 +182,22 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
         zoom.target = window.innerWidth / state.maxWidth;
       } else {
         zoom.target = state.zoom;
-      }      
+      }
+      zoom.current = zoom.target;
+    }
+    resetPageProps();
+    applyCSSProps();
+  };
+
+  const onPositionBySlugChange = (): void => {
+    if (state.layout === LayoutTypes.Fixed) {
+      if (state.fitMode === FitMode.Height) {
+        zoom.target = window.innerHeight / state.maxHeight;
+      } else if (state.fitMode === FitMode.Width) {
+        zoom.target = window.innerWidth / state.maxWidth;
+      } else {
+        zoom.target = state.zoom;
+      }
       zoom.current = zoom.target;
     }
     resetPageProps();
@@ -186,16 +206,17 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
 
   const onZoomChange = (): void => {
     if (!zoomUpdatedByApplyCSSProps && state.layout === LayoutTypes.Fixed) {
-      zoom.target = state.zoom;      
+      zoom.target = state.zoom;
       zoom.current = zoom.target;
       zoom.forceUpdate = true;
       executeTransitions();
     }
-  }
+  };
 
   addOnChangeEventListener('zoom', onZoomChange);
   addOnChangeEventListener('chapterNumber', onChapterChange);
   addOnChangeEventListener('wrapperReady', onChapterChange);
+  addOnChangeEventListener('positionBySlug', onPositionBySlugChange);
   addOnChangeEventListener('contentSlug', onContentSlugChanged);
   addOnChangeEventListener('scrollMode', onScrollModeChange);
   addOnChangeEventListener('readMode', () => onReadModeChangeEvent());

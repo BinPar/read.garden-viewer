@@ -453,7 +453,7 @@ export type State = GlobalState &
 export type FullState = GlobalState &
   Omit<FlowState, 'layout'> &
   Omit<FixedState, 'layout'> & { layout: LayoutTypes } & Omit<PaginatedState, 'scrollMode'> &
-  Omit<FlowState, 'scrollMode'> & { scrollMode: ScrollModes };
+  Omit<FlowState, 'scrollMode'> & { scrollMode: ScrollModes } & ScrolledState;
 
 export type PropChangeHandler = () => void;
 

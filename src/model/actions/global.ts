@@ -29,7 +29,6 @@ export enum GlobalActionTypes {
   type: 'appendNewContent';
 }
 
-
 /**
  * Enables the draw of red border around the viewer
  */
