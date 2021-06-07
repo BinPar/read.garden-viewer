@@ -1,3 +1,5 @@
+import { SelectionRange } from '../viewerSettings';
+
 export interface ReadGardenEvent {
   type: string;
 }
@@ -67,13 +69,32 @@ export interface LoadPreviousChapter extends ReadGardenEvent, LoadChapterInfo {
   type: 'loadPreviousChapter';
 }
 
+export interface OnUserSelect extends ReadGardenEvent {
+  type: 'onUserSelect';
+  slug: string;
+}
+
+export interface OnHighlightClick extends ReadGardenEvent {
+  type: 'onHighlightClick';
+}
+
+export interface OnSelectionMenuOptionClick extends ReadGardenEvent {
+  type: 'onSelectionMenuOptionClick';
+  key: string;
+  slug: string;
+  selectionInfo: SelectionRange;
+}
+
 export type ReadGardenEvents =
   | PageChange
   | LoadNewContent
   | GetContentsInfo
   | GetTerms
   | LoadNextChapter
-  | LoadPreviousChapter;
+  | LoadPreviousChapter
+  | OnUserSelect
+  | OnHighlightClick
+  | OnSelectionMenuOptionClick;
 
 export type ReadGardenEventHandler = (event: ReadGardenEvents) => Promise<void>;
 

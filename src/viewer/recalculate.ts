@@ -39,8 +39,8 @@ const recalculate = async (state: State): Promise<Partial<State>> => {
 
     if (state.layout === LayoutTypes.Flow) {
       setCSSProperty('total-width', `0px`);
-      setCSSProperty('total-column-width', `0px`);
-      setCSSProperty('column-width', `0px`);
+      setCSSProperty('total-column-width', '0px');
+      setCSSProperty('column-width', '0px');
       setCSSProperty('column-gap', `${state.config.columnGap}px`);
       setCSSProperty('column-count', '2');
       const {

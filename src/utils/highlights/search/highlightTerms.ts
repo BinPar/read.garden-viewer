@@ -5,6 +5,7 @@ import getScrollLeftPosition from '../getScrollLeftPosition';
 import drawHighlights from '../drawHighlights';
 import getScrollTopPosition from '../getScrollTopPosition';
 import getRangesRecursively from './getRangesRecursively';
+import setCSSProperty from '../../setCSSProperty';
 
 /**
  * Looks for appearances of terms and draws highlights
@@ -16,6 +17,7 @@ const highlightTerms = (terms: string[]): void => {
   const { contentPlaceholderNode, searchTermsHighlightsNode } = state;
 
   if (searchTermsHighlightsNode && terms.length) {
+    setCSSProperty('user-select', 'auto');
     if (state.layout === LayoutTypes.Flow) {
       if (contentPlaceholderNode) {
         const ranges = getRangesRecursively(contentPlaceholderNode, terms, true);

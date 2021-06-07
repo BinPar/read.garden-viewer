@@ -19,6 +19,9 @@ import navigateToNextChapter from './navigateToNextChapter';
 import navigateToPage from './navigateToPage';
 import setFitMode from './setFitMode';
 import setZoom from './setZoom';
+import showSelectionMenu from './showSelectionMenu';
+import clearSelection from './clearSelection';
+import drawHighlights from './drawHighlights';
 
 /**
  * List of all action dispatchers
@@ -45,6 +48,9 @@ const actionDispatchers  = {
   navigateToPage,
   setFitMode,
   setZoom,
+  showSelectionMenu,
+  clearSelection,
+  drawHighlights,
 };
 
 export default actionDispatchers;

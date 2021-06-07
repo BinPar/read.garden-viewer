@@ -16,6 +16,7 @@ import getWordSelection from './getWordSelection';
 import scrollInertiaAndLimits from './scrollInertiaAndLimits';
 import { LayoutTypes } from '../../model/viewerSettings';
 import updateZoom from './updateZoom';
+import { OnUserSelect } from '../../model/events';
 
 const scrollController = (
   state: State,
@@ -32,11 +33,12 @@ const scrollController = (
   let lastMoveMilliseconds: number = new Date().getTime();
 
   const { selectionHighlightsNode } = state as Required<State>;
-  let currentSelection: SelectionInfo | null = null;
+  let initialSelection: SelectionInfo | null = null;
+  let currentSelection: Range | null = null;
 
   const isPreviousThanSelection = (event: SyntheticEvent): boolean => {
-    if (currentSelection) {
-      const { top, bottom, left } = currentSelection;
+    if (initialSelection) {
+      const { top, bottom, left } = initialSelection;
       return top > event.clientY || (left > event.clientX && bottom > event.clientY);
     }
     return false;
@@ -50,7 +52,7 @@ const scrollController = (
         ev.preventDefault();
         ev.stopPropagation();
         const { top, bottom, left } = wordSelection.getBoundingClientRect();
-        currentSelection = {
+        initialSelection = {
           top,
           bottom,
           left,
@@ -165,11 +167,22 @@ const scrollController = (
         setCSSProperty('user-select', 'auto');
       }, 0);
     }
-    if (currentSelection) {
+    if (initialSelection) {
+      if (currentSelection) {
+        updateState({
+          selectingText: false,
+          currentSelection,
+        });
+        if (state.config.eventHandler) {
+          const event: OnUserSelect = {
+            type: 'onUserSelect',
+            slug: state.slug,
+          };
+          state.config.eventHandler(event);
+        }
+      }
+      initialSelection = null;
       currentSelection = null;
-      updateState({
-        selectingText: false,
-      });
     }
   };
 
@@ -195,7 +208,7 @@ const scrollController = (
       scroll.forceUpdate = false;
       lastMoveMilliseconds = new Date().getTime();
     }
-    if (currentSelection) {
+    if (initialSelection) {
       if (!state.selectingText) {
         updateState({
           selectingText: true,
@@ -205,13 +218,14 @@ const scrollController = (
       const wordSelection = getWordSelection(ev, event);
       if (wordSelection) {
         const isPrevious = isPreviousThanSelection(event);
-        const { startContainer, startOffset, endContainer, endOffset } = currentSelection;
+        const { startContainer, startOffset, endContainer, endOffset } = initialSelection;
         if (isPrevious) {
           wordSelection.setEnd(endContainer, endOffset);
         } else {
           wordSelection.setStart(startContainer, startOffset);
         }
         drawHighlights(selectionHighlightsNode, [wordSelection]);
+        currentSelection = wordSelection;
       }
     }
   };

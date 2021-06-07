@@ -140,3 +140,23 @@ export interface NewContent {
    */
   htmlContent: string;
 }
+
+export interface SelectionOption {
+  key: string;
+  title: string;
+  color: string;
+  className?: string;
+  style?: string;
+  selected?: boolean;
+}
+
+export interface SelectionPointer {
+  querySelector: string;
+  offset: number;
+}
+
+export interface SelectionRange {
+  obfuscatedText: string;
+  start: SelectionPointer;
+  end: SelectionPointer;
+}

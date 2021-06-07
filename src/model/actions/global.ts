@@ -1,5 +1,5 @@
 import { FullState } from '../state';
-import { NewContent, ScrollModes, ViewerTheme } from '../viewerSettings';
+import { NewContent, ScrollModes, SelectionOption, SelectionRange, ViewerTheme } from '../viewerSettings';
 import { Action } from './common';
 
 type FilterPropertyNames<Base, Condition> = {
@@ -111,6 +111,22 @@ export interface SetReadMode extends Action {
   readModeActive: boolean;
 }
 
+export interface ShowSelectionMenu extends Action {
+  type: 'showSelectionMenu';
+  options: SelectionOption[];
+}
+
+export interface ClearSelection extends Action {
+  type: 'clearSelection';
+}
+
+export interface DrawHighlights extends Action {
+  type: 'drawHighlights';
+  highlighterKey: string;
+  color: string;
+  highlights: SelectionRange[];
+  clear?: boolean;
+}
 
 /**
  * Actions that affect Fixed and Flow Layout
@@ -126,4 +142,7 @@ export type GlobalActions =
   | SetReadMode
   | AddOnChangeEvent<any>
   | RemoveOnChangeEvent<any>
-  | RemoveAllChangeEvents;
+  | RemoveAllChangeEvents
+  | ShowSelectionMenu
+  | ClearSelection
+  | DrawHighlights;

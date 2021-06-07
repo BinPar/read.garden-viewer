@@ -115,6 +115,14 @@ export interface GlobalState {
    */
   mainStyleNode?: HTMLLinkElement;
   /**
+   * Selection menu
+   */
+  selectionMenu?: HTMLDivElement | null;
+  /**
+   * Highlighters layers (key is highlighter id)
+   */
+  highlightersLayers: Map<string, HTMLDivElement>;
+  /**
    * Content wrapper is ready
    */
   wrapperReady: boolean;
@@ -182,6 +190,10 @@ export interface GlobalState {
    * Viewer theme (light, dark...)
    */
   theme: ViewerTheme;
+  /**
+   * Current selection range
+   */
+  currentSelection?: Range | null;
 }
 
 /**

@@ -80,6 +80,7 @@ export const initializeState = (initialConfig: InitialConfig): void => {
     readMode: config.initialReadMode ?? defaultGlobal.readMode,
     searchTerms: new Array<string>(),
     searchRanges: new Array<Range>(),
+    highlightersLayers: new Map<string, HTMLDivElement>(),
     debugViewerSafeArea: config.debugViewerSafeArea,
     containerWidth: 0,
     containerHeight: 0,

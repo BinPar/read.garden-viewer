@@ -23,7 +23,8 @@
       layoutType: 'flow',
       eventHandler: window.readGardenEventHandler,
       slug: 'acuario',
-      contentSlug: '64',
+      contentSlug: '10',
+      initialFontSize: 26,
       initialFontFamily: 'Obf-Helvetica',
       availableFontFamilies: [
         'Obf-Helvetica',
@@ -46,7 +47,8 @@
         bottom: 0,
         right: 0,
       },
-      toggleReadModeOnClick: false,
+      toggleReadModeOnClick: true,
+      disableSelection: true,
     });
     window.readGardenSetDispatcher(window.readGardenApi.dispatch);
     window.readGardenSetState(window.readGardenApi.state);
