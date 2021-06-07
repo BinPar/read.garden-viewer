@@ -63,12 +63,10 @@ const recalculate = async (state: State): Promise<Partial<State>> => {
         const totalColumnWidth = containerWidth / columnsInViewport;
 
         if (columnsInViewport === 1) {
-          console.log({ totalColumnWidth, maxWidth, minWidth, desiredColumnGap });
           if (totalColumnWidth > maxWidth) {
             const gapCompensation = Math.max(totalColumnWidth - desiredColumnGap - maxWidth, 0);
             columnGap += gapCompensation;
           } else if (totalColumnWidth < minWidth + desiredColumnGap) {
-            console.log(totalColumnWidth - minWidth - desiredColumnGap);
             const gapCompensation = Math.min(totalColumnWidth - minWidth - desiredColumnGap, 0);
             columnGap += gapCompensation;
           }
@@ -113,14 +111,29 @@ const recalculate = async (state: State): Promise<Partial<State>> => {
           positionBySlug.set(page, position);
           lastLabel = page;
           if (lastPosition !== position) {
-            slugByPosition.set(position, page);
-            const label = document.createElement('div');
-            label.classList.add('rg-label');
-            const labelP = document.createElement('p');
-            label.appendChild(labelP);
-            labelP.innerText = page;
-            pagesLabelsNode!.appendChild(label);
-            labelsCount++;
+            if (lastPosition === null) {
+              slugByPosition.set(position, page);
+              const label = document.createElement('div');
+              label.classList.add('rg-label');
+              const labelP = document.createElement('p');
+              label.appendChild(labelP);
+              labelP.innerText = page;
+              pagesLabelsNode!.appendChild(label);
+              labelsCount++;
+            } else {
+              let labelPosition = lastPosition + totalColumnWidth;
+              while (labelPosition <= position) {
+                slugByPosition.set(labelPosition, page);
+                const label = document.createElement('div');
+                label.classList.add('rg-label');
+                const labelP = document.createElement('p');
+                label.appendChild(labelP);
+                labelP.innerText = page;
+                pagesLabelsNode!.appendChild(label);
+                labelsCount++;
+                labelPosition += totalColumnWidth;
+              }
+            }
           }
           lastPosition = position;
           minTotalWidth = Math.max(minTotalWidth, position);
