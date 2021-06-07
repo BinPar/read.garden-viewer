@@ -30,6 +30,7 @@ const recalculateCurrentPage = (
     }
   }
   if (target !== undefined) {
+    // TODO: Avoid scrolling on flow layout (multple columns for one page)
     updateState({ contentSlug: target });
   }
 };
