@@ -2,6 +2,13 @@ import { State } from '../model/state';
 
 import { updateState } from '../lib/state';
 
+export const cleanDOM = (state: State): void => {
+  if (state.readGardenContainerNode) {
+    state.readGardenContainerNode.remove();
+  }
+  document.body.classList.remove(`rg-${state.layout}-layout`, `rg-${state.scrollMode}-scroll`);
+};
+
 /**
  * Creates basic DOM elements for viewer
  * @param state Viewer state

@@ -1,8 +1,9 @@
 import { Resize } from '../model/actions/global';
 import { DispatchAPIAction } from '../model/apiInterface';
 
-import { getState, updateState } from '../lib/state';
+import { updateState } from '../lib/state';
 import checkCurrentPage from './checkCurrentPage';
+import { State } from '../model/state';
 
 let onResize: () => void;
 let onScroll: () => void;
@@ -12,9 +13,7 @@ let onViewportClick: () => void;
  * Sets up viewer global events
  * @param dispatcher Viewer dispatcher
  */
-export const setupGlobalEvents = (dispatcher: DispatchAPIAction): void => {
-  const state = getState();
-
+export const setupGlobalEvents = (state: State, dispatcher: DispatchAPIAction): void => {
   onResize = (): void => {
     const action: Resize = {
       type: 'resize',
@@ -46,8 +45,8 @@ export const setupGlobalEvents = (dispatcher: DispatchAPIAction): void => {
 /**
  * Removes global events
  */
-export const removeGlobalEvents = (): void => {
-  const { readGardenContainerNode } = getState();
+export const removeGlobalEvents = (state: State): void => {
+  const { readGardenContainerNode } = state;
   if (onResize) {
     window.removeEventListener('resize', onResize);
   }

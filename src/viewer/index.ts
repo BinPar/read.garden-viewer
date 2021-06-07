@@ -7,9 +7,10 @@ import dispatch from '../lib/state/dispatch';
 import { getState, initializeState } from '../lib/state';
 import setInitialProperties from '../lib/styles/setInitialProperties';
 import createBasicDOMElements from '../utils/createBasicDOMElements';
-import { setupGlobalEvents, removeGlobalEvents } from '../utils/globalEvents';
+import { setupGlobalEvents } from '../utils/globalEvents';
 import animationController from '../lib/animation/animationController';
 import setupHandlers from '../utils/setupHandlers';
+import unmount from '../utils/unmount';
 
 /**
  * Main viewer function
@@ -22,11 +23,11 @@ const viewer: ViewerFunction = (config) => {
   const api: APIInterface = {
     dispatch,
     state,
-    unmount: removeGlobalEvents,
+    unmount,
   };
   setInitialProperties(state);
   createBasicDOMElements(state);
-  setupGlobalEvents(api.dispatch);
+  setupGlobalEvents(state, api.dispatch);
   animationController(state, api.dispatch);
   setupHandlers(state, api.dispatch);
   log.info('Viewer Initialized');
