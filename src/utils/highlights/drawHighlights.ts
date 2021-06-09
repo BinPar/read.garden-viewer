@@ -35,11 +35,30 @@ const drawHighlights = (
       x: rect.left,
       y: rect.top,
     });
-    const fixZoom = zoomPanelCoordinates.zoomFix || 1;
-    highlight.style.left = `${zoomPanelCoordinates.x - 3}px`;
-    highlight.style.width = `${rect.width * fixZoom + 6}px`;
-    highlight.style.top = `${zoomPanelCoordinates.y - 6}px`;
-    highlight.style.height = `${rect.height * fixZoom + 8}px`;
+    const zoomPanelEndCoordinates = clientToContentWrapperCoordinates({
+      x: rect.right,
+      y: rect.bottom,
+    });
+    let left = zoomPanelCoordinates.x;
+    let width = zoomPanelEndCoordinates.x - zoomPanelCoordinates.x;
+    let top = zoomPanelCoordinates.y;
+    let height = zoomPanelEndCoordinates.y - zoomPanelCoordinates.y;
+    const heightGrowth = (height + 8) / height;
+    if (heightGrowth <= 1.5) {
+      left -= 3;
+      width += 6;
+      top -= 4;
+      height += 8;
+    } else {
+      left -= 1;
+      width += 2;
+      top -= 1;
+      height += 2;
+    }
+    highlight.style.left = `${left}px`;
+    highlight.style.width = `${width}px`;
+    highlight.style.top = `${top}px`;
+    highlight.style.height = `${height}px`;
     if (key) {
       highlight.dataset.key = key;
     }
