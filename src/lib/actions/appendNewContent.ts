@@ -12,11 +12,10 @@ import { onCssLoaded } from '../state/changeHandlers/cssLoaderHandler';
 import { onWrapperReady } from '../state/changeHandlers/wrapperReadyHandler';
 import { updateState } from '../state';
 import layoutSetup from '../../viewer/layoutSetup';
-import { drawHighlights } from '../../utils/highlights';
 import { highlightTerms } from '../../utils/highlights/search';
 import loadContentsInBackground from '../../utils/loadContentsInBackground';
 import handleFlowCssAndLoad from '../../utils/handleFlowCssAndLoad';
-import { removeUserHighlights } from '../../utils/highlights/removeHighlights';
+import removeHighlights, { removeUserHighlights } from '../../utils/highlights/removeHighlights';
 
 /**
  * Appends new content to viewer
@@ -50,7 +49,7 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
     if (state.layout === LayoutTypes.Flow) {
       setCSSProperty('viewer-margin-top', '200vh');
       window.requestAnimationFrame(() => {
-        drawHighlights(searchTermsHighlightsNode!);
+        removeHighlights(searchTermsHighlightsNode!);
         removeUserHighlights();
         contentPlaceholderNode!.innerHTML = action.htmlContent;
 

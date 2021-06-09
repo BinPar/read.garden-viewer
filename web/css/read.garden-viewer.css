@@ -56,6 +56,7 @@ div.rg-content-wrapper {
   clear: both;
   cursor: var(--drag-cursor, grab);
   user-select: none;
+  box-sizing: content-box;
 }
 
 div.rg-content-wrapper #rg-content-placeholder * {
@@ -192,17 +193,22 @@ div.rg-highlights-layer {
   left: 0;
   right: 0;
   bottom: 0;
+  opacity: 0.6;
+  filter: saturate(0.85);
+  z-index: -1;
   pointer-events: none;
   user-select: none;
   -webkit-user-select: none;
 }
 
+div.rg-highlights-layer.rg-selection > div,
+div.rg-highlights-layer.rg-search > div {
+  pointer-events: none;
+}
+
 div.rg-highlights-layer > div {
   position: absolute;
-  border-style: solid;
-  border-width: thin;
-  border-color: #fffff7;
-  border-radius: 2px;
+  border: none;
 }
 
 div.rg-highlights-layer.rg-selection > div {
@@ -211,6 +217,7 @@ div.rg-highlights-layer.rg-selection > div {
 
 div.rg-highlights-layer > div {
   background-color: var(--highlighter-color);
+  pointer-events: var(--highlights-pointer-events);
 }
 
 div.rg-highlights-layer.rg-search > div {
@@ -249,7 +256,15 @@ div.rg-selection-menu {
   position: absolute;
   z-index: 900;
   pointer-events: auto;
-  transform: translateX(-50%) translateY(calc(-125% * calc(1 / var(--scale))))
+}
+
+div.rg-selection-menu.rg-bottom-arrow {
+  transform: translateX(-50%) translateY(calc(-100% - calc(25% * calc(1 / var(--scale)))))
+    scale(calc(1 / var(--scale)));
+}
+
+div.rg-selection-menu.rg-top-arrow {
+  transform: translateX(-50%) translateY( calc(25% * calc(1 / var(--scale))))
     scale(calc(1 / var(--scale)));
 }
 
@@ -272,11 +287,11 @@ div.rg-selection-menu .rg-selection-menu-wrapper:before {
   border-bottom-right-radius: 5px;
 }
 
-div.rg-selection-menu .rg-selection-menu-wrapper.rg-bottom-arrow:before {
+div.rg-selection-menu.rg-bottom-arrow .rg-selection-menu-wrapper:before {
   bottom: -10px;
 }
 
-div.rg-selection-menu .rg-selection-menu-wrapper.rg-top-arrow:before {
+div.rg-selection-menu.rg-top-arrow .rg-selection-menu-wrapper:before {
   top: -10px;
 }
 
@@ -289,14 +304,63 @@ div.rg-selection-menu .rg-selection-menu-wrapper .rg-selection-menu-holder butto
   align-items: center;
   position: relative;
   user-select: none;
-  background-color: rgba(0, 0, 0, 0);
+  background-color: #fff;
   width: 1.375rem;
   min-width: 1.375rem;
   height: 1.375rem;
   -webkit-appearance: button;
   cursor: pointer;
+  border: 0;
+}
+
+div.rg-selection-menu .rg-selection-menu-wrapper .rg-selection-menu-holder .rg-separator {
+  display: flex;
+  background-color: #f3f3f3;
+  height: 30px;
+  min-height: 30px;
+  width: 3px;
+  min-width: 3px;
+  border-radius: 3px;
+  margin-left: 15px;
+  margin-right: 15px;
+}
+
+.rg-selection-option {
+  overflow: hidden;
+  text-indent: 200%;
 }
 
 .rg-selection-option + .rg-selection-option {
   margin-left: 15px;
+}
+
+.rg-selection-option:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: var(--highlighter-color);
+}
+
+.rg-selection-option.highlighter:after {
+  mask: url(/img/icons/highlighter.svg);
+  -webkit-mask: url(/img/icons/highlighter.svg);
+}
+
+.rg-selection-option.highlighter:hover:after,
+.rg-selection-option.highlighter.rg-selected:after {
+  mask: url(/img/icons/highlighterOn.svg);
+  -webkit-mask: url(/img/icons/highlighterOn.svg);
+}
+
+.rg-selection-option.rg-delete:after {
+  background-color: #979797;
+  mask: url(/img/icons/delete.svg);
+  -webkit-mask: url(/img/icons/delete.svg);
+}
+
+.rg-selection-option.rg-delete:hover:after {
+  background-color: #4d4d4d;
 }

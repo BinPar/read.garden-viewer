@@ -160,3 +160,13 @@ export interface SelectionRange {
   start: SelectionPointer;
   end: SelectionPointer;
 }
+
+export interface HighlightInfo extends SelectionRange {
+  key: string;
+}
+
+export interface HighlightDeleteOption {
+  title: string;
+  className?: string;
+  style?: string;
+}

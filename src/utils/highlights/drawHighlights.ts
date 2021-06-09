@@ -11,9 +11,10 @@ import removeHighlights from './removeHighlights';
  */
 const drawHighlights = (
   container: HTMLDivElement,
-  ranges = new Array<Range>(),
+  ranges: Range[],
   keepExisting = false,
-): void => {
+  key?: string,
+): HTMLDivElement[] => {
   let resultRects = new Array<DOMRect>();
 
   ranges.forEach((selectionRange): void => {
@@ -25,6 +26,7 @@ const drawHighlights = (
     removeHighlights(container);
   }
 
+  const highlights = new Array<HTMLDivElement>();
   for (let i = 0; i < resultRects.length; i++) {
     const rect = resultRects[i];
     const highlight = document.createElement('div');
@@ -35,11 +37,16 @@ const drawHighlights = (
     });
     const fixZoom = zoomPanelCoordinates.zoomFix || 1;
     highlight.style.left = `${zoomPanelCoordinates.x - 3}px`;
-    highlight.style.top = `${zoomPanelCoordinates.y}px`;
-    highlight.style.width = `${rect.width * fixZoom + 4}px`;
-    highlight.style.height = `${rect.height * fixZoom}px`;
+    highlight.style.width = `${rect.width * fixZoom + 6}px`;
+    highlight.style.top = `${zoomPanelCoordinates.y - 6}px`;
+    highlight.style.height = `${rect.height * fixZoom + 8}px`;
+    if (key) {
+      highlight.dataset.key = key;
+    }
     container.append(highlight);
+    highlights.push(highlight);
   }
+  return highlights;
 };
 
 export default drawHighlights;

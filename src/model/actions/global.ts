@@ -1,5 +1,12 @@
 import { FullState } from '../state';
-import { NewContent, ScrollModes, SelectionOption, SelectionRange, ViewerTheme } from '../viewerSettings';
+import {
+  HighlightDeleteOption,
+  HighlightInfo,
+  NewContent,
+  ScrollModes,
+  SelectionOption,
+  ViewerTheme,
+} from '../viewerSettings';
 import { Action } from './common';
 
 type FilterPropertyNames<Base, Condition> = {
@@ -25,7 +32,7 @@ export enum GlobalActionTypes {
 /**
  * Appends new loaded content
  */
- export interface AppendNewContent extends Action, NewContent {
+export interface AppendNewContent extends Action, NewContent {
   type: 'appendNewContent';
 }
 
@@ -82,13 +89,13 @@ export type PropertyChangeEvent<T = any> = (newValue: T, oldValue: T) => void;
 export interface AddOnChangeEvent<T> extends Action {
   type: 'addOnChangeEvent';
   propertyName: StatePropertyNames<T>;
-  event: PropertyChangeEvent<T>; 
+  event: PropertyChangeEvent<T>;
 }
 
 export interface RemoveOnChangeEvent<T> extends Action {
   type: 'removeOnChangeEvent';
   propertyName: StatePropertyNames<T>;
-  event: PropertyChangeEvent<T>; 
+  event: PropertyChangeEvent<T>;
 }
 
 export interface RemoveAllChangeEvents extends Action {
@@ -114,6 +121,8 @@ export interface SetReadMode extends Action {
 export interface ShowSelectionMenu extends Action {
   type: 'showSelectionMenu';
   options: SelectionOption[];
+  key?: string;
+  deleteOption?: HighlightDeleteOption;
 }
 
 export interface ClearSelection extends Action {
@@ -122,9 +131,9 @@ export interface ClearSelection extends Action {
 
 export interface DrawHighlights extends Action {
   type: 'drawHighlights';
-  highlighterKey: string;
+  key: string;
   color: string;
-  highlights: SelectionRange[];
+  highlights: HighlightInfo[];
   clear?: boolean;
 }
 

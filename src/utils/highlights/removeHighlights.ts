@@ -14,6 +14,7 @@ const removeHighlights = (container: HTMLDivElement): void => {
   updateState({
     currentSelection: null,
     selectionMenu: null,
+    lastClickCoords: undefined,
   });
 };
 
@@ -24,6 +25,8 @@ export const removeUserHighlights = (): void => {
     value.remove();
   });
   state.highlightersLayers.clear();
+  state.currentUserHighlights.clear();
+  state.currentUserDomHighlights.clear();
 }
 
 export default removeHighlights;

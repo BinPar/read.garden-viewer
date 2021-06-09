@@ -6,7 +6,7 @@ import {
   State,
 } from '../../model/state';
 import { InitialConfig } from '../../model/config';
-import { ViewerMode } from '../../model/viewerSettings';
+import { SelectionRange, ViewerMode } from '../../model/viewerSettings';
 import defaultGlobal from './defaultGlobal';
 import defaultFlow from './defaultFlow';
 import defaultScrolled from './defaultScrolled';
@@ -81,6 +81,8 @@ export const initializeState = (initialConfig: InitialConfig): void => {
     searchTerms: new Array<string>(),
     searchRanges: new Array<Range>(),
     highlightersLayers: new Map<string, HTMLDivElement>(),
+    currentUserHighlights: new Map<string, SelectionRange[]>(),
+    currentUserDomHighlights: new Map<string, HTMLDivElement[]>(),
     debugViewerSafeArea: config.debugViewerSafeArea,
     containerWidth: 0,
     containerHeight: 0,

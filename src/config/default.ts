@@ -42,8 +42,8 @@ const defaultConfig: DefaultConfig = {
     bottom: 0,
     left: 140,
   },
-  paddingTop: 40,
-  paddingBottom: 40,
+  paddingTop: 60,
+  paddingBottom: 60,
   toggleReadModeOnClick: true,
   fixedViewerPreloadOrder: [0, 1, 2, 3, -1, 4, -2, 5, -3, 6, -4],
 };

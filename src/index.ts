@@ -56,5 +56,3 @@ if (typeof window !== 'undefined') {
 }
 
 export default viewer;
-
-export * from './model';

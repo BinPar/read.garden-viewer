@@ -16,7 +16,9 @@ import getWordSelection from './getWordSelection';
 import scrollInertiaAndLimits from './scrollInertiaAndLimits';
 import { LayoutTypes } from '../../model/viewerSettings';
 import updateZoom from './updateZoom';
-import { OnUserSelect } from '../../model/events';
+import { OnHighlightClick, OnUserSelect } from '../../model/events';
+import getClickedHighlight from './getClickedHighlight';
+import getSelection from './getSelection';
 
 const scrollController = (
   state: State,
@@ -47,7 +49,27 @@ const scrollController = (
   const onDragStart = (ev: MouseEvent | TouchEvent): void => {
     if (ev.type === 'touchstart' || (ev as MouseEvent).button === 0) {
       removeHighlights(selectionHighlightsNode);
-      const wordSelection = !state.config.disableSelection && getWordSelection(ev);
+      const syntheticEvent = getSyntheticEvent(ev);
+      const clickedHighlight =
+        !state.config.disableSelection &&
+        state.config.eventHandler &&
+        getClickedHighlight(ev, syntheticEvent);
+      if (clickedHighlight) {
+        const ranges = state.currentUserHighlights.get(clickedHighlight)!;
+        const onHighlightClick: OnHighlightClick = {
+          type: 'onHighlightClick',
+          slug: state.slug,
+          key: clickedHighlight,
+          ranges,
+        };
+        const handler = state.config.eventHandler!;
+        handler(onHighlightClick);
+        updateState({
+          lastClickCoords: { x: syntheticEvent.clientX, y: syntheticEvent.clientY },
+        });
+        return;
+      }
+      const wordSelection = !state.config.disableSelection && getWordSelection(ev, syntheticEvent);
       if (wordSelection) {
         ev.preventDefault();
         ev.stopPropagation();
@@ -61,13 +83,13 @@ const scrollController = (
           endContainer: wordSelection.endContainer,
           endOffset: wordSelection.endOffset,
         };
-      } else {
-        mouseDown = true;
-        lastX = null;
-        lastY = null;
-        lastDelta = 0;
-        altDelta = 0;
+        return;
       }
+      mouseDown = true;
+      lastX = null;
+      lastY = null;
+      lastDelta = 0;
+      altDelta = 0;
     }
   };
 
@@ -169,11 +191,17 @@ const scrollController = (
     }
     if (initialSelection) {
       if (currentSelection) {
+        const syntheticEvent = getSyntheticEvent(ev);
         updateState({
           selectingText: false,
           currentSelection,
+          lastClickCoords: { x: syntheticEvent.clientX, y: syntheticEvent.clientY },
         });
-        if (state.config.eventHandler) {
+        if (
+          !currentSelection.collapsed &&
+          currentSelection.toString().trim() &&
+          state.config.eventHandler
+        ) {
           const event: OnUserSelect = {
             type: 'onUserSelect',
             slug: state.slug,
@@ -219,8 +247,13 @@ const scrollController = (
       if (wordSelection) {
         const isPrevious = isPreviousThanSelection(event);
         const { startContainer, startOffset, endContainer, endOffset } = initialSelection;
+        const backupRange = wordSelection.cloneRange();
         if (isPrevious) {
           wordSelection.setEnd(endContainer, endOffset);
+          if (!wordSelection.isPointInRange(backupRange.startContainer, backupRange.startOffset)) {
+            wordSelection.setStart(startContainer, startOffset);
+            wordSelection.setEnd(backupRange.endContainer, backupRange.endOffset);
+          }
         } else {
           wordSelection.setStart(startContainer, startOffset);
         }

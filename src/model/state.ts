@@ -1,9 +1,11 @@
 import { Config } from './config';
+import { Coordinates } from './highlights';
 import {
   FitMode,
   LayoutTypes,
   Margin,
   ScrollModes,
+  SelectionRange,
   TextAlignModes,
   ViewerTheme,
 } from './viewerSettings';
@@ -194,6 +196,18 @@ export interface GlobalState {
    * Current selection range
    */
   currentSelection?: Range | null;
+  /**
+   * Current user highlights
+   */
+  currentUserHighlights: Map<string, SelectionRange[]>;
+  /**
+   * Current user DOM highlights
+   */
+  currentUserDomHighlights: Map<string, HTMLDivElement[]>;
+  /**
+   * Stored coords when clicking an existing highlight
+   */
+  lastClickCoords?: Coordinates;
 }
 
 /**

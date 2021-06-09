@@ -76,13 +76,23 @@ export interface OnUserSelect extends ReadGardenEvent {
 
 export interface OnHighlightClick extends ReadGardenEvent {
   type: 'onHighlightClick';
+  slug: string;
+  key: string;
+  ranges: SelectionRange[];
 }
 
 export interface OnSelectionMenuOptionClick extends ReadGardenEvent {
   type: 'onSelectionMenuOptionClick';
   key: string;
   slug: string;
-  selectionInfo: SelectionRange;
+  highlightKey?: string;
+  selectionInfo?: SelectionRange;
+}
+
+export interface OnDeleteOptionClick extends ReadGardenEvent {
+  type: 'onDeleteOptionClick';
+  key: string;
+  slug: string;
 }
 
 export type ReadGardenEvents =
@@ -94,7 +104,8 @@ export type ReadGardenEvents =
   | LoadPreviousChapter
   | OnUserSelect
   | OnHighlightClick
-  | OnSelectionMenuOptionClick;
+  | OnSelectionMenuOptionClick
+  | OnDeleteOptionClick;
 
 export type ReadGardenEventHandler = (event: ReadGardenEvents) => Promise<void>;
 
