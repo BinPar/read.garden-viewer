@@ -121,6 +121,14 @@ export interface GlobalState {
    */
   selectionMenu?: HTMLDivElement | null;
   /**
+   * Notes dialog
+   */
+  notesDialog?: HTMLDivElement | null;
+  /**
+   * Notes dialog
+   */
+  confirmationDialog?: HTMLDivElement | null;
+  /**
    * Highlighters layers (key is highlighter id)
    */
   highlightersLayers: Map<string, HTMLDivElement>;
@@ -199,7 +207,7 @@ export interface GlobalState {
   /**
    * Current user highlights
    */
-  currentUserHighlights: Map<string, SelectionRange[]>;
+  currentUserHighlights: Map<string, SelectionRange>;
   /**
    * Current user DOM highlights
    */

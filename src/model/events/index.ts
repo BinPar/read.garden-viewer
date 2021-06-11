@@ -89,6 +89,30 @@ export interface OnSelectionMenuOptionClick extends ReadGardenEvent {
   selectionInfo?: SelectionRange;
 }
 
+export interface OnCancelNewNote extends ReadGardenEvent {
+  type: 'onCancelNewNote';
+  slug: string;
+}
+
+export interface OnSaveNote extends ReadGardenEvent {
+  type: 'onSaveNote';
+  slug: string;
+  note: string;
+  key: string;
+  highlightKey?: string;
+  selectionInfo?: SelectionRange;
+}
+
+export interface OnChangeNote extends ReadGardenEvent {
+  type: 'onChangeNote';
+  slug: string;
+  key: string;
+  highlightKey: string;
+  editing: boolean;
+  note?: string;
+  selectionInfo?: SelectionRange;
+}
+
 export interface OnDeleteOptionClick extends ReadGardenEvent {
   type: 'onDeleteOptionClick';
   key: string;
@@ -105,6 +129,9 @@ export type ReadGardenEvents =
   | OnUserSelect
   | OnHighlightClick
   | OnSelectionMenuOptionClick
+  | OnCancelNewNote
+  | OnSaveNote
+  | OnChangeNote
   | OnDeleteOptionClick;
 
 export type ReadGardenEventHandler = (event: ReadGardenEvents) => Promise<void>;

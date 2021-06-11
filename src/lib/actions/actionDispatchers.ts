@@ -20,8 +20,12 @@ import navigateToPage from './navigateToPage';
 import setFitMode from './setFitMode';
 import setZoom from './setZoom';
 import showSelectionMenu from './showSelectionMenu';
+import showNotesDialog from './showNotesDialog';
+import removeSelectionMenu from './removeSelectionMenu';
+import removeNotesDialog from './removeNotesDialog';
 import clearSelection from './clearSelection';
 import drawHighlights from './drawHighlights';
+import removeHighlights from './removeHighlights';
 
 /**
  * List of all action dispatchers
@@ -49,8 +53,12 @@ const actionDispatchers  = {
   setFitMode,
   setZoom,
   showSelectionMenu,
+  showNotesDialog,
+  removeSelectionMenu,
+  removeNotesDialog,
   clearSelection,
   drawHighlights,
+  removeHighlights,
 };
 
 export default actionDispatchers;

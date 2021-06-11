@@ -5,7 +5,7 @@ import { DispatchAPIAction } from '../../model/apiInterface';
 import { SelectionInfo, SyntheticEvent } from '../../model/dom';
 import { State } from '../../model/state';
 import { drawHighlights } from '../../utils/highlights';
-import removeHighlights from '../../utils/highlights/removeHighlights';
+import removeLayerHighlights from '../../utils/highlights/removeLayerHighlights';
 import setCSSProperty from '../../utils/setCSSProperty';
 import { updateState } from '../state';
 import getCoordinatesFromEvent from './getCoordinatesFromEvent';
@@ -18,7 +18,8 @@ import { LayoutTypes } from '../../model/viewerSettings';
 import updateZoom from './updateZoom';
 import { OnHighlightClick, OnUserSelect } from '../../model/events';
 import getClickedHighlight from './getClickedHighlight';
-import getSelection from './getSelection';
+import removeSelectionMenu from '../../utils/highlights/removeSelectionMenu';
+import removeNotesDialog from '../../utils/highlights/removeNotesDialog';
 
 const scrollController = (
   state: State,
@@ -48,19 +49,21 @@ const scrollController = (
 
   const onDragStart = (ev: MouseEvent | TouchEvent): void => {
     if (ev.type === 'touchstart' || (ev as MouseEvent).button === 0) {
-      removeHighlights(selectionHighlightsNode);
+      removeLayerHighlights(selectionHighlightsNode);
+      removeSelectionMenu(state);
+      removeNotesDialog(state);
       const syntheticEvent = getSyntheticEvent(ev);
       const clickedHighlight =
         !state.config.disableSelection &&
         state.config.eventHandler &&
         getClickedHighlight(ev, syntheticEvent);
       if (clickedHighlight) {
-        const ranges = state.currentUserHighlights.get(clickedHighlight)!;
+        const range = state.currentUserHighlights.get(clickedHighlight)!;
         const onHighlightClick: OnHighlightClick = {
           type: 'onHighlightClick',
           slug: state.slug,
           key: clickedHighlight,
-          ranges,
+          ranges: [range],
         };
         const handler = state.config.eventHandler!;
         handler(onHighlightClick);

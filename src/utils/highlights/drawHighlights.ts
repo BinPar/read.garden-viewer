@@ -1,6 +1,6 @@
 import clientToContentWrapperCoordinates from './clientToContentWrapperCoordinates';
 import deduplicateRects from './deduplicateRects';
-import removeHighlights from './removeHighlights';
+import removeLayerHighlights from './removeLayerHighlights';
 
 /**
  * Transforms provided selection ranges into coordinates to render highlights inside provided
@@ -23,7 +23,7 @@ const drawHighlights = (
   });
 
   if (!keepExisting) {
-    removeHighlights(container);
+    removeLayerHighlights(container);
   }
 
   const highlights = new Array<HTMLDivElement>();

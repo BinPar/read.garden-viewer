@@ -21,6 +21,13 @@ const selectionOptions: SelectionOption[] = [
     title: 'Green',
     className: 'highlighter',
     style: '--highlighter-color: #00ff00',
+  },
+  {
+    color: '#0000ff',
+    key: 'notes',
+    title: 'Notes',
+    className: 'note',
+    style: '--highlighter-color: #0000ff',
   }
 ];
 

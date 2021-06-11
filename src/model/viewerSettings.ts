@@ -170,3 +170,9 @@ export interface HighlightDeleteOption {
   className?: string;
   style?: string;
 }
+
+export interface MenuPosition {
+  top: number;
+  left: number;
+  arrowDown: boolean;
+}

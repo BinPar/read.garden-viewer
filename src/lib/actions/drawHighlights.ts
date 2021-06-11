@@ -3,7 +3,7 @@ import { DrawHighlights } from '../../model/actions/global';
 
 import getRangesFromSelectionRanges from '../../utils/getRangesFromSelectionRanges';
 import { drawHighlights as drawDomHighlights } from '../../utils/highlights'
-import removeHighlights from '../../utils/highlights/removeHighlights';
+import removeLayerHighlights from '../../utils/highlights/removeLayerHighlights';
 
 const drawHighlights: ActionDispatcher<DrawHighlights> = async ({ action, state }) => {
   if (!state.cssLoaded) {
@@ -21,14 +21,14 @@ const drawHighlights: ActionDispatcher<DrawHighlights> = async ({ action, state 
     state.highlightersLayers.set(action.key, layer);
   }
   if (action.clear) {
-    removeHighlights(layer);
+    removeLayerHighlights(layer);
   }
   for (let i = 0, l = action.highlights.length; i < l; i++) {
     const highlights = action.highlights[i];
     const { key, ...selectionRange } = highlights;
     const ranges = getRangesFromSelectionRanges([selectionRange]);
     if (key) {
-      state.currentUserHighlights.set(key, [selectionRange]);
+      state.currentUserHighlights.set(key, selectionRange);
     }
     const domHighlights = drawDomHighlights(layer, ranges, true, key);
     state.currentUserDomHighlights.set(key, domHighlights);

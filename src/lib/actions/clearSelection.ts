@@ -1,11 +1,9 @@
 import { ActionDispatcher } from '../../model/actions/actionDispatcher';
 import { ClearSelection } from '../../model/actions/global';
-import removeHighlights from '../../utils/highlights/removeHighlights';
+import clear from '../../utils/highlights/clearSelection';
 
 const clearSelection: ActionDispatcher<ClearSelection> = async ({ state }) => {
-  if (state.selectionHighlightsNode) {
-    removeHighlights(state.selectionHighlightsNode);
-  }
+  clear(state);
   return {};
 };
 

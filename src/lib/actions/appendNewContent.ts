@@ -15,7 +15,9 @@ import layoutSetup from '../../viewer/layoutSetup';
 import { highlightTerms } from '../../utils/highlights/search';
 import loadContentsInBackground from '../../utils/loadContentsInBackground';
 import handleFlowCssAndLoad from '../../utils/handleFlowCssAndLoad';
-import removeHighlights, { removeUserHighlights } from '../../utils/highlights/removeHighlights';
+import removeLayerHighlights from '../../utils/highlights/removeLayerHighlights';
+import removeUserHighlights from '../../utils/highlights/removeUserHighlights';
+import clearUserHighlights from '../../utils/highlights/clearUserHighlights';
 
 /**
  * Appends new content to viewer
@@ -49,8 +51,9 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
     if (state.layout === LayoutTypes.Flow) {
       setCSSProperty('viewer-margin-top', '200vh');
       window.requestAnimationFrame(() => {
-        removeHighlights(searchTermsHighlightsNode!);
-        removeUserHighlights();
+        removeLayerHighlights(searchTermsHighlightsNode!);
+        removeUserHighlights(state);
+        clearUserHighlights(state);
         contentPlaceholderNode!.innerHTML = action.htmlContent;
 
         window.requestAnimationFrame(() => {

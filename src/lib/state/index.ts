@@ -81,7 +81,7 @@ export const initializeState = (initialConfig: InitialConfig): void => {
     searchTerms: new Array<string>(),
     searchRanges: new Array<Range>(),
     highlightersLayers: new Map<string, HTMLDivElement>(),
-    currentUserHighlights: new Map<string, SelectionRange[]>(),
+    currentUserHighlights: new Map<string, SelectionRange>(),
     currentUserDomHighlights: new Map<string, HTMLDivElement[]>(),
     debugViewerSafeArea: config.debugViewerSafeArea,
     containerWidth: 0,

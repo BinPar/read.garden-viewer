@@ -193,15 +193,10 @@ div.rg-highlights-layer {
   left: 0;
   right: 0;
   bottom: 0;
-  opacity: 0.6;
-  filter: contrast(1.25) saturate(0.85);
   pointer-events: none;
   user-select: none;
   -webkit-user-select: none;
-}
-
-.rg-flow-layout div.rg-highlights-layer {
-  z-index: -1;
+  mix-blend-mode: multiply;
 }
 
 div.rg-highlights-layer.rg-selection > div,
@@ -246,7 +241,19 @@ div.rg-highlights-layer > .rg-right-extensor {
 
 div.rg-selection-menu,
 div.rg-selection-menu .rg-selection-menu-wrapper,
-div.rg-selection-menu .rg-selection-menu-wrapper .rg-selection-menu-holder {
+div.rg-selection-menu .rg-selection-menu-wrapper .rg-selection-menu-holder,
+div.rg-notes-dialog,
+div.rg-notes-dialog .rg-notes-dialog-wrapper,
+div.rg-notes-dialog .rg-notes-dialog-wrapper .rg-notes-dialog-holder,
+div.rg-notes-dialog .rg-notes-dialog-wrapper .rg-notes-dialog-holder fieldset,
+div.rg-notes-dialog .rg-notes-dialog-header,
+div.rg-notes-dialog .rg-notes-dialog-header-title,
+div.rg-notes-dialog .rg-notes-dialog-header-buttons,
+div.rg-notes-dialog .rg-notes-dialog-text-holder,
+div.rg-confirmation-dialog,
+div.rg-confirmation-dialog .rg-confirmation-dialog-wrapper,
+div.rg-confirmation-dialog .rg-confirmation-dialog-wrapper .rg-confirmation-dialog-holder,
+div.rg-confirmation-dialog .rg-confirmation-dialog-wrapper .rg-confirmation-dialog-buttons {
   display: flex;
   flex-flow: row nowrap;
   -webkit-box-pack: center;
@@ -255,23 +262,34 @@ div.rg-selection-menu .rg-selection-menu-wrapper .rg-selection-menu-holder {
   align-items: center;
 }
 
-div.rg-selection-menu {
+div.rg-selection-menu,
+div.rg-notes-dialog,
+div.rg-confirmation-dialog {
   position: absolute;
   z-index: 900;
   pointer-events: auto;
 }
 
-div.rg-selection-menu.rg-bottom-arrow {
-  transform: translateX(-50%) translateY(calc(-100% - calc(25% * calc(1 / var(--scale)))))
-    scale(calc(1 / var(--scale)));
+div.rg-notes-dialog,
+div.rg-confirmation-dialog {
+  font-family: Muli, Helvetica, sans-serif;
 }
 
-div.rg-selection-menu.rg-top-arrow {
-  transform: translateX(-50%) translateY( calc(25% * calc(1 / var(--scale))))
-    scale(calc(1 / var(--scale)));
+div.rg-selection-menu.rg-bottom-arrow,
+div.rg-notes-dialog.rg-bottom-arrow,
+div.rg-confirmation-dialog.rg-bottom-arrow {
+  transform: translateX(-50%) translateY(-100%) scale(calc(1 / var(--scale)));
 }
 
-div.rg-selection-menu .rg-selection-menu-wrapper {
+div.rg-selection-menu.rg-top-arrow,
+div.rg-notes-dialog.rg-top-arrow,
+div.rg-confirmation-dialog.rg-top-arrow  {
+  transform: translateX(-50%) scale(calc(1 / var(--scale)));
+}
+
+div.rg-selection-menu .rg-selection-menu-wrapper,
+div.rg-notes-dialog .rg-notes-dialog-wrapper,
+div.rg-confirmation-dialog .rg-confirmation-dialog-wrapper {
   background-color: #fff;
   border-radius: 30px;
   position: relative;
@@ -279,26 +297,134 @@ div.rg-selection-menu .rg-selection-menu-wrapper {
   filter: drop-shadow(rgba(0, 0, 0, 0.2) 0px 0px 15px);
 }
 
-div.rg-selection-menu .rg-selection-menu-wrapper:before {
+div.rg-selection-menu .rg-selection-menu-wrapper:before,
+div.rg-notes-dialog .rg-notes-dialog-wrapper:before,
+div.rg-confirmation-dialog .rg-confirmation-dialog-wrapper:before {
   content: '';
   width: 20px;
   height: 20px;
   position: absolute;
-  background-color: rgb(255, 255, 255);
+  background-color: #fff;
   left: 50%;
   transform: translateX(-50%) rotate(45deg);
   border-bottom-right-radius: 5px;
 }
 
-div.rg-selection-menu.rg-bottom-arrow .rg-selection-menu-wrapper:before {
+div.rg-selection-menu.rg-bottom-arrow .rg-selection-menu-wrapper:before,
+div.rg-notes-dialog.rg-bottom-arrow .rg-notes-dialog-wrapper:before,
+div.rg-confirmation-dialog.rg-bottom-arrow .rg-confirmation-dialog-wrapper:before {
   bottom: -10px;
 }
 
-div.rg-selection-menu.rg-top-arrow .rg-selection-menu-wrapper:before {
+div.rg-selection-menu.rg-top-arrow .rg-selection-menu-wrapper:before,
+div.rg-notes-dialog.rg-top-arrow .rg-notes-dialog-wrapper:before,
+div.rg-confirmation-dialog.rg-top-arrow .rg-confirmation-dialog-wrapper:before {
   top: -10px;
 }
 
-div.rg-selection-menu .rg-selection-menu-wrapper .rg-selection-menu-holder button {
+div.rg-notes-dialog .rg-notes-dialog-header-title p {
+  font-size: 0.625rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+div.rg-notes-dialog form {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+div.rg-notes-dialog fieldset {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+div.rg-notes-dialog .rg-notes-dialog-wrapper .rg-notes-dialog-header,
+div.rg-notes-dialog .rg-notes-dialog-wrapper .rg-notes-dialog-text-holder,
+div.rg-confirmation-dialog .rg-confirmation-dialog-wrapper .rg-confirmation-dialog-holder {
+  -webkit-box-pack: justify;
+  justify-content: space-between;
+  width: 100%;
+}
+
+div.rg-confirmation-dialog .rg-confirmation-dialog-wrapper .rg-confirmation-dialog-holder {
+  flex-flow: column nowrap;
+}
+
+div.rg-confirmation-dialog .rg-confirmation-dialog-wrapper .rg-confirmation-dialog-holder p {
+  font-size: 0.825rem;
+  color: #4d4d4d;
+  text-transform: uppercase;
+  text-align: center;
+  line-height: 1.5em;
+}
+
+div.rg-confirmation-dialog .rg-confirmation-dialog-wrapper .rg-confirmation-dialog-buttons {
+  margin-top: 10px;
+}
+
+div.rg-confirmation-dialog .rg-confirmation-dialog-wrapper .rg-confirmation-dialog-buttons button {
+  display: flex;
+  -webkit-box-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  align-items: center;
+  position: relative;
+  user-select: none;
+  font-size: 0.625rem;
+  transition: background-color 0.2s ease-in 0s, border-color 0.2s ease-in 0s;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  text-align: center;
+  min-width: 0px;
+  min-height: 20px;
+  border-radius: 32px;
+  background-color: #f2b818;
+  border: 2px solid #f2b818;
+  color: #ffffff;
+  padding: 5px 10px;
+}
+
+div.rg-confirmation-dialog .rg-confirmation-dialog-wrapper .rg-confirmation-dialog-buttons button:hover {
+  background-color: #ca970b;
+  border-color: #ca970b;
+}
+
+div.rg-confirmation-dialog .rg-confirmation-dialog-wrapper .rg-confirmation-dialog-buttons button + button {
+  margin-left: 10px;
+}
+
+div.rg-notes-dialog .rg-notes-dialog-wrapper .rg-notes-dialog-header-buttons {
+  -webkit-box-pack: end;
+  justify-content: flex-end;
+}
+
+div.rg-notes-dialog .rg-notes-dialog-wrapper .rg-notes-dialog-text-holder {
+  margin-top: 10px;
+}
+
+div.rg-notes-dialog textarea {
+  border: 1px solid #f3f3f3;
+  border-radius: 5px;
+  font-size: 0.75rem;
+  color: #979797;
+  padding: 10px;
+  width: 100%;
+  min-width: 250px;
+  height: 100px;
+  resize: vertical;
+  outline: none;
+}
+
+div.rg-notes-dialog textarea:hover,
+div.rg-notes-dialog textarea:focus {
+  border-color: #979797;
+}
+
+div.rg-selection-menu .rg-selection-menu-wrapper .rg-selection-menu-holder .rg-selection-option,
+div.rg-notes-dialog .rg-notes-dialog-wrapper .rg-notes-dialog-holder .rg-notes-option {
   position: relative;
   display: flex;
   -webkit-box-pack: center;
@@ -328,23 +454,130 @@ div.rg-selection-menu .rg-selection-menu-wrapper .rg-selection-menu-holder .rg-s
   margin-right: 15px;
 }
 
-.rg-selection-option {
+div.rg-notes-dialog .rg-notes-dialog-wrapper .rg-notes-dialog-holder .rg-notes-dialog-note {
+  border: 1px solid #f3f3f3;
+  font-size: 0.75rem;
+  padding: 10px;
+  width: 100%;
+  min-width: 250px;
+  color: #979797;
+  letter-spacing: 0px;
+  border-radius: 5px;
+}
+
+.rg-selection-option,
+.rg-notes-option {
   overflow: hidden;
-  text-indent: 200%;
+  text-indent: -1000%;
 }
 
 .rg-selection-option + .rg-selection-option {
   margin-left: 15px;
 }
 
-.rg-selection-option:after {
+.rg-notes-option + .rg-notes-option {
+  margin-left: 10px;
+}
+
+.rg-notes-option:last-of-type {
+  margin-right: 10px;
+}
+
+.rg-selection-option:after,
+.rg-notes-option:after{
   content: '';
   position: absolute;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
+}
+
+.rg-notes-save:after,
+.rg-notes-cancel:after,
+.rg-notes-edit:after,
+.rg-notes-delete:after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 16px;
+  height: 16px;
+  transform: translate(-50%, -50%);
+}
+
+.rg-notes-save:after,
+.rg-notes-cancel:after {
+  width: 20px;
+  height: 24px;
+  transform: translate(-60%, -50%);
+}
+
+.rg-selection-option:after,
+.rg-notes-option:after {
   background-color: var(--highlighter-color);
+}
+
+.rg-notes-dialog-header-buttons span {
+  display: flex;
+  background-color: #f3f3f3;
+  height: 20px;
+  min-height: 20px;
+  width: 3px;
+  min-width: 3px;
+  border-radius: 3px;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.rg-notes-save,
+.rg-notes-cancel,
+.rg-notes-edit,
+.rg-notes-delete {
+  display: flex;
+  -webkit-box-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  align-items: center;
+  position: relative;
+  user-select: none;
+  background-color: #00000000;
+  width: 1.25rem;
+  min-width: 1.25rem;
+  height: 1.25rem;
+  border: 0;
+  cursor: pointer;
+  outline: none;
+}
+
+.rg-notes-save:after,
+.rg-notes-cancel:after,
+.rg-notes-edit:after,
+.rg-notes-delete:after {
+  background-color: #979797;
+}
+
+.rg-notes-save:hover:after,
+.rg-notes-cancel:hover:after,
+.rg-notes-edit:hover:after,
+.rg-notes-delete:hover:after {
+  background-color: #4d4d4d;
+}
+
+.rg-notes-save:after {
+  mask: url(/img/icons/check.svg);
+  -webkit-mask: url(/img/icons/check.svg);
+}
+
+.rg-notes-edit:after {
+  mask: url(/img/icons/edit.svg);
+  -webkit-mask: url(/img/icons/edit.svg);
+}
+
+.rg-notes-cancel:after {
+  background-color: #979797;
+  mask: url(/img/icons/close.svg);
+  -webkit-mask: url(/img/icons/close.svg);
 }
 
 .rg-selection-option.highlighter:after {
@@ -358,7 +591,22 @@ div.rg-selection-menu .rg-selection-menu-wrapper .rg-selection-menu-holder .rg-s
   -webkit-mask: url(/img/icons/highlighterOn.svg);
 }
 
-.rg-selection-option.rg-delete:after {
+.rg-selection-option.note:after,
+.rg-notes-option:after {
+  mask: url(/img/icons/note.svg);
+  -webkit-mask: url(/img/icons/note.svg);
+}
+
+.rg-selection-option.note:hover:after,
+.rg-selection-option.note.rg-selected:after,
+.rg-notes-option:hover:after,
+.rg-notes-option.rg-selected:after {
+  mask: url(/img/icons/noteOn.svg);
+  -webkit-mask: url(/img/icons/noteOn.svg);
+}
+
+.rg-selection-option.rg-delete:after,
+.rg-notes-delete:after {
   background-color: #979797;
   mask: url(/img/icons/delete.svg);
   -webkit-mask: url(/img/icons/delete.svg);

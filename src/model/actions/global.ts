@@ -5,6 +5,7 @@ import {
   NewContent,
   ScrollModes,
   SelectionOption,
+  SelectionRange,
   ViewerTheme,
 } from '../viewerSettings';
 import { Action } from './common';
@@ -125,6 +126,29 @@ export interface ShowSelectionMenu extends Action {
   deleteOption?: HighlightDeleteOption;
 }
 
+export interface ShowNotesDialog extends Action {
+  type: 'showNotesDialog';
+  key: string;
+  editing?: boolean;
+  title?: string;
+  color?: string;
+  highlightKey?: string;
+  note?: string;
+  selectionInfo?: SelectionRange;
+  options?: SelectionOption[];
+  confirmationMessage?: string;
+  confirmationOkText?: string
+  confirmationCancelText?: string
+}
+
+export interface RemoveSelectionMenu extends Action {
+  type: 'removeSelectionMenu';
+}
+
+export interface RemoveNotesDialog extends Action {
+  type: 'removeNotesDialog';
+}
+
 export interface ClearSelection extends Action {
   type: 'clearSelection';
 }
@@ -135,6 +159,11 @@ export interface DrawHighlights extends Action {
   color: string;
   highlights: HighlightInfo[];
   clear?: boolean;
+}
+
+export interface RemoveHighlights extends Action {
+  type: 'removeHighlights';
+  keys: [string];
 }
 
 /**
@@ -153,5 +182,9 @@ export type GlobalActions =
   | RemoveOnChangeEvent<any>
   | RemoveAllChangeEvents
   | ShowSelectionMenu
+  | ShowNotesDialog
+  | RemoveSelectionMenu
+  | RemoveNotesDialog
   | ClearSelection
-  | DrawHighlights;
+  | DrawHighlights
+  | RemoveHighlights;

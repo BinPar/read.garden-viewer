@@ -1,84 +1,25 @@
 import log from 'loglevel';
-import { LayoutTypes } from '../../model';
+
 import { ActionDispatcher } from '../../model/actions/actionDispatcher';
 import { ShowSelectionMenu } from '../../model/actions/global';
 import { OnDeleteOptionClick, OnSelectionMenuOptionClick } from '../../model/events';
-import getSelectionRangeFromSelection from '../../utils/getSelectionRangeFromSelection';
-import {
-  clientToContentWrapperLeft,
-  clientToContentWrapperTop,
-} from '../../utils/highlights/clientToContentWrapperCoordinates';
-import { updateState } from '../state';
 
-const menuNeededSpace = 70;
+import getSelectionRangeFromSelection from '../../utils/getSelectionRangeFromSelection';
+import getMenuPositions from '../../utils/highlights/getMenuPositions';
 
 const showSelectionMenu: ActionDispatcher<ShowSelectionMenu> = async ({ action, state }) => {
-  const { currentSelection } = state;
   const { key } = action;
+  const { currentSelection } = state;
+  let { selectionMenu } = state;
+
   if (key || currentSelection) {
-    let arrowDown = true;
-    let x = 0;
-    let y = 0;
-
-    let minLeft = 0;
-    let maxLeft = Infinity;
-    if (state.layout === LayoutTypes.Flow && state.lastClickCoords) {
-      const clickLeft = clientToContentWrapperLeft(state.lastClickCoords!.x);
-      minLeft = Math.floor(clickLeft / state.totalColumnWidth) * state.totalColumnWidth;
-      maxLeft = minLeft + state.totalColumnWidth;
-    }
-
-    if (key) {
-      const domHighlights = state.currentUserDomHighlights.get(key);
-      if (domHighlights) {
-        let left = Infinity;
-        let top = Infinity;
-        let width = 0;
-        for (let i = 0, l = domHighlights.length; i < l; i++) {
-          const rect = domHighlights[i].getBoundingClientRect();
-          const rectLeft = clientToContentWrapperLeft(rect.left);
-          if (rectLeft < maxLeft && rectLeft >= minLeft) {
-            left = Math.min(left, rectLeft);
-            top = Math.min(top, rect.top);
-            width = Math.max(width, rect.width);
-          }
-        }
-        x = left + width / 2;
-        y = clientToContentWrapperTop(top);
-      }
-    } else if (currentSelection) {
-      let left = Infinity;
-      let top = Infinity;
-      let bottom = 0;
-      let width = 0;
-      const rects = currentSelection.getClientRects();
-      for (let i = 0, l = rects.length; i < l; i++) {
-        const rect = rects[i];
-        const rectLeft = clientToContentWrapperLeft(rect.left);
-        if (rectLeft < maxLeft && rectLeft >= minLeft) {
-          left = Math.min(left, rectLeft);
-          top = Math.min(top, rect.top);
-          width = Math.max(width, rect.width);
-          bottom = Math.max(bottom, rect.bottom);
-        }
-      }
-      x = left + width / 2;
-      if (top < menuNeededSpace) {
-        if ((state.containerHeight - bottom) >= menuNeededSpace) {
-          arrowDown = false;
-          top = bottom;
-        } else {
-          top = menuNeededSpace;
-        }
-      }
-      y = clientToContentWrapperTop(top);
-    }
+    const { left, top, arrowDown } = getMenuPositions(state, 70, key, currentSelection);
 
     const menu = document.createElement('div');
     menu.classList.add('rg-selection-menu');
     menu.classList.add(`rg-${arrowDown ? 'bottom' : 'top'}-arrow`);
-    menu.style.top = `${y}px`;
-    menu.style.left = `${x}px`;
+    menu.style.top = `${top}px`;
+    menu.style.left = `${left}px`;
 
     const wrapper = document.createElement('div');
     wrapper.classList.add('rg-selection-menu-wrapper');
@@ -118,6 +59,7 @@ const showSelectionMenu: ActionDispatcher<ShowSelectionMenu> = async ({ action, 
           };
           if (action.key) {
             event.highlightKey = action.key;
+            event.selectionInfo = state.currentUserHighlights.get(action.key);
           } else if (state.currentSelection) {
             event.selectionInfo = getSelectionRangeFromSelection(state.currentSelection);
           } else {
@@ -161,14 +103,15 @@ const showSelectionMenu: ActionDispatcher<ShowSelectionMenu> = async ({ action, 
     }
 
     state.contentWrapperNode!.appendChild(menu);
-    updateState({
-      selectionMenu: menu,
-    });
+    selectionMenu = menu;
   } else {
     log.warn(`No current selection nor user selection info at 'showSelectionMenu'`);
+    selectionMenu = null;
   }
 
-  return {};
+  return {
+    selectionMenu
+  };
 };
 
 export default showSelectionMenu;
