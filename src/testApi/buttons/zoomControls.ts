@@ -1,6 +1,6 @@
 import { SetFitMode, SetZoom } from '../../model/actions/fixed';
 import { AddOnChangeEvent } from '../../model/actions/global';
-import { DispatchAPIAction } from '../../model/apiInterface';
+import { DispatchAPIAction } from '../../model/actions/common';
 import { State } from '../../model/state';
 import { FitMode, LayoutTypes } from '../../model/viewerSettings';
 

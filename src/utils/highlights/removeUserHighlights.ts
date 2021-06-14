@@ -6,6 +6,7 @@ const removeUserHighlights = (state = getState()): void => {
     removeLayerHighlights(value);
     value.remove();
   });
+  state.highlightersLayers.clear();
 };
 
 export default removeUserHighlights;

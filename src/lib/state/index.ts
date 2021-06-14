@@ -6,7 +6,9 @@ import {
   State,
 } from '../../model/state';
 import { InitialConfig } from '../../model/config';
-import { SelectionRange, ViewerMode } from '../../model/viewerSettings';
+import { UserHighlightInfo, ViewerMode } from '../../model/viewerSettings';
+import { StatePropertyNames } from '../../model/actions/global';
+
 import defaultGlobal from './defaultGlobal';
 import defaultFlow from './defaultFlow';
 import defaultScrolled from './defaultScrolled';
@@ -16,7 +18,6 @@ import defaultConfig from '../../config/default';
 import { setConfig } from '../../config';
 import changeHandlers from './changeHandlers';
 import { notifyEventHandler } from './stateChangeEvents';
-import { StatePropertyNames } from '../../model/actions/global';
 
 const handlers = new Map<string, Map<any, PropChangeHandler>>();
 
@@ -81,7 +82,7 @@ export const initializeState = (initialConfig: InitialConfig): void => {
     searchTerms: new Array<string>(),
     searchRanges: new Array<Range>(),
     highlightersLayers: new Map<string, HTMLDivElement>(),
-    currentUserHighlights: new Map<string, SelectionRange>(),
+    currentUserHighlights: new Map<string, UserHighlightInfo>(),
     currentUserDomHighlights: new Map<string, HTMLDivElement[]>(),
     debugViewerSafeArea: config.debugViewerSafeArea,
     containerWidth: 0,

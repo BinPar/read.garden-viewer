@@ -1,5 +1,5 @@
 import { SetScrollMode } from '../../model/actions/global';
-import { DispatchAPIAction } from '../../model/apiInterface';
+import { DispatchAPIAction } from '../../model/actions/common';
 import { State } from '../../model/state';
 import { LayoutTypes, ScrollModes } from '../../model/viewerSettings';
 

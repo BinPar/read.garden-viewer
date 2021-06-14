@@ -1,5 +1,5 @@
 import { AddOnChangeEvent, AppendNewContent } from '../model/actions/global';
-import { DispatchAPIAction } from '../model/apiInterface';
+import { DispatchAPIAction } from '../model/actions/common';
 import { LoadNewContent } from '../model/events';
 import { State } from '../model/state';
 import { LayoutTypes } from '../model/viewerSettings';

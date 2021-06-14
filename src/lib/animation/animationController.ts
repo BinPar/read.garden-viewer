@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import { DispatchAPIAction } from '../../model/apiInterface';
+import { DispatchAPIAction } from '../../model/actions/common';
 import { State } from '../../model/state';
 import { FitMode, LayoutTypes } from '../../model/viewerSettings';
 import setCSSProperty from '../../utils/setCSSProperty';

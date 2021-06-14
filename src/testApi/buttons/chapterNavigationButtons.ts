@@ -1,5 +1,5 @@
 import { NavigateToNextChapter, NavigateToPreviousChapter } from '../../model/actions/flow';
-import { DispatchAPIAction } from '../../model/apiInterface';
+import { DispatchAPIAction } from '../../model/actions/common';
 import { State } from '../../model/state';
 
 const chapterNavigationButtons = (container: HTMLDivElement, state: State, dispatcher: DispatchAPIAction): void  => {

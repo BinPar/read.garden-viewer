@@ -1,5 +1,5 @@
 import { AddOnChangeEvent, NavigateToPage } from '../../model/actions/global';
-import { DispatchAPIAction } from '../../model/apiInterface';
+import { DispatchAPIAction } from '../../model/actions/common';
 import { State } from '../../model/state';
 import getContentSlug from '../../utils/getContentSlug';
 import { Content } from '../model/content';

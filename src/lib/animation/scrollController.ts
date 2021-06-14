@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { SetReadMode } from '../../model/actions/global';
-import { DispatchAPIAction } from '../../model/apiInterface';
+import { DispatchAPIAction } from '../../model/actions/common';
 import { SelectionInfo, SyntheticEvent } from '../../model/dom';
 import { State } from '../../model/state';
 import { drawHighlights } from '../../utils/highlights';
@@ -58,19 +58,22 @@ const scrollController = (
         state.config.eventHandler &&
         getClickedHighlight(ev, syntheticEvent);
       if (clickedHighlight) {
-        const range = state.currentUserHighlights.get(clickedHighlight)!;
-        const onHighlightClick: OnHighlightClick = {
-          type: 'onHighlightClick',
-          slug: state.slug,
-          key: clickedHighlight,
-          ranges: [range],
-        };
-        const handler = state.config.eventHandler!;
-        handler(onHighlightClick);
-        updateState({
-          lastClickCoords: { x: syntheticEvent.clientX, y: syntheticEvent.clientY },
-        });
-        return;
+        const userHighlightInfo = state.currentUserHighlights.get(clickedHighlight)!;
+        if (userHighlightInfo) {
+          const { start, end, obfuscatedText } = userHighlightInfo;
+          const onHighlightClick: OnHighlightClick = {
+            type: 'onHighlightClick',
+            slug: state.slug,
+            key: clickedHighlight,
+            ranges: [{ start, end, obfuscatedText }],
+          };
+          const handler = state.config.eventHandler!;
+          handler(onHighlightClick);
+          updateState({
+            lastClickCoords: { x: syntheticEvent.clientX, y: syntheticEvent.clientY },
+          });
+          return;
+        }
       }
       const wordSelection = !state.config.disableSelection && getWordSelection(ev, syntheticEvent);
       if (wordSelection) {

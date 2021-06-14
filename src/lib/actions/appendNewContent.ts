@@ -18,6 +18,7 @@ import handleFlowCssAndLoad from '../../utils/handleFlowCssAndLoad';
 import removeLayerHighlights from '../../utils/highlights/removeLayerHighlights';
 import removeUserHighlights from '../../utils/highlights/removeUserHighlights';
 import clearUserHighlights from '../../utils/highlights/clearUserHighlights';
+import redrawUserHighlights from '../../utils/highlights/redrawUserHighlights';
 
 /**
  * Appends new content to viewer
@@ -76,6 +77,7 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
                 finalPartialState.dynamicStyleNode = newLink;
               }
               resolve(finalPartialState);
+              await redrawUserHighlights(state);
               highlightTerms(state.searchTerms);
             };
             const onStylesLoad = (): void => {

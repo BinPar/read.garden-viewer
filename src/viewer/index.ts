@@ -1,7 +1,6 @@
 import log from 'loglevel';
 
-import { APIInterface } from '../model/apiInterface';
-import { ViewerFunction } from '../model/viewer';
+import { APIInterface, ViewerFunction } from '../model/viewer';
 
 import dispatch from '../lib/state/dispatch';
 import { getState, initializeState } from '../lib/state';
@@ -30,7 +29,7 @@ const viewer: ViewerFunction = (config) => {
   setupGlobalEvents(state, api.dispatch);
   animationController(state, api.dispatch);
   setupHandlers(state, api.dispatch);
-  log.info('Viewer Initialized');
+  log.debug('Viewer Initialized');
   return api;
 };
 

@@ -1,5 +1,5 @@
 import { MoveNext, MovePrev } from '../../model';
-import { DispatchAPIAction } from '../../model/apiInterface';
+import { DispatchAPIAction } from '../../model/actions/common';
 import { State } from '../../model/state';
 
 const directionButtons = (

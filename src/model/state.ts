@@ -5,11 +5,10 @@ import {
   LayoutTypes,
   Margin,
   ScrollModes,
-  SelectionRange,
   TextAlignModes,
+  UserHighlightInfo,
   ViewerTheme,
 } from './viewerSettings';
-
 /**
  * Global state
  */
@@ -207,7 +206,7 @@ export interface GlobalState {
   /**
    * Current user highlights
    */
-  currentUserHighlights: Map<string, SelectionRange>;
+  currentUserHighlights: Map<string, UserHighlightInfo>;
   /**
    * Current user DOM highlights
    */

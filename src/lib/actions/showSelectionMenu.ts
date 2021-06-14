@@ -59,7 +59,11 @@ const showSelectionMenu: ActionDispatcher<ShowSelectionMenu> = async ({ action, 
           };
           if (action.key) {
             event.highlightKey = action.key;
-            event.selectionInfo = state.currentUserHighlights.get(action.key);
+            const userHighlightInfo = state.currentUserHighlights.get(action.key);
+            if (userHighlightInfo) {
+              const { start, end, obfuscatedText } = userHighlightInfo;
+              event.selectionInfo = { start, end, obfuscatedText };
+            }
           } else if (state.currentSelection) {
             event.selectionInfo = getSelectionRangeFromSelection(state.currentSelection);
           } else {

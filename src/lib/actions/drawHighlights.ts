@@ -28,7 +28,12 @@ const drawHighlights: ActionDispatcher<DrawHighlights> = async ({ action, state 
     const { key, ...selectionRange } = highlights;
     const ranges = getRangesFromSelectionRanges([selectionRange]);
     if (key) {
-      state.currentUserHighlights.set(key, selectionRange);
+      state.currentUserHighlights.set(key, {
+        ...selectionRange,
+        key,
+        highlighterKey: action.key,
+        color: action.color,
+      });
     }
     const domHighlights = drawDomHighlights(layer, ranges, true, key);
     state.currentUserDomHighlights.set(key, domHighlights);

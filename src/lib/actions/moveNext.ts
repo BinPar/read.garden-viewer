@@ -10,7 +10,7 @@ const moveNext: ActionDispatcher<MoveNext> = async ({ state }) => {
       if (state.layout === LayoutTypes.Flow) {
         const { totalColumnWidth, columnsInViewport } = state;
         const desiredPosition = position + totalColumnWidth * columnsInViewport;
-        if (desiredPosition < lastPosition) {
+        if (desiredPosition <= lastPosition) {
           const newContentSlug = slugByPosition.get(desiredPosition);
           if (newContentSlug) {
             updateState({

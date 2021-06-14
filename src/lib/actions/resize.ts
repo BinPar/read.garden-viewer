@@ -2,6 +2,8 @@ import { ActionDispatcher } from '../../model/actions/actionDispatcher';
 import { Resize } from '../../model/actions/global';
 import checkCurrentPage from '../../utils/checkCurrentPage';
 import { drawHighlights } from '../../utils/highlights';
+import redrawUserHighlights from '../../utils/highlights/redrawUserHighlights';
+import removeUserHighlights from '../../utils/highlights/removeUserHighlights';
 import { clean } from '../../utils/highlights/search';
 import setCSSProperty from '../../utils/setCSSProperty';
 
@@ -14,6 +16,7 @@ import recalculate from '../../viewer/recalculate';
 const resize: ActionDispatcher<Resize> = async ({ state }) => {
   setCSSProperty('viewer-margin-top', '200vh');
   clean();
+  removeUserHighlights(state);
   const recalculateUpdate = await recalculate(state);
   if (recalculateUpdate.recalculating === false) {
     setCSSProperty('viewer-margin-top', '0');
@@ -21,6 +24,7 @@ const resize: ActionDispatcher<Resize> = async ({ state }) => {
   if (state.searchRanges.length && state.searchTermsHighlightsNode) {
     drawHighlights(state.searchTermsHighlightsNode, state.searchRanges);
   }
+  await redrawUserHighlights(state);
   checkCurrentPage();
   return recalculateUpdate;
 };

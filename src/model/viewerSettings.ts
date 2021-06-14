@@ -165,6 +165,11 @@ export interface HighlightInfo extends SelectionRange {
   key: string;
 }
 
+export interface UserHighlightInfo extends HighlightInfo {
+  highlighterKey: string;
+  color: string;
+}
+
 export interface HighlightDeleteOption {
   title: string;
   className?: string;

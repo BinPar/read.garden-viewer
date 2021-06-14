@@ -1,8 +1,8 @@
-import { APIInterface, DispatchAPIAction } from '../model/apiInterface';
+import { DispatchAPIAction } from '../model/actions/common';
 import { InitialConfig } from '../model/config';
 import { ReadGardenEventHandler } from '../model/events';
 import { State } from '../model/state';
-import { ViewerFunction } from '../model/viewer';
+import { APIInterface, ViewerFunction } from '../model/viewer';
 import settings from './settings/settings.json';
 
 export interface TestingConfig {
