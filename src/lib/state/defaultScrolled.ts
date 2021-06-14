@@ -9,6 +9,7 @@ const defaultScrolled: ScrolledState = {
   showPageSeparation: false,
   slugByPosition: new Map<number, string>(),
   positionBySlug: new Map<string, number>(),
+  lastPosition: 0,
 };
 
 export default defaultScrolled;

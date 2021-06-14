@@ -151,6 +151,7 @@ const recalculate = async (state: State): Promise<Partial<State>> => {
             pagesLabelsNode!.appendChild(label);
             slugByPosition.set(position, lastLabel);
           }
+          lastPosition = position;
         }
 
         if (document.scrollingElement?.scrollTop) {
@@ -167,6 +168,7 @@ const recalculate = async (state: State): Promise<Partial<State>> => {
           columnGap,
           positionBySlug,
           slugByPosition,
+          lastPosition: lastPosition!,
         });
         return;
       }

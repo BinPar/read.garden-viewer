@@ -91,6 +91,7 @@ export interface AddOnChangeEvent<T> extends Action {
   type: 'addOnChangeEvent';
   propertyName: StatePropertyNames<T>;
   event: PropertyChangeEvent<T>;
+  returnValue?: boolean;
 }
 
 export interface RemoveOnChangeEvent<T> extends Action {
@@ -166,6 +167,14 @@ export interface RemoveHighlights extends Action {
   keys: [string];
 }
 
+export interface MoveNext extends Action {
+  type: 'moveNext';
+}
+
+export interface MovePrev extends Action {
+  type: 'movePrev';
+}
+
 /**
  * Actions that affect Fixed and Flow Layout
  */
@@ -187,4 +196,6 @@ export type GlobalActions =
   | RemoveNotesDialog
   | ClearSelection
   | DrawHighlights
-  | RemoveHighlights;
+  | RemoveHighlights
+  | MoveNext
+  | MovePrev;

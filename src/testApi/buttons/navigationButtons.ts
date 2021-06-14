@@ -4,6 +4,7 @@ import { LayoutTypes } from '../../model/viewerSettings';
 
 import loadIndexFile from '../utils/loadIndexFile';
 import contentSlugSelect from './contentSlugSelect';
+import directionButtons from './directionButtons';
 import flowChapterSelect from './flowChapterSelect';
 
 const navigationButtons = (
@@ -16,6 +17,7 @@ const navigationButtons = (
       flowChapterSelect(container, state, dispatcher, jsonIndex);
     }
     contentSlugSelect(container, state, dispatcher, jsonIndex);
+    directionButtons(container, state, dispatcher);
   });
 };
 

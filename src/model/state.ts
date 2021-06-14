@@ -479,6 +479,10 @@ export interface ScrolledState {
    * Map where positions are keys (left for horizontal, top for vertical) and labels are values
    */
   slugByPosition: Map<number, string>;
+  /**
+   * Last content position
+   */
+  lastPosition: number;
 }
 
 export type State = GlobalState &

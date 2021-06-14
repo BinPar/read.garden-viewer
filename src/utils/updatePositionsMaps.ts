@@ -13,14 +13,16 @@ const updatePositionsMaps = (state: State): void => {
     const positionKey = state.scrollMode === 'horizontal' ? 'left' : 'top';
     const positionBySlug = new Map<string, number>();
     const slugByPosition = new Map<number, string>();
+    let lastPosition = 0;
     for (let i = 0, l = contentsInfo.length; i < l; i++) {
       const content = contentsInfo[i];
       const { slug } = content;
       const position = content[positionKey];
       positionBySlug.set(slug, position);
       slugByPosition.set(position, slug);
+      lastPosition = position;
     }
-    updateState({ positionBySlug, slugByPosition });
+    updateState({ positionBySlug, slugByPosition, lastPosition });
   }
 };
 

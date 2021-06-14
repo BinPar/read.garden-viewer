@@ -23,6 +23,7 @@ const setContentsInfo: ActionDispatcher<SetContentsInfo> = async ({ state, actio
   let totalHeight = 0;
   let maxWidth = 0;
   let maxHeight = 0;
+  let lastPosition = 0;
   const contentsBySlug = new Map<string, FixedViewerContentInfo>();
   const contentsByOrder = new Map<number, FixedViewerContentInfo>();
   const positionBySlug = new Map<string, number>();
@@ -66,6 +67,7 @@ const setContentsInfo: ActionDispatcher<SetContentsInfo> = async ({ state, actio
     contentsByOrder.set(order, contentInfo);
     contentsBySlug.set(slug, contentInfo);
     contentsInfo.push(contentInfo);
+    lastPosition = position;
   }
 
   setCSSProperty('total-width', `${totalWidth}px`);
@@ -83,6 +85,7 @@ const setContentsInfo: ActionDispatcher<SetContentsInfo> = async ({ state, actio
     currentContentIndex,
     positionBySlug,
     slugByPosition,
+    lastPosition,
     wrapperReady: true,
   };
 };

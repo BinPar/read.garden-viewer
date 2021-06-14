@@ -26,6 +26,8 @@ import removeNotesDialog from './removeNotesDialog';
 import clearSelection from './clearSelection';
 import drawHighlights from './drawHighlights';
 import removeHighlights from './removeHighlights';
+import moveNext from './moveNext';
+import movePrev from './movePrev';
 
 /**
  * List of all action dispatchers
@@ -59,6 +61,8 @@ const actionDispatchers  = {
   clearSelection,
   drawHighlights,
   removeHighlights,
+  moveNext,
+  movePrev,
 };
 
 export default actionDispatchers;
