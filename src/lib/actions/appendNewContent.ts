@@ -12,13 +12,13 @@ import { onCssLoaded } from '../state/changeHandlers/cssLoaderHandler';
 import { onWrapperReady } from '../state/changeHandlers/wrapperReadyHandler';
 import { updateState } from '../state';
 import layoutSetup from '../../viewer/layoutSetup';
-import { highlightTerms } from '../../utils/highlights/search';
 import loadContentsInBackground from '../../utils/loadContentsInBackground';
 import handleFlowCssAndLoad from '../../utils/handleFlowCssAndLoad';
 import removeLayerHighlights from '../../utils/highlights/removeLayerHighlights';
 import removeUserHighlights from '../../utils/highlights/removeUserHighlights';
 import clearUserHighlights from '../../utils/highlights/clearUserHighlights';
 import redrawUserHighlights from '../../utils/highlights/redrawUserHighlights';
+import { highlightTerms } from '../../utils/highlights/search';
 
 /**
  * Appends new content to viewer
@@ -52,10 +52,13 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
     if (state.layout === LayoutTypes.Flow) {
       setCSSProperty('viewer-margin-top', '200vh');
       window.requestAnimationFrame(() => {
-        removeLayerHighlights(searchTermsHighlightsNode!);
+        if (searchTermsHighlightsNode) {
+          removeLayerHighlights(searchTermsHighlightsNode);
+        }
         removeUserHighlights(state);
         clearUserHighlights(state);
         contentPlaceholderNode!.innerHTML = action.htmlContent;
+        contentPlaceholderNode!.dataset.highlighted = '';
 
         window.requestAnimationFrame(() => {
           window.requestAnimationFrame(() => {
@@ -163,8 +166,8 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
             };
             updateState({ loadingContent: false });
             resolve(finalPartialState);
-            loadContentsInBackground();
             highlightTerms(state.searchTerms);
+            loadContentsInBackground();
           };
           const checkFonts = () => {
             dynamicStyleNode!.removeEventListener('load', checkFonts);
