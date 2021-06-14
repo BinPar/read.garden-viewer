@@ -1,5 +1,3 @@
-import log from 'loglevel';
-
 import { ActionDispatcher } from '../../model/actions/actionDispatcher';
 import { HighlightSearchTerms } from '../../model/actions/global';
 import { clean, highlightTerms } from '../../utils/highlights/search';
@@ -11,7 +9,6 @@ import { updateState } from '../state';
  * @returns Partial state update
  */
 const highlightSearchTerms: ActionDispatcher<HighlightSearchTerms> = async ({ action }) => {
-  log.info('Highlight terms', action.terms);
   const { terms } = action;
   clean();
   updateState({ searchRanges: [] });
