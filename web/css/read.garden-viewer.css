@@ -199,6 +199,14 @@ div.rg-highlights-layer {
   mix-blend-mode: multiply;
 }
 
+div.rg-highlights-layer.rg-selection {
+  --highlighter-color: var(--current-selection-highlights-color);
+}
+
+div.rg-highlights-layer.rg-search {
+  --highlighter-color: var(--search-highlights-color);
+}
+
 div.rg-highlights-layer.rg-selection > div,
 div.rg-highlights-layer.rg-search > div {
   pointer-events: none;
@@ -209,17 +217,9 @@ div.rg-highlights-layer > div {
   border: none;
 }
 
-div.rg-highlights-layer.rg-selection > div {
-  background-color: var(--current-selection-highlights-color);
-}
-
 div.rg-highlights-layer > div {
   background-color: var(--highlighter-color);
   pointer-events: var(--highlights-pointer-events);
-}
-
-div.rg-highlights-layer.rg-search > div {
-  background-color: var(--search-highlights-color);
 }
 
 div.rg-highlights-layer .rg-left-extensor,

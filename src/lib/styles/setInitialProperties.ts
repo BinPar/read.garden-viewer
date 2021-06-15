@@ -27,7 +27,7 @@ const setInitialProperties = (state: State): void => {
   setCSSProperty('padding-top', `${state.config.paddingTop}px`);
   setCSSProperty('padding-bottom', `${state.config.paddingBottom}px`);
   setCSSProperty('scale', `${state.scale}`);
-  setCSSProperty('search-highlights-color', '#ffcf0040');
+  setCSSProperty('search-highlights-color', '#fdff04');
   setCSSProperty('sepia-viewer-color', '0');
   setCSSProperty('text-align', 'initial');
   setCSSProperty('total-column-width', '0px');

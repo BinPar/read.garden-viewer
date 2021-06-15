@@ -112,6 +112,10 @@ export interface HighlightSearchTerms extends Action {
   terms: string[];
 }
 
+export interface RemoveSearchHighlights extends Action {
+  type: 'removeSearchHighlights';
+}
+
 export interface SetReadMode extends Action {
   type: 'setReadMode';
   /**
@@ -186,6 +190,7 @@ export type GlobalActions =
   | AppendNewContent
   | Resize
   | HighlightSearchTerms
+  | RemoveSearchHighlights
   | SetReadMode
   | AddOnChangeEvent<any>
   | RemoveOnChangeEvent<any>

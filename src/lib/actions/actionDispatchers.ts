@@ -8,6 +8,7 @@ import setFontFamily from './setFontFamily';
 import setTextAlign from './setTextAlign';
 import resize from './resize';
 import highlightSearchTerms from './highlightSearchTerms';
+import removeSearchHighlights from './removeSearchHighlights';
 import setContentsInfo from './setContentsInfo';
 import setReadMode from './setReadMode';
 import addOnChangeEvent from './addOnChangeEvent'
@@ -43,6 +44,7 @@ const actionDispatchers  = {
   setTextAlign,
   resize,
   highlightSearchTerms,
+  removeSearchHighlights,
   setContentsInfo,
   setReadMode,
   addOnChangeEvent,
