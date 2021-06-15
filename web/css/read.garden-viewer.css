@@ -118,6 +118,7 @@ div.rg-content-wrapper #rg-content-placeholder *::selection {
 .rg-flow-layout.rg-horizontal-scroll div.rg-content-wrapper img {
   pointer-events: none;
   cursor: pointer;
+  max-height: calc(var(--image-ratio, 100) * var(--column-width)) !important;
 }
 
 .rg-flow-layout.rg-horizontal-scroll div.rg-content-wrapper img.rg-fit-height {
