@@ -168,7 +168,13 @@ export interface DrawHighlights extends Action {
 
 export interface RemoveHighlights extends Action {
   type: 'removeHighlights';
-  keys: [string];
+  keys: string[];
+}
+
+export interface SetHighlighterColor extends Action {
+  type: 'setHighlighterColor';
+  key: string;
+  color: string;
 }
 
 export interface MoveNext extends Action {
@@ -202,5 +208,6 @@ export type GlobalActions =
   | ClearSelection
   | DrawHighlights
   | RemoveHighlights
+  | SetHighlighterColor
   | MoveNext
   | MovePrev;

@@ -27,6 +27,7 @@ import removeNotesDialog from './removeNotesDialog';
 import clearSelection from './clearSelection';
 import drawHighlights from './drawHighlights';
 import removeHighlights from './removeHighlights';
+import setHighlighterColor from './setHighlighterColor';
 import moveNext from './moveNext';
 import movePrev from './movePrev';
 
@@ -63,6 +64,7 @@ const actionDispatchers  = {
   clearSelection,
   drawHighlights,
   removeHighlights,
+  setHighlighterColor,
   moveNext,
   movePrev,
 };
