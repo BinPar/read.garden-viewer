@@ -1,5 +1,3 @@
-import log from 'loglevel';
-
 import { ActionDispatcher } from '../../model/actions/actionDispatcher';
 import { AppendNewContent } from '../../model/actions/global';
 import { State } from '../../model/state';
@@ -84,7 +82,7 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
               highlightTerms(state.searchTerms);
             };
             const onStylesLoad = (): void => {
-              dynamicStyleNode!.removeEventListener('load', onStylesLoad);
+              newLink.removeEventListener('load', onStylesLoad);
               const checkFonts = () => {
                 window.requestAnimationFrame(() => {
                   window.requestAnimationFrame(() => {
@@ -106,28 +104,7 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
                 checkFonts();
                 return;
               }
-              const promises = new Array<Promise<HTMLImageElement>>();
-              images.forEach((img) => {
-                promises.push(
-                  new Promise<HTMLImageElement>((imageResolve) => {
-                    if (img.complete) {
-                      imageResolve(img);
-                      return;
-                    }
-                    const onLoad = (): void => {
-                      img.removeEventListener('load', onLoad);
-                      imageResolve(img);
-                    };
-                    const onError = (ev: ErrorEvent) => {
-                      log.info('Error loading image', ev.message);
-                      onLoad();
-                    };
-                    img.addEventListener('load', onLoad);
-                    img.addEventListener('error', onError);
-                  }),
-                );
-              });
-              Promise.all(promises).then(checkImagesHeight).then(checkFonts);
+              Promise.all(Array.from(images).map((i) => checkImagesHeight([i]))).then(checkFonts);
             };
             if (!action.cssURL || action.cssURL === dynamicStyleNode!.href) {
               replace = false;
@@ -137,6 +114,7 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
             newLink.rel = 'stylesheet';
             newLink.type = 'text/css';
             newLink.addEventListener('load', onStylesLoad);
+            dynamicStyleNode!.removeEventListener('load', onStylesLoad);
             dynamicStyleNode!.replaceWith(newLink);
             newLink.href = action.cssURL;
           });
