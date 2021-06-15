@@ -121,7 +121,10 @@ div.rg-content-wrapper #rg-content-placeholder *::selection {
 }
 
 .rg-flow-layout.rg-horizontal-scroll div.rg-content-wrapper img.rg-fit-height {
-  max-height: calc(100vh - var(--padding-top) - var(--padding-bottom)) !important;
+  max-height: min(
+    calc(100vh - var(--padding-top) - var(--padding-bottom)),
+    calc(var(--image-ratio, 100) * var(--column-width))
+  ) !important;
   width: unset !important;
   margin-left: auto !important;
   margin-right: auto !important;
@@ -141,7 +144,10 @@ div.rg-content-wrapper #rg-content-placeholder *::selection {
 
 @media (max-width: 48em) {
   .rg-flow-layout.rg-horizontal-scroll div.rg-content-wrapper img.rg-fit-height {
-    max-height: calc(100vh - var(--padding-top) - var(--padding-bottom) - 65px) !important;
+    max-height: min(
+      calc(100vh - var(--padding-top) - var(--padding-bottom) - 65px),
+      calc(var(--image-ratio, 100) * var(--column-width))
+    ) !important;
   }
 }
 
@@ -283,7 +289,7 @@ div.rg-confirmation-dialog.rg-bottom-arrow {
 
 div.rg-selection-menu.rg-top-arrow,
 div.rg-notes-dialog.rg-top-arrow,
-div.rg-confirmation-dialog.rg-top-arrow  {
+div.rg-confirmation-dialog.rg-top-arrow {
   transform: translateX(-50%) scale(calc(1 / var(--scale)));
 }
 
@@ -387,12 +393,19 @@ div.rg-confirmation-dialog .rg-confirmation-dialog-wrapper .rg-confirmation-dial
   padding: 5px 10px;
 }
 
-div.rg-confirmation-dialog .rg-confirmation-dialog-wrapper .rg-confirmation-dialog-buttons button:hover {
+div.rg-confirmation-dialog
+  .rg-confirmation-dialog-wrapper
+  .rg-confirmation-dialog-buttons
+  button:hover {
   background-color: #ca970b;
   border-color: #ca970b;
 }
 
-div.rg-confirmation-dialog .rg-confirmation-dialog-wrapper .rg-confirmation-dialog-buttons button + button {
+div.rg-confirmation-dialog
+  .rg-confirmation-dialog-wrapper
+  .rg-confirmation-dialog-buttons
+  button
+  + button {
   margin-left: 10px;
 }
 
@@ -484,7 +497,7 @@ div.rg-notes-dialog .rg-notes-dialog-wrapper .rg-notes-dialog-holder .rg-notes-d
 }
 
 .rg-selection-option:after,
-.rg-notes-option:after{
+.rg-notes-option:after {
   content: '';
   position: absolute;
   top: 0;

@@ -18,17 +18,18 @@ const checkImagesHeight = async (
           imageResolve();
         }, 5000);
         const check = (): void => {
-          const { height: fullHeight } = img;
-          const visibleHeight = img.getClientRects()[0]?.height;
+          const { height: fullHeight, width: fullWidth } = img;
+          const { height: visibleHeight } = img.getClientRects()[0] || { height: 0, width: 0 };
           if (fullHeight || visibleHeight) {
             clearTimeout(securityTimeout);
             if (fullHeight > Math.ceil(visibleHeight)) {
               img.classList.add('rg-fit-height');
-              /**
-               * Needs to know available height (viewport height - vertical margins)
-               * to work properly
-               */
             }
+            const style = img.getAttribute('style');
+            const newStyle = `${style || ''}${style ? ' ' : ''}--image-ratio: ${
+              fullHeight / fullWidth
+            }`;
+            img.setAttribute('style', newStyle);
             img.classList.add('rg-ready');
             imageResolve();
           } else {
