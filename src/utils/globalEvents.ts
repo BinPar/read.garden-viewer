@@ -23,7 +23,8 @@ export const setupGlobalEvents = (state: State, dispatcher: DispatchAPIAction): 
 
   onViewportClick = (): void => {
     if (state.toggleReadModeOnClick) {
-      if (!state.dragging) {
+      const avoidReadModeChange = state.dragging || state.selectingText;
+      if (!avoidReadModeChange) {
         updateState({ readMode: !state.readMode });
       }
     }

@@ -38,6 +38,9 @@ const setInitialProperties = (state: State): void => {
   setCSSProperty('vertical-translate', '0');
   setCSSProperty('viewer-margin-top', '200vh');
   setCSSProperty('pointer-events', 'auto');
+  if (state.theme === 'dark') {
+    setCSSProperty('theme-filter', 'invert(1)');
+  }
   if (state.layout === LayoutTypes.Flow) {
     setCSSProperty('font-family', state.fontFamily);
     setCSSProperty('font-size', `${state.fontSize}px`);
