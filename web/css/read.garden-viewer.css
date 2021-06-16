@@ -32,12 +32,25 @@ body::-webkit-scrollbar {
 }
 
 div#rg-container {
+  position: relative;
   width: 100vw;
   height: 100vh;
+  filter: var(--theme-filter, none);
+}
+
+div#rg-container .rg-bg-cleaner {
+  position: absolute;
   background-color: #fff;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  z-index: -1;
+  pointer-events: none;
 }
 
 div#rg-viewer {
+  float: left;
   width: 100vw;
   height: 100vh;
   pointer-events: var(--pointer-events);
@@ -228,6 +241,10 @@ div.rg-highlights-layer > div {
   pointer-events: var(--highlights-pointer-events);
 }
 
+.rg-dark-theme div.rg-highlights-layer > div {
+  filter: brightness(0.8);
+}
+
 div.rg-highlights-layer .rg-left-extensor,
 div.rg-highlights-layer .rg-right-extensor {
   background-color: var(--current-selection-extensors-color);
@@ -244,6 +261,14 @@ div.rg-highlights-layer > .rg-right-extensor {
   border-top-left-radius: 0;
   cursor: e-resize;
 }
+
+div.rg-selection-menu,
+div.rg-notes-dialog,
+div.rg-confirmation-dialog,
+div.rg-highlights-layer {
+  filter: var(--theme-filter, none);
+}
+
 
 div.rg-selection-menu,
 div.rg-selection-menu .rg-selection-menu-wrapper,
