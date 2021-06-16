@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "ES5",
+    "module": "commonjs",
+    "outDir": "./dist",
+    "rootDir": "src",
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "strict": true,
+  },
+  "exclude": [
+    "dist",
+    "tests/**/*.ts"
+  ]
+}
