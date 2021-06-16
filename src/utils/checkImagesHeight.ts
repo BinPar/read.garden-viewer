@@ -24,7 +24,7 @@ const checkImagesHeight = async (
           }
           if (fullHeight) {
             const style = img.getAttribute('style');
-            const newStyle = `${style || ''}${style ? ' ' : ''}--image-ratio: ${
+            const newStyle = `${style || ''}${style ? '; ' : ''}--image-ratio: ${
               fullHeight / fullWidth
             }`;
             img.setAttribute('style', newStyle);
