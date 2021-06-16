@@ -199,10 +199,14 @@ const scrollController = (
       if (currentSelection) {
         const syntheticEvent = getSyntheticEvent(ev);
         updateState({
-          selectingText: false,
           currentSelection,
           lastClickCoords: { x: syntheticEvent.clientX, y: syntheticEvent.clientY },
         });
+        setTimeout((): void => {
+          updateState({
+            selectingText: false,
+          });
+        },0);
         if (
           !currentSelection.collapsed &&
           currentSelection.toString().trim() &&
