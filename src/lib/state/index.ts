@@ -67,6 +67,7 @@ export const initializeState = (initialConfig: InitialConfig): void => {
     title: 'Title', // From initial config
     slug: config.slug,
     contentSlug: config.contentSlug,
+    theme: config.initialTheme ?? defaultGlobal.theme,
     dragging: false,
     scrollLeft: 0,
     scrollTop: 0,
@@ -101,6 +102,7 @@ export const initializeState = (initialConfig: InitialConfig): void => {
       ...scrolledState,
       columnGap: config.columnGap,
       fontFamily: config.initialFontFamily,
+      textAlign: config.initialTextAlign ?? defaultFlow.textAlign,
     };
   }
 

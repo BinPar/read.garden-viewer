@@ -20,6 +20,9 @@ const createBasicDOMElements = (state: State): void => {
   const readGardenContainerNode = document.createElement('div');
   readGardenContainerNode.id = 'rg-container';
   // #endregion Container node
+  if (state.theme === 'dark') {
+    readGardenContainerNode.style.filter = 'invert(1)';
+  }
 
   // #region Main node
   const readGardenViewerNode = document.createElement('div');
@@ -31,6 +34,9 @@ const createBasicDOMElements = (state: State): void => {
   const contentWrapperNode = document.createElement('div');
   contentWrapperNode.classList.add('rg-content-wrapper');
   readGardenViewerNode.appendChild(contentWrapperNode);
+  if (state.layout === 'flow' && state.textAlign) {
+    contentWrapperNode.classList.add('rg-force-text-align');
+  }
 
   const backgroundCleaner = document.createElement('div');
   backgroundCleaner.classList.add('rg-bg-cleaner');

@@ -41,6 +41,9 @@ const setInitialProperties = (state: State): void => {
   if (state.layout === LayoutTypes.Flow) {
     setCSSProperty('font-family', state.fontFamily);
     setCSSProperty('font-size', `${state.fontSize}px`);
+    if (state.textAlign) {
+      setCSSProperty('text-align', state.textAlign);
+    }
   }
 };
 

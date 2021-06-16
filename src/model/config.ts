@@ -5,7 +5,9 @@ import {
   Margin,
   NewContent,
   ScrollModes,
+  TextAlignModes,
   ViewerMode,
+  ViewerTheme,
   Zoom,
 } from './viewerSettings';
 
@@ -57,6 +59,11 @@ export interface DefaultConfig {
    */
   initialFontSize: number;
   /**
+   * Initial text align for first render
+   * @scope Flow
+   */
+  initialTextAlign: TextAlignModes;
+  /**
    * Initial read mode for first render
    * @scope Global
    */
@@ -66,6 +73,11 @@ export interface DefaultConfig {
    * @scope Scrolled
    */
   initialScrollMode: ScrollModes;
+  /**
+   * Initial viewer theme
+   * @scope Global
+   */
+  initialTheme: ViewerTheme;
   /**
    * Zoom config
    * @scope Fixed
