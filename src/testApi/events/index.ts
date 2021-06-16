@@ -4,6 +4,9 @@ import getTerms from './getTerms';
 import getContentsInfo from './getContentsInfo';
 import loadPreviousChapter from './loadPreviousChapter';
 import loadNextChapter from './loadNextChapter';
+import onUserSelect from './onUserSelect';
+import onSelectionMenuOptionClick from './onSelectionMenuOptionClick';
+import onHighlightClick from './onHighlightClick';
 
 export default {
   pageChange,
@@ -12,4 +15,7 @@ export default {
   getContentsInfo,
   loadPreviousChapter,
   loadNextChapter,
+  onUserSelect,
+  onSelectionMenuOptionClick,
+  onHighlightClick,
 };

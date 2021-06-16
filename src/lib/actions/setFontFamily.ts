@@ -4,6 +4,8 @@ import { State } from '../../model/state';
 import { LayoutTypes } from '../../model/viewerSettings';
 
 import { drawHighlights } from '../../utils/highlights';
+import redrawUserHighlights from '../../utils/highlights/redrawUserHighlights';
+import removeUserHighlights from '../../utils/highlights/removeUserHighlights';
 import { clean } from '../../utils/highlights/search';
 import setCSSProperty from '../../utils/setCSSProperty';
 import recalculate from '../../viewer/recalculate';
@@ -50,6 +52,7 @@ const setFontFamily: ActionDispatcher<SetFontFamily> = async ({ state, action })
           scrollMode: state.scrollMode,
           fontFamily,
         });
+        await redrawUserHighlights(state);
         if (state.searchRanges.length && state.searchTermsHighlightsNode) {
           drawHighlights(state.searchTermsHighlightsNode, state.searchRanges);
         }
@@ -66,6 +69,7 @@ const setFontFamily: ActionDispatcher<SetFontFamily> = async ({ state, action })
       };
       setCSSProperty('viewer-margin-top', '200vh');
       clean();
+      removeUserHighlights(state);
       setCSSProperty('font-family', fontFamily);
       window.requestAnimationFrame(() => {
         window.requestAnimationFrame(checkFonts);

@@ -10,32 +10,30 @@ const checkImagesHeight = async (
   images.forEach((img: HTMLImageElement) => {
     checkImagesHeightPromises.push(
       new Promise<void>((imageResolve) => {
-        let checkTimeout: NodeJS.Timeout | null = null;
         const securityTimeout = setTimeout(() => {
-          if (checkTimeout) {
-            clearTimeout(checkTimeout);
-          }
+          console.warn('Image without width', img);
           imageResolve();
-        }, 5000);
-        const check = (): void => {
-          const { height: fullHeight } = img;
+        }, 2000);
+        const clone = new Image();
+        const onLoad = (): void => {
+          const { height: fullHeight, width: fullWidth } = clone;
           const visibleHeight = img.getClientRects()[0]?.height;
-          if (fullHeight || visibleHeight) {
-            clearTimeout(securityTimeout);
-            if (fullHeight > Math.ceil(visibleHeight)) {
-              img.classList.add('rg-fit-height');
-              /**
-               * Needs to know available height (viewport height - vertical margins)
-               * to work properly
-               */
-            }
-            img.classList.add('rg-ready');
-            imageResolve();
-          } else {
-            checkTimeout = setTimeout(check, 10);
+          clearTimeout(securityTimeout);
+          if (visibleHeight && fullHeight > Math.ceil(visibleHeight)) {
+            img.classList.add('rg-fit-height');
           }
+          if (fullHeight) {
+            const style = img.getAttribute('style');
+            const newStyle = `${style || ''}${style ? '; ' : ''}--image-ratio: ${
+              fullHeight / fullWidth
+            }`;
+            img.setAttribute('style', newStyle);
+          }
+          img.classList.add('rg-ready');
+          imageResolve();
         };
-        check();
+        clone.onload = onLoad;
+        clone.src = img.src;
       }),
     );
   });

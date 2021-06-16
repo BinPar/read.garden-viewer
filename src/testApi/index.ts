@@ -1,5 +1,5 @@
 import log from 'loglevel';
-import { DispatchAPIAction } from '../model/apiInterface';
+import { DispatchAPIAction } from '../model/actions/common';
 import { ReadGardenEventHandler, ReadGardenEvents } from '../model/events';
 import { State } from '../model/state';
 import setupButtonBar from './buttons/setupButtonBar';

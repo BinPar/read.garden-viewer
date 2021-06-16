@@ -1,5 +1,6 @@
 import { Action } from './common';
 import { FixedContentInfo } from '../state';
+import { FitMode } from '../viewerSettings';
 
 /**
  * Names of the action types for Fixed Layout Actions
@@ -27,6 +28,28 @@ export interface SetContentsInfo extends Action {
 }
 
 /**
+ * Set zoom level to desired value
+ */
+export interface SetZoom extends Action {
+  type: 'setZoom';
+  /**
+   * Desired new zoom
+   */
+  zoom: number;
+}
+
+/**
+ * Sets fit mode to width or height
+ */
+export interface SetFitMode extends Action {
+  type: 'setFitMode';
+  /**
+   * Desired fit mode
+   */
+  fitMode: FitMode;
+}
+
+/**
  * Actions for FixedLayout
  */
-export type FixedActions = SetSinglePageMode | SetContentsInfo;
+export type FixedActions = SetSinglePageMode | SetContentsInfo | SetZoom | SetFitMode;

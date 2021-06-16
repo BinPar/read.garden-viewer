@@ -21,10 +21,13 @@ const setContentsInfo: ActionDispatcher<SetContentsInfo> = async ({ state, actio
   let currentContentIndex = 0;
   let totalWidth = 0;
   let totalHeight = 0;
-  const contentsByLabel = new Map<string, FixedViewerContentInfo>();
+  let maxWidth = 0;
+  let maxHeight = 0;
+  let lastPosition = 0;
+  const contentsBySlug = new Map<string, FixedViewerContentInfo>();
   const contentsByOrder = new Map<number, FixedViewerContentInfo>();
-  const positionByLabel = new Map<string, number>();
-  const labelByPosition = new Map<number, string>();
+  const positionBySlug = new Map<string, number>();
+  const slugByPosition = new Map<number, string>();
   const contentsInfo = new Array<FixedViewerContentInfo>();
   for (let i = 0, l = info.length; i < l; i++) {
     const { width, height, label, slug, order, html, cssURL } = info[i];
@@ -32,6 +35,8 @@ const setContentsInfo: ActionDispatcher<SetContentsInfo> = async ({ state, actio
     const top = totalHeight;
     totalHeight += height;
     totalWidth += width;
+    maxWidth = Math.max(maxWidth, width);
+    maxHeight = Math.max(maxHeight, height);
     const container = document.createElement('div');
     container.style.width = `${width}px`;
     container.style.height = `${height}px`;
@@ -43,8 +48,8 @@ const setContentsInfo: ActionDispatcher<SetContentsInfo> = async ({ state, actio
       currentContentIndex = order;
     }
     const position = state.scrollMode === 'horizontal' ? left : top;
-    positionByLabel.set(label, position);
-    labelByPosition.set(position, label);
+    positionBySlug.set(slug, position);
+    slugByPosition.set(position, slug);
     const contentInfo: FixedViewerContentInfo = {
       width,
       height,
@@ -60,8 +65,9 @@ const setContentsInfo: ActionDispatcher<SetContentsInfo> = async ({ state, actio
       maxTop: totalHeight,
     };
     contentsByOrder.set(order, contentInfo);
-    contentsByLabel.set(label, contentInfo);
+    contentsBySlug.set(slug, contentInfo);
     contentsInfo.push(contentInfo);
+    lastPosition = position;
   }
 
   setCSSProperty('total-width', `${totalWidth}px`);
@@ -71,12 +77,15 @@ const setContentsInfo: ActionDispatcher<SetContentsInfo> = async ({ state, actio
     layout: LayoutTypes.Fixed,
     totalHeight,
     totalWidth,
+    maxWidth,
+    maxHeight,
     contentsInfo,
-    contentsByLabel,
+    contentsBySlug,
     contentsByOrder,
     currentContentIndex,
-    positionByLabel,
-    labelByPosition,
+    positionBySlug,
+    slugByPosition,
+    lastPosition,
     wrapperReady: true,
   };
 };

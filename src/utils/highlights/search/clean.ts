@@ -1,5 +1,5 @@
 import { getState } from '../../../lib/state';
-import removeHighlights from '../removeHighlights';
+import removeLayerHighlights from '../removeLayerHighlights';
 
 /**
  * Cleans search highlights
@@ -7,7 +7,7 @@ import removeHighlights from '../removeHighlights';
 const clean = (): void => {
   const state = getState();
   if (state.searchTermsHighlightsNode) {
-    removeHighlights(state.searchTermsHighlightsNode);
+    removeLayerHighlights(state.searchTermsHighlightsNode);
   }
   if (state.contentWrapperNode) {
     state.contentWrapperNode.querySelectorAll('[data-highlighted]').forEach((element) => {

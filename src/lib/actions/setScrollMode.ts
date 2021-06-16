@@ -2,6 +2,8 @@ import { ActionDispatcher } from '../../model/actions/actionDispatcher';
 import { SetScrollMode } from '../../model/actions/global';
 import { State } from '../../model/state';
 import { drawHighlights } from '../../utils/highlights';
+import redrawUserHighlights from '../../utils/highlights/redrawUserHighlights';
+import removeUserHighlights from '../../utils/highlights/removeUserHighlights';
 import { clean } from '../../utils/highlights/search';
 import setCSSProperty from '../../utils/setCSSProperty';
 import recalculate from '../../viewer/recalculate';
@@ -18,17 +20,19 @@ const setScrollMode: ActionDispatcher<SetScrollMode> = async ({ state, action })
   if (state.scrollMode !== scrollMode) {
     return new Promise<Partial<State>>((resolve) => {
       setCSSProperty('viewer-margin-top', '200vh');
+      removeUserHighlights(state);
       clean();
       document.body.classList.remove(`rg-${state.scrollMode}-scroll`);
       document.body.classList.add(`rg-${scrollMode}-scroll`);
       updateState({ scrollMode });
-      recalculate(state).then((recalculateUpdate) => {
+      recalculate(state).then(async (recalculateUpdate): Promise<void> => {
         setCSSProperty('viewer-margin-top', '0');
         resolve({
           ...recalculateUpdate,
           layout: state.layout,
           scrollMode,
         });
+        await redrawUserHighlights(state);
         if (state.searchRanges.length && state.searchTermsHighlightsNode) {
           drawHighlights(state.searchTermsHighlightsNode, state.searchRanges);
         }

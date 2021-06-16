@@ -5,7 +5,9 @@ import {
   Margin,
   NewContent,
   ScrollModes,
+  TextAlignModes,
   ViewerMode,
+  ViewerTheme,
   Zoom,
 } from './viewerSettings';
 
@@ -47,15 +49,20 @@ export interface DefaultConfig {
    */
   initialFitMode: FitMode;
   /**
-   * Initial scale. Will be ignored if `initialFitMode` is set. Will be used at viewer first load.
+   * Initial zoom. Will be ignored if `initialFitMode` is set. Will be used at viewer first load.
    * @scope Fixed
    */
-  initialScale: number;
+  initialZoom: number;
   /**
    * Initial font size (if it's no defined user settings)
    * @scope Flow
    */
   initialFontSize: number;
+  /**
+   * Initial text align for first render
+   * @scope Flow
+   */
+  initialTextAlign: TextAlignModes;
   /**
    * Initial read mode for first render
    * @scope Global
@@ -66,6 +73,11 @@ export interface DefaultConfig {
    * @scope Scrolled
    */
   initialScrollMode: ScrollModes;
+  /**
+   * Initial viewer theme
+   * @scope Global
+   */
+  initialTheme: ViewerTheme;
   /**
    * Zoom config
    * @scope Fixed
@@ -107,6 +119,10 @@ export interface DefaultConfig {
    * @scope Flow
    */
   columnGap: number;
+  /**
+   * For small resolutions, this will be the min column gap (and horizontal padding)
+   */
+  minColumnGap: number;
   /**
    * Threshold for scrolling to next/prev `page` (next/prev hidden column(s)), meaning percentage of
    * new column (left or right) that must be visible to assume user wants to move to next/prev page.

@@ -1,5 +1,5 @@
 import { AddOnChangeEvent, SetDebugViewerSafeArea } from '../../model/actions/global';
-import { DispatchAPIAction } from '../../model/apiInterface';
+import { DispatchAPIAction } from '../../model/actions/common';
 import { State } from '../../model/state';
 
 const debugViewerSafeArea = async (

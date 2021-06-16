@@ -1,5 +1,3 @@
-import log from 'loglevel';
-
 import { ActionDispatcher } from '../../model/actions/actionDispatcher';
 import { AppendNewContent } from '../../model/actions/global';
 import { State } from '../../model/state';
@@ -12,10 +10,13 @@ import { onCssLoaded } from '../state/changeHandlers/cssLoaderHandler';
 import { onWrapperReady } from '../state/changeHandlers/wrapperReadyHandler';
 import { updateState } from '../state';
 import layoutSetup from '../../viewer/layoutSetup';
-import { drawHighlights } from '../../utils/highlights';
-import { highlightTerms } from '../../utils/highlights/search';
 import loadContentsInBackground from '../../utils/loadContentsInBackground';
 import handleFlowCssAndLoad from '../../utils/handleFlowCssAndLoad';
+import removeLayerHighlights from '../../utils/highlights/removeLayerHighlights';
+import removeUserHighlights from '../../utils/highlights/removeUserHighlights';
+import clearUserHighlights from '../../utils/highlights/clearUserHighlights';
+import redrawUserHighlights from '../../utils/highlights/redrawUserHighlights';
+import { highlightTerms } from '../../utils/highlights/search';
 
 /**
  * Appends new content to viewer
@@ -49,8 +50,13 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
     if (state.layout === LayoutTypes.Flow) {
       setCSSProperty('viewer-margin-top', '200vh');
       window.requestAnimationFrame(() => {
-        drawHighlights(searchTermsHighlightsNode!);
+        if (searchTermsHighlightsNode) {
+          removeLayerHighlights(searchTermsHighlightsNode);
+        }
+        removeUserHighlights(state);
+        clearUserHighlights(state);
         contentPlaceholderNode!.innerHTML = action.htmlContent;
+        contentPlaceholderNode!.dataset.highlighted = '';
 
         window.requestAnimationFrame(() => {
           window.requestAnimationFrame(() => {
@@ -72,10 +78,11 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
                 finalPartialState.dynamicStyleNode = newLink;
               }
               resolve(finalPartialState);
+              await redrawUserHighlights(state);
               highlightTerms(state.searchTerms);
             };
             const onStylesLoad = (): void => {
-              dynamicStyleNode!.removeEventListener('load', onStylesLoad);
+              newLink.removeEventListener('load', onStylesLoad);
               const checkFonts = () => {
                 window.requestAnimationFrame(() => {
                   window.requestAnimationFrame(() => {
@@ -97,28 +104,7 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
                 checkFonts();
                 return;
               }
-              const promises = new Array<Promise<HTMLImageElement>>();
-              images.forEach((img) => {
-                promises.push(
-                  new Promise<HTMLImageElement>((imageResolve) => {
-                    if (img.complete) {
-                      imageResolve(img);
-                      return;
-                    }
-                    const onLoad = (): void => {
-                      img.removeEventListener('load', onLoad);
-                      imageResolve(img);
-                    };
-                    const onError = (ev: ErrorEvent) => {
-                      log.info('Error loading image', ev.message);
-                      onLoad();
-                    };
-                    img.addEventListener('load', onLoad);
-                    img.addEventListener('error', onError);
-                  }),
-                );
-              });
-              Promise.all(promises).then(checkImagesHeight).then(checkFonts);
+              Promise.all(Array.from(images).map((i) => checkImagesHeight([i]))).then(checkFonts);
             };
             if (!action.cssURL || action.cssURL === dynamicStyleNode!.href) {
               replace = false;
@@ -128,6 +114,7 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
             newLink.rel = 'stylesheet';
             newLink.type = 'text/css';
             newLink.addEventListener('load', onStylesLoad);
+            dynamicStyleNode!.removeEventListener('load', onStylesLoad);
             dynamicStyleNode!.replaceWith(newLink);
             newLink.href = action.cssURL;
           });
@@ -136,8 +123,8 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
     }
 
     if (state.layout === LayoutTypes.Fixed) {
-      const { contentsByLabel } = state;
-      const content = contentsByLabel.get(action.label)!;
+      const { contentsBySlug } = state;
+      const content = contentsBySlug.get(action.contentSlug)!;
       const { container } = content;
       content.html = action.htmlContent;
       content.cssURL = action.cssURL;
@@ -153,13 +140,12 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
             const finalPartialState: Partial<State> = {
               ...recalculateState,
               slug: action.slug,
-              contentSlug: action.contentSlug,
               cssLoaded: true,
             };
             updateState({ loadingContent: false });
             resolve(finalPartialState);
-            loadContentsInBackground();
             highlightTerms(state.searchTerms);
+            loadContentsInBackground();
           };
           const checkFonts = () => {
             dynamicStyleNode!.removeEventListener('load', checkFonts);

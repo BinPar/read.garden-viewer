@@ -1,22 +1,36 @@
-import { GlobalState, ScrolledState } from '../../model/state';
+import { State } from '../../model/state';
+import { LayoutTypes } from '../../model/viewerSettings';
 import { updateState } from '../state';
+import calculatePagePosition from './calculatePagePosition';
 
 const recalculateCurrentPage = (
-  state: ScrolledState & GlobalState,
+  state: State,
   currentScroll: number,
 ): void => {
   const scrollPosition = Math.round(currentScroll * -1);
   let target: string | undefined;
-  if (state.scrollMode === 'horizontal') {
-    target = state.labelByPosition.get(scrollPosition);
-  } else {
-    state.labelByPosition.forEach((value, key): void => {
-      if (key <= scrollPosition) {
-        target = value;
+  if (state.scrollMode !== 'fixed') {
+    if (state.scrollMode === 'horizontal') {
+      if (state.layout === LayoutTypes.Flow) {
+        target = state.slugByPosition.get(scrollPosition);
+      } else {
+        const targetScroll = calculatePagePosition(currentScroll, state);        
+        state.slugByPosition.forEach((value, key): void => {          
+          if (key <= targetScroll) {
+            target = value;
+          }
+        });
       }
-    });
+    } else {
+      state.slugByPosition.forEach((value, key): void => {
+        if (key <= scrollPosition) {
+          target = value;
+        }
+      });
+    }
   }
   if (target !== undefined) {
+    // TODO: Avoid scrolling on flow layout (multple columns for one page)
     updateState({ contentSlug: target });
   }
 };

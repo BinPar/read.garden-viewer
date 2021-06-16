@@ -7,3 +7,5 @@ export interface Action {
    */
   type: string;
 }
+
+export type DispatchAPIAction = (action: Action) => Promise<void>;

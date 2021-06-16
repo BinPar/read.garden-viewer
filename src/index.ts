@@ -56,6 +56,3 @@ if (typeof window !== 'undefined') {
 }
 
 export default viewer;
-
-export { FixedContentInfo } from './model/state';
-export { ReadGardenEventHandler } from './model/events';

@@ -1,3 +1,5 @@
+import { SelectionRange } from '../viewerSettings';
+
 export interface ReadGardenEvent {
   type: string;
 }
@@ -67,13 +69,70 @@ export interface LoadPreviousChapter extends ReadGardenEvent, LoadChapterInfo {
   type: 'loadPreviousChapter';
 }
 
+export interface OnUserSelect extends ReadGardenEvent {
+  type: 'onUserSelect';
+  slug: string;
+}
+
+export interface OnHighlightClick extends ReadGardenEvent {
+  type: 'onHighlightClick';
+  slug: string;
+  key: string;
+  ranges: SelectionRange[];
+}
+
+export interface OnSelectionMenuOptionClick extends ReadGardenEvent {
+  type: 'onSelectionMenuOptionClick';
+  key: string;
+  slug: string;
+  highlightKey?: string;
+  selectionInfo?: SelectionRange;
+}
+
+export interface OnCancelNewNote extends ReadGardenEvent {
+  type: 'onCancelNewNote';
+  slug: string;
+}
+
+export interface OnSaveNote extends ReadGardenEvent {
+  type: 'onSaveNote';
+  slug: string;
+  note: string;
+  key: string;
+  highlightKey?: string;
+  selectionInfo?: SelectionRange;
+}
+
+export interface OnChangeNote extends ReadGardenEvent {
+  type: 'onChangeNote';
+  slug: string;
+  key: string;
+  highlightKey: string;
+  editing: boolean;
+  note?: string;
+  selectionInfo?: SelectionRange;
+}
+
+export interface OnDeleteOptionClick extends ReadGardenEvent {
+  type: 'onDeleteOptionClick';
+  key: string;
+  slug: string;
+}
+
 export type ReadGardenEvents =
   | PageChange
   | LoadNewContent
   | GetContentsInfo
   | GetTerms
   | LoadNextChapter
-  | LoadPreviousChapter;
+  | LoadPreviousChapter
+  | OnUserSelect
+  | OnHighlightClick
+  | OnSelectionMenuOptionClick
+  | OnCancelNewNote
+  | OnSaveNote
+  | OnChangeNote
+  | OnDeleteOptionClick;
 
 export type ReadGardenEventHandler = (event: ReadGardenEvents) => Promise<void>;
 

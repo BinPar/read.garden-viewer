@@ -1,8 +1,8 @@
 /* eslint-disable no-param-reassign */
-import { DispatchAPIAction } from '../../model/apiInterface';
+import { DispatchAPIAction } from '../../model/actions/common';
 import { State } from '../../model/state';
 import { LayoutTypes } from '../../model/viewerSettings';
-import getMinAndMaxScroll from './getMinAndMaxScroll';
+import getMinAndMaxScroll, { getMinAndMaxAltScroll, MinAndMaxScroll } from './getMinAndMaxScroll';
 import { InterpolationValue } from './interpolationValues';
 
 const scrollInertiaAndLimits = (
@@ -11,6 +11,7 @@ const scrollInertiaAndLimits = (
   lastDelta: number,
   executeTransitions: () => void,
   dispatch: DispatchAPIAction,
+  isAltScroll = false,
 ): void => {
   let min: number | null = null;
   let max: number | null = null;
@@ -23,7 +24,7 @@ const scrollInertiaAndLimits = (
     let found = false;
     let target: number | null = null;
     let i = 0;
-    state.labelByPosition.forEach((value, key) => {
+    state.slugByPosition.forEach((value, key) => {
       if (!found && i++ % state.columnsInViewport === 0) {
         if (min === null) {
           min = key;
@@ -51,12 +52,18 @@ const scrollInertiaAndLimits = (
     if (target !== null) {
       scroll.target = target * -1;
     }
-  } else {
-    scroll.target += lastDelta * state.animationInertia;
-    if (state.layout === LayoutTypes.Flow) {
-      max = state.totalHeight - window.innerHeight;
+  } else if (state.layout === LayoutTypes.Flow) {
+    max = state.totalHeight - window.innerHeight;
+  } else {    
+    let scrollLimits: MinAndMaxScroll;
+    if (isAltScroll) {
+      scrollLimits = getMinAndMaxAltScroll(state);
+    } else {
+      scrollLimits = getMinAndMaxScroll(state, 100);
     }
-    min = 0;
+    scroll.target += lastDelta * state.animationInertia;
+    min = scrollLimits.maxScroll * -1;
+    max = scrollLimits.minScroll * -1;
   }
   if (min !== null && scroll.target * -1 < min) {
     scroll.target = min * -1;

@@ -1,4 +1,4 @@
-import { DispatchAPIAction } from '../../model/apiInterface';
+import { DispatchAPIAction } from '../../model/actions/common';
 import { ReadGardenEvents } from '../../model/events';
 
 export type EventHandler<T extends ReadGardenEvents> = (

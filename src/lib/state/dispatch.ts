@@ -1,4 +1,4 @@
-import { DispatchAPIAction } from '../../model/apiInterface';
+import { DispatchAPIAction } from '../../model/actions/common';
 
 import { getState, updateState } from './index';
 import reducer from './reducer';

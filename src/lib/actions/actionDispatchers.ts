@@ -8,6 +8,7 @@ import setFontFamily from './setFontFamily';
 import setTextAlign from './setTextAlign';
 import resize from './resize';
 import highlightSearchTerms from './highlightSearchTerms';
+import removeSearchHighlights from './removeSearchHighlights';
 import setContentsInfo from './setContentsInfo';
 import setReadMode from './setReadMode';
 import addOnChangeEvent from './addOnChangeEvent'
@@ -17,6 +18,18 @@ import setTheme from './setTheme';
 import navigateToPreviousChapter from './navigateToPreviousChapter';
 import navigateToNextChapter from './navigateToNextChapter';
 import navigateToPage from './navigateToPage';
+import setFitMode from './setFitMode';
+import setZoom from './setZoom';
+import showSelectionMenu from './showSelectionMenu';
+import showNotesDialog from './showNotesDialog';
+import removeSelectionMenu from './removeSelectionMenu';
+import removeNotesDialog from './removeNotesDialog';
+import clearSelection from './clearSelection';
+import drawHighlights from './drawHighlights';
+import removeHighlights from './removeHighlights';
+import setHighlighterColor from './setHighlighterColor';
+import moveNext from './moveNext';
+import movePrev from './movePrev';
 
 /**
  * List of all action dispatchers
@@ -32,6 +45,7 @@ const actionDispatchers  = {
   setTextAlign,
   resize,
   highlightSearchTerms,
+  removeSearchHighlights,
   setContentsInfo,
   setReadMode,
   addOnChangeEvent,
@@ -41,6 +55,18 @@ const actionDispatchers  = {
   navigateToPreviousChapter,
   navigateToNextChapter,
   navigateToPage,
+  setFitMode,
+  setZoom,
+  showSelectionMenu,
+  showNotesDialog,
+  removeSelectionMenu,
+  removeNotesDialog,
+  clearSelection,
+  drawHighlights,
+  removeHighlights,
+  setHighlighterColor,
+  moveNext,
+  movePrev,
 };
 
 export default actionDispatchers;

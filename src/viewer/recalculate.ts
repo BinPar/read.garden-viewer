@@ -39,8 +39,8 @@ const recalculate = async (state: State): Promise<Partial<State>> => {
 
     if (state.layout === LayoutTypes.Flow) {
       setCSSProperty('total-width', `0px`);
-      setCSSProperty('total-column-width', `0px`);
-      setCSSProperty('column-width', `0px`);
+      setCSSProperty('total-column-width', '0px');
+      setCSSProperty('column-width', '0px');
       setCSSProperty('column-gap', `${state.config.columnGap}px`);
       setCSSProperty('column-count', '2');
       const {
@@ -54,8 +54,8 @@ const recalculate = async (state: State): Promise<Partial<State>> => {
 
       let columnGap = desiredColumnGap;
       const charWidth = fontSize / charWidthFactor;
-      const minWidth = minCharsPerColumn * charWidth;
-      const maxWidth = maxCharsPerColumn * charWidth + desiredColumnGap;
+      const minWidth = Math.min(minCharsPerColumn * charWidth, containerWidth);
+      const maxWidth = Math.min(maxCharsPerColumn * charWidth + desiredColumnGap, containerWidth);
 
       if (state.scrollMode === 'horizontal') {
         const doubleColumnWidth = containerWidth / 2 - desiredColumnGap;
@@ -71,6 +71,8 @@ const recalculate = async (state: State): Promise<Partial<State>> => {
             columnGap += gapCompensation;
           }
         }
+
+        columnGap = Math.max(columnGap, state.config.minColumnGap);
 
         const columnWidth = totalColumnWidth - columnGap;
 
@@ -92,8 +94,8 @@ const recalculate = async (state: State): Promise<Partial<State>> => {
           .fill(0)
           .map((_, i) => i * totalColumnWidth)
           .reverse();
-        const positionByLabel = new Map<string, number>();
-        const labelByPosition = new Map<number, string>();
+        const positionBySlug = new Map<string, number>();
+        const slugByPosition = new Map<number, string>();
 
         let lastPosition: number | null = null;
         let labelsCount = 0;
@@ -106,17 +108,32 @@ const recalculate = async (state: State): Promise<Partial<State>> => {
           const contentWrapperPosition = clientToContentWrapperLeft(rawPosition);
           const position = columnsPositions.find((p) => p < contentWrapperPosition)!;
           const page = element.dataset.page!;
-          positionByLabel.set(page, position);
+          positionBySlug.set(page, position);
           lastLabel = page;
           if (lastPosition !== position) {
-            labelByPosition.set(position, page);
-            const label = document.createElement('div');
-            label.classList.add('rg-label');
-            const labelP = document.createElement('p');
-            label.appendChild(labelP);
-            labelP.innerText = page;
-            pagesLabelsNode!.appendChild(label);
-            labelsCount++;
+            if (lastPosition === null) {
+              slugByPosition.set(position, page);
+              const label = document.createElement('div');
+              label.classList.add('rg-label');
+              const labelP = document.createElement('p');
+              label.appendChild(labelP);
+              labelP.innerText = page;
+              pagesLabelsNode!.appendChild(label);
+              labelsCount++;
+            } else {
+              let labelPosition = lastPosition + totalColumnWidth;
+              while (labelPosition <= position) {
+                slugByPosition.set(labelPosition, page);
+                const label = document.createElement('div');
+                label.classList.add('rg-label');
+                const labelP = document.createElement('p');
+                label.appendChild(labelP);
+                labelP.innerText = page;
+                pagesLabelsNode!.appendChild(label);
+                labelsCount++;
+                labelPosition += totalColumnWidth;
+              }
+            }
           }
           lastPosition = position;
           minTotalWidth = Math.max(minTotalWidth, position);
@@ -132,8 +149,9 @@ const recalculate = async (state: State): Promise<Partial<State>> => {
             label.appendChild(labelP);
             labelP.innerText = lastLabel;
             pagesLabelsNode!.appendChild(label);
-            labelByPosition.set(position, lastLabel);
+            slugByPosition.set(position, lastLabel);
           }
+          lastPosition = position;
         }
 
         if (document.scrollingElement?.scrollTop) {
@@ -148,8 +166,9 @@ const recalculate = async (state: State): Promise<Partial<State>> => {
           columnsInViewport,
           columnWidth,
           columnGap,
-          positionByLabel,
-          labelByPosition,
+          positionBySlug,
+          slugByPosition,
+          lastPosition: lastPosition!,
         });
         return;
       }
@@ -166,22 +185,22 @@ const recalculate = async (state: State): Promise<Partial<State>> => {
         });
 
         window.requestAnimationFrame(() => {
-          const positionByLabel = new Map<string, number>();
-          const labelByPosition = new Map<number, string>();
+          const positionBySlug = new Map<string, number>();
+          const slugByPosition = new Map<number, string>();
 
           contentPlaceholderNode!.querySelectorAll('[data-page]').forEach((item) => {
             const element = item as HTMLElement;
             const rawPosition = element.getBoundingClientRect().top;
             const position = clientToContentWrapperTop(rawPosition);
             const page = element.dataset.page!;
-            positionByLabel.set(page, position);
-            labelByPosition.set(position, page);
+            positionBySlug.set(page, position);
+            slugByPosition.set(position, page);
           });
 
           updateState({
             totalHeight: contentPlaceholderNode!.getBoundingClientRect().height,
-            positionByLabel,
-            labelByPosition,
+            positionBySlug,
+            slugByPosition,
           });
         });
         return;

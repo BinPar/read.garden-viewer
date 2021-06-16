@@ -6,7 +6,9 @@ import {
   State,
 } from '../../model/state';
 import { InitialConfig } from '../../model/config';
-import { ViewerMode } from '../../model/viewerSettings';
+import { UserHighlightInfo, ViewerMode } from '../../model/viewerSettings';
+import { StatePropertyNames } from '../../model/actions/global';
+
 import defaultGlobal from './defaultGlobal';
 import defaultFlow from './defaultFlow';
 import defaultScrolled from './defaultScrolled';
@@ -16,7 +18,6 @@ import defaultConfig from '../../config/default';
 import { setConfig } from '../../config';
 import changeHandlers from './changeHandlers';
 import { notifyEventHandler } from './stateChangeEvents';
-import { StatePropertyNames } from '../../model/actions/global';
 
 const handlers = new Map<string, Map<any, PropChangeHandler>>();
 
@@ -66,6 +67,7 @@ export const initializeState = (initialConfig: InitialConfig): void => {
     title: 'Title', // From initial config
     slug: config.slug,
     contentSlug: config.contentSlug,
+    theme: config.initialTheme ?? defaultGlobal.theme,
     dragging: false,
     scrollLeft: 0,
     scrollTop: 0,
@@ -76,10 +78,13 @@ export const initializeState = (initialConfig: InitialConfig): void => {
     animationInertia: config.animationInertia,
     pageLabel: config.contentSlug, // Should be different (maybe we need to add `initialPageLabel`)
     pageNumber: 1, // From initial config
-    scale: config.initialScale ?? defaultGlobal.scale,
     toggleReadModeOnClick: config.toggleReadModeOnClick ?? defaultGlobal.toggleReadModeOnClick,
+    readMode: config.initialReadMode ?? defaultGlobal.readMode,
     searchTerms: new Array<string>(),
     searchRanges: new Array<Range>(),
+    highlightersLayers: new Map<string, HTMLDivElement>(),
+    currentUserHighlights: new Map<string, UserHighlightInfo>(),
+    currentUserDomHighlights: new Map<string, HTMLDivElement[]>(),
     debugViewerSafeArea: config.debugViewerSafeArea,
     containerWidth: 0,
     containerHeight: 0,
@@ -96,8 +101,8 @@ export const initializeState = (initialConfig: InitialConfig): void => {
       ...defaultFlow,
       ...scrolledState,
       columnGap: config.columnGap,
-      readMode: config.initialReadMode,
       fontFamily: config.initialFontFamily,
+      textAlign: config.initialTextAlign ?? defaultFlow.textAlign,
     };
   }
 
@@ -107,6 +112,8 @@ export const initializeState = (initialConfig: InitialConfig): void => {
       fitMode: config.initialFitMode,
       loadingContent: true,
       loadedCssUrls: new Set<string>(),
+      minimumZoomValue: config.zoom.min ?? defaultFixed.minimumZoomValue,
+      maximumZoomValue: config.zoom.max ?? defaultFixed.maximumZoomValue,
     };
 
     if (config.initialFixedMode === ViewerMode.Paginated) {

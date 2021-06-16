@@ -1,6 +1,6 @@
 {
   "name": "read.garden-viewer",
-  "version": "0.34.0",
+  "version": "0.35.0",
   "description": "Universal EBook Reader for EPUB2, EPUB3, HTML5 and PDF contents",
   "scripts": {
     "dev": "concurrently --kill-others \"npm run build-dev\" \"npm run server-dev\"",
@@ -8,6 +8,7 @@
     "build-dev": "nodemon --config nodemon.json --exec 'tsc;webpack --config webpack.config.js'",
     "generate-contents": "rm -rf ./web/books;ts-node-dev ./src/server/scripts/generateContents.ts",
     "lint": "eslint --config ./.eslintrc ./src --ext .js,.jsx,.ts,.tsx",
+    "publish-web": "npm run build;rm -r ../read.garden/web/lib/read.garden-viewer;mkdir ../read.garden/web/lib/read.garden-viewer;cp -R ./dist/* ../read.garden/web/lib/read.garden-viewer;cp ./web/css/read.garden-viewer.css ../read.garden/web/public/css/",
     "server-dev": "NODE_ENV=development ts-node-dev --debug --respawn ./src/server/index.ts",
     "start": "node ./dist/server/index.js",
     "test": "jest --runInBand",

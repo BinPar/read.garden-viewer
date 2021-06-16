@@ -1,13 +1,14 @@
 import { Config } from './config';
+import { Coordinates } from './highlights';
 import {
   FitMode,
   LayoutTypes,
   Margin,
   ScrollModes,
   TextAlignModes,
+  UserHighlightInfo,
   ViewerTheme,
 } from './viewerSettings';
-
 /**
  * Global state
  */
@@ -115,6 +116,22 @@ export interface GlobalState {
    */
   mainStyleNode?: HTMLLinkElement;
   /**
+   * Selection menu
+   */
+  selectionMenu?: HTMLDivElement | null;
+  /**
+   * Notes dialog
+   */
+  notesDialog?: HTMLDivElement | null;
+  /**
+   * Notes dialog
+   */
+  confirmationDialog?: HTMLDivElement | null;
+  /**
+   * Highlighters layers (key is highlighter id)
+   */
+  highlightersLayers: Map<string, HTMLDivElement>;
+  /**
    * Content wrapper is ready
    */
   wrapperReady: boolean;
@@ -182,6 +199,22 @@ export interface GlobalState {
    * Viewer theme (light, dark...)
    */
   theme: ViewerTheme;
+  /**
+   * Current selection range
+   */
+  currentSelection?: Range | null;
+  /**
+   * Current user highlights
+   */
+  currentUserHighlights: Map<string, UserHighlightInfo>;
+  /**
+   * Current user DOM highlights
+   */
+  currentUserDomHighlights: Map<string, HTMLDivElement[]>;
+  /**
+   * Stored coords when clicking an existing highlight
+   */
+  lastClickCoords?: Coordinates;
 }
 
 /**
@@ -306,11 +339,19 @@ export interface FixedState {
   /**
    * Content info by label
    */
-  contentsByLabel: Map<string, FixedViewerContentInfo>;
+  contentsBySlug: Map<string, FixedViewerContentInfo>;
   /**
    * Contents info array
    */
   contentsInfo: FixedViewerContentInfo[];
+  /**
+   * Contents max width
+   */
+  maxWidth: number;
+  /**
+   * Contents max height
+   */
+  maxHeight: number;
   /**
    * Current content index (order, base 0)
    */
@@ -324,6 +365,23 @@ export interface FixedState {
    */
   loadedCssUrls: Set<string>;
   // loadedPages: string[];
+  /**
+   * Zoom Level
+   */
+  zoom: number;
+  /**
+   * Speed of the zoom changing when pinch
+   * or ctl + scroll
+   */
+  zoomSpeed: number;
+  /**
+   * Maximum Zoom Value
+   */
+  maximumZoomValue: number;
+  /**
+   * Minimum Zoom Value
+   */
+  minimumZoomValue: number;
 }
 
 export interface FlowState {
@@ -415,11 +473,15 @@ export interface ScrolledState {
   /**
    * Map where labels are keys and position is value (left for horizontal, top for vertical)
    */
-  positionByLabel: Map<string, number>;
+  positionBySlug: Map<string, number>;
   /**
    * Map where positions are keys (left for horizontal, top for vertical) and labels are values
    */
-  labelByPosition: Map<number, string>;
+  slugByPosition: Map<number, string>;
+  /**
+   * Last content position
+   */
+  lastPosition: number;
 }
 
 export type State = GlobalState &
@@ -428,7 +490,7 @@ export type State = GlobalState &
 export type FullState = GlobalState &
   Omit<FlowState, 'layout'> &
   Omit<FixedState, 'layout'> & { layout: LayoutTypes } & Omit<PaginatedState, 'scrollMode'> &
-  Omit<FlowState, 'scrollMode'> & { scrollMode: ScrollModes };
+  Omit<FlowState, 'scrollMode'> & { scrollMode: ScrollModes } & ScrolledState;
 
 export type PropChangeHandler = () => void;
 

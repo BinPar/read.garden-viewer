@@ -7,7 +7,10 @@ import { drawHighlights } from '../../utils/highlights';
 import removeCSSProperty from '../../utils/removeCSSProperty';
 import setCSSProperty from '../../utils/setCSSProperty';
 import recalculate from '../../viewer/recalculate';
+import { clean } from '../../utils/highlights/search';
 import { getState, updateState } from '../state';
+import removeUserHighlights from '../../utils/highlights/removeUserHighlights';
+import redrawUserHighlights from '../../utils/highlights/redrawUserHighlights';
 
 /**
  * Sets viewer text align mode
@@ -24,6 +27,8 @@ const setTextAlign: ActionDispatcher<SetTextAlign> = async ({ state, action }) =
     const { contentWrapperNode } = state as Required<State>;
     return new Promise<Partial<State>>((resolve) => {
       setCSSProperty('viewer-margin-top', '200vh');
+      removeUserHighlights(state);
+      clean();
       window.requestAnimationFrame(() => {
         if (textAlign) {
           contentWrapperNode.classList.add('rg-force-text-align');
@@ -43,6 +48,7 @@ const setTextAlign: ActionDispatcher<SetTextAlign> = async ({ state, action }) =
             scrollMode: state.scrollMode,
             textAlign,
           });
+          await redrawUserHighlights(state);
           if (state.searchRanges.length && state.searchTermsHighlightsNode) {
             drawHighlights(state.searchTermsHighlightsNode, state.searchRanges);
           }

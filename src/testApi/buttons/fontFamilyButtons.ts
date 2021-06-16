@@ -1,5 +1,5 @@
 import { SetFontFamily } from '../../model/actions/flow';
-import { DispatchAPIAction } from '../../model/apiInterface';
+import { DispatchAPIAction } from '../../model/actions/common';
 import { State } from '../../model/state';
 import { LayoutTypes } from '../../model/viewerSettings';
 

@@ -35,15 +35,15 @@
  */
 export interface Zoom {
   /**
-   * Minimum scale value (`1` based like CSS property)
+   * Minimum zoom value (`1` based like CSS property)
    */
   min: number;
   /**
-   * Maximum scale value (`1` based like CSS property)
+   * Maximum zoom value (`1` based like CSS property)
    */
   max: number;
   /**
-   * Scale steps for range input change and controls
+   * Zoom steps for range input change and controls
    */
   steps: number[];
 }
@@ -139,4 +139,45 @@ export interface NewContent {
    * Content HTML
    */
   htmlContent: string;
+}
+
+export interface SelectionOption {
+  key: string;
+  title: string;
+  color: string;
+  className?: string;
+  style?: string;
+  selected?: boolean;
+}
+
+export interface SelectionPointer {
+  querySelector: string;
+  offset: number;
+}
+
+export interface SelectionRange {
+  obfuscatedText: string;
+  start: SelectionPointer;
+  end: SelectionPointer;
+}
+
+export interface HighlightInfo extends SelectionRange {
+  key: string;
+}
+
+export interface UserHighlightInfo extends HighlightInfo {
+  highlighterKey: string;
+  color: string;
+}
+
+export interface HighlightDeleteOption {
+  title: string;
+  className?: string;
+  style?: string;
+}
+
+export interface MenuPosition {
+  top: number;
+  left: number;
+  arrowDown: boolean;
 }

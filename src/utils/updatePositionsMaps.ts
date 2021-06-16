@@ -11,16 +11,18 @@ const updatePositionsMaps = (state: State): void => {
   if (state.layout === LayoutTypes.Fixed) {
     const { contentsInfo } = state;
     const positionKey = state.scrollMode === 'horizontal' ? 'left' : 'top';
-    const positionByLabel = new Map<string, number>();
-    const labelByPosition = new Map<number, string>();
+    const positionBySlug = new Map<string, number>();
+    const slugByPosition = new Map<number, string>();
+    let lastPosition = 0;
     for (let i = 0, l = contentsInfo.length; i < l; i++) {
       const content = contentsInfo[i];
-      const { label } = content;
+      const { slug } = content;
       const position = content[positionKey];
-      positionByLabel.set(label, position);
-      labelByPosition.set(position, label);
+      positionBySlug.set(slug, position);
+      slugByPosition.set(position, slug);
+      lastPosition = position;
     }
-    updateState({ positionByLabel, labelByPosition });
+    updateState({ positionBySlug, slugByPosition, lastPosition });
   }
 };
 
