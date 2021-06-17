@@ -11,7 +11,7 @@ const navigateToPreviousChapter: ActionDispatcher<NavigateToPreviousChapter> = a
     const event: LoadPreviousChapter = {
       type: 'loadPreviousChapter',
       slug: state.slug,
-      currentContentSlug: state.contentSlug,
+      currentContentSlug: state.slugByPosition.get(0)!,
     };
     state.config.eventHandler(event);
   }
