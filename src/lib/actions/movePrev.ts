@@ -17,10 +17,9 @@ const movePrev: ActionDispatcher<MoveNext> = async ({ state }) => {
     if (state.scrollMode === 'horizontal') {
       const { totalColumnWidth, columnsInViewport, slugByPosition } = state;
       const desiredPosition = position - totalColumnWidth * columnsInViewport;
-      const newContentSlug = slugByPosition.get(desiredPosition);
-      if (newContentSlug) {
+      if (slugByPosition.has(desiredPosition)) {
         updateState({
-          contentSlug: newContentSlug,
+          forceScroll: desiredPosition,
         });
       }
     }

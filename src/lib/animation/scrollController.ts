@@ -1,3 +1,4 @@
+/* eslint-disable no-bitwise */
 /* eslint-disable no-param-reassign */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { SetReadMode } from '../../model/actions/global';
@@ -42,12 +43,17 @@ const scrollController = (
   let mobileSelection = false;
   let mobileSelectionTimeout: NodeJS.Timeout | null = null;
 
-  const isPreviousThanSelection = (event: SyntheticEvent): boolean => {
-    if (initialSelection) {
-      const { top, bottom, left } = initialSelection;
-      return top > event.clientY || (left > event.clientX && bottom > event.clientY);
+  const isPreviousThanSelection = (range: Range): boolean => {
+    if (!initialSelection) {
+      return false;
     }
-    return false;
+    if (range.startContainer === initialSelection.startContainer) {
+      return range.startOffset <= initialSelection.startOffset;
+    }
+    return !!(
+      range.startContainer.compareDocumentPosition(initialSelection.startContainer) &
+      Node.DOCUMENT_POSITION_FOLLOWING
+    );
   };
 
   const onDragStart = (ev: MouseEvent | TouchEvent): void => {
@@ -56,6 +62,9 @@ const scrollController = (
       removeLayerHighlights(selectionHighlightsNode);
       removeSelectionMenu(state);
       removeNotesDialog(state);
+      initialSelection = null;
+      currentSelection = null;
+      isSelecting = false;
       const syntheticEvent = getSyntheticEvent(ev);
       const clickedHighlight =
         !state.config.disableSelection &&
@@ -80,16 +89,14 @@ const scrollController = (
         }
       }
       setCSSProperty('user-select', 'text');
-      const wordSelection = !state.config.disableSelection && getWordSelection(ev, syntheticEvent);
+      const wordSelection =
+        !state.config.disableSelection && getWordSelection(state, ev, syntheticEvent);
       // alert(JSON.stringify({ ...syntheticEvent, wordSelection: !!wordSelection }));
       if (wordSelection) {
         ev.preventDefault();
         ev.stopPropagation();
         const { top, bottom, left } = wordSelection.getBoundingClientRect();
         initialSelection = {
-          top,
-          bottom,
-          left,
           startContainer: wordSelection.startContainer,
           startOffset: wordSelection.startOffset,
           endContainer: wordSelection.endContainer,
@@ -102,8 +109,8 @@ const scrollController = (
           }, 500);
         } else {
           isSelecting = true;
+          return;
         }
-        return;
       }
       setCSSProperty('user-select', 'none');
       mouseDown = true;
@@ -231,7 +238,7 @@ const scrollController = (
             updateState({
               selectingText: false,
             });
-          },0);
+          }, 0);
           if (
             !currentSelection.collapsed &&
             currentSelection.toString().trim() &&
@@ -245,15 +252,18 @@ const scrollController = (
           }
         }
       }
-      initialSelection = null;
-      currentSelection = null;
     }
+    initialSelection = null;
+    currentSelection = null;
+    mobileSelection = false;
+    isSelecting = false;
   };
 
   const onDragMove = (ev: MouseEvent | TouchEvent): void => {
     if (mobileSelectionTimeout) {
       clearTimeout(mobileSelectionTimeout);
       mobileSelectionTimeout = null;
+      mobileSelection = false;
     }
     if (mouseDown) {
       ev.stopPropagation();
@@ -283,17 +293,12 @@ const scrollController = (
         });
       }
       const event = getSyntheticEvent(ev);
-      const wordSelection = getWordSelection(ev, event);
+      const wordSelection = getWordSelection(state, ev, event);
       if (wordSelection) {
-        const isPrevious = isPreviousThanSelection(event);
+        const isPrevious = isPreviousThanSelection(wordSelection);
         const { startContainer, startOffset, endContainer, endOffset } = initialSelection;
-        const backupRange = wordSelection.cloneRange();
         if (isPrevious) {
           wordSelection.setEnd(endContainer, endOffset);
-          if (!wordSelection.isPointInRange(backupRange.startContainer, backupRange.startOffset)) {
-            wordSelection.setStart(startContainer, startOffset);
-            wordSelection.setEnd(backupRange.endContainer, backupRange.endOffset);
-          }
         } else {
           wordSelection.setStart(startContainer, startOffset);
         }

@@ -1,21 +1,25 @@
-import log from 'loglevel';
 import { SyntheticEvent } from '../../model/dom';
+import { State } from '../../model/state';
 
 import getRangeFromPoint from './getRangeFromPoint';
 import getSelection from './getSelection';
 import getSyntheticEvent from './getSyntheticEvent';
 
-const getWordSelection = (ev: MouseEvent | TouchEvent, event?: SyntheticEvent): Range | null => {
-  // if (ev.type === 'touchstart') {
-  //   log.warn('isSelection method is not implemented for touch events');
-  //   return null;
-  // }
+const getWordSelection = (
+  state: State,
+  ev: MouseEvent | TouchEvent,
+  event?: SyntheticEvent,
+): Range | null => {
   const selection = getSelection();
   let res: Range | null = null;
   if (selection) {
     if (ev.target) {
+      const { contentPlaceholderNode } = state;
       const target = ev.target as HTMLElement;
-      if (window.getComputedStyle(target).userSelect !== 'none') {
+      if (
+        contentPlaceholderNode?.contains(target) &&
+        window.getComputedStyle(target).userSelect !== 'none'
+      ) {
         const syntheticEvent = event || getSyntheticEvent(ev);
         selection.removeAllRanges();
         const rangeFromPoint = getRangeFromPoint(syntheticEvent);

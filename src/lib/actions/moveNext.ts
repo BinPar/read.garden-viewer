@@ -15,12 +15,13 @@ const moveNext: ActionDispatcher<MoveNext> = async ({ state }) => {
         state,
       });
     }
-    const desiredPosition = position + totalColumnWidth * columnsInViewport;
-    const newContentSlug = slugByPosition.get(desiredPosition);
-    if (newContentSlug) {
-      updateState({
-        contentSlug: newContentSlug,
-      });
+    if (state.scrollMode === 'horizontal') {
+      const desiredPosition = position + totalColumnWidth * columnsInViewport;
+      if (slugByPosition.has(desiredPosition)) {
+        updateState({
+          forceScroll: desiredPosition,
+        });
+      }
     }
   }
   return {};

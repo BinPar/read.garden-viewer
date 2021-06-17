@@ -1,3 +1,5 @@
+import log from 'loglevel';
+
 /**
  * Checks images height and provides special CSS class when image is higher than the available
  * vertical space. Also provides
@@ -11,7 +13,7 @@ const checkImagesHeight = async (
     checkImagesHeightPromises.push(
       new Promise<void>((imageResolve) => {
         const securityTimeout = setTimeout(() => {
-          console.warn('Image without width', img);
+          log.info('Image without width', img);
           imageResolve();
         }, 2000);
         const clone = new Image();

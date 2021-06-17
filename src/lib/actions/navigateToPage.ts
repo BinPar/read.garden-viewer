@@ -9,41 +9,43 @@ import { updateState } from '../state';
  * Navigate to a specific page (by label)
  * @param context.state Viewer state
  * @param context.action Viewer action
- * @returns 
+ * @returns
  */
 const navigateToPage: ActionDispatcher<NavigateToPage> = async ({ state, action }) => {
-  if (state.scrollMode === 'horizontal' || state.scrollMode === 'vertical') {
-    const { positionBySlug } = state;
-    const position = positionBySlug.get(action.contentSlug);
-    if (state.layout === LayoutTypes.Fixed) {
-      updateState({
-        contentSlug: action.contentSlug,
-      });
-    }
-    if (state.layout === LayoutTypes.Flow) {
-      if (position) {
+  if (action.contentSlug !== state.contentSlug) {
+    if (state.scrollMode === 'horizontal' || state.scrollMode === 'vertical') {
+      const { positionBySlug } = state; 
+      const position = positionBySlug.get(action.contentSlug);
+      if (state.layout === LayoutTypes.Fixed) {
         updateState({
           contentSlug: action.contentSlug,
         });
-      } else if (state.config.eventHandler) {
-        const event: LoadNewContent = {
-          type: 'loadNewContent',
-          slug: state.slug,
-          contentSlug: action.contentSlug,
-        };
-        /**
-         * Es posible que durante la integración tengamos que cambiar o añadir información a estos
-         * eventos. Como hemos avisado ya en otros puntos del código, no es lo mismo `contentSlug`
-         * que `label`, por lo que es probable que se necesiten cambios.
-         */
-        state.config.eventHandler(event);
+      }
+      if (state.layout === LayoutTypes.Flow) {
+        if (position) {
+          updateState({
+            contentSlug: action.contentSlug,
+          });
+        } else if (state.config.eventHandler) {
+          const event: LoadNewContent = {
+            type: 'loadNewContent',
+            slug: state.slug,
+            contentSlug: action.contentSlug,
+          };
+          /**
+           * Es posible que durante la integración tengamos que cambiar o añadir información a estos
+           * eventos. Como hemos avisado ya en otros puntos del código, no es lo mismo `contentSlug`
+           * que `label`, por lo que es probable que se necesiten cambios.
+           */
+          state.config.eventHandler(event);
+        }
       }
     }
-  }
-  if (state.scrollMode === 'fixed') {
-    log.warn(
-      'Page navigation not implemented in fixed mode, it should be controlled by appending new content',
-    );
+    if (state.scrollMode === 'fixed') {
+      log.warn(
+        'Page navigation not implemented in fixed mode, it should be controlled by appending new content',
+      );
+    }
   }
   return {};
 };

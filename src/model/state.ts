@@ -215,6 +215,10 @@ export interface GlobalState {
    * Stored coords when clicking an existing highlight
    */
   lastClickCoords?: Coordinates;
+  /**
+   * Force scroll to move to exact position
+   */
+  forceScroll?: number;
 }
 
 /**
