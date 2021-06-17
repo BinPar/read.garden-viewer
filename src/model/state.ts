@@ -218,7 +218,7 @@ export interface GlobalState {
   /**
    * Force scroll to move to exact position
    */
-  forceScroll?: number;
+  forceScroll: number | undefined;
 }
 
 /**

@@ -213,6 +213,18 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
     }
   };
 
+  const onForceScrollChange = (newScroll: number | undefined): void => {
+    if (newScroll !== undefined) {
+      scroll.target = newScroll * -1;
+      updateState({
+        forceScroll: undefined,
+      });
+      executeTransitions();
+    }
+  }
+
+
+  addOnChangeEventListener('forceScroll', onForceScrollChange);
   addOnChangeEventListener('zoom', onZoomChange);
   addOnChangeEventListener('chapterNumber', onChapterChange);
   addOnChangeEventListener('wrapperReady', onChapterChange);
