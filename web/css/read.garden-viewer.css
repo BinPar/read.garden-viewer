@@ -125,7 +125,7 @@ div.rg-content-wrapper #rg-content-placeholder *::selection {
 .rg-flow-layout.rg-horizontal-scroll div.rg-content-wrapper video,
 .rg-flow-layout.rg-horizontal-scroll div.rg-content-wrapper table,
 .rg-flow-layout.rg-horizontal-scroll div.rg-content-wrapper iframe {
-  max-width: var(--column-width);
+  max-width: min(var(--column-width), 100%);
 }
 
 .rg-flow-layout.rg-vertical-scroll div.rg-content-wrapper img.rg-ready,
