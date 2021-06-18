@@ -16,7 +16,7 @@ const setInitialProperties = (state: State): void => {
   setCSSProperty('content-wrapper-height', '100vh');
   setCSSProperty('contrast-viewer-color', '1');
   setCSSProperty('column-width', '0px');
-  setCSSProperty('current-selection-extensors-color', '#f2b818');
+  setCSSProperty('current-selection-extensors-color', '#3273ff');
   setCSSProperty('current-selection-highlights-color', '#f2b818');
   setCSSProperty('debug-viewer-safe-area', `${state.debugViewerSafeArea ? 1 : 0}`);
   setCSSProperty('highlights-pointer-events', 'none');

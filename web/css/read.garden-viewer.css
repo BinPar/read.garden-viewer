@@ -273,6 +273,8 @@ div.rg-highlights-layer > div {
 
 div.rg-highlights-layer .rg-selection-extensor {
   background-color: var(--current-selection-extensors-color);
+  width: 27px;
+  height: 27px;
   border-radius: 100%;
   pointer-events: all;
 }
