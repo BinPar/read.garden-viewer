@@ -13,7 +13,6 @@ const setInitialProperties = (state: State): void => {
    */
   setCSSProperty('column-count', '2');
   setCSSProperty('column-gap', `${state.config.columnGap}px`);
-  setCSSProperty('column-gap-compensation', '0px');
   setCSSProperty('content-wrapper-height', '100vh');
   setCSSProperty('contrast-viewer-color', '1');
   setCSSProperty('column-width', '0px');
