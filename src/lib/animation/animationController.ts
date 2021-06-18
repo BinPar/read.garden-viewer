@@ -163,7 +163,7 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
 
   const onContentSlugChanged = (slug: string): void => {
     const targetSlugScrollPosition = getScrollFromContentSlug(state, slug);
-    if (targetSlugScrollPosition !== null) {
+    if (targetSlugScrollPosition !== null && state.forceScroll === undefined) {
       scroll.target = targetSlugScrollPosition;
     }
     executeTransitions();
