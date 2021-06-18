@@ -3,7 +3,7 @@ import { NavigateToPreviousChapter } from '../../model/actions/flow';
 import { LoadPreviousChapter } from '../../model/events';
 import { LayoutTypes } from '../../model/viewerSettings';
 
-const navigateToPreviousChapter: ActionDispatcher<NavigateToPreviousChapter> = async ({ state }) => {
+const navigateToPreviousChapter: ActionDispatcher<NavigateToPreviousChapter> = async ({ state, action }) => {
   if (state.layout === LayoutTypes.Fixed) {
     throw new Error('Action not allowed in fixed mode');
   }
@@ -12,6 +12,7 @@ const navigateToPreviousChapter: ActionDispatcher<NavigateToPreviousChapter> = a
       type: 'loadPreviousChapter',
       slug: state.slug,
       currentContentSlug: state.slugByPosition.get(0)!,
+      goToEnd: action.goToEnd,
     };
     state.config.eventHandler(event);
   }

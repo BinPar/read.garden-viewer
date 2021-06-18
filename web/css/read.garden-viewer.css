@@ -121,6 +121,12 @@ div.rg-content-wrapper #rg-content-placeholder *::selection {
   width: auto;
 }
 
+.rg-flow-layout div.rg-content-wrapper img.rg-ready,
+.rg-flow-layout div.rg-content-wrapper video,
+.rg-flow-layout div.rg-content-wrapper iframe {
+  filter: var(--theme-filter, none);
+}
+
 .rg-flow-layout.rg-horizontal-scroll div.rg-content-wrapper img.rg-ready,
 .rg-flow-layout.rg-horizontal-scroll div.rg-content-wrapper video,
 .rg-flow-layout.rg-horizontal-scroll div.rg-content-wrapper table,
@@ -257,9 +263,6 @@ div.rg-highlights-layer.rg-search > div {
 div.rg-highlights-layer > div {
   position: absolute;
   border: none;
-}
-
-div.rg-highlights-layer > div {
   background-color: var(--highlighter-color);
   pointer-events: var(--highlights-pointer-events);
 }
@@ -268,8 +271,7 @@ div.rg-highlights-layer > div {
   filter: brightness(0.8);
 }
 
-div.rg-highlights-layer .rg-left-extensor,
-div.rg-highlights-layer .rg-right-extensor {
+div.rg-highlights-layer .rg-selection-extensor {
   background-color: var(--current-selection-extensors-color);
   border-radius: 100%;
   pointer-events: all;

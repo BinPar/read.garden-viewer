@@ -35,6 +35,7 @@ export enum GlobalActionTypes {
  */
 export interface AppendNewContent extends Action, NewContent {
   type: 'appendNewContent';
+  goToEnd?: boolean;
 }
 
 /**

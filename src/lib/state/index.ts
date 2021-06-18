@@ -88,6 +88,7 @@ export const initializeState = (initialConfig: InitialConfig): void => {
     debugViewerSafeArea: config.debugViewerSafeArea,
     containerWidth: 0,
     containerHeight: 0,
+    forceScroll: undefined,
   };
 
   const scrolledState: ScrolledState = {

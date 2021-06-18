@@ -67,6 +67,7 @@ export interface LoadNextChapter extends ReadGardenEvent, LoadChapterInfo {
 
 export interface LoadPreviousChapter extends ReadGardenEvent, LoadChapterInfo {
   type: 'loadPreviousChapter';
+  goToEnd?: boolean;
 }
 
 export interface OnUserSelect extends ReadGardenEvent {

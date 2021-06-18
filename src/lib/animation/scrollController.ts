@@ -21,6 +21,7 @@ import { OnHighlightClick, OnUserSelect } from '../../model/events';
 import getClickedHighlight from './getClickedHighlight';
 import removeSelectionMenu from '../../utils/highlights/removeSelectionMenu';
 import removeNotesDialog from '../../utils/highlights/removeNotesDialog';
+import drawExtensors from '../../utils/highlights/drawExtensors';
 
 const scrollController = (
   state: State,
@@ -234,6 +235,7 @@ const scrollController = (
             currentSelection,
             lastClickCoords: { x: syntheticEvent.clientX, y: syntheticEvent.clientY },
           });
+          drawExtensors(currentSelection, state);
           setTimeout((): void => {
             updateState({
               selectingText: false,
