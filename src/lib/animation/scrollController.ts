@@ -223,8 +223,7 @@ const scrollController = (
           updateState({
             lastClickCoords: { x: syntheticEvent.clientX, y: syntheticEvent.clientY },
           });
-          const highlights = drawHighlights(selectionHighlightsNode, [currentSelection]);
-          drawExtensors(highlights, currentSelection, state);
+          drawHighlights(selectionHighlightsNode, [currentSelection]);
           setTimeout((): void => {
             updateState({
               selectingText: false,
