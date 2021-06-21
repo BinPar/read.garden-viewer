@@ -37,6 +37,7 @@ const showNotesDialog: ActionDispatcher<ShowNotesDialog> = async ({ action, stat
     const menu = document.createElement('div');
     menu.onmousedown = onMouseDown;
     menu.ontouchstart = onMouseDown;
+    menu.onclick = onMouseDown;
     menu.classList.add('rg-notes-dialog');
     menu.classList.add(`rg-${arrowDown ? 'bottom' : 'top'}-arrow`);
     menu.style.top = `${top}px`;

@@ -25,6 +25,7 @@ const getConfirmationDialog = (
 
   menu.onmousedown = onMouseDown;
   menu.ontouchstart = onMouseDown;
+  menu.onclick = onMouseDown;
 
   const wrapper = document.createElement('div');
   wrapper.classList.add('rg-confirmation-dialog-wrapper');

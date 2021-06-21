@@ -35,6 +35,10 @@ const showSelectionMenu: ActionDispatcher<ShowSelectionMenu> = async ({ action, 
       e.stopPropagation();
     };
 
+    menu.onmousedown = onMouseDown;
+    menu.ontouchstart = onMouseDown;
+    menu.onclick = onMouseDown;
+
     action.options.forEach((option) => {
       const button = document.createElement('button');
       button.classList.add('rg-selection-option');
@@ -49,8 +53,6 @@ const showSelectionMenu: ActionDispatcher<ShowSelectionMenu> = async ({ action, 
       if (option.style) {
         button.setAttribute('style', option.style);
       }
-      button.onmousedown = onMouseDown;
-      button.ontouchstart = onMouseDown;
       const onClick = (): void => {
         if (state.config.eventHandler) {
           const event: OnSelectionMenuOptionClick = {
@@ -93,7 +95,6 @@ const showSelectionMenu: ActionDispatcher<ShowSelectionMenu> = async ({ action, 
       if (action.deleteOption.style) {
         button.setAttribute('style', action.deleteOption.style);
       }
-      button.onmousedown = onMouseDown;
       const onClick = (): void => {
         if (state.config.eventHandler && action.key) {
           const event: OnDeleteOptionClick = {
