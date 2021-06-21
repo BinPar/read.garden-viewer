@@ -65,7 +65,6 @@ div#rg-viewer {
   transform-origin: top left;
   transform: translateX(var(--horizontal-translate)) translateY(var(--vertical-translate))
     scale(var(--scale));
-  transition: transform .01s;
   line-height: var(--line-height);
 }
 
