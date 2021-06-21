@@ -65,6 +65,7 @@ div#rg-viewer {
   transform-origin: top left;
   transform: translateX(var(--horizontal-translate)) translateY(var(--vertical-translate))
     scale(var(--scale));
+  transition: transform .01s;
   line-height: var(--line-height);
 }
 
@@ -544,7 +545,7 @@ div.rg-notes-dialog .rg-notes-dialog-wrapper .rg-notes-dialog-holder .rg-notes-d
 .rg-selection-option,
 .rg-notes-option {
   overflow: hidden;
-  text-indent: -1000%;
+  text-indent: -10000px;
   outline: none;
 }
 
