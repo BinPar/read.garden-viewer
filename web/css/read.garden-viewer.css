@@ -276,6 +276,7 @@ div.rg-highlights-layer > div {
 
 .rg-dark-theme div.rg-highlights-layer > div {
   filter: brightness(0.8);
+  mix-blend-mode: multiply;
 }
 
 div.rg-highlights-layer .rg-selection-extensor {
