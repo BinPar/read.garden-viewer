@@ -29,13 +29,14 @@ const showNotesDialog: ActionDispatcher<ShowNotesDialog> = async ({ action, stat
 
     const { left, top, arrowDown } = getMenuPositions(state, 180, highlightKey, currentSelection);
 
-    const onMouseDown = (e: MouseEvent): void => {
+    const onMouseDown = (e: MouseEvent | TouchEvent): void => {
       e.stopImmediatePropagation();
       e.stopPropagation();
     };
 
     const menu = document.createElement('div');
     menu.onmousedown = onMouseDown;
+    menu.ontouchstart = onMouseDown;
     menu.classList.add('rg-notes-dialog');
     menu.classList.add(`rg-${arrowDown ? 'bottom' : 'top'}-arrow`);
     menu.style.top = `${top}px`;

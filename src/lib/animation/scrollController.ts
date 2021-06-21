@@ -21,7 +21,8 @@ import { OnHighlightClick, OnUserSelect } from '../../model/events';
 import getClickedHighlight from './getClickedHighlight';
 import removeSelectionMenu from '../../utils/highlights/removeSelectionMenu';
 import removeNotesDialog from '../../utils/highlights/removeNotesDialog';
-import drawExtensors from '../../utils/highlights/drawExtensors';
+import drawExtensors, { removeExtensors } from '../../utils/highlights/drawExtensors';
+import extendSelection from '../../utils/highlights/extendSelection';
 
 const scrollController = (
   state: State,
@@ -44,23 +45,11 @@ const scrollController = (
   let mobileSelection = false;
   let mobileSelectionTimeout: NodeJS.Timeout | null = null;
 
-  const isPreviousThanSelection = (range: Range): boolean => {
-    if (!initialSelection) {
-      return false;
-    }
-    if (range.startContainer === initialSelection.startContainer) {
-      return range.startOffset <= initialSelection.startOffset;
-    }
-    return !!(
-      range.startContainer.compareDocumentPosition(initialSelection.startContainer) &
-      Node.DOCUMENT_POSITION_FOLLOWING
-    );
-  };
-
   const onDragStart = (ev: MouseEvent | TouchEvent): void => {
     if (ev.type === 'touchstart' || (ev as MouseEvent).button === 0) {
       setCSSProperty('user-select', 'none');
       removeLayerHighlights(selectionHighlightsNode);
+      removeExtensors(state);
       removeSelectionMenu(state);
       removeNotesDialog(state);
       initialSelection = null;
@@ -96,7 +85,6 @@ const scrollController = (
       if (wordSelection) {
         ev.preventDefault();
         ev.stopPropagation();
-        const { top, bottom, left } = wordSelection.getBoundingClientRect();
         initialSelection = {
           startContainer: wordSelection.startContainer,
           startOffset: wordSelection.startOffset,
@@ -221,37 +209,38 @@ const scrollController = (
       }, 0);
     }
     if (initialSelection) {
-      if (mobileSelection) {
-        if (currentSelection) {
-          drawHighlights(selectionHighlightsNode, [currentSelection]);
+      if (currentSelection) {
+        updateState({
+          currentSelection,
+        });
+        if (mobileSelection) {
+          const highlights = drawHighlights(selectionHighlightsNode, [currentSelection]);
           mobileSelection = false;
-          // draw extensors
-        }
-      } else {
-        setCSSProperty('user-select', 'none');
-        if (currentSelection) {
+          drawExtensors(highlights, currentSelection, state);
+        } else {
+          setCSSProperty('user-select', 'none');
           const syntheticEvent = getSyntheticEvent(ev);
           updateState({
-            currentSelection,
             lastClickCoords: { x: syntheticEvent.clientX, y: syntheticEvent.clientY },
           });
-          drawExtensors(currentSelection, state);
+          const highlights = drawHighlights(selectionHighlightsNode, [currentSelection]);
+          drawExtensors(highlights, currentSelection, state);
           setTimeout((): void => {
             updateState({
               selectingText: false,
             });
           }, 0);
-          if (
-            !currentSelection.collapsed &&
-            currentSelection.toString().trim() &&
-            state.config.eventHandler
-          ) {
-            const event: OnUserSelect = {
-              type: 'onUserSelect',
-              slug: state.slug,
-            };
-            state.config.eventHandler(event);
-          }
+        }
+        if (
+          !currentSelection.collapsed &&
+          currentSelection.toString().trim() &&
+          state.config.eventHandler
+        ) {
+          const event: OnUserSelect = {
+            type: 'onUserSelect',
+            slug: state.slug,
+          };
+          state.config.eventHandler(event);
         }
       }
     }
@@ -297,15 +286,9 @@ const scrollController = (
       const event = getSyntheticEvent(ev);
       const wordSelection = getWordSelection(state, ev, event);
       if (wordSelection) {
-        const isPrevious = isPreviousThanSelection(wordSelection);
-        const { startContainer, startOffset, endContainer, endOffset } = initialSelection;
-        if (isPrevious) {
-          wordSelection.setEnd(endContainer, endOffset);
-        } else {
-          wordSelection.setStart(startContainer, startOffset);
-        }
-        drawHighlights(selectionHighlightsNode, [wordSelection]);
-        currentSelection = wordSelection;
+        const { range } = extendSelection(wordSelection, initialSelection);
+        currentSelection = range;
+        drawHighlights(selectionHighlightsNode, [currentSelection]);
       }
     }
   };

@@ -9,6 +9,7 @@ const getWordSelection = (
   state: State,
   ev: MouseEvent | TouchEvent,
   event?: SyntheticEvent,
+  force = false,
 ): Range | null => {
   const selection = getSelection();
   let res: Range | null = null;
@@ -17,8 +18,9 @@ const getWordSelection = (
       const { contentPlaceholderNode } = state;
       const target = ev.target as HTMLElement;
       if (
-        contentPlaceholderNode?.contains(target) &&
-        window.getComputedStyle(target).userSelect !== 'none'
+        force ||
+        (contentPlaceholderNode?.contains(target) &&
+          window.getComputedStyle(target).userSelect !== 'none')
       ) {
         const syntheticEvent = event || getSyntheticEvent(ev);
         selection.removeAllRanges();
@@ -30,8 +32,9 @@ const getWordSelection = (
           selection.modify('extend', 'forward', 'word');
           if (
             selection.toString().trim() &&
-            (range.startContainer === target || target.contains(range.startContainer)) &&
-            (range.endContainer === target || target.contains(range.endContainer))
+            (force ||
+              ((range.startContainer === target || target.contains(range.startContainer)) &&
+                (range.endContainer === target || target.contains(range.endContainer))))
           ) {
             const finalRange = selection.getRangeAt(0);
             const { left, right, top, bottom } = finalRange.getBoundingClientRect();

@@ -19,12 +19,14 @@ const setInitialProperties = (state: State): void => {
   setCSSProperty('current-selection-extensors-color', '#3273ff');
   setCSSProperty('current-selection-highlights-color', '#f2b818');
   setCSSProperty('debug-viewer-safe-area', `${state.debugViewerSafeArea ? 1 : 0}`);
+  setCSSProperty('extensors-pointer-events', 'auto');
   setCSSProperty('highlights-pointer-events', 'none');
   setCSSProperty('horizontal-translate', '0');
   setCSSProperty('invert-viewer-color', '0');
   setCSSProperty('line-height', '1.5em');
   setCSSProperty('padding-top', `${state.config.paddingTop}px`);
   setCSSProperty('padding-bottom', `${state.config.paddingBottom}px`);
+  setCSSProperty('pointer-events', 'auto');
   setCSSProperty('scale', `${state.scale}`);
   setCSSProperty('search-highlights-color', '#fdff04');
   setCSSProperty('sepia-viewer-color', '0');
@@ -36,10 +38,11 @@ const setInitialProperties = (state: State): void => {
   setCSSProperty('user-select-end', 'none');
   setCSSProperty('vertical-translate', '0');
   setCSSProperty('viewer-margin-top', '200vh');
-  setCSSProperty('pointer-events', 'auto');
+
   if (state.theme === 'dark') {
     setCSSProperty('theme-filter', 'invert(1)');
   }
+
   if (state.layout === LayoutTypes.Flow) {
     setCSSProperty('font-family', state.fontFamily);
     setCSSProperty('font-size', `${state.fontSize}px`);

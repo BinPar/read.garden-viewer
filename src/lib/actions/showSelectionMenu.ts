@@ -5,6 +5,7 @@ import { ShowSelectionMenu } from '../../model/actions/global';
 import { OnDeleteOptionClick, OnSelectionMenuOptionClick } from '../../model/events';
 
 import getSelectionRangeFromSelection from '../../utils/getSelectionRangeFromSelection';
+import { removeExtensors } from '../../utils/highlights/drawExtensors';
 import getMenuPositions from '../../utils/highlights/getMenuPositions';
 
 const showSelectionMenu: ActionDispatcher<ShowSelectionMenu> = async ({ action, state }) => {
@@ -29,8 +30,7 @@ const showSelectionMenu: ActionDispatcher<ShowSelectionMenu> = async ({ action, 
     holder.classList.add('rg-selection-menu-holder');
     wrapper.appendChild(holder);
 
-    const onMouseDown = (e: MouseEvent): void => {
-      e.preventDefault();
+    const onMouseDown = (e: MouseEvent | TouchEvent): void => {
       e.stopImmediatePropagation();
       e.stopPropagation();
     };
@@ -50,6 +50,7 @@ const showSelectionMenu: ActionDispatcher<ShowSelectionMenu> = async ({ action, 
         button.setAttribute('style', option.style);
       }
       button.onmousedown = onMouseDown;
+      button.ontouchstart = onMouseDown;
       const onClick = (): void => {
         if (state.config.eventHandler) {
           const event: OnSelectionMenuOptionClick = {
@@ -71,6 +72,7 @@ const showSelectionMenu: ActionDispatcher<ShowSelectionMenu> = async ({ action, 
           }
           state.config.eventHandler(event);
         }
+        removeExtensors(state);
       };
       button.onclick = onClick;
       holder.appendChild(button);
