@@ -545,6 +545,7 @@ div.rg-notes-dialog .rg-notes-dialog-wrapper .rg-notes-dialog-holder .rg-notes-d
 .rg-notes-option {
   overflow: hidden;
   text-indent: -1000%;
+  outline: none;
 }
 
 .rg-selection-option + .rg-selection-option {
