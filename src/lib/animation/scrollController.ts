@@ -46,12 +46,12 @@ const scrollController = (
   let mobileSelectionTimeout: NodeJS.Timeout | null = null;
 
   const onDragStart = (ev: MouseEvent | TouchEvent): void => {
+    removeLayerHighlights(selectionHighlightsNode);
+    removeExtensors(state);
+    removeSelectionMenu(state);
+    removeNotesDialog(state);
     if (ev.type === 'touchstart' || (ev as MouseEvent).button === 0) {
       setCSSProperty('user-select', 'none');
-      removeLayerHighlights(selectionHighlightsNode);
-      removeExtensors(state);
-      removeSelectionMenu(state);
-      removeNotesDialog(state);
       initialSelection = null;
       currentSelection = null;
       isSelecting = false;
@@ -95,7 +95,7 @@ const scrollController = (
             mobileSelection = true;
             mobileSelectionTimeout = null;
             currentSelection = wordSelection;
-            updateState({ 
+            updateState({
               selectingText: true,
             });
           }, 400);
