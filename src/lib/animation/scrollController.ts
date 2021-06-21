@@ -83,7 +83,6 @@ const scrollController = (
         !state.config.disableSelection && getWordSelection(state, ev, syntheticEvent);
       // alert(JSON.stringify({ ...syntheticEvent, wordSelection: !!wordSelection }));
       if (wordSelection) {
-        ev.preventDefault();
         ev.stopPropagation();
         initialSelection = {
           startContainer: wordSelection.startContainer,
@@ -94,9 +93,14 @@ const scrollController = (
         if (ev.type === 'touchstart') {
           mobileSelectionTimeout = setTimeout(() => {
             mobileSelection = true;
+            mobileSelectionTimeout = null;
             currentSelection = wordSelection;
-          }, 500);
+            updateState({ 
+              selectingText: true,
+            });
+          }, 400);
         } else {
+          ev.preventDefault();
           isSelecting = true;
           return;
         }
@@ -224,12 +228,12 @@ const scrollController = (
             lastClickCoords: { x: syntheticEvent.clientX, y: syntheticEvent.clientY },
           });
           drawHighlights(selectionHighlightsNode, [currentSelection]);
-          setTimeout((): void => {
-            updateState({
-              selectingText: false,
-            });
-          }, 0);
         }
+        setTimeout((): void => {
+          updateState({
+            selectingText: false,
+          });
+        }, 0);
         if (
           !currentSelection.collapsed &&
           currentSelection.toString().trim() &&

@@ -87,7 +87,7 @@ const drawExtensors = (
     leftExtensor.classList.remove('rg-right-extensor');
     leftExtensor.classList.add('rg-left-extensor');
     leftExtensor.style.top = `${clientToContentWrapperTop(firstRect.top + firstRect.height)}px`;
-    leftExtensor.style.left = `${clientToContentWrapperLeft(firstRect.left - 28)}px`;
+    leftExtensor.style.left = `${clientToContentWrapperLeft(firstRect.left) - 28}px`;
     rightExtensor.classList.remove('rg-left-extensor');
     rightExtensor.classList.add('rg-right-extensor');
     rightExtensor.style.top = `${clientToContentWrapperTop(lastRect.top + lastRect.height)}px`;
