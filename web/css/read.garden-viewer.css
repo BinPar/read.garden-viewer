@@ -84,6 +84,8 @@ div.rg-content-wrapper #rg-content-placeholder * {
   -webkit-backface-visibility: unset;
   user-select: var(--user-select);
   -webkit-user-select: var(--user-select);
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 div.rg-content-wrapper #rg-content-placeholder *::selection {
