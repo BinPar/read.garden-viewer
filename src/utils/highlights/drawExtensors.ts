@@ -154,6 +154,7 @@ const drawExtensors = (
           }
         }
       }
+      clearNativeSelection();
       if (isLeft) {
         leftExtensor.style.top = `${event.clientY + lineHeight}px`;
         leftExtensor.style.left = `${event.clientX - 14}px`;
