@@ -219,6 +219,10 @@ export interface GlobalState {
    * Force scroll to move to exact position
    */
   forceScroll: number | undefined;
+  /**
+   * Existing highlight has been clicked
+   */
+  highlightClicked?: boolean;
 }
 
 /**

@@ -3,6 +3,8 @@ import getSyntheticEvent from '../../lib/animation/getSyntheticEvent';
 import getWordSelection from '../../lib/animation/getWordSelection';
 import { getState, updateState } from '../../lib/state';
 import { OnUserSelect, State } from '../../model';
+import setCSSProperty from '../setCSSProperty';
+import clearNativeSelection from './clearNativeSelection';
 import {
   clientToContentWrapperLeft,
   clientToContentWrapperTop,
@@ -55,6 +57,7 @@ const drawExtensors = (
   const onDragStart = (e: Event): void => {
     e.stopImmediatePropagation();
     e.stopPropagation();
+    setCSSProperty('user-select', 'text');
     moving = true;
     removeSelectionMenu(state);
   };
@@ -174,6 +177,8 @@ const drawExtensors = (
           selectingText: false,
         });
       }, 0);
+      setCSSProperty('user-select', 'none');
+      clearNativeSelection();
       if (
         !currentSelection.collapsed &&
         currentSelection.toString().trim() &&

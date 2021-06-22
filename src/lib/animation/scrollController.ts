@@ -23,6 +23,7 @@ import removeSelectionMenu from '../../utils/highlights/removeSelectionMenu';
 import removeNotesDialog from '../../utils/highlights/removeNotesDialog';
 import drawExtensors, { removeExtensors } from '../../utils/highlights/drawExtensors';
 import extendSelection from '../../utils/highlights/extendSelection';
+import clearNativeSelection from '../../utils/highlights/clearNativeSelection';
 
 const scrollController = (
   state: State,
@@ -74,6 +75,7 @@ const scrollController = (
           handler(onHighlightClick);
           updateState({
             lastClickCoords: { x: syntheticEvent.clientX, y: syntheticEvent.clientY },
+            highlightClicked: true,
           });
           return;
         }
@@ -82,6 +84,7 @@ const scrollController = (
       const wordSelection =
         !state.config.disableSelection && getWordSelection(state, ev, syntheticEvent);
       // alert(JSON.stringify({ ...syntheticEvent, wordSelection: !!wordSelection }));
+      setCSSProperty('user-select', 'none');
       if (wordSelection) {
         ev.stopPropagation();
         initialSelection = {
@@ -105,7 +108,6 @@ const scrollController = (
           return;
         }
       }
-      setCSSProperty('user-select', 'none');
       mouseDown = true;
       lastX = null;
       lastY = null;
@@ -222,13 +224,14 @@ const scrollController = (
         mobileSelection = false;
         drawExtensors(highlights, currentSelection, state);
       } else {
-        setCSSProperty('user-select', 'none');
         const syntheticEvent = getSyntheticEvent(ev);
         updateState({
           lastClickCoords: { x: syntheticEvent.clientX, y: syntheticEvent.clientY },
         });
         drawHighlights(selectionHighlightsNode, [currentSelection]);
       }
+      setCSSProperty('user-select', 'none');
+      clearNativeSelection();
       setTimeout((): void => {
         updateState({
           selectingText: false,
@@ -245,6 +248,11 @@ const scrollController = (
         };
         state.config.eventHandler(event);
       }
+    }
+    if (state.highlightClicked) {
+      setTimeout(() => {
+        updateState({ highlightClicked: false });
+      }, 0);
     }
     initialSelection = null;
     currentSelection = null;
@@ -283,6 +291,7 @@ const scrollController = (
       lastMoveMilliseconds = new Date().getTime();
     }
     if (isSelecting && initialSelection) {
+      setCSSProperty('user-select', 'text');
       if (!state.selectingText) {
         updateState({
           selectingText: true,

@@ -1,4 +1,3 @@
-import setCSSProperty from '../setCSSProperty';
 import clientToContentWrapperCoordinates from './clientToContentWrapperCoordinates';
 import deduplicateRects from './deduplicateRects';
 import removeLayerHighlights from './removeLayerHighlights';
@@ -16,7 +15,6 @@ const drawHighlights = (
   keepExisting = false,
   key?: string,
 ): HTMLDivElement[] => {
-  setCSSProperty('user-select', 'text');
   let resultRects = new Array<DOMRect>();
 
   ranges.forEach((selectionRange): void => {
