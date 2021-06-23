@@ -11,6 +11,10 @@ import { clean } from '../../utils/highlights/search';
 import { getState, updateState } from '../state';
 import removeUserHighlights from '../../utils/highlights/removeUserHighlights';
 import redrawUserHighlights from '../../utils/highlights/redrawUserHighlights';
+import clearSelection from '../../utils/highlights/clearSelection';
+import { removeExtensors } from '../../utils/highlights/drawExtensors';
+import removeSelectionMenu from '../../utils/highlights/removeSelectionMenu';
+import removeNotesDialog from '../../utils/highlights/removeNotesDialog';
 
 /**
  * Sets viewer text align mode
@@ -27,8 +31,12 @@ const setTextAlign: ActionDispatcher<SetTextAlign> = async ({ state, action }) =
     const { contentWrapperNode } = state as Required<State>;
     return new Promise<Partial<State>>((resolve) => {
       setCSSProperty('viewer-margin-top', '200vh');
-      removeUserHighlights(state);
       clean();
+      clearSelection(state);
+      removeExtensors(state);
+      removeSelectionMenu(state);
+      removeNotesDialog(state);
+      removeUserHighlights(state);
       window.requestAnimationFrame(() => {
         if (textAlign) {
           contentWrapperNode.classList.add('rg-force-text-align');

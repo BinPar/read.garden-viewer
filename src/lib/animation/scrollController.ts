@@ -6,7 +6,6 @@ import { DispatchAPIAction } from '../../model/actions/common';
 import { SelectionInfo, SyntheticEvent } from '../../model/dom';
 import { State } from '../../model/state';
 import { drawHighlights } from '../../utils/highlights';
-import removeLayerHighlights from '../../utils/highlights/removeLayerHighlights';
 import setCSSProperty from '../../utils/setCSSProperty';
 import { updateState } from '../state';
 import getCoordinatesFromEvent from './getCoordinatesFromEvent';
@@ -24,6 +23,7 @@ import removeNotesDialog from '../../utils/highlights/removeNotesDialog';
 import drawExtensors, { removeExtensors } from '../../utils/highlights/drawExtensors';
 import extendSelection from '../../utils/highlights/extendSelection';
 import clearNativeSelection from '../../utils/highlights/clearNativeSelection';
+import clearSelection from '../../utils/highlights/clearSelection';
 
 const scrollController = (
   state: State,
@@ -47,7 +47,7 @@ const scrollController = (
   let mobileSelectionTimeout: NodeJS.Timeout | null = null;
 
   const onDragStart = (ev: MouseEvent | TouchEvent): void => {
-    removeLayerHighlights(selectionHighlightsNode);
+    clearSelection();
     removeExtensors(state);
     removeSelectionMenu(state);
     removeNotesDialog(state);

@@ -39,22 +39,14 @@ const drawHighlights = (
       x: rect.right,
       y: rect.bottom,
     });
-    let left = zoomPanelCoordinates.x;
-    let width = zoomPanelEndCoordinates.x - zoomPanelCoordinates.x;
+    const left = zoomPanelCoordinates.x - 2.5;
+    const width = zoomPanelEndCoordinates.x - zoomPanelCoordinates.x + 5;
     let top = zoomPanelCoordinates.y;
     let height = zoomPanelEndCoordinates.y - zoomPanelCoordinates.y;
-    const heightGrowth = (height + 8) / height;
-    if (heightGrowth <= 1.5) {
-      left -= 3;
-      width += 6;
-      top -= 4;
-      height += 8;
-    } else {
-      left -= 1;
-      width += 2;
-      top -= 1;
-      height += 2;
-    }
+    const heightMargin = Math.min(Math.round(height * 0.35), 8);
+    const topMargin = Math.round(heightMargin / 2);
+    top -= topMargin;
+    height += heightMargin;
     highlight.style.left = `${left}px`;
     highlight.style.width = `${width}px`;
     highlight.style.top = `${top}px`;

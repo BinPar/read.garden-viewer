@@ -7,8 +7,7 @@ import { highlightTerms } from './highlights/search';
 /**
  * Loads contents in background. Meant for fixed viewer in scroll mode
  */
-const loadContentsInBackground = async (): Promise<void> => {
-  const state = getState();
+const loadContentsInBackground = async (state = getState()): Promise<void> => {
   if (state.layout === LayoutTypes.Flow) {
     throw new Error('Loading contents in background is not available in flow layout');
   }
