@@ -24,7 +24,9 @@ const setupHandlers = async (state: State, dispatch: DispatchAPIAction): Promise
     const onPageChange: AddOnChangeEvent<string> = {
       type: 'addOnChangeEvent',
       propertyName: 'contentSlug',
-      event: loadContentsInBackground,
+      event: () => {
+        loadContentsInBackground(state);
+      },
     };
     await dispatch(onPageChange);
   }
