@@ -25,11 +25,12 @@ const getSearchHighlightsRanges = (contentWrapper: HTMLElement, terms: string[])
     return [];
   }
   const sortedTerms = getSortedTerms(terms);
-  setCSSProperty('user-select', 'auto');
+  setCSSProperty('user-select', 'text');
   setCSSProperty('user-select-end', 'auto');
   // Reset current caret position
   const currentSelection = window.getSelection();
   const range = document.createRange();
+  const resultRanges = new Array<Range>();
   if (currentSelection && range) {
     currentSelection.removeAllRanges();
     const firstTextNode = getFirstTextNode(contentWrapper) || contentWrapper;
@@ -40,7 +41,6 @@ const getSearchHighlightsRanges = (contentWrapper: HTMLElement, terms: string[])
     extendToWord(currentSelection, contentWrapper);
     let searching = true;
     let rangeIsOutside = false;
-    const resultRanges = new Array<Range>();
     let currentText = currentSelection.toString();
     currentText = currentText.trim().replace(/([.,/#¡!¿?$%^&*;:{}=«»\-_`~()\][])+$/g, '');
 
@@ -158,10 +158,9 @@ const getSearchHighlightsRanges = (contentWrapper: HTMLElement, terms: string[])
       }
     }
     currentSelection.removeAllRanges();
-    setCSSProperty('user-select-end', 'none');
-    return resultRanges;
   }
-  return [];
+  setCSSProperty('user-select-end', 'none');
+  return resultRanges;
 };
 
 export default getSearchHighlightsRanges;

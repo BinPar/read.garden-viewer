@@ -1,3 +1,4 @@
+/* eslint-disable no-bitwise */
 /* eslint-disable no-param-reassign */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { SetReadMode } from '../../model/actions/global';
@@ -20,6 +21,9 @@ import { OnHighlightClick, OnUserSelect } from '../../model/events';
 import getClickedHighlight from './getClickedHighlight';
 import removeSelectionMenu from '../../utils/highlights/removeSelectionMenu';
 import removeNotesDialog from '../../utils/highlights/removeNotesDialog';
+import drawExtensors, { removeExtensors } from '../../utils/highlights/drawExtensors';
+import extendSelection from '../../utils/highlights/extendSelection';
+import clearNativeSelection from '../../utils/highlights/clearNativeSelection';
 
 const scrollController = (
   state: State,
@@ -38,20 +42,20 @@ const scrollController = (
   const { selectionHighlightsNode } = state as Required<State>;
   let initialSelection: SelectionInfo | null = null;
   let currentSelection: Range | null = null;
-
-  const isPreviousThanSelection = (event: SyntheticEvent): boolean => {
-    if (initialSelection) {
-      const { top, bottom, left } = initialSelection;
-      return top > event.clientY || (left > event.clientX && bottom > event.clientY);
-    }
-    return false;
-  };
+  let isSelecting = false;
+  let mobileSelection = false;
+  let mobileSelectionTimeout: NodeJS.Timeout | null = null;
 
   const onDragStart = (ev: MouseEvent | TouchEvent): void => {
+    removeLayerHighlights(selectionHighlightsNode);
+    removeExtensors(state);
+    removeSelectionMenu(state);
+    removeNotesDialog(state);
     if (ev.type === 'touchstart' || (ev as MouseEvent).button === 0) {
-      removeLayerHighlights(selectionHighlightsNode);
-      removeSelectionMenu(state);
-      removeNotesDialog(state);
+      setCSSProperty('user-select', 'none');
+      initialSelection = null;
+      currentSelection = null;
+      isSelecting = false;
       const syntheticEvent = getSyntheticEvent(ev);
       const clickedHighlight =
         !state.config.disableSelection &&
@@ -71,25 +75,38 @@ const scrollController = (
           handler(onHighlightClick);
           updateState({
             lastClickCoords: { x: syntheticEvent.clientX, y: syntheticEvent.clientY },
+            highlightClicked: true,
           });
           return;
         }
       }
-      const wordSelection = !state.config.disableSelection && getWordSelection(ev, syntheticEvent);
+      setCSSProperty('user-select', 'text');
+      const wordSelection =
+        !state.config.disableSelection && getWordSelection(state, ev, syntheticEvent);
+      // alert(JSON.stringify({ ...syntheticEvent, wordSelection: !!wordSelection }));
+      setCSSProperty('user-select', 'none');
       if (wordSelection) {
-        ev.preventDefault();
         ev.stopPropagation();
-        const { top, bottom, left } = wordSelection.getBoundingClientRect();
         initialSelection = {
-          top,
-          bottom,
-          left,
           startContainer: wordSelection.startContainer,
           startOffset: wordSelection.startOffset,
           endContainer: wordSelection.endContainer,
           endOffset: wordSelection.endOffset,
         };
-        return;
+        if (ev.type === 'touchstart') {
+          mobileSelectionTimeout = setTimeout(() => {
+            mobileSelection = true;
+            mobileSelectionTimeout = null;
+            currentSelection = wordSelection;
+            updateState({
+              selectingText: true,
+            });
+          }, 400);
+        } else {
+          ev.preventDefault();
+          isSelecting = true;
+          return;
+        }
       }
       mouseDown = true;
       lastX = null;
@@ -151,9 +168,12 @@ const scrollController = (
   };
 
   const onDragEnd = (ev: MouseEvent | TouchEvent): void => {
+    if (mobileSelectionTimeout) {
+      clearTimeout(mobileSelectionTimeout);
+      mobileSelectionTimeout = null;
+    }
     if (mouseDown) {
       mouseDown = false;
-      setCSSProperty('user-select', 'auto');
       let inertialDelta = lastDelta;
       let altInertialDelta = altDelta;
       updateScrollDeltas(ev);
@@ -197,36 +217,61 @@ const scrollController = (
         }
       }, 0);
     }
-    if (initialSelection) {
-      if (currentSelection) {
+    if (initialSelection && currentSelection) {
+      ev.preventDefault();
+      updateState({
+        currentSelection,
+      });
+      if (mobileSelection) {
+        const highlights = drawHighlights(selectionHighlightsNode, [currentSelection]);
+        mobileSelection = false;
+        drawExtensors(highlights, currentSelection, state);
+      } else {
         const syntheticEvent = getSyntheticEvent(ev);
         updateState({
-          currentSelection,
           lastClickCoords: { x: syntheticEvent.clientX, y: syntheticEvent.clientY },
         });
-        setTimeout((): void => {
-          updateState({
-            selectingText: false,
-          });
-        },0);
-        if (
-          !currentSelection.collapsed &&
-          currentSelection.toString().trim() &&
-          state.config.eventHandler
-        ) {
-          const event: OnUserSelect = {
-            type: 'onUserSelect',
-            slug: state.slug,
-          };
-          state.config.eventHandler(event);
-        }
+        drawHighlights(selectionHighlightsNode, [currentSelection]);
       }
-      initialSelection = null;
-      currentSelection = null;
+      setCSSProperty('user-select', 'none');
+      clearNativeSelection();
+      setTimeout((): void => {
+        updateState({
+          selectingText: false,
+        });
+      }, 0);
+      if (
+        !currentSelection.collapsed &&
+        currentSelection.toString().trim() &&
+        state.config.eventHandler
+      ) {
+        const event: OnUserSelect = {
+          type: 'onUserSelect',
+          slug: state.slug,
+        };
+        state.config.eventHandler(event);
+      }
     }
+    if (state.highlightClicked) {
+      setTimeout(() => {
+        updateState({ highlightClicked: false });
+      }, 0);
+    }
+    initialSelection = null;
+    currentSelection = null;
+    mobileSelection = false;
+    isSelecting = false;
   };
 
   const onDragMove = (ev: MouseEvent | TouchEvent): void => {
+    if (mobileSelectionTimeout) {
+      updateState({
+        selectingText: false,
+      });
+      clearTimeout(mobileSelectionTimeout);
+      mobileSelectionTimeout = null;
+      mobileSelection = false;
+    }
     if (mouseDown) {
       ev.stopPropagation();
       if (!state.dragging) {
@@ -248,29 +293,19 @@ const scrollController = (
       scroll.forceUpdate = false;
       lastMoveMilliseconds = new Date().getTime();
     }
-    if (initialSelection) {
+    if (isSelecting && initialSelection) {
+      setCSSProperty('user-select', 'text');
       if (!state.selectingText) {
         updateState({
           selectingText: true,
         });
       }
       const event = getSyntheticEvent(ev);
-      const wordSelection = getWordSelection(ev, event);
+      const wordSelection = getWordSelection(state, ev, event);
       if (wordSelection) {
-        const isPrevious = isPreviousThanSelection(event);
-        const { startContainer, startOffset, endContainer, endOffset } = initialSelection;
-        const backupRange = wordSelection.cloneRange();
-        if (isPrevious) {
-          wordSelection.setEnd(endContainer, endOffset);
-          if (!wordSelection.isPointInRange(backupRange.startContainer, backupRange.startOffset)) {
-            wordSelection.setStart(startContainer, startOffset);
-            wordSelection.setEnd(backupRange.endContainer, backupRange.endOffset);
-          }
-        } else {
-          wordSelection.setStart(startContainer, startOffset);
-        }
-        drawHighlights(selectionHighlightsNode, [wordSelection]);
-        currentSelection = wordSelection;
+        const { range } = extendSelection(wordSelection, initialSelection);
+        currentSelection = range;
+        drawHighlights(selectionHighlightsNode, [currentSelection]);
       }
     }
   };

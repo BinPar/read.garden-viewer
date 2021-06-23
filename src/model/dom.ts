@@ -9,9 +9,6 @@ export interface SyntheticEvent {
 }
 
 export interface SelectionInfo {
-  top: number;
-  bottom: number;
-  left: number;
   startContainer: Node;
   startOffset: number;
   endContainer: Node;

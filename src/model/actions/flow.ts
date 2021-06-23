@@ -74,6 +74,7 @@ export interface NavigateToNextChapter extends Action {
 
 export interface NavigateToPreviousChapter extends Action {
   type: 'navigateToPreviousChapter';
+  goToEnd?: boolean;
 }
 
 /**

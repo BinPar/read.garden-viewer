@@ -8,10 +8,11 @@ const navigateToNextChapter: ActionDispatcher<NavigateToNextChapter> = async ({ 
     throw new Error('Action not allowed in fixed mode');
   }
   if (state.config.eventHandler) {
+    const [currentContentSlug] = Array.from(state.positionBySlug.keys()).slice(-1);
     const event: LoadNextChapter = {
       type: 'loadNextChapter',
       slug: state.slug,
-      currentContentSlug: state.contentSlug,
+      currentContentSlug,
     };
     state.config.eventHandler(event);
   }

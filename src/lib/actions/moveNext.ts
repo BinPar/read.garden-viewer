@@ -3,28 +3,27 @@ import { updateState } from '../state';
 import navigateToNextChapter from './navigateToNextChapter';
 
 const moveNext: ActionDispatcher<MoveNext> = async ({ state }) => {
-  if (state.scrollMode !== 'fixed') {
-    const { contentSlug, positionBySlug, slugByPosition, lastPosition } = state;
-    const position = positionBySlug.get(contentSlug);
-    if (position !== undefined) {
-      if (state.layout === LayoutTypes.Flow) {
-        const { totalColumnWidth, columnsInViewport } = state;
-        const desiredPosition = position + totalColumnWidth * columnsInViewport;
-        if (desiredPosition <= lastPosition) {
-          const newContentSlug = slugByPosition.get(desiredPosition);
-          if (newContentSlug) {
-            updateState({
-              contentSlug: newContentSlug,
-            });
-          }
-        } else {
-          return navigateToNextChapter({
-            action: {
-              type: 'navigateToNextChapter',
-            },
-            state,
-          });
-        }
+  const { scrollLeft, scrollTop } = state;
+  if (state.layout === LayoutTypes.Flow) {
+    const { lastPosition, totalColumnWidth, columnsInViewport, slugByPosition } = state;
+    const movementWidth = totalColumnWidth * columnsInViewport;
+    const rawPosition =
+      ((state.scrollMode === 'horizontal' ? scrollLeft : scrollTop) * -1) / state.scale;
+    const position = Math.round(rawPosition / movementWidth) * movementWidth;
+    if (state.scrollMode === 'horizontal') {
+      const desiredPosition = position + movementWidth;
+      if (desiredPosition > lastPosition) {
+        return navigateToNextChapter({
+          action: {
+            type: 'navigateToNextChapter',
+          },
+          state,
+        });
+      }
+      if (slugByPosition.has(desiredPosition)) {
+        updateState({
+          forceScroll: desiredPosition,
+        });
       }
     }
   }

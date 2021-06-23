@@ -1,6 +1,6 @@
 import { ActionDispatcher } from '../../model/actions/actionDispatcher';
 import { AppendNewContent } from '../../model/actions/global';
-import { State } from '../../model/state';
+import { GlobalState, ScrolledState, State } from '../../model/state';
 import { LayoutTypes } from '../../model/viewerSettings';
 
 import setCSSProperty from '../../utils/setCSSProperty';
@@ -76,6 +76,11 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
               };
               if (replace) {
                 finalPartialState.dynamicStyleNode = newLink;
+              }
+              if (action.goToEnd) {
+                const tempState = recalculateState as GlobalState & ScrolledState;
+                finalPartialState.forceScroll =
+                  tempState.lastPosition! - (tempState.lastPosition! % tempState.containerWidth!);
               }
               resolve(finalPartialState);
               await redrawUserHighlights(state);

@@ -37,6 +37,7 @@ const loadPreviousChapter: EventHandler<LoadPreviousChapter> = async (event, dis
     cssURL: `${testingConfig.baseURL}books/${slug}/${previousContent.cssUrl}`,
     htmlContent: html.replace('<div', `<div class="c${chapterNumber}"`),
     chapterNumber,
+    goToEnd: event.goToEnd,
   };
   dispatch(action);
 };
