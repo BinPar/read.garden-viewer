@@ -140,17 +140,15 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
         window.requestAnimationFrame(() => {
           const done = async (): Promise<void> => {
             container.classList.remove('rg-loading');
-            const recalculateState = await recalculate(state);
             setCSSProperty('viewer-margin-top', '0');
             const finalPartialState: Partial<State> = {
-              ...recalculateState,
               slug: action.slug,
               cssLoaded: true,
             };
             updateState({ loadingContent: false });
             resolve(finalPartialState);
             highlightTerms(state.searchTerms);
-            loadContentsInBackground();
+            loadContentsInBackground(state);
           };
           const checkFonts = () => {
             dynamicStyleNode!.removeEventListener('load', checkFonts);
