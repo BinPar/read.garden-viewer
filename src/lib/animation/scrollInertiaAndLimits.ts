@@ -55,7 +55,7 @@ const scrollInertiaAndLimits = (
     }
   } else if (state.layout === LayoutTypes.Flow) {
     max = state.totalHeight - window.innerHeight;
-  } else {    
+  } else {
     let scrollLimits: MinAndMaxScroll;
     if (isAltScroll) {
       scrollLimits = getMinAndMaxAltScroll(state);
@@ -78,7 +78,7 @@ const scrollInertiaAndLimits = (
       const navigateToPrevious: NavigateToPreviousChapter = {
         type: 'navigateToPreviousChapter',
         goToEnd: true,
-      }
+      };
       dispatch(navigateToPrevious);
     } else if (scroll.current <= scrollLimits.minScroll) {
       dispatch({ type: 'navigateToNextChapter' });

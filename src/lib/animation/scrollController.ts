@@ -12,7 +12,7 @@ import { updateState } from '../state';
 import getCoordinatesFromEvent from './getCoordinatesFromEvent';
 import getMinAndMaxScroll, { getMinAndMaxAltScroll } from './getMinAndMaxScroll';
 import getSyntheticEvent from './getSyntheticEvent';
-import { InterpolationValue, zoom, scale } from './interpolationValues';
+import { InterpolationValue, zoom, scale, leftCorrector, topCorrector } from './interpolationValues';
 import getWordSelection from './getWordSelection';
 import scrollInertiaAndLimits from './scrollInertiaAndLimits';
 import { LayoutTypes } from '../../model/viewerSettings';
@@ -356,8 +356,7 @@ const scrollController = (
           altDelta = ev.deltaX * -1;
         }
         altScroll.current += altDelta;
-        const altScrollLimits = getMinAndMaxAltScroll(state);
-
+        const altScrollLimits = getMinAndMaxAltScroll(state);        
         if (altScroll.current > altScrollLimits.maxScroll) {
           altScroll.current = altScrollLimits.maxScroll;
           altScroll.speed = 0;

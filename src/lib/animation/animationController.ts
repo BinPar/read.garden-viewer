@@ -19,6 +19,7 @@ import {
 } from './interpolationValues';
 import recalculateCurrentPage from './recalculateCurrentPage';
 import scrollController from './scrollController';
+import { getSkipPageChange, removeSkipPageChange } from './skipPageChange';
 
 const animationController = (state: State, dispatch: DispatchAPIAction): void => {
   let zoomUpdatedByApplyCSSProps = false;
@@ -151,6 +152,7 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
     if (targetSlugScrollPosition !== null) {
       scroll.current = targetSlugScrollPosition;
       scroll.target = scroll.current;
+      console.log('Changed by reset page');
     }
     scroll.speed = 0;
   };
@@ -158,6 +160,7 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
   const onScrollModeChange = (): void => {
     setTimeout(() => {
       onReadModeChangeEvent(true);
+      console.log('Changed by scroll mode');
       scroll.current = getScrollFromContentSlug(state) ?? 0;
       scroll.target = scroll.current;
       scroll.speed = 0;
@@ -166,10 +169,16 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
   };
 
   const onContentSlugChanged = (slug: string): void => {
+    if (getSkipPageChange()) {
+      removeSkipPageChange();
+      return;
+    }
     const targetSlugScrollPosition = getScrollFromContentSlug(state, slug);
     if (targetSlugScrollPosition !== null && state.forceScroll === undefined) {
+      console.log('Changed by content slug');
       scroll.target = targetSlugScrollPosition;
     }
+
     executeTransitions();
   };
 
@@ -189,6 +198,7 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
       }
       zoom.current = zoom.target;
     }
+    console.log('chapter change');
     resetPageProps();
     applyCSSProps();
   };
@@ -204,6 +214,7 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
       }
       zoom.current = zoom.target;
     }
+    console.log('position by slug change');
     resetPageProps();
     applyCSSProps();
   };
@@ -219,14 +230,14 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
 
   const onForceScrollChange = (newScroll: number | undefined): void => {
     if (newScroll !== undefined) {
+      console.log('Changed by force scroll');
       scroll.target = newScroll * -1;
       updateState({
         forceScroll: undefined,
       });
       executeTransitions();
     }
-  }
-
+  };
 
   addOnChangeEventListener('forceScroll', onForceScrollChange);
   addOnChangeEventListener('zoom', onZoomChange);

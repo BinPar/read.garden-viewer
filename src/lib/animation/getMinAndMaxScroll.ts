@@ -27,8 +27,8 @@ const getMinAndMaxScroll = (state: State, forceMargin: number | null = null): Mi
         });
         minScroll = margin * -1 - max;
         if (state.layout === LayoutTypes.Fixed) {
-          const additionalMargin  = (window.innerWidth) / 2;
-          maxScroll += additionalMargin;
+          maxScroll = 0;
+          minScroll = -1 * state.totalWidth;
         }
       }
     } else if (state.scrollMode === 'vertical') {
@@ -43,11 +43,18 @@ const getMinAndMaxScroll = (state: State, forceMargin: number | null = null): Mi
 export const getMinAndMaxAltScroll = (state: State): MinAndMaxScroll => {
   if (state.layout === LayoutTypes.Fixed) {
     if (state.scrollMode === 'horizontal') {
-      const verticalCenter = (window.innerHeight - state.maxHeight) / 2;
-      const midMaxHeight = (state.maxHeight * state.zoom) / 2;
+      const additional = (window.innerHeight - state.maxHeight * state.zoom) / 2;      
+      if (additional >= 0) {
+        return {
+          maxScroll: 0,
+          minScroll: 0,
+        }
+      }
+      const maxScroll = -additional / 2;
+      const minScroll = additional / 2;
       return {
-        maxScroll: verticalCenter + midMaxHeight,
-        minScroll: verticalCenter - midMaxHeight,
+        maxScroll,
+        minScroll,
       };
     }
   }

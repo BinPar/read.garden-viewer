@@ -2,11 +2,9 @@ import { State } from '../../model/state';
 import { LayoutTypes } from '../../model/viewerSettings';
 import { updateState } from '../state';
 import calculatePagePosition from './calculatePagePosition';
+import { forceSkipPageChange } from './skipPageChange';
 
-const recalculateCurrentPage = (
-  state: State,
-  currentScroll: number,
-): void => {
+const recalculateCurrentPage = (state: State, currentScroll: number): void => {
   const scrollPosition = Math.round(currentScroll * -1);
   let target: string | undefined;
   if (state.scrollMode !== 'fixed') {
@@ -14,8 +12,8 @@ const recalculateCurrentPage = (
       if (state.layout === LayoutTypes.Flow) {
         target = state.slugByPosition.get(scrollPosition);
       } else {
-        const targetScroll = calculatePagePosition(currentScroll, state);        
-        state.slugByPosition.forEach((value, key): void => {          
+        const targetScroll = calculatePagePosition(currentScroll, state) - state.margin.left - state.margin.right;
+        state.slugByPosition.forEach((value, key): void => {
           if (key <= targetScroll) {
             target = value;
           }
@@ -30,7 +28,7 @@ const recalculateCurrentPage = (
     }
   }
   if (target !== undefined) {
-    // TODO: Avoid scrolling on flow layout (multple columns for one page)
+    forceSkipPageChange();
     updateState({ contentSlug: target });
   }
 };

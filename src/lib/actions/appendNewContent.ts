@@ -69,7 +69,7 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
                 ...recalculateState,
                 layout: LayoutTypes.Flow,
                 scrollMode: state.scrollMode,
-                slug: action.slug,
+                slug: action.slug,                
                 contentSlug: action.contentSlug,
                 chapterNumber: action.chapterNumber,
                 cssLoaded: true,
