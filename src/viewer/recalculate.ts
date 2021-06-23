@@ -27,9 +27,9 @@ const recalculate = async (state: State): Promise<Partial<State>> => {
   }
   updateState({ recalculating: true });
   return new Promise<Partial<State>>((resolve): void => {
-    const { contentWrapperNode, contentPlaceholderNode } = state;
+    const { readGardenContainerNode, contentPlaceholderNode } = state;
 
-    const containerRect = contentWrapperNode!.getBoundingClientRect();
+    const containerRect = readGardenContainerNode!.getBoundingClientRect();
     const { width: containerWidth, height: containerHeight } = containerRect;
 
     const globalUpdate: Partial<GlobalState> = {
