@@ -211,7 +211,10 @@ const scrollController = (
         updateState({
           dragging: false,
         });
-        setCSSProperty('pointer-events', 'auto');
+        if (!state.animating) {
+          setCSSProperty('pointer-events', 'auto');
+          setCSSProperty('user-select', 'auto');
+        }
       }, 0);
     }
     if (initialSelection && currentSelection) {

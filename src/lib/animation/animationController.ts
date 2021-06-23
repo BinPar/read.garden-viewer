@@ -79,6 +79,10 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
       updateState({
         animating: false,
       });
+      if (!state.dragging) {
+        setCSSProperty('pointer-events', 'auto');
+        setCSSProperty('user-select', 'auto');
+      }
     }
   };
 
