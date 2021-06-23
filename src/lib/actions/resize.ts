@@ -25,7 +25,7 @@ const resize: ActionDispatcher<Resize> = async ({ state }) => {
     drawHighlights(state.searchTermsHighlightsNode, state.searchRanges);
   }
   await redrawUserHighlights(state);
-  checkCurrentPage();
+  checkCurrentPage(state);
   return recalculateUpdate;
 };
 
