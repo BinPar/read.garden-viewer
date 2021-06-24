@@ -223,6 +223,10 @@ export interface GlobalState {
    * Existing highlight has been clicked
    */
   highlightClicked?: boolean;
+  /**
+   * Viewer has been unmounted
+   */
+  unmounted?: boolean;
 }
 
 /**
@@ -274,6 +278,14 @@ export interface FixedContentInfo {
    * Content CSS URL
    */
   cssURL?: string;
+  /**
+   * Next content slug (undefined for last page/content)
+   */
+  next?: string;
+  /**
+   * Prev content slug (undefined for first page/content)
+   */
+  prev?: string;
 }
 
 export interface FixedViewerContentInfo extends FixedContentInfo {
@@ -367,7 +379,7 @@ export interface FixedState {
   /**
    * Viewer is loading content
    */
-  loadingContent: boolean;
+  loadingContent?: string;
   /**
    * Loaded CSS URLs
    */

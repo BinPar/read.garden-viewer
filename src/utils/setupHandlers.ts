@@ -4,6 +4,7 @@ import { LoadNewContent } from '../model/events';
 import { State } from '../model/state';
 import { LayoutTypes } from '../model/viewerSettings';
 import loadContentsInBackground from './loadContentsInBackground';
+import layoutSetup from '../viewer/layoutSetup';
 
 const setupHandlers = async (state: State, dispatch: DispatchAPIAction): Promise<void> => {
   if (state.config.initialContent) {
@@ -12,13 +13,15 @@ const setupHandlers = async (state: State, dispatch: DispatchAPIAction): Promise
       ...state.config.initialContent,
     };
     await dispatch(action);
-  } else if (state.config.eventHandler) {
+  } else if (state.config.eventHandler && state.layout === LayoutTypes.Flow) {
     const loadNewContent: LoadNewContent = {
       type: 'loadNewContent',
       slug: state.config.slug,
       contentSlug: state.config.contentSlug,
     };
     state.config.eventHandler(loadNewContent);
+  } else if (state.layout === LayoutTypes.Fixed) {
+    layoutSetup(state);
   }
   if (state.layout === LayoutTypes.Fixed) {
     const onPageChange: AddOnChangeEvent<string> = {
@@ -29,6 +32,14 @@ const setupHandlers = async (state: State, dispatch: DispatchAPIAction): Promise
       },
     };
     await dispatch(onPageChange);
+    const onLayoutReady: AddOnChangeEvent<boolean> = {
+      type: 'addOnChangeEvent',
+      propertyName: 'wrapperReady',
+      event: () => {
+        loadContentsInBackground(state);
+      },
+    };
+    await dispatch(onLayoutReady);
   }
 };
 

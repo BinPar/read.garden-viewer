@@ -7,7 +7,6 @@ const defaultFixed: FixedState = {
   contentsBySlug: new Map<string, FixedViewerContentInfo>(),
   contentsInfo: new Array<FixedViewerContentInfo>(),
   currentContentIndex: 0,
-  loadingContent: true,
   loadedCssUrls: new Set<string>(),
   zoom: 1,
   zoomSpeed: 0.01,

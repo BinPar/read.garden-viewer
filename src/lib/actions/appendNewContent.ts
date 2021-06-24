@@ -145,10 +145,12 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
               slug: action.slug,
               cssLoaded: true,
             };
-            updateState({ loadingContent: false });
+            if (state.loadingContent === action.contentSlug) {
+              updateState({ loadingContent: '' });
+              loadContentsInBackground(state);
+            }
             resolve(finalPartialState);
             highlightTerms(state.searchTerms);
-            loadContentsInBackground(state);
           };
           const checkFonts = () => {
             dynamicStyleNode!.removeEventListener('load', checkFonts);

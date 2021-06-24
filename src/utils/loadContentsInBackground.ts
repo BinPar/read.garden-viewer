@@ -11,7 +11,7 @@ const loadContentsInBackground = async (state = getState()): Promise<void> => {
   if (state.layout === LayoutTypes.Flow) {
     throw new Error('Loading contents in background is not available in flow layout');
   }
-  if (!state.loadingContent) {
+  if (!state.unmounted && !state.loadingContent) {
     const {
       contentSlug,
       contentsByOrder,
@@ -31,14 +31,14 @@ const loadContentsInBackground = async (state = getState()): Promise<void> => {
       return !content.html;
     });
     if (indexToLoad !== undefined) {
-      const content = contentsByOrder.get(currentContentIndex + indexToLoad)!;
-      const event: LoadNewContent = {
-        type: 'loadNewContent',
-        slug: state.slug,
-        contentSlug: content.slug,
-      };
-      if (state.config.eventHandler) {
-        updateState({ loadingContent: true });
+      const content = contentsByOrder.get(currentContentIndex + indexToLoad);
+      if (state.config.eventHandler && content) {
+        const event: LoadNewContent = {
+          type: 'loadNewContent',
+          slug: state.slug,
+          contentSlug: content.slug,
+        };
+        updateState({ loadingContent: content.slug });
         state.config.eventHandler(event);
       }
     } else {
