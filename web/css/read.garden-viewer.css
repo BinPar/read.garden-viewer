@@ -1,6 +1,7 @@
 :root {
   --debug-viewer-safe-area: 0;
   --safe-area-border-width: calc(2px * var(--debug-viewer-safe-area));
+  --page-display: none;
 }
 
 * {
@@ -83,12 +84,8 @@ div.rg-content-wrapper #rg-content-placeholder > div {
   overflow: hidden;
 }
 
-.rg-fixed-layout div.rg-content-wrapper #rg-content-placeholder > div {
-  outline: 4px dashed red;
-}
-
 .rg-fixed-layout div.rg-content-wrapper #rg-content-placeholder > div > .pf {
-  display: none;
+  display: var(--page-display);
 }
 
 div.rg-content-wrapper #rg-content-placeholder * {

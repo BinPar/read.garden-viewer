@@ -19,7 +19,6 @@ import {
 } from './interpolationValues';
 import recalculateCurrentPage from './recalculateCurrentPage';
 import scrollController from './scrollController';
-import { getSkipPageChange, removeSkipPageChange } from './skipPageChange';
 
 const animationController = (state: State, dispatch: DispatchAPIAction): void => {
   let zoomUpdatedByApplyCSSProps = false;
@@ -70,6 +69,7 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
   const interpolateToTargetValues = (): void => {
     if (interpolationValues.filter((value) => interpolate(state, value)).length > 0) {
       applyCSSProps();
+      recalculateCurrentPage(state, scroll.current, true);
       // Execute the interpolation
       window.requestAnimationFrame(interpolateToTargetValues);
     } else {
@@ -160,7 +160,6 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
   const onScrollModeChange = (): void => {
     setTimeout(() => {
       onReadModeChangeEvent(true);
-      console.log('Changed by scroll mode');
       scroll.current = getScrollFromContentSlug(state) ?? 0;
       scroll.target = scroll.current;
       scroll.speed = 0;
@@ -169,13 +168,8 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
   };
 
   const onContentSlugChanged = (slug: string): void => {
-    if (getSkipPageChange()) {
-      removeSkipPageChange();
-      return;
-    }
     const targetSlugScrollPosition = getScrollFromContentSlug(state, slug);
     if (targetSlugScrollPosition !== null && state.forceScroll === undefined) {
-      console.log('Changed by content slug');
       scroll.target = targetSlugScrollPosition;
     }
 
@@ -198,7 +192,6 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
       }
       zoom.current = zoom.target;
     }
-    console.log('chapter change');
     resetPageProps();
     applyCSSProps();
   };
@@ -214,7 +207,6 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
       }
       zoom.current = zoom.target;
     }
-    console.log('position by slug change');
     resetPageProps();
     applyCSSProps();
   };

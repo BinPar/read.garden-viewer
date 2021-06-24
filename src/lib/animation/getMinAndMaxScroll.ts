@@ -1,5 +1,6 @@
 import { State } from '../../model/state';
 import { LayoutTypes } from '../../model/viewerSettings';
+import { zoom, leftCorrector, topCorrector } from './interpolationValues';
 
 export interface MinAndMaxScroll {
   minScroll: number;
@@ -11,7 +12,7 @@ const getMinAndMaxScroll = (state: State, forceMargin: number | null = null): Mi
   let minScroll = margin * -1;
   let maxScroll = margin;
   if (state.layout === LayoutTypes.Flow || state.layout === LayoutTypes.Fixed) {
-    if (state.scrollMode === 'horizontal') {      
+    if (state.scrollMode === 'horizontal') {
       if (state.slugByPosition) {
         let max = 0;
         let i = 0;
@@ -25,10 +26,12 @@ const getMinAndMaxScroll = (state: State, forceMargin: number | null = null): Mi
             max = key;
           }
         });
+
         minScroll = margin * -1 - max;
         if (state.layout === LayoutTypes.Fixed) {
-          maxScroll = 0;
-          minScroll = -1 * state.totalWidth;
+          const correctorFix = -leftCorrector.current / zoom.current;
+          maxScroll = correctorFix + state.margin.left * zoom.current;
+          minScroll = -1 * state.totalWidth + correctorFix - state.margin.left * zoom.current;
         }
       }
     } else if (state.scrollMode === 'vertical') {
@@ -36,29 +39,32 @@ const getMinAndMaxScroll = (state: State, forceMargin: number | null = null): Mi
       maxScroll = margin;
       minScroll = window.innerHeight - state.totalHeight - margin;
     }
-  }  
+  }
   return { minScroll, maxScroll };
 };
 
 export const getMinAndMaxAltScroll = (state: State): MinAndMaxScroll => {
   if (state.layout === LayoutTypes.Fixed) {
     if (state.scrollMode === 'horizontal') {
-      const additional = (window.innerHeight - state.maxHeight * state.zoom) / 2;      
+      const additional = (window.innerHeight - state.maxHeight * state.zoom) / 2;
+      const correctorFix = 0; // -topCorrector.current *  zoom.current;
+      // TODO: Aquí
       if (additional >= 0) {
         return {
-          maxScroll: 0,
-          minScroll: 0,
-        }
+          maxScroll: correctorFix,
+          minScroll: correctorFix,
+        };
       }
-      const maxScroll = -additional / 2;
-      const minScroll = additional / 2;
+
+      const maxScroll = -additional / 2 + correctorFix;
+      const minScroll = additional / 2 + correctorFix;
       return {
         maxScroll,
         minScroll,
       };
     }
   }
-  return { minScroll: 0, maxScroll : 0};
+  return { minScroll: 0, maxScroll: 0 };
 };
 
 export default getMinAndMaxScroll;
