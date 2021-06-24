@@ -26,14 +26,14 @@ const recalculateCurrentPage = (state: State, currentScroll: number, avoidUpdate
         const targetScale = Math.abs(scale.current * zoom.current);
 
         const targetScroll =
-          calculatePagePosition(currentScroll, state) - state.margin.left / targetScale;
+          calculatePagePosition(currentScroll, state) - state.margin.left / targetScale + 1;
         const baseScroll = targetScroll - state.margin.left / targetScale;
         const endScroll = targetScroll + window.screen.width / targetScale / 2;
         let startPage = 0;
         let endPage = -1;
         let pageCounter = 0;
         state.slugByPosition.forEach((value, key): void => {
-          if (key <= baseScroll) {
+          if (key <= baseScroll)   {
             startPage = pageCounter;
           }
           if (key <= targetScroll) {
