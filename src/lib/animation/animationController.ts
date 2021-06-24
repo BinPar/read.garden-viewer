@@ -69,6 +69,7 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
   const interpolateToTargetValues = (): void => {
     if (interpolationValues.filter((value) => interpolate(state, value)).length > 0) {
       applyCSSProps();
+      recalculateCurrentPage(state, scroll.current, true);
       // Execute the interpolation
       window.requestAnimationFrame(interpolateToTargetValues);
     } else {
@@ -153,6 +154,7 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
       scroll.target = scroll.current;
     }
     scroll.speed = 0;
+    recalculateCurrentPage(state, scroll.current, true);
   };
 
   const onScrollModeChange = (): void => {
@@ -170,6 +172,7 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
     if (targetSlugScrollPosition !== null && state.forceScroll === undefined) {
       scroll.target = targetSlugScrollPosition;
     }
+
     executeTransitions();
   };
 
@@ -225,8 +228,7 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
       });
       executeTransitions();
     }
-  }
-
+  };
 
   addOnChangeEventListener('forceScroll', onForceScrollChange);
   addOnChangeEventListener('zoom', onZoomChange);

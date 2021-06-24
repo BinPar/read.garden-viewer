@@ -17,7 +17,7 @@ const defaultConfig: DefaultConfig = {
   animationInertia: 20,
   zoom: {
     max: 4,
-    min: 0.1,
+    min: 0.5,
     steps: [0.1, 0.2, 0.3, 0.4, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.5, 3, 3.5, 4],
   },
   loadedContentsNumber: 5,

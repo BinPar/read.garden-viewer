@@ -11,7 +11,7 @@ import { updateState } from '../state';
 import getCoordinatesFromEvent from './getCoordinatesFromEvent';
 import getMinAndMaxScroll, { getMinAndMaxAltScroll } from './getMinAndMaxScroll';
 import getSyntheticEvent from './getSyntheticEvent';
-import { InterpolationValue, zoom, scale } from './interpolationValues';
+import { InterpolationValue, zoom, scale, leftCorrector, topCorrector } from './interpolationValues';
 import getWordSelection from './getWordSelection';
 import scrollInertiaAndLimits from './scrollInertiaAndLimits';
 import { LayoutTypes } from '../../model/viewerSettings';
@@ -337,6 +337,22 @@ const scrollController = (
       } else {
         updateState({ fitMode: undefined });
         updateZoom(zoom.target - ev.deltaY * state.zoomSpeed, state);
+        const scrollLimits = getMinAndMaxScroll(state);        
+        if (scroll.current > scrollLimits.maxScroll) {
+          scroll.target = scrollLimits.maxScroll;
+          scroll.speed = 0;
+        } else if (scroll.target < scrollLimits.minScroll) {
+          scroll.target = scrollLimits.minScroll;
+          scroll.speed = 0;
+        }
+        const altScrollLimits = getMinAndMaxAltScroll(state);        
+        if (altScroll.current > altScrollLimits.maxScroll) {
+          altScroll.target = altScrollLimits.maxScroll;
+          altScroll.speed = 0;
+        } else if (altScroll.target < altScrollLimits.minScroll) {
+          altScroll.target = altScrollLimits.minScroll;
+          altScroll.speed = 0;
+        }
         executeTransitions();
       }
       ev.preventDefault();
@@ -356,8 +372,7 @@ const scrollController = (
           altDelta = ev.deltaX * -1;
         }
         altScroll.current += altDelta;
-        const altScrollLimits = getMinAndMaxAltScroll(state);
-
+        const altScrollLimits = getMinAndMaxAltScroll(state);        
         if (altScroll.current > altScrollLimits.maxScroll) {
           altScroll.current = altScrollLimits.maxScroll;
           altScroll.speed = 0;
