@@ -46,18 +46,17 @@ const getMinAndMaxScroll = (state: State, forceMargin: number | null = null): Mi
 export const getMinAndMaxAltScroll = (state: State): MinAndMaxScroll => {
   if (state.layout === LayoutTypes.Fixed) {
     if (state.scrollMode === 'horizontal') {
-      const additional = (window.innerHeight - state.maxHeight * state.zoom) / 2;
-      const correctorFix = 0; // -topCorrector.current *  zoom.current;
-      // TODO: Aquí
+      const additional = (window.innerHeight / zoom.target - state.maxHeight ) / 2;
+      const correctorFix = -topCorrector.target / zoom.target;
       if (additional >= 0) {
         return {
-          maxScroll: correctorFix,
-          minScroll: correctorFix,
+          maxScroll: correctorFix + additional,
+          minScroll: correctorFix + additional,
         };
       }
 
-      const maxScroll = -additional / 2 + correctorFix;
-      const minScroll = additional / 2 + correctorFix;
+      const maxScroll = correctorFix;
+      const minScroll = additional * 2+ correctorFix;
       return {
         maxScroll,
         minScroll,

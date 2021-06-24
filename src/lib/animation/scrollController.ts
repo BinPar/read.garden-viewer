@@ -337,6 +337,16 @@ const scrollController = (
       } else {
         updateState({ fitMode: undefined });
         updateZoom(zoom.target - ev.deltaY * state.zoomSpeed, state);
+        const altScrollLimits = getMinAndMaxAltScroll(state);        
+        if (altScroll.current > altScrollLimits.maxScroll) {
+          altScroll.target = altScrollLimits.maxScroll;
+          altScroll.speed = 0;
+          altDelta = 0;
+        } else if (altScroll.target < altScrollLimits.minScroll) {
+          altScroll.target = altScrollLimits.minScroll;
+          altScroll.speed = 0;
+          altDelta = 0;
+        }
         executeTransitions();
       }
       ev.preventDefault();
