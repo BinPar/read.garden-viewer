@@ -88,6 +88,10 @@ div.rg-content-wrapper #rg-content-placeholder > div {
   display: var(--page-display);
 }
 
+.rg-fixed-layout div.rg-content-wrapper #rg-content-placeholder > div > div.pf > div > a.l > div.w {
+  border-style: none !important;
+}
+
 div.rg-content-wrapper #rg-content-placeholder * {
   backface-visibility: unset;
   -webkit-backface-visibility: unset;
