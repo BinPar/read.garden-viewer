@@ -1,6 +1,6 @@
 import { State } from '../../model/state';
 import { LayoutTypes } from '../../model/viewerSettings';
-import { zoom, leftCorrector, topCorrector } from './interpolationValues';
+import { zoom, leftCorrector, topCorrector, scale } from './interpolationValues';
 
 export interface MinAndMaxScroll {
   minScroll: number;
@@ -29,9 +29,10 @@ const getMinAndMaxScroll = (state: State, forceMargin: number | null = null): Mi
 
         minScroll = margin * -1 - max;
         if (state.layout === LayoutTypes.Fixed) {
-          const correctorFix = -leftCorrector.current / zoom.current;
-          maxScroll = correctorFix + state.margin.left * zoom.current;
-          minScroll = -1 * state.totalWidth + correctorFix - state.margin.left * zoom.current;
+          const targetScale = Math.abs(scale.target * zoom.target);
+          const correctorFix = -leftCorrector.target / targetScale;
+          maxScroll = correctorFix;
+          minScroll = -1 * state.totalWidth + correctorFix;
         }
       }
     } else if (state.scrollMode === 'vertical') {
@@ -46,8 +47,9 @@ const getMinAndMaxScroll = (state: State, forceMargin: number | null = null): Mi
 export const getMinAndMaxAltScroll = (state: State): MinAndMaxScroll => {
   if (state.layout === LayoutTypes.Fixed) {
     if (state.scrollMode === 'horizontal') {
+      const targetScale = Math.abs(scale.target * zoom.target);
       const additional = (window.innerHeight / zoom.target - state.maxHeight ) / 2;
-      const correctorFix = -topCorrector.target / zoom.target;
+      const correctorFix = -topCorrector.target / targetScale;
       if (additional >= 0) {
         return {
           maxScroll: correctorFix + additional,
@@ -56,7 +58,7 @@ export const getMinAndMaxAltScroll = (state: State): MinAndMaxScroll => {
       }
 
       const maxScroll = correctorFix;
-      const minScroll = additional * 2+ correctorFix;
+      const minScroll = additional * 2 + correctorFix;
       return {
         maxScroll,
         minScroll,
