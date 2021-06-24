@@ -169,7 +169,8 @@ div.rg-content-wrapper #rg-content-placeholder *::selection {
   max-width: calc(100vw - var(--column-gap));
 }
 
-.rg-flow-layout div.rg-content-wrapper img.rg-ready {
+.rg-flow-layout div.rg-content-wrapper img.rg-ready,
+.rg-fixed-layout div.rg-content-wrapper div#rg-content-placeholder img {
   pointer-events: none;
   cursor: pointer;
 }
