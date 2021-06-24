@@ -152,9 +152,9 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
     if (targetSlugScrollPosition !== null) {
       scroll.current = targetSlugScrollPosition;
       scroll.target = scroll.current;
-      console.log('Changed by reset page');
     }
     scroll.speed = 0;
+    recalculateCurrentPage(state, scroll.current, true);
   };
 
   const onScrollModeChange = (): void => {
@@ -222,7 +222,6 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
 
   const onForceScrollChange = (newScroll: number | undefined): void => {
     if (newScroll !== undefined) {
-      console.log('Changed by force scroll');
       scroll.target = newScroll * -1;
       updateState({
         forceScroll: undefined,
