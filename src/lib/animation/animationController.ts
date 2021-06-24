@@ -18,7 +18,7 @@ import {
   topCorrector,
 } from './interpolationValues';
 import recalculateCurrentPage from './recalculateCurrentPage';
-import scrollController from './scrollController';
+import scrollController, { reCalcScrollLimits } from './scrollController';
 
 const animationController = (state: State, dispatch: DispatchAPIAction): void => {
   let zoomUpdatedByApplyCSSProps = false;
@@ -163,6 +163,9 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
       scroll.current = getScrollFromContentSlug(state) ?? 0;
       scroll.target = scroll.current;
       scroll.speed = 0;
+      if (state.layout === LayoutTypes.Fixed) {
+        reCalcScrollLimits(state);
+      }
       applyCSSProps();
     }, 0);
   };
@@ -193,6 +196,9 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
       zoom.current = zoom.target;
     }
     resetPageProps();
+    if (state.layout === LayoutTypes.Fixed) {
+      reCalcScrollLimits(state);
+    }
     applyCSSProps();
   };
 
@@ -216,6 +222,7 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
       zoom.target = state.zoom;
       zoom.current = zoom.target;
       zoom.forceUpdate = true;
+      reCalcScrollLimits(state);
       executeTransitions();
     }
   };
@@ -243,7 +250,7 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
   addOnChangeEventListener('containerHeight', () => onReadModeChangeEvent());
   addOnChangeEventListener('fontSize', () => onReadModeChangeEvent());
   onReadModeChangeEvent(true);
-  scrollController(state, dispatch, scroll, altScroll, executeTransitions);
+  scrollController(state, dispatch, executeTransitions);
   updateState({
     animate: true,
     animating: false,
