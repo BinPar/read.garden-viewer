@@ -28,7 +28,7 @@ const recalculateCurrentPage = (state: State, currentScroll: number, avoidUpdate
         const targetScroll =
           calculatePagePosition(currentScroll, state) - state.margin.left / targetScale + 1;
         const baseScroll = targetScroll - state.margin.left / targetScale;
-        const endScroll = targetScroll + window.screen.width / targetScale / 2;
+        const endScroll = targetScroll + window.screen.width / targetScale / 2 + state.margin.left / targetScale;
         let startPage = 0;
         let endPage = -1;
         let pageCounter = 0;
