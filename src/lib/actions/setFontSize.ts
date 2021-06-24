@@ -13,7 +13,6 @@ import removeUserHighlights from '../../utils/highlights/removeUserHighlights';
 import { clean } from '../../utils/highlights/search';
 import setCSSProperty from '../../utils/setCSSProperty';
 import recalculate from '../../viewer/recalculate';
-import { updateState } from '../state';
 
 /**
  * Sets font size to provided value and recalculates
@@ -27,14 +26,13 @@ export const setSize = async (size: number, state: State): Promise<Partial<State
   }
   return new Promise<Partial<State>>((resolve) => {
     setCSSProperty('viewer-margin-top', '200vh');
-    clean();
+    clean(state);
     clearSelection(state);
     removeExtensors(state);
     removeSelectionMenu(state);
     removeNotesDialog(state);
     removeUserHighlights(state);
     setCSSProperty('font-size', `${size}px`);
-    updateState({ fontSize: size });
     recalculate(state).then(async (recalculateUpdate): Promise<void> => {
       setCSSProperty('viewer-margin-top', '0');
       resolve({

@@ -15,7 +15,7 @@ import recalculate from '../../viewer/recalculate';
  */
 const resize: ActionDispatcher<Resize> = async ({ state }) => {
   setCSSProperty('viewer-margin-top', '200vh');
-  clean();
+  clean(state);
   removeUserHighlights(state);
   const recalculateUpdate = await recalculate(state);
   if (recalculateUpdate.recalculating === false) {

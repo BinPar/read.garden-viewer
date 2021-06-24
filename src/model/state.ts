@@ -3,6 +3,7 @@ import { Coordinates } from './highlights';
 import {
   FitMode,
   LayoutTypes,
+  LineHeight,
   Margin,
   ScrollModes,
   TextAlignModes,
@@ -425,6 +426,10 @@ export interface FlowState {
    * Current text align. `null` means auto (content's original align)
    */
   textAlign: TextAlignModes;
+  /**
+   * Line height
+   */
+  lineHeight: LineHeight;
   /**
    * Space between columns (pixels)
    */

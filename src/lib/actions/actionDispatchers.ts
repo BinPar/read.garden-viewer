@@ -30,6 +30,7 @@ import removeHighlights from './removeHighlights';
 import setHighlighterColor from './setHighlighterColor';
 import moveNext from './moveNext';
 import movePrev from './movePrev';
+import setLineHeight from './setLineHeight';
 
 /**
  * List of all action dispatchers
@@ -43,6 +44,7 @@ const actionDispatchers  = {
   setFontSize,
   setFontFamily,
   setTextAlign,
+  setLineHeight,
   resize,
   highlightSearchTerms,
   removeSearchHighlights,

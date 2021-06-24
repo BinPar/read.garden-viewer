@@ -23,7 +23,6 @@ const setInitialProperties = (state: State): void => {
   setCSSProperty('highlights-pointer-events', 'none');
   setCSSProperty('horizontal-translate', '0');
   setCSSProperty('invert-viewer-color', '0');
-  setCSSProperty('line-height', '1.5em');
   setCSSProperty('padding-top', `${state.config.paddingTop}px`);
   setCSSProperty('padding-bottom', `${state.config.paddingBottom}px`);
   setCSSProperty('pointer-events', 'auto');
@@ -46,6 +45,7 @@ const setInitialProperties = (state: State): void => {
   if (state.layout === LayoutTypes.Flow) {
     setCSSProperty('font-family', state.fontFamily);
     setCSSProperty('font-size', `${state.fontSize}px`);
+    setCSSProperty('line-height', `${state.lineHeight}em`);
     if (state.textAlign) {
       setCSSProperty('text-align', state.textAlign);
     }

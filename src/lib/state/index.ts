@@ -104,6 +104,7 @@ export const initializeState = (initialConfig: InitialConfig): void => {
       columnGap: config.columnGap,
       fontFamily: config.initialFontFamily,
       textAlign: config.initialTextAlign ?? defaultFlow.textAlign,
+      lineHeight: config.initialLineHeight ?? defaultFlow.lineHeight,
     };
   }
 

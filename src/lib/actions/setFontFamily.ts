@@ -72,7 +72,7 @@ const setFontFamily: ActionDispatcher<SetFontFamily> = async ({ state, action })
         };
       };
       setCSSProperty('viewer-margin-top', '200vh');
-      clean();
+      clean(state);
       clearSelection(state);
       removeExtensors(state);
       removeSelectionMenu(state);

@@ -2,6 +2,7 @@ import { ReadGardenEventHandler } from './events';
 import {
   FitMode,
   FontSize,
+  LineHeight,
   Margin,
   NewContent,
   ScrollModes,
@@ -63,6 +64,10 @@ export interface DefaultConfig {
    * @scope Flow
    */
   initialTextAlign: TextAlignModes;
+  /**
+   * Initial line height for first render
+   */
+  initialLineHeight: LineHeight;
   /**
    * Initial read mode for first render
    * @scope Global

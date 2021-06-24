@@ -31,7 +31,7 @@ const setTextAlign: ActionDispatcher<SetTextAlign> = async ({ state, action }) =
     const { contentWrapperNode } = state as Required<State>;
     return new Promise<Partial<State>>((resolve) => {
       setCSSProperty('viewer-margin-top', '200vh');
-      clean();
+      clean(state);
       clearSelection(state);
       removeExtensors(state);
       removeSelectionMenu(state);
