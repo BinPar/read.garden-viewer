@@ -4,8 +4,16 @@ import { updateState } from '../state';
 import calculatePagePosition from './calculatePagePosition';
 import { scale, zoom } from './interpolationValues';
 
-let lastStartPage = 0;
-let lastEndPage = 0;
+let lastStartPage = -1;
+let lastEndPage = -1;
+
+/**
+ * To be called on book change
+ */
+export const resetLastPage = (): void => {
+  lastStartPage = -1;
+  lastEndPage = -1;
+}
 
 const recalculateCurrentPage = (state: State, currentScroll: number, avoidUpdate = false): void => {
   const scrollPosition = Math.round(currentScroll * -1);
@@ -37,9 +45,11 @@ const recalculateCurrentPage = (state: State, currentScroll: number, avoidUpdate
         }
         if (state.contentPlaceholderNode && state.layout === LayoutTypes.Fixed) {          
           if (lastStartPage !== startPage && endPage !== lastEndPage) {
-            for (let i=lastStartPage;i<=lastEndPage;i++) {
-              const element = state.contentPlaceholderNode.childNodes[i] as HTMLElement;
-              element.style.setProperty('--page-display', 'none');
+            if (lastStartPage !== -1) {
+              for (let i=lastStartPage;i<=lastEndPage;i++) {
+                const element = state.contentPlaceholderNode.childNodes[i] as HTMLElement;
+                element.style.setProperty('--page-display', 'none');
+              }
             }
             for (let i=startPage;i<=endPage;i++) {
               const element = state.contentPlaceholderNode.childNodes[i] as HTMLElement;
