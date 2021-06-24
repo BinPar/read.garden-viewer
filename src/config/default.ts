@@ -10,6 +10,7 @@ const defaultConfig: DefaultConfig = {
   initialTextAlign: null,
   initialTheme: 'light',
   initialFontSize: 16,
+  initialLineHeight: 1.5,
   initialZoom: 1,
   showPageSeparation: false,
   animationFriction: 10,
