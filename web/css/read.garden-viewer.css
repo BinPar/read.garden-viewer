@@ -84,6 +84,14 @@ div.rg-content-wrapper {
 }
 
 .rg-fixed-layout div.rg-content-wrapper #rg-content-placeholder > div > .pf {
+  pointer-events: none;
+}
+
+.rg-fixed-layout div.rg-content-wrapper #rg-content-placeholder > div > .pf > div > div {
+  pointer-events: var(--pointer-events);
+}
+
+.rg-fixed-layout div.rg-content-wrapper #rg-content-placeholder > div > .pf {
   display: var(--page-display);
 }
 
