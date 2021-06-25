@@ -230,6 +230,8 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
   const onForceScrollChange = (newScroll: number | undefined): void => {
     if (newScroll !== undefined) {
       scroll.target = newScroll * -1;
+      scroll.current = scroll.target;
+      scroll.speed = 0;
       updateState({
         forceScroll: undefined,
       });
