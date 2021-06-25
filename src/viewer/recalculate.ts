@@ -173,16 +173,17 @@ const recalculate = async (state: State): Promise<Partial<State>> => {
         );
 
         setCSSProperty('column-gap', `${columnGap}px`);
+        setCSSProperty('viewer-margin-top', '0');
+        setCSSProperty('vertical-translate', '0');
 
-        resolve({
-          ...globalUpdate,
-          columnGap,
-        });
+        updateState({ scrollTop: 0 });
 
         window.requestAnimationFrame(() => {
           const positionBySlug = new Map<string, number>();
           const slugByPosition = new Map<number, string>();
-
+  
+          let lastPosition = 0;
+  
           contentPlaceholderNode!.querySelectorAll('[data-page]').forEach((item) => {
             const element = item as HTMLElement;
             const rawPosition = element.getBoundingClientRect().top;
@@ -190,10 +191,14 @@ const recalculate = async (state: State): Promise<Partial<State>> => {
             const page = element.dataset.page!;
             positionBySlug.set(page, position);
             slugByPosition.set(position, page);
+            lastPosition = position;
           });
-
-          updateState({
+  
+          resolve({
+            ...globalUpdate,
+            columnGap,
             totalHeight: contentPlaceholderNode!.getBoundingClientRect().height,
+            lastPosition,
             positionBySlug,
             slugByPosition,
           });
