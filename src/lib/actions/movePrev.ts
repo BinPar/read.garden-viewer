@@ -3,15 +3,13 @@ import { updateState } from '../state';
 import navigateToPreviousChapter from './navigateToPreviousChapter';
 
 const movePrev: ActionDispatcher<MoveNext> = async ({ state }) => {
-  const { scrollLeft, scrollTop } = state;
   if (state.scrollMode !== 'fixed') {
     if (state.layout === LayoutTypes.Flow) {
-      const { totalColumnWidth, columnsInViewport, slugByPosition } = state;
-      const movementWidth = totalColumnWidth * columnsInViewport;
-      const rawPosition =
-        ((state.scrollMode === 'horizontal' ? scrollLeft : scrollTop) * -1) / state.scale;
-      const position = Math.round(rawPosition / movementWidth) * movementWidth;
+      const { scrollLeft, totalColumnWidth, columnsInViewport, slugByPosition } = state;
       if (state.scrollMode === 'horizontal') {
+        const movementWidth = totalColumnWidth * columnsInViewport;
+        const rawPosition = (scrollLeft * -1) / state.scale;
+        const position = Math.round(rawPosition / movementWidth) * movementWidth;
         if (position === 0) {
           return navigateToPreviousChapter({
             action: {
@@ -26,6 +24,9 @@ const movePrev: ActionDispatcher<MoveNext> = async ({ state }) => {
             forceScroll: desiredPosition,
           });
         }
+      }
+      if (state.scrollMode === 'vertical') {
+        // 
       }
     }
     if (state.layout === LayoutTypes.Fixed) {

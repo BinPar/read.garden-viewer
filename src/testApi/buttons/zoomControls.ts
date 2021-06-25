@@ -94,6 +94,10 @@ const zoomControls = async (
     type: 'addOnChangeEvent',
     propertyName: 'fitMode',
     event: (newValue) => {
+      if (!newValue) {
+        fitWidth.classList.remove('active');
+        fitHeight.classList.remove('active');
+      }
       if (newValue === FitMode.Height) {
         fitHeight.classList.add('active');
         fitWidth.classList.remove('active');
