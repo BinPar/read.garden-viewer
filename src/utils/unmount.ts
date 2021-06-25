@@ -1,5 +1,6 @@
 import { getState, updateState } from '../lib/state';
 import { removeAllChangeEvents } from '../lib/state/stateChangeEvents';
+import cleanStyles from './cleanStyles';
 import { cleanDOM } from './createBasicDOMElements';
 import { removeGlobalEvents } from './globalEvents';
 
@@ -8,6 +9,7 @@ const unmount = (state = getState()): void => {
   removeGlobalEvents(state);
   removeAllChangeEvents();
   cleanDOM(state);
+  cleanStyles(state);
 };
 
 export default unmount;

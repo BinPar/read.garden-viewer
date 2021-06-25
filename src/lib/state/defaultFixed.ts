@@ -8,6 +8,7 @@ const defaultFixed: FixedState = {
   contentsInfo: new Array<FixedViewerContentInfo>(),
   currentContentIndex: 0,
   loadedCssUrls: new Set<string>(),
+  fixedStylesNodes: [],
   zoom: 1,
   zoomSpeed: 0.01,
   maximumZoomValue: 4,
