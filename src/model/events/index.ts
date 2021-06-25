@@ -28,6 +28,10 @@ export interface LoadNewContent extends ReadGardenEvent {
    * Slug of the second level content (page, chapter...) to load
    */
   contentSlug: string;
+  /**
+   * Go to end of new content
+   */
+  goToEnd?: boolean;
 }
 
 export interface GetContentsInfo extends ReadGardenEvent {

@@ -45,7 +45,7 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
   }
   updateState({ cssLoaded: false });
   return new Promise<Partial<State>>((resolve): void => {
-    const { contentPlaceholderNode, dynamicStyleNode, searchTermsHighlightsNode } = state;
+    const { contentPlaceholderNode, dynamicStyleNode, searchTermsHighlightsNode, config } = state;
 
     if (state.layout === LayoutTypes.Flow) {
       setCSSProperty('viewer-margin-top', '200vh');
@@ -83,7 +83,10 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
                   finalPartialState.forceScroll =
                     tempState.lastPosition - (tempState.lastPosition % tempState.containerWidth);
                 } else {
-                  finalPartialState.forceScroll = tempState.totalHeight - tempState.containerHeight;
+                  finalPartialState.forceScroll = Math.max(
+                    tempState.totalHeight + config.paddingTop - tempState.containerHeight,
+                    0,
+                  );
                 }
               }
               resolve(finalPartialState);

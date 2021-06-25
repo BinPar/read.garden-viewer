@@ -5,8 +5,8 @@ import navigateToPreviousChapter from './navigateToPreviousChapter';
 const movePrev: ActionDispatcher<MoveNext> = async ({ state }) => {
   if (state.scrollMode !== 'fixed') {
     if (state.layout === LayoutTypes.Flow) {
-      const { scrollLeft, totalColumnWidth, columnsInViewport, slugByPosition } = state;
       if (state.scrollMode === 'horizontal') {
+        const { scrollLeft, totalColumnWidth, columnsInViewport, slugByPosition } = state;
         const movementWidth = totalColumnWidth * columnsInViewport;
         const rawPosition = (scrollLeft * -1) / state.scale;
         const position = Math.round(rawPosition / movementWidth) * movementWidth;
@@ -14,6 +14,7 @@ const movePrev: ActionDispatcher<MoveNext> = async ({ state }) => {
           return navigateToPreviousChapter({
             action: {
               type: 'navigateToPreviousChapter',
+              goToEnd: true,
             },
             state,
           });
@@ -26,7 +27,12 @@ const movePrev: ActionDispatcher<MoveNext> = async ({ state }) => {
         }
       }
       if (state.scrollMode === 'vertical') {
-        // 
+        return navigateToPreviousChapter({
+          action: {
+            type: 'navigateToPreviousChapter',
+          },
+          state,
+        });
       }
     }
     if (state.layout === LayoutTypes.Fixed) {

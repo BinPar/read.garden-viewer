@@ -3,15 +3,14 @@ import { updateState } from '../state';
 import navigateToNextChapter from './navigateToNextChapter';
 
 const moveNext: ActionDispatcher<MoveNext> = async ({ state }) => {
-  const { scrollLeft, scrollTop } = state;
   if (state.scrollMode !== 'fixed') {
     if (state.layout === LayoutTypes.Flow) {
-      const { lastPosition, totalColumnWidth, columnsInViewport, slugByPosition } = state;
-      const movementWidth = totalColumnWidth * columnsInViewport;
-      const rawPosition =
-        ((state.scrollMode === 'horizontal' ? scrollLeft : scrollTop) * -1) / state.scale;
-      const position = Math.round(rawPosition / movementWidth) * movementWidth;
       if (state.scrollMode === 'horizontal') {
+        const { scrollLeft, lastPosition, totalColumnWidth, columnsInViewport, slugByPosition } =
+          state;
+        const movementWidth = totalColumnWidth * columnsInViewport;
+        const rawPosition = (scrollLeft * -1) / state.scale;
+        const position = Math.round(rawPosition / movementWidth) * movementWidth;
         const desiredPosition = position + movementWidth;
         if (desiredPosition > lastPosition) {
           return navigateToNextChapter({
@@ -26,6 +25,14 @@ const moveNext: ActionDispatcher<MoveNext> = async ({ state }) => {
             forceScroll: desiredPosition,
           });
         }
+      }
+      if (state.scrollMode === 'vertical') {
+        return navigateToNextChapter({
+          action: {
+            type: 'navigateToNextChapter',
+          },
+          state,
+        });
       }
     }
     if (state.layout === LayoutTypes.Fixed) {
