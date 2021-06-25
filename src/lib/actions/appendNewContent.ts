@@ -69,7 +69,7 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
                 ...recalculateState,
                 layout: LayoutTypes.Flow,
                 scrollMode: state.scrollMode,
-                slug: action.slug,                
+                slug: action.slug,
                 contentSlug: action.contentSlug,
                 chapterNumber: action.chapterNumber,
                 cssLoaded: true,
@@ -79,8 +79,12 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
               }
               if (action.goToEnd) {
                 const tempState = recalculateState as GlobalState & ScrolledState;
-                finalPartialState.forceScroll =
-                  tempState.lastPosition! - (tempState.lastPosition! % tempState.containerWidth!);
+                if (state.scrollMode === 'horizontal') {
+                  finalPartialState.forceScroll =
+                    tempState.lastPosition - (tempState.lastPosition % tempState.containerWidth);
+                } else {
+                  finalPartialState.forceScroll = tempState.totalHeight - tempState.containerHeight;
+                }
               }
               resolve(finalPartialState);
               await redrawUserHighlights(state);
