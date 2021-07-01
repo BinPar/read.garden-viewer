@@ -1,10 +1,18 @@
 import { LayoutTypes } from '../../../model/viewerSettings';
 
 import { getState, updateState } from '../../../lib/state';
-import getScrollLeftPosition from '../getScrollLeftPosition';
 import drawHighlights from '../drawHighlights';
-import getScrollTopPosition from '../getScrollTopPosition';
 import getRangesRecursively from './getRangesRecursively';
+
+const getContainerRanges = (container: HTMLDivElement, terms: string[]): Range[] => {
+  if (
+    container.firstElementChild &&
+    window.getComputedStyle(container.firstElementChild).display !== 'none'
+  ) {
+    return getRangesRecursively(container, terms, true);
+  }
+  return [];
+};
 
 /**
  * Looks for appearances of terms and draws highlights
@@ -34,8 +42,11 @@ const highlightTerms = (terms: string[]): void => {
       let endFound = false;
       const ranges: Range[] = [];
       if (scrollMode === 'horizontal') {
-        const leftLimit = getScrollLeftPosition(state);
-        const rightLimit = leftLimit + window.innerWidth;
+        const content = state.contentsBySlug.get(state.contentSlug)!;
+        const currentPosition = state.positionBySlug.get(state.contentSlug)!;
+        const visibleWidth = state.containerWidth / (state.scale * state.zoom);
+        const leftLimit = currentPosition - content.width;
+        const rightLimit = currentPosition + content.width + visibleWidth;
         const startingElementIndex = Math.floor((leftLimit * contentsInfo.length) / totalWidth) - 2;
         for (
           let i = Math.max(0, startingElementIndex), l = contentsInfo.length;
@@ -44,12 +55,12 @@ const highlightTerms = (terms: string[]): void => {
         ) {
           const { maxLeft, order, container } = contentsInfo[i];
           if (startFound) {
-            ranges.push(...getRangesRecursively(container, terms, true));
+            ranges.push(...getContainerRanges(container, terms));
             if (maxLeft > rightLimit) {
               endFound = true;
               const next = contentsByOrder.get(order + 1);
               if (next) {
-                ranges.push(...getRangesRecursively(next.container, terms, true));
+                ranges.push(...getContainerRanges(next.container, terms));
               }
             }
           } else if (maxLeft > leftLimit) {
@@ -57,16 +68,19 @@ const highlightTerms = (terms: string[]): void => {
             if (order > 0) {
               const previous = contentsByOrder.get(order - 1);
               if (previous) {
-                ranges.push(...getRangesRecursively(previous.container, terms, true));
+                ranges.push(...getContainerRanges(previous.container, terms));
               }
             }
-            ranges.push(...getRangesRecursively(container, terms, true));
+            ranges.push(...getContainerRanges(container, terms));
           }
         }
       }
       if (scrollMode === 'vertical') {
-        const topLimit = getScrollTopPosition(state);
-        const bottomLimit = topLimit + document.body.clientHeight;
+        const content = state.contentsBySlug.get(state.contentSlug)!;
+        const currentPosition = state.positionBySlug.get(state.contentSlug)!;
+        const visibleHeight = state.containerHeight / (state.scale * state.zoom);
+        const topLimit = currentPosition - content.height;
+        const bottomLimit = currentPosition + content.height + visibleHeight;
         const startingElementIndex = Math.floor((topLimit * contentsInfo.length) / totalHeight) - 2;
         for (
           let i = Math.max(0, startingElementIndex), l = contentsInfo.length;
@@ -75,12 +89,12 @@ const highlightTerms = (terms: string[]): void => {
         ) {
           const { maxTop, order, container } = contentsInfo[i];
           if (startFound) {
-            ranges.push(...getRangesRecursively(container, terms, true));
+            ranges.push(...getContainerRanges(container, terms));
             if (maxTop > bottomLimit) {
               endFound = true;
               const next = contentsByOrder.get(order + 1);
               if (next) {
-                ranges.push(...getRangesRecursively(next.container, terms, true));
+                ranges.push(...getContainerRanges(next.container, terms));
               }
             }
           } else if (maxTop > topLimit) {
@@ -88,10 +102,10 @@ const highlightTerms = (terms: string[]): void => {
             if (order > 0) {
               const previous = contentsByOrder.get(order - 1);
               if (previous) {
-                ranges.push(...getRangesRecursively(previous.container, terms, true));
+                ranges.push(...getContainerRanges(previous.container, terms));
               }
             }
-            ranges.push(...getRangesRecursively(container, terms, true));
+            ranges.push(...getContainerRanges(container, terms));
           }
         }
       }
