@@ -14,6 +14,7 @@ import textAlignButtons from './textAlignButtons';
 import themeButtons from './themeButtons';
 import navigationButtons from './navigationButtons';
 import zoomControls from './zoomControls';
+import lineHeightButtons from './lineHeightButtons';
 
 const setupButtonBar = async (state: State, dispatcher: DispatchAPIAction): Promise<void> => {
   const redrawToolbar = async (): Promise<void> => {
@@ -37,6 +38,7 @@ const setupButtonBar = async (state: State, dispatcher: DispatchAPIAction): Prom
       fontSizeButtons(testingButtonsPanel, state, dispatcher);
       fontFamilyButtons(testingButtonsPanel, state, dispatcher);
       textAlignButtons(testingButtonsPanel, state, dispatcher);
+      lineHeightButtons(testingButtonsPanel, state, dispatcher);
       chapterNavigationButtons(testingButtonsPanel, state, dispatcher);
     }
     if (state.layout === LayoutTypes.Fixed) {

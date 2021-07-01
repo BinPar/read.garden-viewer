@@ -8,9 +8,9 @@ import { updateState } from '../state';
  * @param state.action Viewer action
  * @returns Partial state update
  */
-const highlightSearchTerms: ActionDispatcher<HighlightSearchTerms> = async ({ action }) => {
+const highlightSearchTerms: ActionDispatcher<HighlightSearchTerms> = async ({ state, action }) => {
   const { terms } = action;
-  clean();
+  clean(state);
   updateState({ searchRanges: [] });
   highlightTerms(terms);
   return { searchTerms: terms };

@@ -1,4 +1,4 @@
-import { TextAlignModes } from '../viewerSettings';
+import { LineHeight, TextAlignModes } from '../viewerSettings';
 import { Action } from './common';
 
 /**
@@ -46,7 +46,7 @@ export interface SetLineHeight extends Action {
   /**
    * Line Height (in EMs)
    */
-  lineHeight: number;
+  lineHeight: LineHeight;
 }
 
 /**

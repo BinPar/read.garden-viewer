@@ -45,7 +45,7 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
   }
   updateState({ cssLoaded: false });
   return new Promise<Partial<State>>((resolve): void => {
-    const { contentPlaceholderNode, dynamicStyleNode, searchTermsHighlightsNode } = state;
+    const { contentPlaceholderNode, dynamicStyleNode, searchTermsHighlightsNode, config } = state;
 
     if (state.layout === LayoutTypes.Flow) {
       setCSSProperty('viewer-margin-top', '200vh');
@@ -79,8 +79,15 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
               }
               if (action.goToEnd) {
                 const tempState = recalculateState as GlobalState & ScrolledState;
-                finalPartialState.forceScroll =
-                  tempState.lastPosition! - (tempState.lastPosition! % tempState.containerWidth!);
+                if (state.scrollMode === 'horizontal') {
+                  finalPartialState.forceScroll =
+                    tempState.lastPosition - (tempState.lastPosition % tempState.containerWidth);
+                } else {
+                  finalPartialState.forceScroll = Math.max(
+                    tempState.totalHeight + config.paddingTop - tempState.containerHeight,
+                    0,
+                  );
+                }
               }
               resolve(finalPartialState);
               await redrawUserHighlights(state);
@@ -140,17 +147,17 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
         window.requestAnimationFrame(() => {
           const done = async (): Promise<void> => {
             container.classList.remove('rg-loading');
-            const recalculateState = await recalculate(state);
             setCSSProperty('viewer-margin-top', '0');
             const finalPartialState: Partial<State> = {
-              ...recalculateState,
               slug: action.slug,
               cssLoaded: true,
             };
-            updateState({ loadingContent: false });
+            if (state.loadingContent === action.contentSlug) {
+              updateState({ loadingContent: '' });
+              loadContentsInBackground(state);
+            }
             resolve(finalPartialState);
             highlightTerms(state.searchTerms);
-            loadContentsInBackground();
           };
           const checkFonts = () => {
             dynamicStyleNode!.removeEventListener('load', checkFonts);

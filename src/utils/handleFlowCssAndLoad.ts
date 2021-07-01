@@ -27,6 +27,7 @@ const handleFlowCssAndLoad = (url: string, callback: () => any): void => {
   };
   link.addEventListener('load', onLoad);
   document.head.appendChild(link);
+  state.fixedStylesNodes.push(link);
   link.href = url;
 };
 

@@ -24,6 +24,8 @@ const setContentsInfo: ActionDispatcher<SetContentsInfo> = async ({ state, actio
   let maxWidth = 0;
   let maxHeight = 0;
   let lastPosition = 0;
+  let prev: string | undefined;
+  let previousContent: FixedViewerContentInfo | undefined;
   const contentsBySlug = new Map<string, FixedViewerContentInfo>();
   const contentsByOrder = new Map<number, FixedViewerContentInfo>();
   const positionBySlug = new Map<string, number>();
@@ -63,11 +65,21 @@ const setContentsInfo: ActionDispatcher<SetContentsInfo> = async ({ state, actio
       top,
       maxLeft: totalWidth,
       maxTop: totalHeight,
+      prev,
     };
     contentsByOrder.set(order, contentInfo);
     contentsBySlug.set(slug, contentInfo);
     contentsInfo.push(contentInfo);
     lastPosition = position;
+    prev = slug;
+    if (previousContent) {
+      previousContent.next = slug;
+    }
+    previousContent = contentInfo;
+  }
+
+  if (previousContent) {
+    previousContent.next = prev;
   }
 
   setCSSProperty('total-width', `${totalWidth}px`);

@@ -27,9 +27,9 @@ const recalculate = async (state: State): Promise<Partial<State>> => {
   }
   updateState({ recalculating: true });
   return new Promise<Partial<State>>((resolve): void => {
-    const { contentWrapperNode, contentPlaceholderNode } = state;
+    const { readGardenContainerNode, readGardenViewerNode, contentPlaceholderNode } = state;
 
-    const containerRect = contentWrapperNode!.getBoundingClientRect();
+    const containerRect = readGardenContainerNode!.getBoundingClientRect();
     const { width: containerWidth, height: containerHeight } = containerRect;
 
     const globalUpdate: Partial<GlobalState> = {
@@ -173,30 +173,34 @@ const recalculate = async (state: State): Promise<Partial<State>> => {
         );
 
         setCSSProperty('column-gap', `${columnGap}px`);
+        setCSSProperty('vertical-translate', '0');
+        updateState({ scrollTop: 0 });
+
+        const marginTop =
+          parseInt(window.getComputedStyle(readGardenViewerNode!).marginTop, 10) || 0;
+
+        const positionBySlug = new Map<string, number>();
+        const slugByPosition = new Map<number, string>();
+
+        let lastPosition = 0;
+
+        contentPlaceholderNode!.querySelectorAll('[data-page]').forEach((item) => {
+          const element = item as HTMLElement;
+          const rawPosition = element.getBoundingClientRect().top - marginTop;
+          const position = clientToContentWrapperTop(rawPosition);
+          const page = element.dataset.page!;
+          positionBySlug.set(page, position);
+          slugByPosition.set(position, page);
+          lastPosition = position;
+        });
 
         resolve({
           ...globalUpdate,
           columnGap,
-        });
-
-        window.requestAnimationFrame(() => {
-          const positionBySlug = new Map<string, number>();
-          const slugByPosition = new Map<number, string>();
-
-          contentPlaceholderNode!.querySelectorAll('[data-page]').forEach((item) => {
-            const element = item as HTMLElement;
-            const rawPosition = element.getBoundingClientRect().top;
-            const position = clientToContentWrapperTop(rawPosition);
-            const page = element.dataset.page!;
-            positionBySlug.set(page, position);
-            slugByPosition.set(position, page);
-          });
-
-          updateState({
-            totalHeight: contentPlaceholderNode!.getBoundingClientRect().height,
-            positionBySlug,
-            slugByPosition,
-          });
+          totalHeight: contentPlaceholderNode!.getBoundingClientRect().height / state.scale,
+          lastPosition,
+          positionBySlug,
+          slugByPosition,
         });
         return;
       }

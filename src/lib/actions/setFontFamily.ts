@@ -4,7 +4,11 @@ import { State } from '../../model/state';
 import { LayoutTypes } from '../../model/viewerSettings';
 
 import { drawHighlights } from '../../utils/highlights';
+import clearSelection from '../../utils/highlights/clearSelection';
+import { removeExtensors } from '../../utils/highlights/drawExtensors';
 import redrawUserHighlights from '../../utils/highlights/redrawUserHighlights';
+import removeNotesDialog from '../../utils/highlights/removeNotesDialog';
+import removeSelectionMenu from '../../utils/highlights/removeSelectionMenu';
 import removeUserHighlights from '../../utils/highlights/removeUserHighlights';
 import { clean } from '../../utils/highlights/search';
 import setCSSProperty from '../../utils/setCSSProperty';
@@ -68,7 +72,11 @@ const setFontFamily: ActionDispatcher<SetFontFamily> = async ({ state, action })
         };
       };
       setCSSProperty('viewer-margin-top', '200vh');
-      clean();
+      clean(state);
+      clearSelection(state);
+      removeExtensors(state);
+      removeSelectionMenu(state);
+      removeNotesDialog(state);
       removeUserHighlights(state);
       setCSSProperty('font-family', fontFamily);
       window.requestAnimationFrame(() => {

@@ -4,15 +4,14 @@
 import { SetReadMode } from '../../model/actions/global';
 import { DispatchAPIAction } from '../../model/actions/common';
 import { SelectionInfo, SyntheticEvent } from '../../model/dom';
-import { State } from '../../model/state';
+import { FixedState, GlobalState, PaginatedState, ScrolledState, State } from '../../model/state';
 import { drawHighlights } from '../../utils/highlights';
-import removeLayerHighlights from '../../utils/highlights/removeLayerHighlights';
 import setCSSProperty from '../../utils/setCSSProperty';
 import { updateState } from '../state';
 import getCoordinatesFromEvent from './getCoordinatesFromEvent';
 import getMinAndMaxScroll, { getMinAndMaxAltScroll } from './getMinAndMaxScroll';
 import getSyntheticEvent from './getSyntheticEvent';
-import { InterpolationValue, zoom, scale } from './interpolationValues';
+import { InterpolationValue, zoom, scale, altScroll, scroll } from './interpolationValues';
 import getWordSelection from './getWordSelection';
 import scrollInertiaAndLimits from './scrollInertiaAndLimits';
 import { LayoutTypes } from '../../model/viewerSettings';
@@ -24,12 +23,30 @@ import removeNotesDialog from '../../utils/highlights/removeNotesDialog';
 import drawExtensors, { removeExtensors } from '../../utils/highlights/drawExtensors';
 import extendSelection from '../../utils/highlights/extendSelection';
 import clearNativeSelection from '../../utils/highlights/clearNativeSelection';
+import clearSelection from '../../utils/highlights/clearSelection';
+
+export const reCalcScrollLimits = (state: (GlobalState & FixedState & ScrolledState) | (GlobalState & FixedState & PaginatedState)): void => {
+  const scrollLimits = getMinAndMaxScroll(state);
+  if (scroll.current > scrollLimits.maxScroll) {
+    scroll.target = scrollLimits.maxScroll;
+    scroll.speed = 0;
+  } else if (scroll.target < scrollLimits.minScroll) {
+    scroll.target = scrollLimits.minScroll;
+    scroll.speed = 0;
+  }
+  const altScrollLimits = getMinAndMaxAltScroll(state);
+  if (altScroll.current > altScrollLimits.maxScroll) {
+    altScroll.target = altScrollLimits.maxScroll;
+    altScroll.speed = 0;
+  } else if (altScroll.target < altScrollLimits.minScroll) {
+    altScroll.target = altScrollLimits.minScroll;
+    altScroll.speed = 0;
+  }
+}
 
 const scrollController = (
   state: State,
   dispatch: DispatchAPIAction,
-  scroll: InterpolationValue,
-  altScroll: InterpolationValue,
   executeTransitions: () => void,
 ): void => {
   let mouseDown = false;
@@ -47,7 +64,7 @@ const scrollController = (
   let mobileSelectionTimeout: NodeJS.Timeout | null = null;
 
   const onDragStart = (ev: MouseEvent | TouchEvent): void => {
-    removeLayerHighlights(selectionHighlightsNode);
+    clearSelection();
     removeExtensors(state);
     removeSelectionMenu(state);
     removeNotesDialog(state);
@@ -211,7 +228,10 @@ const scrollController = (
         updateState({
           dragging: false,
         });
-        setCSSProperty('pointer-events', 'auto');
+        if (!state.animating) {
+          setCSSProperty('pointer-events', 'auto');
+          setCSSProperty('user-select', 'auto');
+        }
       }, 0);
     }
     if (initialSelection && currentSelection) {
@@ -334,6 +354,7 @@ const scrollController = (
       } else {
         updateState({ fitMode: undefined });
         updateZoom(zoom.target - ev.deltaY * state.zoomSpeed, state);
+        reCalcScrollLimits(state);
         executeTransitions();
       }
       ev.preventDefault();
@@ -353,8 +374,7 @@ const scrollController = (
           altDelta = ev.deltaX * -1;
         }
         altScroll.current += altDelta;
-        const altScrollLimits = getMinAndMaxAltScroll(state);
-
+        const altScrollLimits = getMinAndMaxAltScroll(state);        
         if (altScroll.current > altScrollLimits.maxScroll) {
           altScroll.current = altScrollLimits.maxScroll;
           altScroll.speed = 0;
