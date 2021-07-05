@@ -89,6 +89,7 @@ export const initializeState = (initialConfig: InitialConfig): void => {
     containerWidth: 0,
     containerHeight: 0,
     forceScroll: undefined,
+    animateToScroll: undefined,
   };
 
   const scrolledState: ScrolledState = {

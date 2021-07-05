@@ -350,7 +350,6 @@ div.rg-selection-menu .rg-selection-menu-wrapper .rg-selection-menu-holder,
 div.rg-notes-dialog,
 div.rg-notes-dialog .rg-notes-dialog-wrapper,
 div.rg-notes-dialog .rg-notes-dialog-wrapper .rg-notes-dialog-holder,
-div.rg-notes-dialog .rg-notes-dialog-wrapper .rg-notes-dialog-holder fieldset,
 div.rg-notes-dialog .rg-notes-dialog-header,
 div.rg-notes-dialog .rg-notes-dialog-header-title,
 div.rg-notes-dialog .rg-notes-dialog-header-buttons,
@@ -361,6 +360,15 @@ div.rg-confirmation-dialog .rg-confirmation-dialog-wrapper .rg-confirmation-dial
 div.rg-confirmation-dialog .rg-confirmation-dialog-wrapper .rg-confirmation-dialog-buttons {
   display: flex;
   flex-flow: row nowrap;
+  -webkit-box-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  align-items: center;
+}
+
+div.rg-notes-dialog .rg-notes-dialog-wrapper .rg-notes-dialog-holder fieldset {
+  display: flex;
+  flex-flow: column nowrap;
   -webkit-box-pack: center;
   justify-content: center;
   -webkit-box-align: center;
@@ -384,6 +392,7 @@ div.rg-selection-menu.rg-bottom-arrow,
 div.rg-notes-dialog.rg-bottom-arrow,
 div.rg-confirmation-dialog.rg-bottom-arrow {
   transform: translateX(-50%) translateY(-100%) scale(calc(1 / var(--scale)));
+  transform-origin: center bottom;
 }
 
 div.rg-selection-menu.rg-top-arrow,

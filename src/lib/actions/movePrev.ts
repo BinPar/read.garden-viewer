@@ -22,7 +22,7 @@ const movePrev: ActionDispatcher<MoveNext> = async ({ state }) => {
         const desiredPosition = position - movementWidth;
         if (slugByPosition.has(desiredPosition)) {
           updateState({
-            forceScroll: desiredPosition,
+            animateToScroll: desiredPosition,
           });
         }
       }

@@ -146,6 +146,7 @@ const showNotesDialog: ActionDispatcher<ShowNotesDialog> = async ({ action, stat
       title.innerText = action.title;
       headerTitle.appendChild(title);
     }
+
     if (action.color) {
       headerTitle.style.color = action.color;
     }

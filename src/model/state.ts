@@ -217,9 +217,13 @@ export interface GlobalState {
    */
   lastClickCoords?: Coordinates;
   /**
-   * Force scroll to move to exact position
+   * Force scroll to move (without animation) to exact position
    */
   forceScroll: number | undefined;
+  /**
+   * Force scroll to animate to exact position
+   */
+  animateToScroll: number | undefined;
   /**
    * Existing highlight has been clicked
    */
