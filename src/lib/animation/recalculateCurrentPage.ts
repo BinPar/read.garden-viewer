@@ -24,28 +24,33 @@ const recalculateCurrentPage = (state: State, currentScroll: number, avoidUpdate
         target = state.slugByPosition.get(scrollPosition);
       } else {
         const targetScale = Math.abs(scale.current * zoom.current);
-
         const targetScroll =
           calculatePagePosition(currentScroll, state) - state.margin.left / targetScale + 1;
         const baseScroll = targetScroll - state.margin.left / targetScale;
-        const endScroll = targetScroll + window.screen.width / targetScale / 2 + state.margin.left / targetScale;
+        const visibleWidth = state.containerWidth / targetScale;
+        const endScroll = baseScroll + visibleWidth;
         let startPage = 0;
         let endPage = -1;
-        let pageCounter = 0;
-        state.slugByPosition.forEach((value, key): void => {
-          if (key <= baseScroll)   {
-            startPage = pageCounter;
+        const startingElementIndex =
+          Math.floor((baseScroll * state.contentsInfo.length) / state.totalWidth) - 2;
+        for (
+          let i = Math.max(0, startingElementIndex), l = state.contentsInfo.length;
+          i < l && endPage === -1;
+          i++
+        ) {
+          const { left, maxLeft, slug } = state.contentsInfo[i];
+          if (left <= baseScroll) {
+            startPage = i;
           }
-          if (key <= targetScroll) {
-            target = value;
+          if (left <= targetScroll) {
+            target = slug;
           }
-          if (key <= endScroll) {
-            endPage = pageCounter;
+          if (left <= endScroll && maxLeft >= endScroll) {
+            endPage = i;
           }
-          pageCounter++;
-        });
+        }
         if (endPage === -1) {
-          endPage = pageCounter - 1;
+          endPage = state.contentsInfo.length - 1;
         }
         if (state.contentPlaceholderNode && state.layout === LayoutTypes.Fixed) {
           if (lastStartPage !== startPage || endPage !== lastEndPage) {
