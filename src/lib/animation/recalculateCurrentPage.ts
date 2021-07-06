@@ -52,7 +52,6 @@ const recalculateCurrentPage = (state: State, currentScroll: number, avoidUpdate
         if (endPage === -1) {
           endPage = state.contentsInfo.length - 1;
         }
-        console.log({ baseScroll, endScroll, startingElementIndex, startPage, endPage });
         if (state.contentPlaceholderNode && state.layout === LayoutTypes.Fixed) {
           if (lastStartPage !== startPage || endPage !== lastEndPage) {
             if (lastStartPage !== -1) {
