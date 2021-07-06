@@ -6,7 +6,7 @@ import { drawHighlights as drawDomHighlights } from '../../utils/highlights'
 import removeLayerHighlights from '../../utils/highlights/removeLayerHighlights';
 
 const drawHighlights: ActionDispatcher<DrawHighlights> = async ({ action, state }) => {
-  if (!state.cssLoaded) {
+  if (!state.cssLoaded || !state.wrapperReady) {
     setTimeout(() => {
       drawHighlights({ action, state });
     }, 64);
