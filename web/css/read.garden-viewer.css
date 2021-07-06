@@ -36,7 +36,8 @@ body.rg-flow-layout {
   -ms-overflow-style: none;
 }
 
-body::-webkit-scrollbar {
+body.rg-fixed-layout::-webkit-scrollbar,
+body.rg-flow-layout::-webkit-scrollbar {
   display: none;
 }
 
