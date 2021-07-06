@@ -23,7 +23,8 @@ html {
   -webkit-overflow-scrolling: touch;
 }
 
-body {
+body.rg-fixed-layout,
+body.rg-flow-layout {
   height: 100%;
   min-height: 100%;
   max-height: 100%;
@@ -311,7 +312,7 @@ div.rg-highlights-layer > div {
 
 .rg-dark-theme div.rg-highlights-layer > div {
   filter: brightness(0.8);
-  mix-blend-mode: multiply;
+  /* mix-blend-mode: multiply; Needed for mobile, will need to add it with specific class */ 
 }
 
 div.rg-highlights-layer .rg-selection-extensor {

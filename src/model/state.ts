@@ -378,10 +378,6 @@ export interface FixedState {
    */
   maxHeight: number;
   /**
-   * Current content index (order, base 0)
-   */
-  currentContentIndex: number;
-  /**
    * Viewer is loading content
    */
   loadingContent?: string;

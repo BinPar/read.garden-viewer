@@ -1,6 +1,5 @@
 import { ActionDispatcher } from '../../model/actions/actionDispatcher';
 import { Resize } from '../../model/actions/global';
-import checkCurrentPage from '../../utils/checkCurrentPage';
 import { drawHighlights } from '../../utils/highlights';
 import redrawUserHighlights from '../../utils/highlights/redrawUserHighlights';
 import removeUserHighlights from '../../utils/highlights/removeUserHighlights';
@@ -25,7 +24,6 @@ const resize: ActionDispatcher<Resize> = async ({ state }) => {
     drawHighlights(state.searchTermsHighlightsNode, state.searchRanges);
   }
   await redrawUserHighlights(state);
-  checkCurrentPage(state);
   return recalculateUpdate;
 };
 

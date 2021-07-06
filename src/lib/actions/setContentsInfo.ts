@@ -18,7 +18,6 @@ const setContentsInfo: ActionDispatcher<SetContentsInfo> = async ({ state, actio
   const { contentPlaceholderNode } = state as Required<State>;
 
   const { info } = action;
-  let currentContentIndex = 0;
   let totalWidth = 0;
   let totalHeight = 0;
   let maxWidth = 0;
@@ -46,9 +45,6 @@ const setContentsInfo: ActionDispatcher<SetContentsInfo> = async ({ state, actio
     container.dataset.slug = slug;
     container.dataset.label = label;
     contentPlaceholderNode.appendChild(container);
-    if (!currentContentIndex && slug === state.contentSlug) {
-      currentContentIndex = order;
-    }
     const position = state.scrollMode === 'horizontal' ? left : top;
     positionBySlug.set(slug, position);
     slugByPosition.set(position, slug);
@@ -94,7 +90,6 @@ const setContentsInfo: ActionDispatcher<SetContentsInfo> = async ({ state, actio
     contentsInfo,
     contentsBySlug,
     contentsByOrder,
-    currentContentIndex,
     positionBySlug,
     slugByPosition,
     lastPosition,
