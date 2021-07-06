@@ -16,9 +16,12 @@ import {
   zoom,
   leftCorrector,
   topCorrector,
+  resetInterpolationValues,
 } from './interpolationValues';
-import recalculateCurrentPage from './recalculateCurrentPage';
+import recalculateCurrentPage, { resetLastPage } from './recalculateCurrentPage';
 import scrollController, { reCalcScrollLimits } from './scrollController';
+
+let unmountAnimationsHandler = (): void => {};
 
 const animationController = (state: State, dispatch: DispatchAPIAction): void => {
   let zoomUpdatedByApplyCSSProps = false;
@@ -269,6 +272,16 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
     animate: true,
     animating: false,
   });
+
+  unmountAnimationsHandler = (): void => {
+    resetLastPage();
+    resetInterpolationValues();
+    applyCSSProps();
+  };
+};
+
+export const unmountAnimations = (): void => {
+  unmountAnimationsHandler();
 };
 
 export default animationController;
