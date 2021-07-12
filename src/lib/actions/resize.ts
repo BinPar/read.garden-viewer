@@ -1,3 +1,4 @@
+import { LayoutTypes } from '../../model';
 import { ActionDispatcher } from '../../model/actions/actionDispatcher';
 import { Resize } from '../../model/actions/global';
 import { drawHighlights } from '../../utils/highlights';
@@ -13,18 +14,21 @@ import recalculate from '../../viewer/recalculate';
  * @param context.state Viewer state
  */
 const resize: ActionDispatcher<Resize> = async ({ state }) => {
-  setCSSProperty('viewer-margin-top', '200vh');
-  clean(state);
-  removeUserHighlights(state);
-  const recalculateUpdate = await recalculate(state);
-  if (recalculateUpdate.recalculating === false) {
-    setCSSProperty('viewer-margin-top', '0');
+  if (state.layout === LayoutTypes.Flow) {
+    setCSSProperty('viewer-margin-top', '200vh');
+    clean(state);
+    removeUserHighlights(state);
+    const recalculateUpdate = await recalculate(state);
+    if (recalculateUpdate.recalculating === false) {
+      setCSSProperty('viewer-margin-top', '0');
+    }
+    if (state.searchRanges.length && state.searchTermsHighlightsNode) {
+      drawHighlights(state.searchTermsHighlightsNode, state.searchRanges);
+    }
+    await redrawUserHighlights(state);
+    return recalculateUpdate;
   }
-  if (state.searchRanges.length && state.searchTermsHighlightsNode) {
-    drawHighlights(state.searchTermsHighlightsNode, state.searchRanges);
-  }
-  await redrawUserHighlights(state);
-  return recalculateUpdate;
+  return {};
 };
 
 export default resize;

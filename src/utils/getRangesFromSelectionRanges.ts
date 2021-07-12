@@ -1,3 +1,4 @@
+import log from 'loglevel';
 import { SelectionRange } from '../model/viewerSettings';
 import getNodeFromQuerySelector from './getNodeFromQuerySelector';
 
@@ -17,6 +18,8 @@ const getRangesFromSelectionRanges = (selection: SelectionRange[]): Range[] => {
       range.setStart(startNode, item.start.offset);
       range.setEnd(endNode, item.end.offset);
       result.push(range);
+    } else {
+      log.info('No start or end node', { item, startNode, endNode });
     }
   });
   return result;

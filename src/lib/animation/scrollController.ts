@@ -24,8 +24,12 @@ import drawExtensors, { removeExtensors } from '../../utils/highlights/drawExten
 import extendSelection from '../../utils/highlights/extendSelection';
 import clearNativeSelection from '../../utils/highlights/clearNativeSelection';
 import clearSelection from '../../utils/highlights/clearSelection';
+import getFixedContentContainer from '../../utils/highlights/getFixedContentContainer';
+import isClickOnLink from '../../utils/highlights/isClickOnLink';
 
-export const reCalcScrollLimits = (state: (GlobalState & FixedState & ScrolledState) | (GlobalState & FixedState & PaginatedState)): void => {
+export const reCalcScrollLimits = (
+  state: (GlobalState & FixedState & ScrolledState) | (GlobalState & FixedState & PaginatedState),
+): void => {
   const scrollLimits = getMinAndMaxScroll(state);
   if (scroll.current > scrollLimits.maxScroll) {
     scroll.target = scrollLimits.maxScroll;
@@ -42,7 +46,7 @@ export const reCalcScrollLimits = (state: (GlobalState & FixedState & ScrolledSt
     altScroll.target = altScrollLimits.minScroll;
     altScroll.speed = 0;
   }
-}
+};
 
 const scrollController = (
   state: State,
@@ -74,6 +78,10 @@ const scrollController = (
       currentSelection = null;
       isSelecting = false;
       const syntheticEvent = getSyntheticEvent(ev);
+      const isLink = isClickOnLink(syntheticEvent, state);
+      if (isLink) {
+        return;
+      }
       const clickedHighlight =
         !state.config.disableSelection &&
         state.config.eventHandler &&
@@ -320,9 +328,14 @@ const scrollController = (
       const event = getSyntheticEvent(ev);
       const wordSelection = getWordSelection(state, ev, event);
       if (wordSelection) {
-        const { range } = extendSelection(wordSelection, initialSelection);
-        currentSelection = range;
-        drawHighlights(selectionHighlightsNode, [currentSelection]);
+        const container =
+          state.layout === LayoutTypes.Fixed &&
+          getFixedContentContainer(wordSelection.startContainer);
+        if (!container || container.contains(initialSelection.startContainer)) {
+          const { range } = extendSelection(wordSelection, initialSelection);
+          currentSelection = range;
+          drawHighlights(selectionHighlightsNode, [currentSelection]);
+        }
       }
     }
   };
@@ -374,7 +387,7 @@ const scrollController = (
           altDelta = ev.deltaX * -1;
         }
         altScroll.current += altDelta;
-        const altScrollLimits = getMinAndMaxAltScroll(state);        
+        const altScrollLimits = getMinAndMaxAltScroll(state);
         if (altScroll.current > altScrollLimits.maxScroll) {
           altScroll.current = altScrollLimits.maxScroll;
           altScroll.speed = 0;

@@ -5,6 +5,7 @@ import { State } from '../model/state';
 import { LayoutTypes } from '../model/viewerSettings';
 import loadContentsInBackground from './loadContentsInBackground';
 import layoutSetup from '../viewer/layoutSetup';
+import redrawUserHighlights from './highlights/redrawUserHighlights';
 
 const setupHandlers = async (state: State, dispatch: DispatchAPIAction): Promise<void> => {
   if (state.config.initialContent) {
@@ -29,6 +30,7 @@ const setupHandlers = async (state: State, dispatch: DispatchAPIAction): Promise
       propertyName: 'contentSlug',
       event: () => {
         loadContentsInBackground(state);
+        redrawUserHighlights(state);
       },
     };
     await dispatch(onPageChange);

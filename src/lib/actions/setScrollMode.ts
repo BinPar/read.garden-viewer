@@ -32,6 +32,7 @@ const setScrollMode: ActionDispatcher<SetScrollMode> = async ({ state, action })
           layout: state.layout,
           scrollMode,
         });
+        removeUserHighlights(state);
         await redrawUserHighlights(state);
         if (state.searchRanges.length && state.searchTermsHighlightsNode) {
           drawHighlights(state.searchTermsHighlightsNode, state.searchRanges);
