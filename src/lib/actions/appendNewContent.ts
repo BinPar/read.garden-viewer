@@ -17,6 +17,7 @@ import removeUserHighlights from '../../utils/highlights/removeUserHighlights';
 import clearUserHighlights from '../../utils/highlights/clearUserHighlights';
 import redrawUserHighlights from '../../utils/highlights/redrawUserHighlights';
 import { highlightTerms } from '../../utils/highlights/search';
+import handleAnchors from '../../utils/handleAnchors';
 
 /**
  * Appends new content to viewer
@@ -64,6 +65,7 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
             const newLink = document.createElement('link');
             const done = async (): Promise<void> => {
               const recalculateState = await recalculate(state);
+              handleAnchors(contentPlaceholderNode!, state);
               setCSSProperty('viewer-margin-top', '0');
               const finalPartialState: Partial<State> = {
                 ...recalculateState,
@@ -147,6 +149,7 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
         window.requestAnimationFrame(() => {
           const done = async (): Promise<void> => {
             container.classList.remove('rg-loading');
+            handleAnchors(container!, state);
             setCSSProperty('viewer-margin-top', '0');
             const finalPartialState: Partial<State> = {
               slug: action.slug,

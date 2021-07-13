@@ -124,6 +124,13 @@ export interface OnDeleteOptionClick extends ReadGardenEvent {
   slug: string;
 }
 
+export interface OnLinkClick extends ReadGardenEvent {
+  type: 'onLinkClick';
+  slug: string;
+  url: string | null;
+  querySelector: string;
+}
+
 export type ReadGardenEvents =
   | PageChange
   | LoadNewContent
@@ -137,7 +144,8 @@ export type ReadGardenEvents =
   | OnCancelNewNote
   | OnSaveNote
   | OnChangeNote
-  | OnDeleteOptionClick;
+  | OnDeleteOptionClick
+  | OnLinkClick;
 
 export type ReadGardenEventHandler = (event: ReadGardenEvents) => Promise<void>;
 

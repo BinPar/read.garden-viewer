@@ -38,6 +38,7 @@
     "@types/live-server": "^1.2.0",
     "@types/mkdirp": "^1.0.1",
     "@types/puppeteer": "^5.4.3",
+    "@types/shortid": "0.0.29",
     "@typescript-eslint/eslint-plugin": "^4.22.0",
     "babel-loader": "^8.2.2",
     "chalk": "^4.1.1",
@@ -70,6 +71,7 @@
     "@a2r/fs": "^1.5.1",
     "js-base64": "^3.6.0",
     "loglevel": "^1.7.1",
+    "shortid": "^2.2.16",
     "typescript": "^4.2.4"
   }
 }
