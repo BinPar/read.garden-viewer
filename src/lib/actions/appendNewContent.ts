@@ -100,16 +100,14 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
               const checkFonts = () => {
                 window.requestAnimationFrame(() => {
                   window.requestAnimationFrame(() => {
-                    if (document.fonts.status === 'loaded') {
-                      dynamicStyleNode!.onload = null;
-                      done();
-                      return;
-                    }
-                    document.fonts.onloadingdone = () => {
-                      dynamicStyleNode!.onload = null;
-                      document.fonts.onloadingdone = null;
-                      done();
+                    const checkStatus = (): void => {
+                      if (document.fonts.status === 'loaded') {
+                        done();
+                      } else {
+                        setTimeout(checkStatus, 16);
+                      }
                     };
+                    checkStatus();
                   });
                 });
               };
@@ -166,16 +164,14 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
             dynamicStyleNode!.removeEventListener('load', checkFonts);
             window.requestAnimationFrame(() => {
               window.requestAnimationFrame(() => {
-                if (document.fonts.status === 'loaded') {
-                  dynamicStyleNode!.onload = null;
-                  done();
-                  return;
-                }
-                document.fonts.onloadingdone = () => {
-                  dynamicStyleNode!.onload = null;
-                  document.fonts.onloadingdone = null;
-                  done();
+                const checkStatus = (): void => {
+                  if (document.fonts.status === 'loaded') {
+                    done();
+                  } else {
+                    setTimeout(checkStatus, 16);
+                  }
                 };
+                checkStatus();
               });
             });
           };
