@@ -106,7 +106,7 @@ div#rg-viewer {
   transform-origin: top left;
   will-change: transform;
   transform: translateX(var(--horizontal-translate)) translateY(var(--vertical-translate))
-    scale(var(--scale));
+    translateZ(0) scale(var(--scale));
 }
 
 div.rg-content-wrapper {
@@ -135,7 +135,8 @@ div.rg-content-wrapper #rg-content-placeholder > div a {
   position: relative;
   contain: size;
   content-visibility: auto;
-  background-color: #ccc;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 .rg-fixed-layout.rg-horizontal-scroll div.rg-content-wrapper div#rg-content-placeholder {
@@ -171,8 +172,8 @@ div.rg-content-wrapper #rg-content-placeholder *::selection {
 }
 
 .rg-flow-layout div.rg-content-wrapper #rg-content-placeholder > div {
-  backface-visibility: unset;
-  -webkit-backface-visibility: unset;
+  backface-visibility: visible;
+  -webkit-backface-visibility: visible;
 }
 
 .rg-flow-layout div.rg-content-wrapper {
