@@ -1,4 +1,5 @@
 /* eslint-disable no-param-reassign */
+import { NavigateToPreviousChapter } from '../../model';
 import { DispatchAPIAction } from '../../model/actions/common';
 import { State } from '../../model/state';
 import { LayoutTypes } from '../../model/viewerSettings';
@@ -54,7 +55,7 @@ const scrollInertiaAndLimits = (
     }
   } else if (state.layout === LayoutTypes.Flow) {
     max = state.totalHeight - window.innerHeight;
-  } else {    
+  } else {
     let scrollLimits: MinAndMaxScroll;
     if (isAltScroll) {
       scrollLimits = getMinAndMaxAltScroll(state);
@@ -74,7 +75,11 @@ const scrollInertiaAndLimits = (
   if (state.layout === LayoutTypes.Flow) {
     const scrollLimits = getMinAndMaxScroll(state, 100);
     if (scroll.current >= scrollLimits.maxScroll) {
-      dispatch({ type: 'navigateToPreviousChapter' });
+      const navigateToPrevious: NavigateToPreviousChapter = {
+        type: 'navigateToPreviousChapter',
+        goToEnd: true,
+      };
+      dispatch(navigateToPrevious);
     } else if (scroll.current <= scrollLimits.minScroll) {
       dispatch({ type: 'navigateToNextChapter' });
     }

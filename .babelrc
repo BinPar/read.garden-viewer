@@ -1,0 +1,13 @@
+{
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "targets": {
+          "android": "4.4",
+          "ios": "12"
+        }
+      }
+    ]
+  ]
+}

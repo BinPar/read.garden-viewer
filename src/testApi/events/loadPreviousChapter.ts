@@ -22,23 +22,32 @@ const loadPreviousChapter: EventHandler<LoadPreviousChapter> = async (event, dis
     log.warn(`Already in first chapter, can't load previous chapter`);
     return;
   }
-  const previousContent = contents[currentContentIndex - 1];
-  const url = `${testingConfig.baseURL}books/${slug}/${previousContent.file}`;
-  const response = await fetch(url);
-  const html = await response.text();
-  const chapterNumber = parseInt(previousContent.cssUrl!.split('/')[1]!, 10) + 1;
-  const label = previousContent.labels.slice().pop()!;
-  const action: AppendNewContent = {
-    type: 'appendNewContent',
-    layout,
-    slug,
-    label,
-    contentSlug: label.toLowerCase(),
-    cssURL: `${testingConfig.baseURL}books/${slug}/${previousContent.cssUrl}`,
-    htmlContent: html.replace('<div', `<div class="c${chapterNumber}"`),
-    chapterNumber,
-  };
-  dispatch(action);
+  const currentContent = contents[currentContentIndex];
+  const currentContentChapterNumber = parseInt(currentContent.cssUrl!.split('/')[1]!, 10);
+  const previousContent = contents.find(
+    (c) => parseInt(c.cssUrl!.split('/')[1]!, 10) === currentContentChapterNumber - 1,
+  );
+  if (previousContent) {
+    const url = `${testingConfig.baseURL}books/${slug}/${previousContent.file}`;
+    const response = await fetch(url);
+    const html = await response.text();
+    const chapterNumber = parseInt(previousContent.cssUrl!.split('/')[1]!, 10) + 1;
+    const label = event.goToEnd
+      ? previousContent.labels.slice().pop()!
+      : previousContent.labels.slice().shift()!;
+    const action: AppendNewContent = {
+      type: 'appendNewContent',
+      layout,
+      slug,
+      label,
+      contentSlug: label.toLowerCase(),
+      cssURL: `${testingConfig.baseURL}books/${slug}/${previousContent.cssUrl}`,
+      htmlContent: html.replace('<div', `<div class="c${chapterNumber}"`),
+      chapterNumber,
+      goToEnd: event.goToEnd,
+    };
+    dispatch(action);
+  }
 };
 
 export default loadPreviousChapter;

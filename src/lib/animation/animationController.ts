@@ -16,9 +16,12 @@ import {
   zoom,
   leftCorrector,
   topCorrector,
+  resetInterpolationValues,
 } from './interpolationValues';
-import recalculateCurrentPage from './recalculateCurrentPage';
-import scrollController from './scrollController';
+import recalculateCurrentPage, { resetLastPage } from './recalculateCurrentPage';
+import scrollController, { reCalcScrollLimits } from './scrollController';
+
+let unmountAnimationsHandler = (): void => {};
 
 const animationController = (state: State, dispatch: DispatchAPIAction): void => {
   let zoomUpdatedByApplyCSSProps = false;
@@ -69,6 +72,7 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
   const interpolateToTargetValues = (): void => {
     if (interpolationValues.filter((value) => interpolate(state, value)).length > 0) {
       applyCSSProps();
+      recalculateCurrentPage(state, scroll.current, true);
       // Execute the interpolation
       window.requestAnimationFrame(interpolateToTargetValues);
     } else {
@@ -79,6 +83,10 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
       updateState({
         animating: false,
       });
+      if (!state.dragging) {
+        setCSSProperty('pointer-events', 'auto');
+        setCSSProperty('user-select', 'auto');
+      }
     }
   };
 
@@ -149,6 +157,7 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
       scroll.target = scroll.current;
     }
     scroll.speed = 0;
+    recalculateCurrentPage(state, scroll.current, true);
   };
 
   const onScrollModeChange = (): void => {
@@ -157,15 +166,19 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
       scroll.current = getScrollFromContentSlug(state) ?? 0;
       scroll.target = scroll.current;
       scroll.speed = 0;
+      if (state.layout === LayoutTypes.Fixed) {
+        reCalcScrollLimits(state);
+      }
       applyCSSProps();
     }, 0);
   };
 
   const onContentSlugChanged = (slug: string): void => {
     const targetSlugScrollPosition = getScrollFromContentSlug(state, slug);
-    if (targetSlugScrollPosition !== null) {
+    if (targetSlugScrollPosition !== null && state.forceScroll === undefined) {
       scroll.target = targetSlugScrollPosition;
     }
+
     executeTransitions();
   };
 
@@ -186,6 +199,9 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
       zoom.current = zoom.target;
     }
     resetPageProps();
+    if (state.layout === LayoutTypes.Fixed) {
+      reCalcScrollLimits(state);
+    }
     applyCSSProps();
   };
 
@@ -209,9 +225,35 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
       zoom.target = state.zoom;
       zoom.current = zoom.target;
       zoom.forceUpdate = true;
+      reCalcScrollLimits(state);
       executeTransitions();
     }
   };
+
+  const onForceScrollChange = (newScroll: number | undefined): void => {
+    if (newScroll !== undefined) {
+      scroll.target = newScroll * -1;
+      scroll.current = scroll.target;
+      scroll.speed = 0;
+      updateState({
+        forceScroll: undefined,
+      });
+      executeTransitions();
+    }
+  };
+
+  const onAnimateToScroll = (newScroll: number | undefined): void => {
+    if (newScroll !== undefined) {
+      scroll.target = newScroll * -1;
+      updateState({
+        animateToScroll: undefined,
+      });
+      executeTransitions();
+    }
+  };
+
+  addOnChangeEventListener('forceScroll', onForceScrollChange);
+  addOnChangeEventListener('animateToScroll', onAnimateToScroll);
 
   addOnChangeEventListener('zoom', onZoomChange);
   addOnChangeEventListener('chapterNumber', onChapterChange);
@@ -225,11 +267,21 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
   addOnChangeEventListener('containerHeight', () => onReadModeChangeEvent());
   addOnChangeEventListener('fontSize', () => onReadModeChangeEvent());
   onReadModeChangeEvent(true);
-  scrollController(state, dispatch, scroll, altScroll, executeTransitions);
+  scrollController(state, dispatch, executeTransitions);
   updateState({
     animate: true,
     animating: false,
   });
+
+  unmountAnimationsHandler = (): void => {
+    resetLastPage();
+    resetInterpolationValues();
+    applyCSSProps();
+  };
+};
+
+export const unmountAnimations = (): void => {
+  unmountAnimationsHandler();
 };
 
 export default animationController;

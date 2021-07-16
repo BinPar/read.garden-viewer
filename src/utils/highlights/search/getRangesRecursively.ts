@@ -8,7 +8,11 @@ import getSearchHighlightsRanges from './getSearchHighlightsRanges';
  * @param terms Terms to look for
  * @param firstCall Denotes this is the first call to method
  */
-const getRangesRecursively = (container: HTMLElement, terms: string[], firstCall = false): Range[] => {
+const getRangesRecursively = (
+  container: HTMLElement,
+  terms: string[],
+  firstCall = false,
+): Range[] => {
   const termsKey = terms.join('|');
   if (container.dataset && container.dataset.highlighted === termsKey) {
     return [];

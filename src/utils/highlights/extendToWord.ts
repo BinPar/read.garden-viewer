@@ -1,3 +1,4 @@
+import getSelection from '../../lib/animation/getSelection';
 import getLastTextNode from '../getLastTextNode';
 
 /**
@@ -5,9 +6,12 @@ import getLastTextNode from '../getLastTextNode';
  * @param selection Selection
  */
 const extendToWord = (selection: Selection, contentWrapper: HTMLElement): void => {
-  const backupRange = selection!.getRangeAt(0);
+  if (!selection || !selection.rangeCount) {
+    return;
+  }
+  const backupRange = selection.getRangeAt(0);
   selection.modify('extend', 'forward', 'word');
-  let candidate = window.getSelection()!.getRangeAt(0);
+  let candidate = getSelection()!.getRangeAt(0);
   if (
     contentWrapper !== candidate.endContainer &&
     !contentWrapper.contains(candidate.endContainer)
@@ -34,7 +38,7 @@ const extendToWord = (selection: Selection, contentWrapper: HTMLElement): void =
     candidate.toString() !== selection.toString() &&
     !selection.toString().match(/[.,/#¡!¿?$%^&*;:{}=«»\-_`~()\][ \n]+$/)
   ) {
-    candidate = window.getSelection()!.getRangeAt(0);
+    candidate = getSelection()!.getRangeAt(0);
     selection.modify('extend', 'forward', 'character');
   }
   selection.removeAllRanges();

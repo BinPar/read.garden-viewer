@@ -6,7 +6,11 @@ export const cleanDOM = (state: State): void => {
   if (state.readGardenContainerNode) {
     state.readGardenContainerNode.remove();
   }
-  document.body.classList.remove(`rg-${state.layout}-layout`, `rg-${state.scrollMode}-scroll`);
+  document.body.classList.remove(
+    `rg-${state.layout}-layout`,
+    `rg-${state.scrollMode}-scroll`,
+    `rg-${state.theme}-theme`,
+  );
 };
 
 /**
@@ -14,15 +18,20 @@ export const cleanDOM = (state: State): void => {
  * @param state Viewer state
  */
 const createBasicDOMElements = (state: State): void => {
-  document.body.classList.add(`rg-${state.layout}-layout`, `rg-${state.scrollMode}-scroll`);
+  document.body.classList.add(
+    `rg-${state.layout}-layout`,
+    `rg-${state.scrollMode}-scroll`,
+    `rg-${state.theme}-theme`,
+  );
 
   // #region Container node
   const readGardenContainerNode = document.createElement('div');
   readGardenContainerNode.id = 'rg-container';
+
+  const backgroundCleaner = document.createElement('div');
+  backgroundCleaner.classList.add('rg-bg-cleaner');
+  readGardenContainerNode.appendChild(backgroundCleaner);
   // #endregion Container node
-  if (state.theme === 'dark') {
-    readGardenContainerNode.style.filter = 'invert(1)';
-  }
 
   // #region Main node
   const readGardenViewerNode = document.createElement('div');
@@ -37,10 +46,6 @@ const createBasicDOMElements = (state: State): void => {
   if (state.layout === 'flow' && state.textAlign) {
     contentWrapperNode.classList.add('rg-force-text-align');
   }
-
-  const backgroundCleaner = document.createElement('div');
-  backgroundCleaner.classList.add('rg-bg-cleaner');
-  contentWrapperNode.appendChild(backgroundCleaner);
 
   const contentPlaceholderNode = document.createElement('div');
   contentPlaceholderNode.id = 'rg-content-placeholder';

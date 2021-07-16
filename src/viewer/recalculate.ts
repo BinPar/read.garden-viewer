@@ -9,6 +9,7 @@ import {
 } from '../utils/highlights/clientToContentWrapperCoordinates';
 import setCSSProperty from '../utils/setCSSProperty';
 import updatePositionsMaps from '../utils/updatePositionsMaps';
+import getColumnGap from '../utils/getColumnGap';
 
 const charWidthFactor = 1.65;
 
@@ -26,10 +27,10 @@ const recalculate = async (state: State): Promise<Partial<State>> => {
   }
   updateState({ recalculating: true });
   return new Promise<Partial<State>>((resolve): void => {
-    const { contentWrapperNode, contentPlaceholderNode } = state;
+    const { readGardenContainerNode, readGardenViewerNode, contentPlaceholderNode } = state;
 
-    const containerWidth = contentWrapperNode!.clientWidth;
-    const containerHeight = contentWrapperNode!.clientHeight;
+    const containerRect = readGardenContainerNode!.getBoundingClientRect();
+    const { width: containerWidth, height: containerHeight } = containerRect;
 
     const globalUpdate: Partial<GlobalState> = {
       containerWidth,
@@ -52,7 +53,6 @@ const recalculate = async (state: State): Promise<Partial<State>> => {
 
       pagesLabelsNode!.innerHTML = '';
 
-      let columnGap = desiredColumnGap;
       const charWidth = fontSize / charWidthFactor;
       const minWidth = Math.min(minCharsPerColumn * charWidth, containerWidth);
       const maxWidth = Math.min(maxCharsPerColumn * charWidth + desiredColumnGap, containerWidth);
@@ -62,17 +62,10 @@ const recalculate = async (state: State): Promise<Partial<State>> => {
         const columnsInViewport = doubleColumnWidth < minWidth ? 1 : 2;
         const totalColumnWidth = containerWidth / columnsInViewport;
 
-        if (columnsInViewport === 1) {
-          if (totalColumnWidth > maxWidth) {
-            const gapCompensation = Math.max(totalColumnWidth - desiredColumnGap - maxWidth, 0);
-            columnGap += gapCompensation;
-          } else if (totalColumnWidth < minWidth + desiredColumnGap) {
-            const gapCompensation = Math.min(totalColumnWidth - minWidth - desiredColumnGap, 0);
-            columnGap += gapCompensation;
-          }
-        }
-
-        columnGap = Math.max(columnGap, state.config.minColumnGap);
+        const columnGap = Math.max(
+          getColumnGap(totalColumnWidth, maxWidth, minWidth, desiredColumnGap),
+          state.config.minColumnGap,
+        );
 
         const columnWidth = totalColumnWidth - columnGap;
 
@@ -174,34 +167,40 @@ const recalculate = async (state: State): Promise<Partial<State>> => {
       }
 
       if (state.scrollMode === 'vertical') {
-        const gapCompensation = Math.max(containerWidth - desiredColumnGap - maxWidth, 0);
-        columnGap += gapCompensation;
+        const columnGap = Math.max(
+          getColumnGap(containerWidth, maxWidth, minWidth, desiredColumnGap),
+          state.config.minColumnGap,
+        );
 
         setCSSProperty('column-gap', `${columnGap}px`);
+        setCSSProperty('vertical-translate', '0');
+        updateState({ scrollTop: 0 });
+
+        const marginTop =
+          parseInt(window.getComputedStyle(readGardenViewerNode!).marginTop, 10) || 0;
+
+        const positionBySlug = new Map<string, number>();
+        const slugByPosition = new Map<number, string>();
+
+        let lastPosition = 0;
+
+        contentPlaceholderNode!.querySelectorAll('[data-page]').forEach((item) => {
+          const element = item as HTMLElement;
+          const rawPosition = element.getBoundingClientRect().top - marginTop;
+          const position = clientToContentWrapperTop(rawPosition);
+          const page = element.dataset.page!;
+          positionBySlug.set(page, position);
+          slugByPosition.set(position, page);
+          lastPosition = position;
+        });
 
         resolve({
           ...globalUpdate,
           columnGap,
-        });
-
-        window.requestAnimationFrame(() => {
-          const positionBySlug = new Map<string, number>();
-          const slugByPosition = new Map<number, string>();
-
-          contentPlaceholderNode!.querySelectorAll('[data-page]').forEach((item) => {
-            const element = item as HTMLElement;
-            const rawPosition = element.getBoundingClientRect().top;
-            const position = clientToContentWrapperTop(rawPosition);
-            const page = element.dataset.page!;
-            positionBySlug.set(page, position);
-            slugByPosition.set(position, page);
-          });
-
-          updateState({
-            totalHeight: contentPlaceholderNode!.getBoundingClientRect().height,
-            positionBySlug,
-            slugByPosition,
-          });
+          totalHeight: contentPlaceholderNode!.getBoundingClientRect().height / state.scale,
+          lastPosition,
+          positionBySlug,
+          slugByPosition,
         });
         return;
       }

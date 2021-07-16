@@ -28,16 +28,7 @@ const getScrollFromContentSlug = (state: State, contentSlug = state.contentSlug)
           nextPage = position;
         }
       });
-      result -= labelPosition ?? 0;
-      if (state.layout === LayoutTypes.Fixed) {
-        // Center is smaller than width
-        if (nextPage) {
-          const pageWidth = nextPage - labelPosition;
-          const centerFix = (window.innerWidth - pageWidth) / 2;
-          // TODO: Zoom FIX
-          result += centerFix;
-        }
-      }      
+      result -= labelPosition ?? 0; 
       if (!found) {
         return null;
       }

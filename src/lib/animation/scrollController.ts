@@ -1,17 +1,17 @@
+/* eslint-disable no-bitwise */
 /* eslint-disable no-param-reassign */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { SetReadMode } from '../../model/actions/global';
 import { DispatchAPIAction } from '../../model/actions/common';
 import { SelectionInfo, SyntheticEvent } from '../../model/dom';
-import { State } from '../../model/state';
+import { FixedState, GlobalState, PaginatedState, ScrolledState, State } from '../../model/state';
 import { drawHighlights } from '../../utils/highlights';
-import removeLayerHighlights from '../../utils/highlights/removeLayerHighlights';
 import setCSSProperty from '../../utils/setCSSProperty';
 import { updateState } from '../state';
 import getCoordinatesFromEvent from './getCoordinatesFromEvent';
 import getMinAndMaxScroll, { getMinAndMaxAltScroll } from './getMinAndMaxScroll';
 import getSyntheticEvent from './getSyntheticEvent';
-import { InterpolationValue, zoom, scale } from './interpolationValues';
+import { InterpolationValue, zoom, scale, altScroll, scroll } from './interpolationValues';
 import getWordSelection from './getWordSelection';
 import scrollInertiaAndLimits from './scrollInertiaAndLimits';
 import { LayoutTypes } from '../../model/viewerSettings';
@@ -20,12 +20,37 @@ import { OnHighlightClick, OnUserSelect } from '../../model/events';
 import getClickedHighlight from './getClickedHighlight';
 import removeSelectionMenu from '../../utils/highlights/removeSelectionMenu';
 import removeNotesDialog from '../../utils/highlights/removeNotesDialog';
+import drawExtensors, { removeExtensors } from '../../utils/highlights/drawExtensors';
+import extendSelection from '../../utils/highlights/extendSelection';
+import clearNativeSelection from '../../utils/highlights/clearNativeSelection';
+import clearSelection from '../../utils/highlights/clearSelection';
+import getFixedContentContainer from '../../utils/highlights/getFixedContentContainer';
+import isClickOnLink from '../../utils/highlights/isClickOnLink';
+
+export const reCalcScrollLimits = (
+  state: (GlobalState & FixedState & ScrolledState) | (GlobalState & FixedState & PaginatedState),
+): void => {
+  const scrollLimits = getMinAndMaxScroll(state);
+  if (scroll.current > scrollLimits.maxScroll) {
+    scroll.target = scrollLimits.maxScroll;
+    scroll.speed = 0;
+  } else if (scroll.target < scrollLimits.minScroll) {
+    scroll.target = scrollLimits.minScroll;
+    scroll.speed = 0;
+  }
+  const altScrollLimits = getMinAndMaxAltScroll(state);
+  if (altScroll.current > altScrollLimits.maxScroll) {
+    altScroll.target = altScrollLimits.maxScroll;
+    altScroll.speed = 0;
+  } else if (altScroll.target < altScrollLimits.minScroll) {
+    altScroll.target = altScrollLimits.minScroll;
+    altScroll.speed = 0;
+  }
+};
 
 const scrollController = (
   state: State,
   dispatch: DispatchAPIAction,
-  scroll: InterpolationValue,
-  altScroll: InterpolationValue,
   executeTransitions: () => void,
 ): void => {
   let mouseDown = false;
@@ -38,21 +63,25 @@ const scrollController = (
   const { selectionHighlightsNode } = state as Required<State>;
   let initialSelection: SelectionInfo | null = null;
   let currentSelection: Range | null = null;
-
-  const isPreviousThanSelection = (event: SyntheticEvent): boolean => {
-    if (initialSelection) {
-      const { top, bottom, left } = initialSelection;
-      return top > event.clientY || (left > event.clientX && bottom > event.clientY);
-    }
-    return false;
-  };
+  let isSelecting = false;
+  let mobileSelection = false;
+  let mobileSelectionTimeout: NodeJS.Timeout | null = null;
 
   const onDragStart = (ev: MouseEvent | TouchEvent): void => {
+    clearSelection();
+    removeExtensors(state);
+    removeSelectionMenu(state);
+    removeNotesDialog(state);
     if (ev.type === 'touchstart' || (ev as MouseEvent).button === 0) {
-      removeLayerHighlights(selectionHighlightsNode);
-      removeSelectionMenu(state);
-      removeNotesDialog(state);
+      setCSSProperty('user-select', 'none');
+      initialSelection = null;
+      currentSelection = null;
+      isSelecting = false;
       const syntheticEvent = getSyntheticEvent(ev);
+      const isLink = isClickOnLink(syntheticEvent, state);
+      if (isLink) {
+        return;
+      }
       const clickedHighlight =
         !state.config.disableSelection &&
         state.config.eventHandler &&
@@ -71,25 +100,38 @@ const scrollController = (
           handler(onHighlightClick);
           updateState({
             lastClickCoords: { x: syntheticEvent.clientX, y: syntheticEvent.clientY },
+            highlightClicked: true,
           });
           return;
         }
       }
-      const wordSelection = !state.config.disableSelection && getWordSelection(ev, syntheticEvent);
+      setCSSProperty('user-select', 'text');
+      const wordSelection =
+        !state.config.disableSelection && getWordSelection(state, ev, syntheticEvent);
+      // alert(JSON.stringify({ ...syntheticEvent, wordSelection: !!wordSelection }));
+      setCSSProperty('user-select', 'none');
       if (wordSelection) {
-        ev.preventDefault();
         ev.stopPropagation();
-        const { top, bottom, left } = wordSelection.getBoundingClientRect();
         initialSelection = {
-          top,
-          bottom,
-          left,
           startContainer: wordSelection.startContainer,
           startOffset: wordSelection.startOffset,
           endContainer: wordSelection.endContainer,
           endOffset: wordSelection.endOffset,
         };
-        return;
+        if (ev.type === 'touchstart') {
+          mobileSelectionTimeout = setTimeout(() => {
+            mobileSelection = true;
+            mobileSelectionTimeout = null;
+            currentSelection = wordSelection;
+            updateState({
+              selectingText: true,
+            });
+          }, 400);
+        } else {
+          ev.preventDefault();
+          isSelecting = true;
+          return;
+        }
       }
       mouseDown = true;
       lastX = null;
@@ -151,9 +193,12 @@ const scrollController = (
   };
 
   const onDragEnd = (ev: MouseEvent | TouchEvent): void => {
+    if (mobileSelectionTimeout) {
+      clearTimeout(mobileSelectionTimeout);
+      mobileSelectionTimeout = null;
+    }
     if (mouseDown) {
       mouseDown = false;
-      setCSSProperty('user-select', 'auto');
       let inertialDelta = lastDelta;
       let altInertialDelta = altDelta;
       updateScrollDeltas(ev);
@@ -191,36 +236,67 @@ const scrollController = (
         updateState({
           dragging: false,
         });
-        setCSSProperty('pointer-events', 'auto');
-        setCSSProperty('user-select', 'auto');
+        if (!state.animating) {
+          setCSSProperty('pointer-events', 'auto');
+          setCSSProperty('user-select', 'auto');
+        }
       }, 0);
     }
-    if (initialSelection) {
-      if (currentSelection) {
+    if (initialSelection && currentSelection) {
+      ev.preventDefault();
+      updateState({
+        currentSelection,
+      });
+      if (mobileSelection) {
+        const highlights = drawHighlights(selectionHighlightsNode, [currentSelection]);
+        mobileSelection = false;
+        drawExtensors(highlights, currentSelection, state);
+      } else {
         const syntheticEvent = getSyntheticEvent(ev);
         updateState({
-          selectingText: false,
-          currentSelection,
           lastClickCoords: { x: syntheticEvent.clientX, y: syntheticEvent.clientY },
         });
-        if (
-          !currentSelection.collapsed &&
-          currentSelection.toString().trim() &&
-          state.config.eventHandler
-        ) {
-          const event: OnUserSelect = {
-            type: 'onUserSelect',
-            slug: state.slug,
-          };
-          state.config.eventHandler(event);
-        }
+        drawHighlights(selectionHighlightsNode, [currentSelection]);
       }
-      initialSelection = null;
-      currentSelection = null;
+      setCSSProperty('user-select', 'none');
+      clearNativeSelection();
+      setTimeout((): void => {
+        updateState({
+          selectingText: false,
+        });
+      }, 0);
+      if (
+        !currentSelection.collapsed &&
+        currentSelection.toString().trim() &&
+        state.config.eventHandler
+      ) {
+        const event: OnUserSelect = {
+          type: 'onUserSelect',
+          slug: state.slug,
+        };
+        state.config.eventHandler(event);
+      }
     }
+    if (state.highlightClicked) {
+      setTimeout(() => {
+        updateState({ highlightClicked: false });
+      }, 0);
+    }
+    initialSelection = null;
+    currentSelection = null;
+    mobileSelection = false;
+    isSelecting = false;
   };
 
   const onDragMove = (ev: MouseEvent | TouchEvent): void => {
+    if (mobileSelectionTimeout) {
+      updateState({
+        selectingText: false,
+      });
+      clearTimeout(mobileSelectionTimeout);
+      mobileSelectionTimeout = null;
+      mobileSelection = false;
+    }
     if (mouseDown) {
       ev.stopPropagation();
       if (!state.dragging) {
@@ -242,29 +318,24 @@ const scrollController = (
       scroll.forceUpdate = false;
       lastMoveMilliseconds = new Date().getTime();
     }
-    if (initialSelection) {
+    if (isSelecting && initialSelection) {
+      setCSSProperty('user-select', 'text');
       if (!state.selectingText) {
         updateState({
           selectingText: true,
         });
       }
       const event = getSyntheticEvent(ev);
-      const wordSelection = getWordSelection(ev, event);
+      const wordSelection = getWordSelection(state, ev, event);
       if (wordSelection) {
-        const isPrevious = isPreviousThanSelection(event);
-        const { startContainer, startOffset, endContainer, endOffset } = initialSelection;
-        const backupRange = wordSelection.cloneRange();
-        if (isPrevious) {
-          wordSelection.setEnd(endContainer, endOffset);
-          if (!wordSelection.isPointInRange(backupRange.startContainer, backupRange.startOffset)) {
-            wordSelection.setStart(startContainer, startOffset);
-            wordSelection.setEnd(backupRange.endContainer, backupRange.endOffset);
-          }
-        } else {
-          wordSelection.setStart(startContainer, startOffset);
+        const container =
+          state.layout === LayoutTypes.Fixed &&
+          getFixedContentContainer(wordSelection.startContainer);
+        if (!container || container.contains(initialSelection.startContainer)) {
+          const { range } = extendSelection(wordSelection, initialSelection);
+          currentSelection = range;
+          drawHighlights(selectionHighlightsNode, [currentSelection]);
         }
-        drawHighlights(selectionHighlightsNode, [wordSelection]);
-        currentSelection = wordSelection;
       }
     }
   };
@@ -296,6 +367,7 @@ const scrollController = (
       } else {
         updateState({ fitMode: undefined });
         updateZoom(zoom.target - ev.deltaY * state.zoomSpeed, state);
+        reCalcScrollLimits(state);
         executeTransitions();
       }
       ev.preventDefault();
@@ -316,7 +388,6 @@ const scrollController = (
         }
         altScroll.current += altDelta;
         const altScrollLimits = getMinAndMaxAltScroll(state);
-
         if (altScroll.current > altScrollLimits.maxScroll) {
           altScroll.current = altScrollLimits.maxScroll;
           altScroll.speed = 0;

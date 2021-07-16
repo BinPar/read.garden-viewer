@@ -22,7 +22,7 @@ const viewer: ViewerFunction = (config) => {
   const api: APIInterface = {
     dispatch,
     state,
-    unmount,
+    unmount: (): void => unmount(state),
   };
   setInitialProperties(state);
   createBasicDOMElements(state);

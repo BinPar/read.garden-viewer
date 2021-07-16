@@ -1,51 +1,112 @@
-:root {
-  --debug-viewer-safe-area: 0;
-  --safe-area-border-width: calc(2px * var(--debug-viewer-safe-area));
+/** From CSS Remedy **/
+
+*,
+::before,
+::after {
+  box-sizing: border-box;
 }
 
-* {
-  margin: 0;
-  padding: 0;
-}
-
-*:before,
-*:after {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  outline: none;
+html {
+  line-sizing: normal;
 }
 
 body {
-  min-height: 100vh;
-  max-height: 100vh;
+  margin: 0;
+}
+
+[hidden] {
+  display: none;
+}
+
+img,
+svg,
+video,
+canvas {
+  height: auto;
+}
+
+audio {
+  width: 100%;
+}
+
+img {
+  border-style: none;
+}
+
+svg {
+  overflow: hidden;
+}
+
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+main,
+nav,
+section {
+  display: block;
+}
+
+/** End CSS Remedy **/
+
+html {
+  height: 100%;
+  overflow: hidden;
+}
+
+body.rg-fixed-layout,
+body.rg-flow-layout {
+  height: 100%;
+  min-height: 100%;
+  max-height: 100%;
   padding: 0;
   overflow: hidden;
   background-color: #fff;
-  overscroll-behavior-y: contain;
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
 
-body::-webkit-scrollbar {
+body.rg-fixed-layout::-webkit-scrollbar,
+body.rg-flow-layout::-webkit-scrollbar {
   display: none;
 }
 
 div#rg-container {
-  width: 100vw;
-  height: 100vh;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  filter: var(--theme-filter, none);
+}
+
+div#rg-container .rg-bg-cleaner {
+  position: absolute;
   background-color: #fff;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.rg-fixed-layout div#rg-container .rg-bg-cleaner {
+  background-color: #eee;
 }
 
 div#rg-viewer {
-  width: 100vw;
-  height: 100vh;
+  float: left;
+  width: 100%;
+  height: 100%;
   pointer-events: var(--pointer-events);
   margin-top: var(--viewer-margin-top);
   transform-origin: top left;
+  will-change: transform;
   transform: translateX(var(--horizontal-translate)) translateY(var(--vertical-translate))
     scale(var(--scale));
-  line-height: var(--line-height);
 }
 
 div.rg-content-wrapper {
@@ -56,18 +117,62 @@ div.rg-content-wrapper {
   clear: both;
   cursor: var(--drag-cursor, grab);
   user-select: none;
-  box-sizing: content-box;
 }
 
-div.rg-content-wrapper #rg-content-placeholder * {
-  backface-visibility: unset;
-  -webkit-backface-visibility: unset;
+.rg-flow-layout div.rg-content-wrapper #rg-content-placeholder span[data-page] {
+  display: block;
+}
+
+div.rg-content-wrapper #rg-content-placeholder > div a {
+  pointer-events: auto !important;
+}
+
+.rg-fixed-layout div.rg-content-wrapper #rg-content-placeholder .rg-fixed-content-container > * {
+  display: var(--page-display);
+}
+
+.rg-fixed-layout div.rg-content-wrapper div#rg-content-placeholder > .rg-fixed-content-container {
+  position: relative;
+  contain: size;
+  content-visibility: auto;
+  background-color: #ccc;
+}
+
+.rg-fixed-layout.rg-horizontal-scroll div.rg-content-wrapper div#rg-content-placeholder {
+  width: var(--total-width);
+  height: auto;
+}
+
+.rg-fixed-layout [data-link] > div {
+  border: none !important;
+}
+
+.rg-fixed-layout.rg-horizontal-scroll
+  div.rg-content-wrapper
+  div#rg-content-placeholder
+  > .rg-fixed-content-container {
+  float: left;
+}
+
+.rg-fixed-layout.rg-vertical-scroll div.rg-content-wrapper div#rg-content-placeholder {
+  height: var(--total-height);
+  width: auto;
+}
+
+div.rg-content-wrapper #rg-content-placeholder > div {
   user-select: var(--user-select);
   -webkit-user-select: var(--user-select);
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 div.rg-content-wrapper #rg-content-placeholder *::selection {
   background-color: transparent;
+}
+
+.rg-flow-layout div.rg-content-wrapper #rg-content-placeholder > div {
+  backface-visibility: unset;
+  -webkit-backface-visibility: unset;
 }
 
 .rg-flow-layout div.rg-content-wrapper {
@@ -83,44 +188,51 @@ div.rg-content-wrapper #rg-content-placeholder *::selection {
   column-width: var(--column-width);
 }
 
+.rg-flow-layout div#rg-content-placeholder * {
+  line-height: var(--line-height) !important;
+}
+
 .rg-flow-layout.rg-vertical-scroll div#rg-content-placeholder {
   overflow: hidden;
 }
 
-.rg-fixed-layout.rg-horizontal-scroll div.rg-content-wrapper div#rg-content-placeholder {
-  width: var(--total-width);
-  height: auto;
-}
-
-.rg-fixed-layout.rg-horizontal-scroll div.rg-content-wrapper div#rg-content-placeholder > * {
-  float: left;
-  contain: size;
-  content-visibility: auto;
-  background-color: #ccc;
-}
-
-.rg-fixed-layout div.rg-content-wrapper div#rg-content-placeholder > * {
-  position: relative;
-}
-
-.rg-fixed-layout.rg-vertical-scroll div.rg-content-wrapper div#rg-content-placeholder {
-  height: var(--total-height);
-  width: auto;
+.rg-flow-layout div.rg-content-wrapper img.rg-ready,
+.rg-flow-layout div.rg-content-wrapper video,
+.rg-flow-layout div.rg-content-wrapper iframe {
+  filter: var(--theme-filter, none);
 }
 
 .rg-flow-layout.rg-horizontal-scroll div.rg-content-wrapper img.rg-ready,
 .rg-flow-layout.rg-horizontal-scroll div.rg-content-wrapper video,
 .rg-flow-layout.rg-horizontal-scroll div.rg-content-wrapper table,
 .rg-flow-layout.rg-horizontal-scroll div.rg-content-wrapper iframe {
-  max-width: var(--column-width);
+  max-width: min(var(--column-width), 100%);
+}
+
+.rg-flow-layout.rg-vertical-scroll div.rg-content-wrapper img.rg-ready,
+.rg-flow-layout.rg-vertical-scroll div.rg-content-wrapper video,
+.rg-flow-layout.rg-vertical-scroll div.rg-content-wrapper table,
+.rg-flow-layout.rg-vertical-scroll div.rg-content-wrapper iframe {
+  max-width: calc(100vw - var(--column-gap));
+}
+
+.rg-flow-layout div.rg-content-wrapper img.rg-ready,
+.rg-fixed-layout div.rg-content-wrapper div#rg-content-placeholder img {
+  pointer-events: none;
+  cursor: pointer;
 }
 
 .rg-flow-layout.rg-horizontal-scroll div.rg-content-wrapper img.rg-ready {
-  pointer-events: none;
-  cursor: pointer;
   max-height: min(
     calc(100vh - var(--padding-top) - var(--padding-bottom)),
     calc(var(--image-ratio, 100) * var(--column-width))
+  ) !important;
+}
+
+.rg-flow-layout.rg-vertical-scroll div.rg-content-wrapper img.rg-ready {
+  max-height: min(
+    calc(100vh - var(--padding-top) - var(--padding-bottom)),
+    calc(var(--image-ratio, 100) * calc(100vw - var(--column-gap)))
   ) !important;
 }
 
@@ -139,7 +251,7 @@ div.rg-content-wrapper #rg-content-placeholder *::selection {
   right: 0;
   bottom: 0;
   z-index: 1;
-  background-color: #ccc;
+  background-color: #ddd;
 }
 
 @media (max-width: 48em) {
@@ -149,6 +261,12 @@ div.rg-content-wrapper #rg-content-placeholder *::selection {
       calc(var(--image-ratio, 100) * var(--column-width))
     ) !important;
   }
+
+  /* .rg-flow-layout.rg-vertical-scroll div.rg-content-wrapper {
+    padding: var(--padding-top)
+      min(calc(var(--column-gap) / 2), calc(0.1 * calc(100vw - var(--column-gap))))
+      var(--padding-bottom);
+  } */
 }
 
 div.rg-content-wrapper.rg-force-text-align * {
@@ -221,18 +339,27 @@ div.rg-highlights-layer.rg-search > div {
 div.rg-highlights-layer > div {
   position: absolute;
   border: none;
-}
-
-div.rg-highlights-layer > div {
   background-color: var(--highlighter-color);
   pointer-events: var(--highlights-pointer-events);
+  transform: translate3d(0, 0, 0);
 }
 
-div.rg-highlights-layer .rg-left-extensor,
-div.rg-highlights-layer .rg-right-extensor {
+.rg-dark-theme div.rg-highlights-layer > div {
+  filter: brightness(0.8);
+  /* mix-blend-mode: multiply; Needed for mobile, will need to add it with specific class */
+}
+
+div.rg-highlights-layer .rg-selection-extensor {
   background-color: var(--current-selection-extensors-color);
+  width: 27px;
+  height: 27px;
   border-radius: 100%;
-  pointer-events: all;
+  pointer-events: var(--extensors-pointer-events);
+  border: 1px solid #fff;
+}
+
+div.rg-highlights-layer.rg-selectors {
+  mix-blend-mode: normal;
 }
 
 div.rg-highlights-layer > .rg-left-extensor {
@@ -246,12 +373,18 @@ div.rg-highlights-layer > .rg-right-extensor {
 }
 
 div.rg-selection-menu,
+div.rg-notes-dialog,
+div.rg-confirmation-dialog,
+div.rg-highlights-layer {
+  filter: var(--theme-filter, none);
+}
+
+div.rg-selection-menu,
 div.rg-selection-menu .rg-selection-menu-wrapper,
 div.rg-selection-menu .rg-selection-menu-wrapper .rg-selection-menu-holder,
 div.rg-notes-dialog,
 div.rg-notes-dialog .rg-notes-dialog-wrapper,
 div.rg-notes-dialog .rg-notes-dialog-wrapper .rg-notes-dialog-holder,
-div.rg-notes-dialog .rg-notes-dialog-wrapper .rg-notes-dialog-holder fieldset,
 div.rg-notes-dialog .rg-notes-dialog-header,
 div.rg-notes-dialog .rg-notes-dialog-header-title,
 div.rg-notes-dialog .rg-notes-dialog-header-buttons,
@@ -262,6 +395,15 @@ div.rg-confirmation-dialog .rg-confirmation-dialog-wrapper .rg-confirmation-dial
 div.rg-confirmation-dialog .rg-confirmation-dialog-wrapper .rg-confirmation-dialog-buttons {
   display: flex;
   flex-flow: row nowrap;
+  -webkit-box-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  align-items: center;
+}
+
+div.rg-notes-dialog .rg-notes-dialog-wrapper .rg-notes-dialog-holder fieldset {
+  display: flex;
+  flex-flow: column nowrap;
   -webkit-box-pack: center;
   justify-content: center;
   -webkit-box-align: center;
@@ -285,6 +427,7 @@ div.rg-selection-menu.rg-bottom-arrow,
 div.rg-notes-dialog.rg-bottom-arrow,
 div.rg-confirmation-dialog.rg-bottom-arrow {
   transform: translateX(-50%) translateY(-100%) scale(calc(1 / var(--scale)));
+  transform-origin: center bottom;
 }
 
 div.rg-selection-menu.rg-top-arrow,
@@ -481,7 +624,8 @@ div.rg-notes-dialog .rg-notes-dialog-wrapper .rg-notes-dialog-holder .rg-notes-d
 .rg-selection-option,
 .rg-notes-option {
   overflow: hidden;
-  text-indent: -1000%;
+  text-indent: -10000px;
+  outline: none;
 }
 
 .rg-selection-option + .rg-selection-option {
@@ -578,51 +722,51 @@ div.rg-notes-dialog .rg-notes-dialog-wrapper .rg-notes-dialog-holder .rg-notes-d
 }
 
 .rg-notes-save:after {
-  mask: url(../img/icons/check.svg);
-  -webkit-mask: url(../img/icons/check.svg);
+  mask-image: url(../img/icons/check.svg);
+  -webkit-mask-image: url(../img/icons/check.svg);
 }
 
 .rg-notes-edit:after {
-  mask: url(../img/icons/edit.svg);
-  -webkit-mask: url(../img/icons/edit.svg);
+  mask-image: url(../img/icons/edit.svg);
+  -webkit-mask-image: url(../img/icons/edit.svg);
 }
 
 .rg-notes-cancel:after {
   background-color: #979797;
-  mask: url(../img/icons/close.svg);
-  -webkit-mask: url(../img/icons/close.svg);
+  mask-image: url(../img/icons/close.svg);
+  -webkit-mask-image: url(../img/icons/close.svg);
 }
 
 .rg-selection-option.highlighter:after {
-  mask: url(../img/icons/highlighter.svg);
-  -webkit-mask: url(../img/icons/highlighter.svg);
+  mask-image: url(../img/icons/highlighter.svg);
+  -webkit-mask-image: url(../img/icons/highlighter.svg);
 }
 
 .rg-selection-option.highlighter:hover:after,
 .rg-selection-option.highlighter.rg-selected:after {
-  mask: url(../img/icons/highlighterOn.svg);
-  -webkit-mask: url(../img/icons/highlighterOn.svg);
+  mask-image: url(../img/icons/highlighterOn.svg);
+  -webkit-mask-image: url(../img/icons/highlighterOn.svg);
 }
 
 .rg-selection-option.note:after,
 .rg-notes-option:after {
-  mask: url(../img/icons/note.svg);
-  -webkit-mask: url(../img/icons/note.svg);
+  mask-image: url(../img/icons/note.svg);
+  -webkit-mask-image: url(../img/icons/note.svg);
 }
 
 .rg-selection-option.note:hover:after,
 .rg-selection-option.note.rg-selected:after,
 .rg-notes-option:hover:after,
 .rg-notes-option.rg-selected:after {
-  mask: url(../img/icons/noteOn.svg);
-  -webkit-mask: url(../img/icons/noteOn.svg);
+  mask-image: url(../img/icons/noteOn.svg);
+  -webkit-mask-image: url(../img/icons/noteOn.svg);
 }
 
 .rg-selection-option.rg-delete:after,
 .rg-notes-delete:after {
   background-color: #979797;
-  mask: url(../img/icons/delete.svg);
-  -webkit-mask: url(../img/icons/delete.svg);
+  mask-image: url(../img/icons/delete.svg);
+  -webkit-mask-image: url(../img/icons/delete.svg);
 }
 
 .rg-selection-option.rg-delete:hover:after {

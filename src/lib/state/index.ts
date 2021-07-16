@@ -88,6 +88,8 @@ export const initializeState = (initialConfig: InitialConfig): void => {
     debugViewerSafeArea: config.debugViewerSafeArea,
     containerWidth: 0,
     containerHeight: 0,
+    forceScroll: undefined,
+    animateToScroll: undefined,
   };
 
   const scrolledState: ScrolledState = {
@@ -103,6 +105,7 @@ export const initializeState = (initialConfig: InitialConfig): void => {
       columnGap: config.columnGap,
       fontFamily: config.initialFontFamily,
       textAlign: config.initialTextAlign ?? defaultFlow.textAlign,
+      lineHeight: config.initialLineHeight ?? defaultFlow.lineHeight,
     };
   }
 
@@ -110,11 +113,14 @@ export const initializeState = (initialConfig: InitialConfig): void => {
     const fixedState: FixedState = {
       ...defaultFixed,
       fitMode: config.initialFitMode,
-      loadingContent: true,
       loadedCssUrls: new Set<string>(),
       minimumZoomValue: config.zoom.min ?? defaultFixed.minimumZoomValue,
       maximumZoomValue: config.zoom.max ?? defaultFixed.maximumZoomValue,
     };
+
+    if (config.initialContent) {
+      fixedState.loadingContent = config.initialContent.contentSlug;
+    }
 
     if (config.initialFixedMode === ViewerMode.Paginated) {
       state = {

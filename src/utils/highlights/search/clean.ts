@@ -4,8 +4,7 @@ import removeLayerHighlights from '../removeLayerHighlights';
 /**
  * Cleans search highlights
  */
-const clean = (): void => {
-  const state = getState();
+const clean = (state = getState()): void => {
   if (state.searchTermsHighlightsNode) {
     removeLayerHighlights(state.searchTermsHighlightsNode);
   }

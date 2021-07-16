@@ -6,6 +6,7 @@ const defaultFlow: DefaultFlowState = {
   columnsInViewport: 2,
   fontFamily: 'Helvetica',
   fontSize: 18,
+  lineHeight: 1.5,
   textAlign: null,
   snaps: new Array<number>(),
   columnWidth: 0,

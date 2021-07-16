@@ -108,6 +108,11 @@ export type TextAlignModes = 'start' | 'justify' | null;
 export type ScrollModes = 'vertical' | 'horizontal';
 
 /**
+ * Available line height values
+ */
+export type LineHeight = 1.25 | 1.5 | 1.75;
+
+/**
  * New content for viewer
  */
 export interface NewContent {

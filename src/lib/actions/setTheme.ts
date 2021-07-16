@@ -1,16 +1,19 @@
 import { ActionDispatcher } from '../../model/actions/actionDispatcher';
 import { SetTheme } from '../../model/actions/global';
-import { State } from '../../model/state';
+
+import removeCSSProperty from '../../utils/removeCSSProperty';
+import setCSSProperty from '../../utils/setCSSProperty';
 
 const setTheme: ActionDispatcher<SetTheme> = async ({ state, action }) => {
   const { theme } = action;
   if (state.theme !== theme) {
-    const { readGardenContainerNode } = state as Required<State>;
     if (theme === 'dark') {
-      readGardenContainerNode.style.filter = 'invert(1)';
+      setCSSProperty('theme-filter', 'invert(1)');
     } else {
-      readGardenContainerNode.style.filter = '';
+      removeCSSProperty('theme-filter');
     }
+    document.body.classList.remove(`rg-${state.theme}-theme`);
+    document.body.classList.add(`rg-${theme}-theme`);
     return { theme };
   }
   return {};

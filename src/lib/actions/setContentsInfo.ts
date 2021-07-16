@@ -18,12 +18,13 @@ const setContentsInfo: ActionDispatcher<SetContentsInfo> = async ({ state, actio
   const { contentPlaceholderNode } = state as Required<State>;
 
   const { info } = action;
-  let currentContentIndex = 0;
   let totalWidth = 0;
   let totalHeight = 0;
   let maxWidth = 0;
   let maxHeight = 0;
   let lastPosition = 0;
+  let prev: string | undefined;
+  let previousContent: FixedViewerContentInfo | undefined;
   const contentsBySlug = new Map<string, FixedViewerContentInfo>();
   const contentsByOrder = new Map<number, FixedViewerContentInfo>();
   const positionBySlug = new Map<string, number>();
@@ -38,15 +39,13 @@ const setContentsInfo: ActionDispatcher<SetContentsInfo> = async ({ state, actio
     maxWidth = Math.max(maxWidth, width);
     maxHeight = Math.max(maxHeight, height);
     const container = document.createElement('div');
+    container.classList.add('rg-fixed-content-container');
     container.style.width = `${width}px`;
     container.style.height = `${height}px`;
     container.dataset.order = `${order}`;
     container.dataset.slug = slug;
     container.dataset.label = label;
     contentPlaceholderNode.appendChild(container);
-    if (!currentContentIndex && slug === state.contentSlug) {
-      currentContentIndex = order;
-    }
     const position = state.scrollMode === 'horizontal' ? left : top;
     positionBySlug.set(slug, position);
     slugByPosition.set(position, slug);
@@ -63,11 +62,21 @@ const setContentsInfo: ActionDispatcher<SetContentsInfo> = async ({ state, actio
       top,
       maxLeft: totalWidth,
       maxTop: totalHeight,
+      prev,
     };
     contentsByOrder.set(order, contentInfo);
     contentsBySlug.set(slug, contentInfo);
     contentsInfo.push(contentInfo);
     lastPosition = position;
+    prev = slug;
+    if (previousContent) {
+      previousContent.next = slug;
+    }
+    previousContent = contentInfo;
+  }
+
+  if (previousContent) {
+    previousContent.next = prev;
   }
 
   setCSSProperty('total-width', `${totalWidth}px`);
@@ -82,7 +91,6 @@ const setContentsInfo: ActionDispatcher<SetContentsInfo> = async ({ state, actio
     contentsInfo,
     contentsBySlug,
     contentsByOrder,
-    currentContentIndex,
     positionBySlug,
     slugByPosition,
     lastPosition,

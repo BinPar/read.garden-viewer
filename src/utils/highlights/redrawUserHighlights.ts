@@ -1,5 +1,5 @@
 import drawHighlights from '../../lib/actions/drawHighlights';
-import { DrawHighlights, State } from '../../model';
+import { DrawHighlights, LayoutTypes, State } from '../../model';
 
 const redrawUserHighlights = async (state: State): Promise<void> => {
   const { currentUserHighlights } = state;
@@ -12,7 +12,7 @@ const redrawUserHighlights = async (state: State): Promise<void> => {
         color: highlightInfo.color,
         key: highlightInfo.highlighterKey,
         highlights: [],
-        clear: true,
+        clear: state.layout === LayoutTypes.Flow,
       };
       actions.set(highlightInfo.highlighterKey, drawAction);
     }

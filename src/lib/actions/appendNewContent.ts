@@ -1,6 +1,6 @@
 import { ActionDispatcher } from '../../model/actions/actionDispatcher';
 import { AppendNewContent } from '../../model/actions/global';
-import { State } from '../../model/state';
+import { GlobalState, ScrolledState, State } from '../../model/state';
 import { LayoutTypes } from '../../model/viewerSettings';
 
 import setCSSProperty from '../../utils/setCSSProperty';
@@ -17,6 +17,7 @@ import removeUserHighlights from '../../utils/highlights/removeUserHighlights';
 import clearUserHighlights from '../../utils/highlights/clearUserHighlights';
 import redrawUserHighlights from '../../utils/highlights/redrawUserHighlights';
 import { highlightTerms } from '../../utils/highlights/search';
+import handleAnchors from '../../utils/handleAnchors';
 
 /**
  * Appends new content to viewer
@@ -45,7 +46,7 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
   }
   updateState({ cssLoaded: false });
   return new Promise<Partial<State>>((resolve): void => {
-    const { contentPlaceholderNode, dynamicStyleNode, searchTermsHighlightsNode } = state;
+    const { contentPlaceholderNode, dynamicStyleNode, searchTermsHighlightsNode, config } = state;
 
     if (state.layout === LayoutTypes.Flow) {
       setCSSProperty('viewer-margin-top', '200vh');
@@ -64,6 +65,7 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
             const newLink = document.createElement('link');
             const done = async (): Promise<void> => {
               const recalculateState = await recalculate(state);
+              handleAnchors(contentPlaceholderNode!, state);
               setCSSProperty('viewer-margin-top', '0');
               const finalPartialState: Partial<State> = {
                 ...recalculateState,
@@ -76,6 +78,18 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
               };
               if (replace) {
                 finalPartialState.dynamicStyleNode = newLink;
+              }
+              if (action.goToEnd) {
+                const tempState = recalculateState as GlobalState & ScrolledState;
+                if (state.scrollMode === 'horizontal') {
+                  finalPartialState.forceScroll =
+                    tempState.lastPosition - (tempState.lastPosition % tempState.containerWidth);
+                } else {
+                  finalPartialState.forceScroll = Math.max(
+                    tempState.totalHeight + config.paddingTop - tempState.containerHeight,
+                    0,
+                  );
+                }
               }
               resolve(finalPartialState);
               await redrawUserHighlights(state);
@@ -135,17 +149,18 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
         window.requestAnimationFrame(() => {
           const done = async (): Promise<void> => {
             container.classList.remove('rg-loading');
-            const recalculateState = await recalculate(state);
+            handleAnchors(container!, state);
             setCSSProperty('viewer-margin-top', '0');
             const finalPartialState: Partial<State> = {
-              ...recalculateState,
               slug: action.slug,
               cssLoaded: true,
             };
-            updateState({ loadingContent: false });
+            if (state.loadingContent === action.contentSlug) {
+              updateState({ loadingContent: '' });
+              loadContentsInBackground(state);
+            }
             resolve(finalPartialState);
             highlightTerms(state.searchTerms);
-            loadContentsInBackground();
           };
           const checkFonts = () => {
             dynamicStyleNode!.removeEventListener('load', checkFonts);

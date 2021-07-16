@@ -28,6 +28,10 @@ export interface LoadNewContent extends ReadGardenEvent {
    * Slug of the second level content (page, chapter...) to load
    */
   contentSlug: string;
+  /**
+   * Go to end of new content
+   */
+  goToEnd?: boolean;
 }
 
 export interface GetContentsInfo extends ReadGardenEvent {
@@ -67,6 +71,7 @@ export interface LoadNextChapter extends ReadGardenEvent, LoadChapterInfo {
 
 export interface LoadPreviousChapter extends ReadGardenEvent, LoadChapterInfo {
   type: 'loadPreviousChapter';
+  goToEnd?: boolean;
 }
 
 export interface OnUserSelect extends ReadGardenEvent {
@@ -119,6 +124,13 @@ export interface OnDeleteOptionClick extends ReadGardenEvent {
   slug: string;
 }
 
+export interface OnLinkClick extends ReadGardenEvent {
+  type: 'onLinkClick';
+  slug: string;
+  url: string | null;
+  querySelector: string;
+}
+
 export type ReadGardenEvents =
   | PageChange
   | LoadNewContent
@@ -132,7 +144,8 @@ export type ReadGardenEvents =
   | OnCancelNewNote
   | OnSaveNote
   | OnChangeNote
-  | OnDeleteOptionClick;
+  | OnDeleteOptionClick
+  | OnLinkClick;
 
 export type ReadGardenEventHandler = (event: ReadGardenEvents) => Promise<void>;
 

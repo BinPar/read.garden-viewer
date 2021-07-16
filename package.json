@@ -1,6 +1,6 @@
 {
   "name": "read.garden-viewer",
-  "version": "0.35.0",
+  "version": "0.36.0",
   "description": "Universal EBook Reader for EPUB2, EPUB3, HTML5 and PDF contents",
   "scripts": {
     "dev": "concurrently --kill-others \"npm run build-dev\" \"npm run server-dev\"",
@@ -8,7 +8,8 @@
     "build-dev": "nodemon --config nodemon.json --exec 'tsc;webpack --config webpack.config.js'",
     "generate-contents": "rm -rf ./web/books;ts-node-dev ./src/server/scripts/generateContents.ts",
     "lint": "eslint --config ./.eslintrc ./src --ext .js,.jsx,.ts,.tsx",
-    "publish-web": "npm run build;rm -r ../read.garden/web/lib/read.garden-viewer;mkdir ../read.garden/web/lib/read.garden-viewer;cp -R ./dist/* ../read.garden/web/lib/read.garden-viewer;cp ./web/css/read.garden-viewer.css ../read.garden/web/public/css/",
+    "publish-web": "npm run build;rm -r ../read.garden/web/sdk/read.garden-viewer;mkdir ../read.garden/web/sdk/read.garden-viewer;cp -R ./dist/* ../read.garden/web/sdk/read.garden-viewer;cp ./web/css/read.garden-viewer.css ../read.garden/web/public/css/",
+    "publish-app": "rm -rf ./dist;tsc -p tsconfig.app.json;webpack --config webpack.config.app.js;cp ./web/css/read.garden-viewer.css ../read.garden-mobile/sdk-viewer/css/;cp -R ./web/img ../read.garden-mobile/sdk-viewer/",
     "server-dev": "NODE_ENV=development ts-node-dev --debug --respawn ./src/server/index.ts",
     "start": "node ./dist/server/index.js",
     "test": "jest --runInBand",
@@ -29,6 +30,7 @@
   },
   "homepage": "https://github.com/acttoreact/read.garden-viewer#readme",
   "devDependencies": {
+    "@babel/preset-env": "^7.14.5",
     "@types/css-font-loading-module": "0.0.4",
     "@types/expect-puppeteer": "^4.4.5",
     "@types/jest": "^26.0.23",
@@ -36,7 +38,9 @@
     "@types/live-server": "^1.2.0",
     "@types/mkdirp": "^1.0.1",
     "@types/puppeteer": "^5.4.3",
+    "@types/shortid": "0.0.29",
     "@typescript-eslint/eslint-plugin": "^4.22.0",
+    "babel-loader": "^8.2.2",
     "chalk": "^4.1.1",
     "concurrently": "^3.5.1",
     "dotenv": "^8.2.0",
@@ -67,6 +71,7 @@
     "@a2r/fs": "^1.5.1",
     "js-base64": "^3.6.0",
     "loglevel": "^1.7.1",
+    "shortid": "^2.2.16",
     "typescript": "^4.2.4"
   }
 }

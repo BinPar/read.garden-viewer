@@ -1,12 +1,14 @@
+import { LayoutTypes } from '../../model';
+
 import { ActionDispatcher } from '../../model/actions/actionDispatcher';
 import { DrawHighlights } from '../../model/actions/global';
 
 import getRangesFromSelectionRanges from '../../utils/getRangesFromSelectionRanges';
-import { drawHighlights as drawDomHighlights } from '../../utils/highlights'
+import { drawHighlights as drawDomHighlights } from '../../utils/highlights';
 import removeLayerHighlights from '../../utils/highlights/removeLayerHighlights';
 
 const drawHighlights: ActionDispatcher<DrawHighlights> = async ({ action, state }) => {
-  if (!state.cssLoaded) {
+  if (!state.cssLoaded || !state.wrapperReady) {
     setTimeout(() => {
       drawHighlights({ action, state });
     }, 64);
@@ -27,7 +29,15 @@ const drawHighlights: ActionDispatcher<DrawHighlights> = async ({ action, state 
     const highlights = action.highlights[i];
     const { key, ...selectionRange } = highlights;
     const ranges = getRangesFromSelectionRanges([selectionRange]);
+    let existing = false;
     if (key) {
+      const existingHighlight = layer.querySelectorAll(`[data-key="${key}"`);
+      if (existingHighlight.length) {
+        existing = true;
+        if (state.layout === LayoutTypes.Flow) {
+          existingHighlight.forEach((item) => item.remove());
+        }
+      }
       state.currentUserHighlights.set(key, {
         ...selectionRange,
         key,
@@ -35,10 +45,14 @@ const drawHighlights: ActionDispatcher<DrawHighlights> = async ({ action, state 
         color: action.color,
       });
     }
-    const domHighlights = drawDomHighlights(layer, ranges, true, key);
-    state.currentUserDomHighlights.set(key, domHighlights);
+    if (!existing && ranges.length) {
+      const domHighlights = drawDomHighlights(layer, ranges, true, key);
+      if (domHighlights.length) {
+        state.currentUserDomHighlights.set(key, domHighlights);
+      }
+    }
   }
-  
+
   return {};
 };
 

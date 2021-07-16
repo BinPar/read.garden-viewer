@@ -7,7 +7,7 @@ import { SyntheticEvent } from '../../model/dom';
 const getSyntheticEvent = (ev: MouseEvent | TouchEvent): SyntheticEvent => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { rangeParent, rangeOffset } = ev as any;
-  const { clientX, clientY } = (ev as TouchEvent).touches
+  const { clientX, clientY } = (ev as TouchEvent).touches && (ev as TouchEvent).touches.length > 0
     ? (ev as TouchEvent).touches[0]
     : (ev as MouseEvent);
   return {

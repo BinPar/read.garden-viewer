@@ -10,6 +10,7 @@ const defaultConfig: DefaultConfig = {
   initialTextAlign: null,
   initialTheme: 'light',
   initialFontSize: 16,
+  initialLineHeight: 1.5,
   initialZoom: 1,
   showPageSeparation: false,
   animationFriction: 10,
@@ -17,7 +18,7 @@ const defaultConfig: DefaultConfig = {
   animationInertia: 20,
   zoom: {
     max: 4,
-    min: 0.1,
+    min: 0.5,
     steps: [0.1, 0.2, 0.3, 0.4, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.5, 3, 3.5, 4],
   },
   loadedContentsNumber: 5,
@@ -27,7 +28,7 @@ const defaultConfig: DefaultConfig = {
     step: 2,
   },
   columnGap: 216,
-  minColumnGap: 32,
+  minColumnGap: 48,
   pageChangeThreshold: 40,
   chapterChangeThreshold: 40,
   minCharsPerColumn: 50,
@@ -47,7 +48,7 @@ const defaultConfig: DefaultConfig = {
   paddingTop: 60,
   paddingBottom: 60,
   toggleReadModeOnClick: true,
-  fixedViewerPreloadOrder: [0, 1, 2, 3, -1, 4, -2, 5, -3, 6, -4],
+  fixedViewerPreloadOrder: [0, 1, 2, 3, -1, 4, -2],
 };
 
 export default defaultConfig;

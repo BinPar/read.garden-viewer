@@ -4,7 +4,7 @@
  * @param {DOMRectList | DOMRect[] | undefined} rectangles - Rectangles to be de-duplicated
  * @returns {DOMRect[]} New list of rectangles
  */
-const deduplicateRectangles = (rectangles: DOMRectList | DOMRect[] | undefined): DOMRect[] => {
+const deduplicateRects = (rectangles: DOMRectList | DOMRect[] | undefined): DOMRect[] => {
   const result = new Array<DOMRect>();
   let lastRect: DOMRect | null = null;
   if (rectangles) {
@@ -29,7 +29,7 @@ const deduplicateRectangles = (rectangles: DOMRectList | DOMRect[] | undefined):
         )
       ) {
         // Contained in the previous rectangle
-      } else {
+      } else if (rect.height > 4) {
         result.push(rect);
         lastRect = rect;
       }
@@ -38,4 +38,4 @@ const deduplicateRectangles = (rectangles: DOMRectList | DOMRect[] | undefined):
   return result;
 };
 
-export default deduplicateRectangles;
+export default deduplicateRects;
