@@ -1,26 +1,61 @@
-:root {
-  --debug-viewer-safe-area: 0;
-  --safe-area-border-width: calc(2px * var(--debug-viewer-safe-area));
-  --page-display: none;
+/** From CSS Remedy **/
+
+*,
+::before,
+::after {
+  box-sizing: border-box;
 }
 
-* {
-  margin: 0;
-  padding: 0;
+html {
+  line-sizing: normal;
 }
 
-*:before,
-*:after {
+body {
   margin: 0;
-  padding: 0;
-  border: 0;
-  outline: none;
 }
+
+[hidden] {
+  display: none;
+}
+
+img,
+svg,
+video,
+canvas {
+  height: auto;
+}
+
+audio {
+  width: 100%;
+}
+
+img {
+  border-style: none;
+}
+
+svg {
+  overflow: hidden;
+}
+
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+main,
+nav,
+section {
+  display: block;
+}
+
+/** End CSS Remedy **/
 
 html {
   height: 100%;
   overflow: hidden;
-  -webkit-overflow-scrolling: touch;
 }
 
 body.rg-fixed-layout,
@@ -31,7 +66,6 @@ body.rg-flow-layout {
   padding: 0;
   overflow: hidden;
   background-color: #fff;
-  overscroll-behavior-y: contain;
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
@@ -59,6 +93,10 @@ div#rg-container .rg-bg-cleaner {
   pointer-events: none;
 }
 
+.rg-fixed-layout div#rg-container .rg-bg-cleaner {
+  background-color: #eee;
+}
+
 div#rg-viewer {
   float: left;
   width: 100%;
@@ -66,6 +104,7 @@ div#rg-viewer {
   pointer-events: var(--pointer-events);
   margin-top: var(--viewer-margin-top);
   transform-origin: top left;
+  will-change: transform;
   transform: translateX(var(--horizontal-translate)) translateY(var(--vertical-translate))
     scale(var(--scale));
 }
@@ -78,40 +117,49 @@ div.rg-content-wrapper {
   clear: both;
   cursor: var(--drag-cursor, grab);
   user-select: none;
-  box-sizing: content-box;
 }
 
 .rg-flow-layout div.rg-content-wrapper #rg-content-placeholder span[data-page] {
   display: block;
 }
 
-.rg-fixed-layout div.rg-content-wrapper #rg-content-placeholder > div {
-  overflow: hidden;
-}
-
-.rg-fixed-layout div.rg-content-wrapper #rg-content-placeholder > div > div {
-  pointer-events: none;
-}
-
-.rg-fixed-layout div.rg-content-wrapper #rg-content-placeholder > div > div > div > div {
-  pointer-events: var(--pointer-events);
-}
-
 div.rg-content-wrapper #rg-content-placeholder > div a {
   pointer-events: auto !important;
 }
 
-.rg-fixed-layout div.rg-content-wrapper #rg-content-placeholder > div > div {
+.rg-fixed-layout div.rg-content-wrapper #rg-content-placeholder .rg-fixed-content-container > * {
   display: var(--page-display);
 }
 
-.rg-fixed-layout div.rg-content-wrapper #rg-content-placeholder > div > div > div > a.l > div.w {
-  border-style: none !important;
+.rg-fixed-layout div.rg-content-wrapper div#rg-content-placeholder > .rg-fixed-content-container {
+  position: relative;
+  contain: size;
+  content-visibility: auto;
+  background-color: #ccc;
 }
 
-div.rg-content-wrapper #rg-content-placeholder * {
-  backface-visibility: unset;
-  -webkit-backface-visibility: unset;
+.rg-fixed-layout.rg-horizontal-scroll div.rg-content-wrapper div#rg-content-placeholder {
+  width: var(--total-width);
+  height: auto;
+}
+
+.rg-fixed-layout [data-link] > div {
+  border: none !important;
+}
+
+.rg-fixed-layout.rg-horizontal-scroll
+  div.rg-content-wrapper
+  div#rg-content-placeholder
+  > .rg-fixed-content-container {
+  float: left;
+}
+
+.rg-fixed-layout.rg-vertical-scroll div.rg-content-wrapper div#rg-content-placeholder {
+  height: var(--total-height);
+  width: auto;
+}
+
+div.rg-content-wrapper #rg-content-placeholder > div {
   user-select: var(--user-select);
   -webkit-user-select: var(--user-select);
   -webkit-touch-callout: none;
@@ -120,6 +168,11 @@ div.rg-content-wrapper #rg-content-placeholder * {
 
 div.rg-content-wrapper #rg-content-placeholder *::selection {
   background-color: transparent;
+}
+
+.rg-flow-layout div.rg-content-wrapper #rg-content-placeholder > div {
+  backface-visibility: unset;
+  -webkit-backface-visibility: unset;
 }
 
 .rg-flow-layout div.rg-content-wrapper {
@@ -141,30 +194,6 @@ div.rg-content-wrapper #rg-content-placeholder *::selection {
 
 .rg-flow-layout.rg-vertical-scroll div#rg-content-placeholder {
   overflow: hidden;
-}
-
-.rg-fixed-layout div.rg-content-wrapper div#rg-content-placeholder > * {
-  contain: size;
-  content-visibility: auto;
-  background-color: #ccc;
-}
-
-.rg-fixed-layout.rg-horizontal-scroll div.rg-content-wrapper div#rg-content-placeholder {
-  width: var(--total-width);
-  height: auto;
-}
-
-.rg-fixed-layout.rg-horizontal-scroll div.rg-content-wrapper div#rg-content-placeholder > * {
-  float: left;
-}
-
-.rg-fixed-layout div.rg-content-wrapper div#rg-content-placeholder > * {
-  position: relative;
-}
-
-.rg-fixed-layout.rg-vertical-scroll div.rg-content-wrapper div#rg-content-placeholder {
-  height: var(--total-height);
-  width: auto;
 }
 
 .rg-flow-layout div.rg-content-wrapper img.rg-ready,
@@ -222,7 +251,7 @@ div.rg-content-wrapper #rg-content-placeholder *::selection {
   right: 0;
   bottom: 0;
   z-index: 1;
-  background-color: #ccc;
+  background-color: #ddd;
 }
 
 @media (max-width: 48em) {
@@ -312,12 +341,12 @@ div.rg-highlights-layer > div {
   border: none;
   background-color: var(--highlighter-color);
   pointer-events: var(--highlights-pointer-events);
-  transform: translate3d(0,0,0);
+  transform: translate3d(0, 0, 0);
 }
 
 .rg-dark-theme div.rg-highlights-layer > div {
   filter: brightness(0.8);
-  /* mix-blend-mode: multiply; Needed for mobile, will need to add it with specific class */ 
+  /* mix-blend-mode: multiply; Needed for mobile, will need to add it with specific class */
 }
 
 div.rg-highlights-layer .rg-selection-extensor {

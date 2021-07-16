@@ -39,6 +39,7 @@ const setContentsInfo: ActionDispatcher<SetContentsInfo> = async ({ state, actio
     maxWidth = Math.max(maxWidth, width);
     maxHeight = Math.max(maxHeight, height);
     const container = document.createElement('div');
+    container.classList.add('rg-fixed-content-container');
     container.style.width = `${width}px`;
     container.style.height = `${height}px`;
     container.dataset.order = `${order}`;
