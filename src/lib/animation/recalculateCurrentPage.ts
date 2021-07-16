@@ -56,13 +56,17 @@ const recalculateCurrentPage = (state: State, currentScroll: number, avoidUpdate
           if (lastStartPage !== startPage || endPage !== lastEndPage) {
             if (lastStartPage !== -1) {
               for (let i = lastStartPage; i <= lastEndPage; i++) {
-                const element = state.contentPlaceholderNode.childNodes[i] as HTMLElement;
-                element.style.setProperty('--page-display', 'none');
+                const content = state.contentsByOrder.get(i);
+                if (content) {
+                  content.container.style.setProperty('--page-display', 'none');
+                }
               }
             }
             for (let i = startPage; i <= endPage; i++) {
-              const element = state.contentPlaceholderNode.childNodes[i] as HTMLElement;
-              element.style.setProperty('--page-display', 'block');
+              const content = state.contentsByOrder.get(i);
+              if (content) {
+                content.container.style.setProperty('--page-display', 'block');
+              }
             }
             lastStartPage = startPage;
             lastEndPage = endPage;
