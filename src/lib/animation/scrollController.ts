@@ -31,7 +31,6 @@ export const reCalcScrollLimits = (
   state: (GlobalState & FixedState & ScrolledState) | (GlobalState & FixedState & PaginatedState),
   instant = false,
 ): void => {
-  console.log('reCalcScrollLimits');
   const scrollLimits = getMinAndMaxScroll(state);
   if (scroll.current > scrollLimits.maxScroll) {
     scroll.target = scrollLimits.maxScroll;
@@ -41,7 +40,6 @@ export const reCalcScrollLimits = (
     scroll.speed = 0;
   }
   const altScrollLimits = getMinAndMaxAltScroll(state);
-  console.log({ ...altScroll, ...altScrollLimits });
   if (altScroll.current > altScrollLimits.maxScroll) {
     altScroll.target = altScrollLimits.maxScroll;
     altScroll.speed = 0;
@@ -53,7 +51,6 @@ export const reCalcScrollLimits = (
     scroll.current = scroll.target;
     altScroll.current = altScroll.target;
   }
-  console.log({ ...altScroll });
 };
 
 const scrollController = (
@@ -321,7 +318,6 @@ const scrollController = (
       if (state.layout === LayoutTypes.Fixed) {
         if (state.scrollMode === 'vertical') {
           const fitWidthZoom = window.innerWidth / state.maxWidth;
-          console.log({ fitWidthZoom, ...zoom });
           if (fitWidthZoom < zoom.current) {
             altScroll.current += altDelta;
             altScroll.target = altScroll.current;

@@ -73,12 +73,58 @@ const recalculateCurrentPage = (state: State, currentScroll: number, avoidUpdate
           }
         }
       }
-    } else {
-      state.slugByPosition.forEach((value, key): void => {
-        if (key <= scrollPosition) {
-          target = value;
+    } else if (state.layout === LayoutTypes.Fixed) {
+      const targetScale = Math.abs(scale.current * zoom.current);
+      const targetScroll =
+        calculatePagePosition(currentScroll, state) - state.margin.top / targetScale + 1;
+      const baseScroll = targetScroll - state.margin.top / targetScale;
+      const visibleHeight = state.containerHeight / targetScale;
+      const endScroll = baseScroll + visibleHeight;
+      let startPage = 0;
+      let endPage = -1;
+      const startingElementIndex =
+        Math.floor((baseScroll * state.contentsInfo.length) / state.totalHeight) - 1;
+      for (
+        let i = Math.max(0, startingElementIndex), l = state.contentsInfo.length;
+        i < l && endPage === -1;
+        i++
+      ) {
+        const { top, maxTop, slug } = state.contentsInfo[i];
+        if (top <= baseScroll) {
+          startPage = i;
         }
-      });
+        if (top <= targetScroll) {
+          target = slug;
+        }
+        if (top <= endScroll && maxTop >= endScroll) {
+          endPage = i;
+        }
+      }
+      if (endPage === -1) {
+        endPage = state.contentsInfo.length - 1;
+      }
+      if (state.contentPlaceholderNode && state.layout === LayoutTypes.Fixed) {
+        if (lastStartPage !== startPage || endPage !== lastEndPage) {
+          if (lastStartPage !== -1) {
+            for (let i = lastStartPage; i <= lastEndPage; i++) {
+              const content = state.contentsByOrder.get(i);
+              if (content) {
+                content.container.style.setProperty('--page-display', 'none');
+              }
+            }
+          }
+          for (let i = startPage; i <= endPage; i++) {
+            const content = state.contentsByOrder.get(i);
+            if (content) {
+              content.container.style.setProperty('--page-display', 'block');
+            }
+          }
+          lastStartPage = startPage;
+          lastEndPage = endPage;
+        }
+      }
+    } else {
+      // TODO: Vertical flow logic (is it needed?)
     }
   }
   if (target !== undefined && !avoidUpdate) {

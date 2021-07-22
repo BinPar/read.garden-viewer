@@ -77,7 +77,6 @@ export const getMinAndMaxAltScroll = (state: State): MinAndMaxScroll => {
           minScroll: correctorFix + additional,
         };
       }
-
       const maxScroll = correctorFix;
       const minScroll = additional * 2 + correctorFix;
       return {
@@ -89,17 +88,14 @@ export const getMinAndMaxAltScroll = (state: State): MinAndMaxScroll => {
       const targetScale = Math.abs(scale.target * zoom.target);
       const additional = (window.innerWidth / zoom.target - state.maxWidth) / 2;
       const correctorFix = -leftCorrector.target / targetScale;
-      console.log({ targetScale, additional, correctorFix });
       if (additional >= 0) {
         return {
           maxScroll: correctorFix + additional,
           minScroll: correctorFix + additional,
         };
       }
-
       const maxScroll = correctorFix;
       const minScroll = additional * 2 + correctorFix;
-      console.log({ maxScroll, minScroll });
       return {
         maxScroll,
         minScroll,
