@@ -152,11 +152,8 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
 
   const resetPageProps = (): void => {
     const targetSlugScrollPosition = getScrollFromContentSlug(state) ?? 0;
-    // @nacho este "if" se cumple siempre, no?
-    if (targetSlugScrollPosition !== null) {
-      scroll.current = targetSlugScrollPosition;
-      scroll.target = scroll.current;
-    }
+    scroll.current = targetSlugScrollPosition;
+    scroll.target = scroll.current;
     scroll.speed = 0;
     recalculateCurrentPage(state, scroll.current, true);
   };
