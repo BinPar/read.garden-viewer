@@ -29,6 +29,7 @@ import isClickOnLink from '../../utils/highlights/isClickOnLink';
 
 export const reCalcScrollLimits = (
   state: (GlobalState & FixedState & ScrolledState) | (GlobalState & FixedState & PaginatedState),
+  instant = false,
 ): void => {
   const scrollLimits = getMinAndMaxScroll(state);
   if (scroll.current > scrollLimits.maxScroll) {
@@ -45,6 +46,10 @@ export const reCalcScrollLimits = (
   } else if (altScroll.target < altScrollLimits.minScroll) {
     altScroll.target = altScrollLimits.minScroll;
     altScroll.speed = 0;
+  }
+  if (instant) {
+    scroll.current = scroll.target;
+    altScroll.current = altScroll.target;
   }
 };
 
@@ -311,8 +316,19 @@ const scrollController = (
       scroll.current += lastDelta;
       scroll.target = scroll.current;
       if (state.layout === LayoutTypes.Fixed) {
-        altScroll.current += altDelta;
-        altScroll.target = altScroll.current;
+        if (state.scrollMode === 'vertical') {
+          const fitWidthZoom = window.innerWidth / state.maxWidth;
+          if (fitWidthZoom < zoom.current) {
+            altScroll.current += altDelta;
+            altScroll.target = altScroll.current;
+          }
+        } else if (state.scrollMode === 'horizontal') {
+          const fitHeightZoom = window.innerHeight / state.maxHeight;
+          if (fitHeightZoom < zoom.current) {
+            altScroll.current += altDelta;
+            altScroll.target = altScroll.current;
+          }
+        }
       }
       executeTransitions();
       scroll.forceUpdate = false;

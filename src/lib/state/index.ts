@@ -50,6 +50,8 @@ export const initializeState = (initialConfig: InitialConfig): void => {
       ...defaultConfig.fontSize,
       ...(initialConfig.fontSize ?? {}),
     },
+    initialFitMode: initialConfig.initialFitMode ?? undefined,
+    initialZoom: (!initialConfig.initialFitMode && initialConfig.initialZoom) || undefined,
   });
 
   const defaultInitialMargins = config.initialReadMode
@@ -113,6 +115,7 @@ export const initializeState = (initialConfig: InitialConfig): void => {
     const fixedState: FixedState = {
       ...defaultFixed,
       fitMode: config.initialFitMode,
+      zoom: config.initialZoom,
       loadedCssUrls: new Set<string>(),
       minimumZoomValue: config.zoom.min ?? defaultFixed.minimumZoomValue,
       maximumZoomValue: config.zoom.max ?? defaultFixed.maximumZoomValue,

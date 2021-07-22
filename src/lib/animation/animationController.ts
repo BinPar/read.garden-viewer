@@ -152,6 +152,7 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
 
   const resetPageProps = (): void => {
     const targetSlugScrollPosition = getScrollFromContentSlug(state) ?? 0;
+    // @nacho este "if" se cumple siempre, no?
     if (targetSlugScrollPosition !== null) {
       scroll.current = targetSlugScrollPosition;
       scroll.target = scroll.current;
@@ -200,7 +201,7 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
     }
     resetPageProps();
     if (state.layout === LayoutTypes.Fixed) {
-      reCalcScrollLimits(state);
+      reCalcScrollLimits(state, true);
     }
     applyCSSProps();
   };
@@ -215,6 +216,7 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
         zoom.target = state.zoom;
       }
       zoom.current = zoom.target;
+      reCalcScrollLimits(state, true);
     }
     resetPageProps();
     applyCSSProps();
@@ -254,7 +256,6 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
 
   addOnChangeEventListener('forceScroll', onForceScrollChange);
   addOnChangeEventListener('animateToScroll', onAnimateToScroll);
-
   addOnChangeEventListener('zoom', onZoomChange);
   addOnChangeEventListener('chapterNumber', onChapterChange);
   addOnChangeEventListener('wrapperReady', onChapterChange);
@@ -266,6 +267,7 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
   addOnChangeEventListener('containerWidth', () => onReadModeChangeEvent());
   addOnChangeEventListener('containerHeight', () => onReadModeChangeEvent());
   addOnChangeEventListener('fontSize', () => onReadModeChangeEvent());
+
   onReadModeChangeEvent(true);
   scrollController(state, dispatch, executeTransitions);
   updateState({
