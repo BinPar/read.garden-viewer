@@ -39,7 +39,7 @@ for (let i = 0, l = changeHandlers.length; i < l; i++) {
 let state: State;
 
 export const initializeState = (initialConfig: InitialConfig): void => {
-  const config = setConfig({
+  let config = setConfig({
     ...defaultConfig,
     ...initialConfig,
     zoom: {
@@ -51,8 +51,14 @@ export const initializeState = (initialConfig: InitialConfig): void => {
       ...(initialConfig.fontSize ?? {}),
     },
     initialFitMode: initialConfig.initialFitMode ?? undefined,
-    initialZoom: (!initialConfig.initialFitMode && initialConfig.initialZoom) || undefined,
   });
+
+  if (!initialConfig.initialFitMode && initialConfig.initialZoom) {
+    config = setConfig({
+      ...config,
+      initialZoom: initialConfig.initialZoom,
+    });
+  }
 
   const defaultInitialMargins = config.initialReadMode
     ? defaultConfig.readModeMargin
