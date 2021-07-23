@@ -16,7 +16,7 @@ import getWordSelection from './getWordSelection';
 import scrollInertiaAndLimits from './scrollInertiaAndLimits';
 import { LayoutTypes } from '../../model/viewerSettings';
 import updateZoom from './updateZoom';
-import { OnHighlightClick, OnUserSelect } from '../../model/events';
+import { OnHighlightClick, OnLinkClick, OnUserSelect } from '../../model/events';
 import getClickedHighlight from './getClickedHighlight';
 import removeSelectionMenu from '../../utils/highlights/removeSelectionMenu';
 import removeNotesDialog from '../../utils/highlights/removeNotesDialog';
@@ -25,7 +25,7 @@ import extendSelection from '../../utils/highlights/extendSelection';
 import clearNativeSelection from '../../utils/highlights/clearNativeSelection';
 import clearSelection from '../../utils/highlights/clearSelection';
 import getFixedContentContainer from '../../utils/highlights/getFixedContentContainer';
-import isClickOnLink from '../../utils/highlights/isClickOnLink';
+import getClickedLink from '../../utils/highlights/getClickedLink';
 
 export const reCalcScrollLimits = (
   state: (GlobalState & FixedState & ScrolledState) | (GlobalState & FixedState & PaginatedState),
@@ -70,6 +70,7 @@ const scrollController = (
   let currentSelection: Range | null = null;
   let isSelecting = false;
   let mobileSelection = false;
+  let clickedLink: HTMLAnchorElement | null = null;
   let mobileSelectionTimeout: NodeJS.Timeout | null = null;
 
   const onDragStart = (ev: MouseEvent | TouchEvent): void => {
@@ -83,9 +84,9 @@ const scrollController = (
       currentSelection = null;
       isSelecting = false;
       const syntheticEvent = getSyntheticEvent(ev);
-      const isLink = isClickOnLink(syntheticEvent, state);
-      if (isLink) {
-        return;
+      clickedLink = getClickedLink(syntheticEvent, state);
+      if (clickedLink) {
+        ev.preventDefault();
       }
       const clickedHighlight =
         !state.config.disableSelection &&
@@ -233,8 +234,19 @@ const scrollController = (
           altInertialDelta,
           executeTransitions,
           dispatch,
+          false,
           true,
         );
+      }
+
+      if (clickedLink && state.config.eventHandler) {
+        const event: OnLinkClick = {
+          type: 'onLinkClick',
+          slug: state.slug,
+          url: clickedLink.getAttribute('href'),
+          querySelector: `[data-link="${clickedLink.dataset.link}"]`,
+        };
+        state.config.eventHandler(event);
       }
 
       setTimeout(() => {
@@ -294,6 +306,7 @@ const scrollController = (
   };
 
   const onDragMove = (ev: MouseEvent | TouchEvent): void => {
+    clickedLink = null;
     if (mobileSelectionTimeout) {
       updateState({
         selectingText: false,
@@ -360,7 +373,7 @@ const scrollController = (
 
   const onWheelStop = (): void => {
     onWheelStopTimeout = null;
-    scrollInertiaAndLimits(state, scroll, lastDelta, executeTransitions, dispatch);
+    scrollInertiaAndLimits(state, scroll, lastDelta, executeTransitions, dispatch, true);
   };
 
   const onWheel = (ev: WheelEvent): void => {
@@ -395,12 +408,12 @@ const scrollController = (
       }
       scroll.forceUpdate = true;
       if (state.layout === LayoutTypes.Fixed) {
-        if (state.scrollMode !== 'vertical') {
-          lastDelta = ev.deltaX * -1;
-          altDelta = ev.deltaY * -1;
-        } else {
+        if (state.scrollMode === 'vertical') {
           lastDelta = ev.deltaY * -1;
           altDelta = ev.deltaX * -1;
+        } else {
+          lastDelta = ev.deltaX * -1;
+          altDelta = ev.deltaY * -1;
         }
         altScroll.current += altDelta;
         const altScrollLimits = getMinAndMaxAltScroll(state);
