@@ -106,7 +106,7 @@ div#rg-viewer {
   transform-origin: top left;
   will-change: transform;
   transform: translateX(var(--horizontal-translate)) translateY(var(--vertical-translate))
-    translateZ(0) scale(var(--scale));
+    scale(var(--scale));
 }
 
 div.rg-content-wrapper {
@@ -127,18 +127,23 @@ div.rg-content-wrapper #rg-content-placeholder > div a {
   pointer-events: auto !important;
 }
 
-.rg-fixed-layout div.rg-content-wrapper #rg-content-placeholder .rg-fixed-content-container > * {
-  display: var(--page-display);
-}
-
 .rg-fixed-layout div.rg-content-wrapper div#rg-content-placeholder > .rg-fixed-content-container {
-  position: relative;
+  position: absolute;
   margin: 0;
-  contain: size;
-  content-visibility: auto;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
-  background-color: #ddd;
+}
+
+.rg-fixed-layout div.rg-content-wrapper div#rg-content-placeholder > .rg-fixed-content-container.rg-avoid-invert {
+  filter: var(--theme-filter, none);
+}
+
+.rg-vertical-scroll.rg-fixed-layout div.rg-content-wrapper div#rg-content-placeholder > .rg-fixed-content-container {
+  top: var(--page-top);
+}
+
+.rg-horizontal-scroll.rg-fixed-layout div.rg-content-wrapper div#rg-content-placeholder > .rg-fixed-content-container {
+  left: var(--page-left);
 }
 
 .rg-fixed-layout.rg-horizontal-scroll div.rg-content-wrapper div#rg-content-placeholder {
@@ -146,20 +151,13 @@ div.rg-content-wrapper #rg-content-placeholder > div a {
   height: auto;
 }
 
-.rg-fixed-layout [data-link] > div {
-  border: none !important;
-}
-
-.rg-fixed-layout.rg-horizontal-scroll
-  div.rg-content-wrapper
-  div#rg-content-placeholder
-  > .rg-fixed-content-container {
-  float: left;
-}
-
 .rg-fixed-layout.rg-vertical-scroll div.rg-content-wrapper div#rg-content-placeholder {
   height: var(--total-height);
   width: auto;
+}
+
+.rg-fixed-layout [data-link] > div {
+  border: none !important;
 }
 
 div.rg-content-wrapper #rg-content-placeholder > div {

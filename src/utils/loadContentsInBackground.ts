@@ -7,7 +7,7 @@ import { highlightTerms } from './highlights/search';
 /**
  * Loads contents in background. Meant for fixed viewer in scroll mode
  */
-const loadContentsInBackground = async (state = getState()): Promise<void> => {
+const loadContentsInBackground = async (state = getState(), currentContentSlug?: string): Promise<void> => {
   if (state.layout === LayoutTypes.Flow) {
     throw new Error('Loading contents in background is not available in flow layout');
   }
@@ -18,7 +18,7 @@ const loadContentsInBackground = async (state = getState()): Promise<void> => {
       contentsBySlug,
       config: { fixedViewerPreloadOrder },
     } = state;
-    const { order: currentContentIndex } = contentsBySlug.get(contentSlug)!;
+    const { order: currentContentIndex } = contentsBySlug.get(currentContentSlug || contentSlug)!;
     const indexToLoad = fixedViewerPreloadOrder.find((i) => {
       const index = currentContentIndex + i;
       if (index < 0) {

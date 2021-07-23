@@ -25,7 +25,7 @@
     layoutType: 'fixed',
     initialScrollMode: 'horizontal',
     // initialFitMode: 'height',
-    initialZoom: 1,
+    // initialZoom: 1,
     eventHandler: window.readGardenEventHandler,
     slug: 'sistema-respiratorio',
     contentSlug: 'portada',
@@ -43,18 +43,19 @@
     readModeMargin: {
       top: 20,
       left: 100,
-      bottom: 20,
+      bottom: 70,
       right: 20,
     },
     uiModeMargin: {
-      top: 0,
+      top: 20,
       left: 450,
-      bottom: 0,
-      right: 0,
+      bottom: 70,
+      right: 20,
     },
     toggleReadModeOnClick: false,
     paddingTop: 0,
     paddingBottom: 0,
+    themeUnaffectedSlugs: ['portada'],
   });
   window.readGardenSetDispatcher(window.readGardenApi.dispatch);
   window.readGardenSetState(window.readGardenApi.state);

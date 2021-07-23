@@ -51,18 +51,18 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
       state.layout === LayoutTypes.Flow
         ? Math.abs(scale.current)
         : Math.abs(scale.current * zoom.current);
-    setCSSProperty('scale', `${targetScale}`);
     const computedScroll = scroll.current * targetScale;
     const computedAltScroll = altScroll.current * targetScale;
     const scrollLeft =
       left.current +
       leftCorrector.current +
       (state.scrollMode === 'horizontal' ? computedScroll : computedAltScroll);
-    setCSSProperty('horizontal-translate', `${scrollLeft}px`);
     const scrollTop =
       top.current +
       topCorrector.current +
       (state.scrollMode === 'vertical' ? computedScroll : computedAltScroll);
+    setCSSProperty('scale', `${targetScale}`);
+    setCSSProperty('horizontal-translate', `${scrollLeft}px`);
     setCSSProperty('vertical-translate', `${scrollTop}px`);
     zoomUpdatedByApplyCSSProps = true;
     updateState({ scrollLeft, scrollTop, scale: targetScale, zoom: zoom.current });
@@ -72,9 +72,11 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
   const interpolateToTargetValues = (): void => {
     if (interpolationValues.filter((value) => interpolate(state, value)).length > 0) {
       applyCSSProps();
-      recalculateCurrentPage(state, scroll.current, true);
       // Execute the interpolation
-      window.requestAnimationFrame(interpolateToTargetValues);
+      window.requestAnimationFrame(() => {
+        recalculateCurrentPage(state, scroll.current, true);
+        interpolateToTargetValues();
+      });
     } else {
       applyCSSProps();
       if (state.scrollMode === 'horizontal' || state.scrollMode === 'vertical') {

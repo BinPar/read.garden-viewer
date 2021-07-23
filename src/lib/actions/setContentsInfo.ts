@@ -30,11 +30,13 @@ const setContentsInfo: ActionDispatcher<SetContentsInfo> = async ({ state, actio
   const positionBySlug = new Map<string, number>();
   const slugByPosition = new Map<number, string>();
   const contentsInfo = new Array<FixedViewerContentInfo>();
+  const containers = [];
+  const unaffected = new Set<string>(state.config.themeUnaffectedSlugs || []);
   for (let i = 0, l = info.length; i < l; i++) {
     const { width, height, label, slug, order, html, cssURL } = info[i];
-    const left = totalWidth;
-    const top = totalHeight;
-    totalHeight += height;
+    const left = Math.max(totalWidth - 1, 0);
+    const top = Math.max(totalHeight - 1, 0);
+    totalHeight += height - 1;
     totalWidth += width;
     maxWidth = Math.max(maxWidth, width);
     maxHeight = Math.max(maxHeight, height);
@@ -45,7 +47,12 @@ const setContentsInfo: ActionDispatcher<SetContentsInfo> = async ({ state, actio
     container.dataset.order = `${order}`;
     container.dataset.slug = slug;
     container.dataset.label = label;
-    contentPlaceholderNode.appendChild(container);
+    container.style.setProperty('--page-top', `${top}px`);
+    container.style.setProperty('--page-left', `${left}px`);
+    if (unaffected.has(slug)) {
+      container.classList.add('rg-avoid-invert');
+    }
+    containers.push(container);
     const position = state.scrollMode === 'horizontal' ? left : top;
     positionBySlug.set(slug, position);
     slugByPosition.set(position, slug);
@@ -81,21 +88,54 @@ const setContentsInfo: ActionDispatcher<SetContentsInfo> = async ({ state, actio
 
   setCSSProperty('total-width', `${totalWidth}px`);
   setCSSProperty('total-height', `${totalHeight}px`);
+  contentPlaceholderNode.append(...containers);
 
-  return {
-    layout: LayoutTypes.Fixed,
-    totalHeight,
-    totalWidth,
-    maxWidth,
-    maxHeight,
-    contentsInfo,
-    contentsBySlug,
-    contentsByOrder,
-    positionBySlug,
-    slugByPosition,
-    lastPosition,
-    wrapperReady: true,
-  };
+  return new Promise<Partial<State>>((resolve) => {
+    window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(() => {
+        for (let i = 0, l = info.length; i < l; i++) {
+          const content = contentsByOrder.get(i);
+          if (content && content.slug !== state.contentSlug) {
+            contentPlaceholderNode.removeChild(content.container);
+          }
+        }
+        window.requestAnimationFrame(() => {
+          window.requestAnimationFrame(() => {
+            setCSSProperty('viewer-margin-top', '0');
+            resolve({
+              layout: LayoutTypes.Fixed,
+              totalHeight,
+              totalWidth,
+              maxWidth,
+              maxHeight,
+              contentsInfo,
+              contentsBySlug,
+              contentsByOrder,
+              positionBySlug,
+              slugByPosition,
+              lastPosition,
+              wrapperReady: true,
+            });
+          });
+        });
+      });
+    });
+  });
+
+  // return {
+  //   layout: LayoutTypes.Fixed,
+  //   totalHeight,
+  //   totalWidth,
+  //   maxWidth,
+  //   maxHeight,
+  //   contentsInfo,
+  //   contentsBySlug,
+  //   contentsByOrder,
+  //   positionBySlug,
+  //   slugByPosition,
+  //   lastPosition,
+  //   wrapperReady: true,
+  // };
 };
 
 export default setContentsInfo;
