@@ -234,6 +234,7 @@ const scrollController = (
           altInertialDelta,
           executeTransitions,
           dispatch,
+          false,
           true,
         );
       }
@@ -372,7 +373,7 @@ const scrollController = (
 
   const onWheelStop = (): void => {
     onWheelStopTimeout = null;
-    scrollInertiaAndLimits(state, scroll, lastDelta, executeTransitions, dispatch);
+    scrollInertiaAndLimits(state, scroll, lastDelta, executeTransitions, dispatch, true);
   };
 
   const onWheel = (ev: WheelEvent): void => {
@@ -407,13 +408,12 @@ const scrollController = (
       }
       scroll.forceUpdate = true;
       if (state.layout === LayoutTypes.Fixed) {
-        const targetScale = Math.abs(scale.current * zoom.current);
-        if (state.scrollMode !== 'vertical') {
-          lastDelta = ev.deltaX * -1 / targetScale;
-          altDelta = ev.deltaY * -1 / targetScale;
+        if (state.scrollMode === 'vertical') {
+          lastDelta = ev.deltaY * -1;
+          altDelta = ev.deltaX * -1;
         } else {
-          lastDelta = ev.deltaY * -1 / targetScale;
-          altDelta = ev.deltaX * -1 / targetScale;
+          lastDelta = ev.deltaX * -1;
+          altDelta = ev.deltaY * -1;
         }
         altScroll.current += altDelta;
         const altScrollLimits = getMinAndMaxAltScroll(state);

@@ -12,6 +12,7 @@ const scrollInertiaAndLimits = (
   lastDelta: number,
   executeTransitions: () => void,
   dispatch: DispatchAPIAction,
+  avoidInertia = false,
   isAltScroll = false,
 ): void => {
   let min: number | null = null;
@@ -62,7 +63,9 @@ const scrollInertiaAndLimits = (
     } else {
       scrollLimits = getMinAndMaxScroll(state, 100);
     }
-    scroll.target += lastDelta * state.animationInertia;
+    if (!avoidInertia) {
+      scroll.target += lastDelta * state.animationInertia;
+    }
     min = scrollLimits.maxScroll * -1;
     max = scrollLimits.minScroll * -1;
   }
