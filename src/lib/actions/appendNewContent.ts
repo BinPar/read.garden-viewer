@@ -141,47 +141,42 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
       content.html = action.htmlContent;
       content.cssURL = action.cssURL;
       container.classList.add('rg-loading');
-      container!.innerHTML = action.htmlContent;
+      container.innerHTML = action.htmlContent;
 
-      window.requestAnimationFrame(() => {
-        window.requestAnimationFrame(() => {
-          const done = async (): Promise<void> => {
-            container.classList.remove('rg-loading');
-            handleAnchors(container!, state);
-            setCSSProperty('viewer-margin-top', '0');
-            const finalPartialState: Partial<State> = {
-              slug: action.slug,
-              cssLoaded: true,
-            };
-            if (state.loadingContent === action.contentSlug) {
-              updateState({ loadingContent: '' });
-              loadContentsInBackground(state);
-            }
-            resolve(finalPartialState);
-            highlightTerms(state.searchTerms);
+      setTimeout(() => {
+        const done = async (): Promise<void> => {
+          container.classList.remove('rg-loading');
+          handleAnchors(container!, state);
+          const finalPartialState: Partial<State> = {
+            slug: action.slug,
+            cssLoaded: true,
           };
-          const checkFonts = () => {
-            dynamicStyleNode!.removeEventListener('load', checkFonts);
-            window.requestAnimationFrame(() => {
-              window.requestAnimationFrame(() => {
-                const checkStatus = (): void => {
-                  if (document.fonts.status === 'loaded') {
-                    done();
-                  } else {
-                    setTimeout(checkStatus, 16);
-                  }
-                };
-                checkStatus();
-              });
-            });
-          };
-          if (!action.cssURL) {
-            checkFonts();
-            return;
+          if (state.loadingContent === action.contentSlug) {
+            updateState({ loadingContent: '' });
+            loadContentsInBackground(state);
           }
-          handleFlowCssAndLoad(action.cssURL, checkFonts);
-        });
-      });
+          resolve(finalPartialState);
+          highlightTerms(state.searchTerms);
+        };
+        const checkFonts = () => {
+          dynamicStyleNode!.removeEventListener('load', checkFonts);
+          setTimeout(() => {
+            const checkStatus = (): void => {
+              if (document.fonts.status === 'loaded') {
+                done();
+              } else {
+                setTimeout(checkStatus, 16);
+              }
+            };
+            checkStatus();
+          }, 0);
+        };
+        if (!action.cssURL) {
+          checkFonts();
+          return;
+        }
+        handleFlowCssAndLoad(action.cssURL, checkFonts);
+      }, 0);
     }
   });
 };

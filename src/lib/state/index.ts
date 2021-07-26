@@ -50,12 +50,12 @@ export const initializeState = (initialConfig: InitialConfig): void => {
       ...defaultConfig.fontSize,
       ...(initialConfig.fontSize ?? {}),
     },
-    initialFitMode: initialConfig.initialFitMode ?? undefined,
   });
 
   if (!initialConfig.initialFitMode && initialConfig.initialZoom) {
     config = setConfig({
       ...config,
+      initialFitMode: undefined,
       initialZoom: initialConfig.initialZoom,
     });
   }

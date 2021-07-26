@@ -176,6 +176,10 @@ export interface DefaultConfig {
    * Initial content. If provided, viewer won't ask for content after setup
    */
   initialContent?: NewContent;
+  /**
+   * Pages slugs that shouldn't be affected by theme
+   */
+  themeUnaffectedSlugs?: string[]
 }
 
 export interface RequiredConfig {

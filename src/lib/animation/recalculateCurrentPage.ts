@@ -1,5 +1,6 @@
 import { State } from '../../model/state';
 import { LayoutTypes } from '../../model/viewerSettings';
+import loadContentsInBackground from '../../utils/loadContentsInBackground';
 import { updateState } from '../state';
 import calculatePagePosition from './calculatePagePosition';
 import { scale, zoom } from './interpolationValues';
@@ -54,18 +55,24 @@ const recalculateCurrentPage = (state: State, currentScroll: number, avoidUpdate
         }
         if (state.contentPlaceholderNode && state.layout === LayoutTypes.Fixed) {
           if (lastStartPage !== startPage || endPage !== lastEndPage) {
-            if (lastStartPage !== -1) {
-              for (let i = lastStartPage; i <= lastEndPage; i++) {
-                const content = state.contentsByOrder.get(i);
-                if (content) {
-                  content.container.style.setProperty('--page-display', 'none');
-                }
-              }
-            }
+            const containers = [];
+            const pagesToAppend = new Set<number>();
             for (let i = startPage; i <= endPage; i++) {
               const content = state.contentsByOrder.get(i);
-              if (content) {
-                content.container.style.setProperty('--page-display', 'block');
+              if (content && !state.contentPlaceholderNode.contains(content.container)) {
+                containers.push(content.container);
+              }
+              pagesToAppend.add(i);
+            }
+            state.contentPlaceholderNode.append(...containers);
+            if (lastStartPage !== -1 && (lastStartPage < startPage || lastEndPage > endPage)) {
+              for (let i = lastStartPage; i <= lastEndPage; i++) {
+                if (!pagesToAppend.has(i)) {
+                  const content = state.contentsByOrder.get(i);
+                  if (content && state.contentPlaceholderNode.contains(content.container)) {
+                    state.contentPlaceholderNode.removeChild(content.container);
+                  }
+                }
               }
             }
             lastStartPage = startPage;
@@ -105,18 +112,24 @@ const recalculateCurrentPage = (state: State, currentScroll: number, avoidUpdate
       }
       if (state.contentPlaceholderNode && state.layout === LayoutTypes.Fixed) {
         if (lastStartPage !== startPage || endPage !== lastEndPage) {
-          if (lastStartPage !== -1) {
-            for (let i = lastStartPage; i <= lastEndPage; i++) {
-              const content = state.contentsByOrder.get(i);
-              if (content) {
-                content.container.style.setProperty('--page-display', 'none');
-              }
-            }
-          }
+          const containers = [];
+          const pagesToAppend = new Set<number>();
           for (let i = startPage; i <= endPage; i++) {
             const content = state.contentsByOrder.get(i);
-            if (content) {
-              content.container.style.setProperty('--page-display', 'block');
+            if (content && !state.contentPlaceholderNode.contains(content.container)) {
+              containers.push(content.container);
+            }
+            pagesToAppend.add(i);
+          }
+          state.contentPlaceholderNode.append(...containers);
+          if (lastStartPage !== -1 && (lastStartPage < startPage || lastEndPage > endPage)) {
+            for (let i = lastStartPage; i <= lastEndPage; i++) {
+              if (!pagesToAppend.has(i)) {
+                const content = state.contentsByOrder.get(i);
+                if (content && state.contentPlaceholderNode.contains(content.container)) {
+                  state.contentPlaceholderNode.removeChild(content.container);
+                }
+              }
             }
           }
           lastStartPage = startPage;
@@ -129,6 +142,8 @@ const recalculateCurrentPage = (state: State, currentScroll: number, avoidUpdate
   }
   if (target !== undefined && !avoidUpdate) {
     updateState({ contentSlug: target });
+  } else if (state.layout === LayoutTypes.Fixed && avoidUpdate && target) {
+    loadContentsInBackground(state, target);
   }
 };
 

@@ -25,7 +25,6 @@ const setInitialProperties = (state: State): void => {
   setCSSProperty('invert-viewer-color', '0');
   setCSSProperty('padding-top', `${state.config.paddingTop}px`);
   setCSSProperty('padding-bottom', `${state.config.paddingBottom}px`);
-  setCSSProperty('page-display', 'none');
   setCSSProperty('pointer-events', 'auto');
   setCSSProperty('scale', `${state.scale}`);
   setCSSProperty('safe-area-border-width', 'calc(2px * var(--debug-viewer-safe-area))');
