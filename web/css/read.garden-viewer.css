@@ -112,7 +112,7 @@ div#rg-viewer {
 div.rg-content-wrapper {
   outline: solid var(--safe-area-border-width) red;
   margin: var(--safe-area-margin-correction);
-  height: calc(100% - var(--padding-top) - var(--padding-bottom));
+  height: 100%;
   padding: var(--padding-top) 0 var(--padding-bottom) 0;
   clear: both;
   cursor: var(--drag-cursor, grab);
