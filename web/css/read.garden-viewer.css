@@ -175,7 +175,14 @@ div.rg-content-wrapper #rg-content-placeholder *::selection {
   background-color: transparent;
 }
 
-.rg-flow-layout div.rg-content-wrapper #rg-content-placeholder > div {
+.rg-flow-layout div.rg-content-wrapper #rg-content-placeholder > div,
+.rg-flow-layout div.rg-content-wrapper #rg-content-placeholder h1,
+.rg-flow-layout div.rg-content-wrapper #rg-content-placeholder h2,
+.rg-flow-layout div.rg-content-wrapper #rg-content-placeholder h3,
+.rg-flow-layout div.rg-content-wrapper #rg-content-placeholder h4,
+.rg-flow-layout div.rg-content-wrapper #rg-content-placeholder h5,
+.rg-flow-layout div.rg-content-wrapper #rg-content-placeholder h6,
+.rg-flow-layout div.rg-content-wrapper #rg-content-placeholder p {
   backface-visibility: visible;
   -webkit-backface-visibility: visible;
 }
