@@ -29,10 +29,10 @@ const extractFilesToOutput = async (
     const { length } = jsonIndex[relativePath];
     if (start >= jsonIndexStartByte) {
       start += jsonIndexLength;
-    }    
+    }
     let fileBase64Data = await readFileBytes(fd, length, start);
     if (encrypted) {
-      fileBase64Data = fastEncrypt(fileBase64Data);      
+      fileBase64Data = fastEncrypt(fileBase64Data);
     }
     await writeFile(absolutePath, fileBase64Data, 'base64');
   }
