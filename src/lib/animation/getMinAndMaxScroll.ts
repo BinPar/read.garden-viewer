@@ -34,7 +34,10 @@ const getMinAndMaxScroll = (state: State, forceMargin: number | null = null): Mi
           const targetScale = Math.abs(scale.target * zoom.target);
           const correctorFix = -leftCorrector.target / targetScale;
           maxScroll = correctorFix;
-          minScroll = -1 * state.totalWidth + correctorFix;
+          const maxScrollableWidth =
+            state.totalWidth -
+            (state.containerWidth - (state.margin.left + state.margin.right * 2)) / targetScale;
+          minScroll = -1 * maxScrollableWidth + correctorFix;
         }
       }
     } else if (state.scrollMode === 'vertical') {
@@ -57,7 +60,10 @@ const getMinAndMaxScroll = (state: State, forceMargin: number | null = null): Mi
           const targetScale = Math.abs(scale.target * zoom.target);
           const correctorFix = -topCorrector.target / targetScale;
           maxScroll = correctorFix;
-          minScroll = -1 * state.totalHeight + correctorFix;
+          const maxScrollableHeight =
+            state.totalHeight -
+            (state.containerHeight - (state.margin.top + state.margin.bottom)) / targetScale;
+          minScroll = -1 * maxScrollableHeight + correctorFix;
         }
       }
     }
