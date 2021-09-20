@@ -121,11 +121,13 @@ const getSearchHighlightsRanges = (contentWrapper: HTMLElement, terms: string[])
       } else {
         // The selected text is empty or we can find any word to highlight
         // we must keep searching
-        const backupRange = window.getSelection()!.getRangeAt(0);
+        const backupRange = window.getSelection()?.getRangeAt(0);
         currentSelection.modify('move', 'forward', 'character');
         extendToWord(currentSelection, contentWrapper);
-        let newRange = window.getSelection()!.getRangeAt(0);
+        let newRange = window.getSelection()?.getRangeAt(0);
         if (
+          backupRange &&
+          newRange &&
           backupRange.startOffset === newRange.startOffset &&
           backupRange.startContainer === newRange.startContainer
         ) {
@@ -133,8 +135,9 @@ const getSearchHighlightsRanges = (contentWrapper: HTMLElement, terms: string[])
           currentSelection.modify('move', 'forward', 'character');
           currentSelection.modify('move', 'forward', 'character');
           currentSelection.modify('extend', 'forward', 'word');
-          newRange = window.getSelection()!.getRangeAt(0);
+          newRange = window.getSelection()?.getRangeAt(0);
           if (
+            newRange &&
             backupRange.startOffset === newRange.startOffset &&
             backupRange.startContainer === newRange.startContainer
           ) {
