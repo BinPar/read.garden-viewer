@@ -323,6 +323,13 @@ div.rg-pages-labels > .rg-label p {
   pointer-events: none;
 }
 
+.rg-fixed-content-container > div > div *[class*=' fs'],
+.rg-fixed-content-container > div > div *[class*=' fc'],
+.rg-fixed-content-container > div > div *[class*=' ff'],
+.rg-text-cursor {
+  cursor: text;
+}
+
 div.rg-highlights-layer {
   position: absolute;
   top: 0;
