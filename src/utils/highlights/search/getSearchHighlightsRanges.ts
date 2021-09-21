@@ -1,4 +1,6 @@
 import log from 'loglevel';
+
+import getSelection from '../../../lib/animation/getSelection';
 import getFirstTextNode from '../../getFirstTextNode';
 import getNextSibling from '../../getNextSibling';
 import setCSSProperty from '../../setCSSProperty';
@@ -28,7 +30,7 @@ const getSearchHighlightsRanges = (contentWrapper: HTMLElement, terms: string[])
   setCSSProperty('user-select', 'text');
   setCSSProperty('user-select-end', 'auto');
   // Reset current caret position
-  const currentSelection = window.getSelection();
+  const currentSelection = getSelection();
   const range = document.createRange();
   const resultRanges = new Array<Range>();
   if (currentSelection && range) {
@@ -37,6 +39,9 @@ const getSearchHighlightsRanges = (contentWrapper: HTMLElement, terms: string[])
     range.setStart(firstTextNode, 0);
     range.setEnd(firstTextNode, 0);
     currentSelection.addRange(range);
+    if (!currentSelection.rangeCount) {
+      return [];
+    }
     currentSelection.modify('extend', 'forward', 'character');
     extendToWord(currentSelection, contentWrapper);
     let searching = true;
@@ -89,10 +94,7 @@ const getSearchHighlightsRanges = (contentWrapper: HTMLElement, terms: string[])
                       const nextSibling = getNextSibling(selectionRange.startContainer);
                       const nextSiblingTextNode = nextSibling && getFirstTextNode(nextSibling);
                       if (nextSiblingTextNode) {
-                        selectionRange.setStart(
-                          nextSiblingTextNode,
-                          0,
-                        );
+                        selectionRange.setStart(nextSiblingTextNode, 0);
                       } else {
                         selectionRange.setStartAfter(selectionRange.startContainer);
                       }
@@ -121,10 +123,10 @@ const getSearchHighlightsRanges = (contentWrapper: HTMLElement, terms: string[])
       } else {
         // The selected text is empty or we can find any word to highlight
         // we must keep searching
-        const backupRange = window.getSelection()?.getRangeAt(0);
+        const backupRange = getSelection()?.getRangeAt(0);
         currentSelection.modify('move', 'forward', 'character');
         extendToWord(currentSelection, contentWrapper);
-        let newRange = window.getSelection()?.getRangeAt(0);
+        let newRange = getSelection()?.getRangeAt(0);
         if (
           backupRange &&
           newRange &&
@@ -135,7 +137,7 @@ const getSearchHighlightsRanges = (contentWrapper: HTMLElement, terms: string[])
           currentSelection.modify('move', 'forward', 'character');
           currentSelection.modify('move', 'forward', 'character');
           currentSelection.modify('extend', 'forward', 'word');
-          newRange = window.getSelection()?.getRangeAt(0);
+          newRange = getSelection()?.getRangeAt(0);
           if (
             newRange &&
             backupRange.startOffset === newRange.startOffset &&
