@@ -7,11 +7,11 @@ import getRangesRecursively from './getRangesRecursively';
  * @param terms Terms to highlight
  */
 const highlightTerms = (terms: string[]): void => {
-  const { contentPlaceholderNode, searchTermsHighlightsNode } = getState();
+  const { contentPlaceholderNode, searchTermsHighlightsNode, layout } = getState();
   if (searchTermsHighlightsNode && terms.length) {
     if (contentPlaceholderNode) {
-      const ranges = getRangesRecursively(contentPlaceholderNode, terms, true);
-      drawHighlights(searchTermsHighlightsNode, ranges);
+      const ranges = getRangesRecursively(contentPlaceholderNode, terms, layout !== 'fixed');
+      drawHighlights(searchTermsHighlightsNode, ranges, layout === 'fixed');
       updateState({ searchRanges: ranges });
     }
   }

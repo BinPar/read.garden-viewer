@@ -12,11 +12,10 @@ import { updateState } from '../state';
 import layoutSetup from '../../viewer/layoutSetup';
 import loadContentsInBackground from '../../utils/loadContentsInBackground';
 import handleFlowCssAndLoad from '../../utils/handleFlowCssAndLoad';
-import removeLayerHighlights from '../../utils/highlights/removeLayerHighlights';
 import removeUserHighlights from '../../utils/highlights/removeUserHighlights';
 import clearUserHighlights from '../../utils/highlights/clearUserHighlights';
 import redrawUserHighlights from '../../utils/highlights/redrawUserHighlights';
-import { highlightTerms } from '../../utils/highlights/search';
+import { highlightTerms, clean } from '../../utils/highlights/search';
 import handleAnchors from '../../utils/handleAnchors';
 
 /**
@@ -46,14 +45,12 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
   }
   updateState({ cssLoaded: false });
   return new Promise<Partial<State>>((resolve): void => {
-    const { contentPlaceholderNode, dynamicStyleNode, searchTermsHighlightsNode, config } = state;
+    const { contentPlaceholderNode, dynamicStyleNode, config } = state;
 
     if (state.layout === LayoutTypes.Flow) {
       setCSSProperty('viewer-margin-top', '200vh');
       window.requestAnimationFrame(() => {
-        if (searchTermsHighlightsNode) {
-          removeLayerHighlights(searchTermsHighlightsNode);
-        }
+        clean(state);
         removeUserHighlights(state);
         clearUserHighlights(state);
         contentPlaceholderNode!.innerHTML = action.htmlContent;
