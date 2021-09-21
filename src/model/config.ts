@@ -179,7 +179,11 @@ export interface DefaultConfig {
   /**
    * Pages slugs that shouldn't be affected by theme
    */
-  themeUnaffectedSlugs?: string[]
+  themeUnaffectedSlugs?: string[];
+  /**
+   * Custom search highlight color
+   */
+  searchHighlightColor?: string;
 }
 
 export interface RequiredConfig {

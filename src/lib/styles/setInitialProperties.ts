@@ -28,7 +28,7 @@ const setInitialProperties = (state: State): void => {
   setCSSProperty('pointer-events', 'auto');
   setCSSProperty('scale', `${state.scale}`);
   setCSSProperty('safe-area-border-width', 'calc(2px * var(--debug-viewer-safe-area))');
-  setCSSProperty('search-highlights-color', '#fdff04');
+  setCSSProperty('search-highlights-color', state.config.searchHighlightColor || '#fdff04');
   setCSSProperty('sepia-viewer-color', '0');
   setCSSProperty('text-align', 'initial');
   setCSSProperty('total-column-width', '0px');
