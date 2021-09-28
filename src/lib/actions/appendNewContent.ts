@@ -94,6 +94,7 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
             };
             const onStylesLoad = (): void => {
               newLink.removeEventListener('load', onStylesLoad);
+              newLink.removeEventListener('error', onStylesLoad);
               const checkFonts = () => {
                 window.requestAnimationFrame(() => {
                   window.requestAnimationFrame(() => {
@@ -123,7 +124,9 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
             newLink.rel = 'stylesheet';
             newLink.type = 'text/css';
             newLink.addEventListener('load', onStylesLoad);
+            newLink.addEventListener('error', onStylesLoad);
             dynamicStyleNode!.removeEventListener('load', onStylesLoad);
+            dynamicStyleNode!.removeEventListener('error', onStylesLoad);
             dynamicStyleNode!.replaceWith(newLink);
             newLink.href = action.cssURL;
           });

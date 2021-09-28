@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui" />
+    <title>Read.Garden Testing Viewer Demo-1</title>
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="description" content="Viewer used by to test the Demo-1" />
+    <link rel="preload" as="style" href="/css/readium.css" />
+    <link rel="stylesheet" type="text/css" href="/css/readium.css" />
+    <link rel="preload" as="style" href="/css/read.garden-viewer.css" />
+    <link rel="stylesheet" type="text/css" href="/css/read.garden-viewer.css" />
+    <link rel="preload" as="style" href="/css/fonts.css" />
+    <link rel="stylesheet" type="text/css" href="/css/fonts.css" />
+    <link rel="stylesheet" type="text/css" href="/css/read.garden-testing-ui.css" />
+    <script src="/js/read.garden-test-api.js"></script>
+    <script src="/js/read.garden-viewer.js"></script>
+  </head>
+
+  <body></body>
+  <script type="text/javascript">
+    window.readGardenApi = window.readGardenViewer({
+      layoutType: 'flow',
+      eventHandler: window.readGardenEventHandler,
+      slug: 'demo-1',
+      contentSlug: '3',
+      initialFontSize: 26,
+      initialFontFamily: 'Obf-Helvetica',
+      availableFontFamilies: [
+        'Obf-Helvetica',
+        'Obf-OpenDyslexic',
+        'Obf-AmericanTypewriter',
+        'Obf-RobotoSlab',
+        'Obf-Baskerville',
+        'Obf-Tahoma',
+        'Obf-TimesNewRoman',
+      ],
+      readModeMargin: {
+        top: 0,
+        left: 0,
+        bottom: 0,
+        right: 0,
+      },
+      uiModeMargin: {
+        top: 100,
+        left: 0,
+        bottom: 0,
+        right: 0,
+      },
+      toggleReadModeOnClick: true,
+      // initialTextAlign: 'start',
+      // initialScrollMode: 'vertical',
+    });
+    window.readGardenSetDispatcher(window.readGardenApi.dispatch);
+    window.readGardenSetState(window.readGardenApi.state);
+  </script>
+</html>
