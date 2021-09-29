@@ -26,6 +26,7 @@ import clearNativeSelection from '../../utils/highlights/clearNativeSelection';
 import clearSelection from '../../utils/highlights/clearSelection';
 import getFixedContentContainer from '../../utils/highlights/getFixedContentContainer';
 import getClickedLink from '../../utils/highlights/getClickedLink';
+import { addOnChangeEventListener } from '../state/stateChangeEvents';
 
 export const reCalcScrollLimits = (
   state: (GlobalState & FixedState & ScrolledState) | (GlobalState & FixedState & PaginatedState),
@@ -56,7 +57,7 @@ export const reCalcScrollLimits = (
 const scrollController = (
   state: State,
   dispatch: DispatchAPIAction,
-  executeTransitions: () => void,
+  executeTransitions: (instant?: boolean) => void,
 ): void => {
   let mouseDown = false;
   let lastDelta = 0;
@@ -460,6 +461,26 @@ const scrollController = (
   window.addEventListener('mousemove', onDragMove);
   window.addEventListener('touchmove', onDragMove);
   state.readGardenContainerNode?.addEventListener('wheel', onWheel);
+  addOnChangeEventListener('containerHeight', () => {
+    if (state.layout === LayoutTypes.Fixed) {
+      if (state.scrollMode === 'vertical') {
+        scrollInertiaAndLimits(state, scroll, 0, executeTransitions, dispatch, true, false, true);
+      }
+      if (state.scrollMode === 'horizontal') {
+        scrollInertiaAndLimits(state, altScroll, 0, executeTransitions, dispatch, true, true, true);
+      }
+    }
+  });
+  addOnChangeEventListener('containerWidth', () => {
+    if (state.layout === LayoutTypes.Fixed) {
+      if (state.scrollMode === 'vertical') {
+        scrollInertiaAndLimits(state, altScroll, 0, executeTransitions, dispatch, true, true, true);
+      }
+      if (state.scrollMode === 'horizontal') {
+        scrollInertiaAndLimits(state, scroll, 0, executeTransitions, dispatch, true, false, true);
+      }
+    }
+  });
 };
 
 export default scrollController;
