@@ -75,7 +75,7 @@ export const getMinAndMaxAltScroll = (state: State): MinAndMaxScroll => {
   if (state.layout === LayoutTypes.Fixed) {
     if (state.scrollMode === 'horizontal') {
       const targetScale = Math.abs(scale.target * zoom.target);
-      const additional = (window.innerHeight / zoom.target - state.maxHeight) / 2;
+      const additional = (state.containerHeight / zoom.target - state.maxHeight) / 2;
       const correctorFix = -topCorrector.target / targetScale;
       if (additional >= 0) {
         return {
@@ -92,8 +92,9 @@ export const getMinAndMaxAltScroll = (state: State): MinAndMaxScroll => {
     }
     if (state.scrollMode === 'vertical') {
       const targetScale = Math.abs(scale.target * zoom.target);
-      const additional = (window.innerWidth / zoom.target - state.maxWidth) / 2;
+      const additional = (state.containerWidth / zoom.target - state.maxWidth) / 2;
       const correctorFix = -leftCorrector.target / targetScale;
+      console.log({ correctorFix, additional });
       if (additional >= 0) {
         return {
           maxScroll: correctorFix + additional,

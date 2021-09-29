@@ -92,8 +92,8 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
     }
   };
 
-  const executeTransitions = (): void => {
-    if (!state.animate) {
+  const executeTransitions = (instant = false): void => {
+    if (!state.animate || instant) {
       interpolationValues.forEach((value) => {
         value.current = value.target;
       });
@@ -105,6 +105,7 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
       updateState({
         animating: true,
       });
+      console.log(left.current, left.target, altScroll.current, altScroll.target);
       interpolateToTargetValues();
     }
   };
@@ -116,26 +117,49 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
     if (!state.readMode && state.layout === LayoutTypes.Flow) {
       newMargins.bottom += state.fontSize * 3;
     }
-    const currentWidth = state.containerWidth;
-    const targetWidth = currentWidth - newMargins.left - newMargins.right;
-    const currentHeight = state.containerHeight;
-    const widthNeededScale = targetWidth / currentWidth;
-    const targetHeight = currentHeight - newMargins.top - newMargins.bottom;
-    const heightNeededScale = targetHeight / currentHeight;
-    scale.target = Math.max(Math.min(widthNeededScale, heightNeededScale), 0);
-    const widthReduction = currentWidth * (1 - scale.target);
-    const marginWidth = widthReduction - newMargins.left - newMargins.right;
-    left.target = newMargins.left + marginWidth / 2;
 
-    const heightReduction = currentHeight * (1 - scale.target);
-    const marginHeight = heightReduction - newMargins.top - newMargins.bottom;
-    top.target = newMargins.top + marginHeight / 2;
-    if (state.scrollMode === 'horizontal') {
-      left.target = newMargins.left + marginWidth / 2;
+    const currentWidth = state.containerWidth;
+    const horizontalMargin = newMargins.left + newMargins.right;
+    const targetWidth = currentWidth - horizontalMargin;
+    const widthNeededScale = targetWidth / currentWidth;
+
+    const currentHeight = state.containerHeight;
+    const verticalMargin =
+      state.layout === LayoutTypes.Fixed && state.fitMode === FitMode.Height
+        ? state.config.readModeMargin.top + state.config.readModeMargin.bottom
+        : newMargins.top + newMargins.bottom;
+    const targetHeight = currentHeight - verticalMargin;
+    const heightNeededScale = targetHeight / currentHeight;
+
+    scale.target = Math.max(Math.min(widthNeededScale, heightNeededScale), 0);
+    if (state.layout === LayoutTypes.Fixed) {
+      if (state.fitMode === FitMode.Height) {
+        scale.target = Math.max(heightNeededScale, 0);
+      }
+      if (state.fitMode === FitMode.Width) {
+        scale.target = Math.max(widthNeededScale, 0);
+      }
     }
+
+    if (state.scrollMode === 'horizontal') {
+      left.target = newMargins.left;
+      console.log(left.current, left.target);
+    } else {
+      const widthReduction = currentWidth * (1 - scale.target);
+      const marginWidth = widthReduction - newMargins.left - newMargins.right;
+      left.target = newMargins.left + marginWidth / 2;
+      console.log(left.current, left.target);
+    }
+
     if (state.scrollMode === 'vertical') {
       top.target = newMargins.top;
+    } else {
+      const heightReduction = currentHeight * (1 - scale.target);
+      const marginHeight = heightReduction - newMargins.top - newMargins.bottom;
+      top.target = newMargins.top + marginHeight / 2;
     }
+    console.log(left.current, left.target, top.current, top.target);
+
     updateState({
       margin: newMargins,
     });
@@ -178,7 +202,6 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
     if (targetSlugScrollPosition !== null && state.forceScroll === undefined) {
       scroll.target = targetSlugScrollPosition;
     }
-
     executeTransitions();
   };
 
@@ -186,17 +209,38 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
     const scrollingElement = document.scrollingElement ?? document.body;
     scrollingElement.scrollTop = 0;
   };
+
   const onChapterChange = (): void => {
     resetPageScroll();
     if (state.layout === LayoutTypes.Fixed) {
       if (state.fitMode === FitMode.Height) {
-        zoom.target = window.innerHeight / state.maxHeight;
+        scale.target = Math.max(
+          0,
+          (state.containerHeight - state.margin.top - state.margin.bottom) / state.containerHeight,
+        );
+        top.current = state.margin.top;
+        zoom.target = state.containerHeight / state.maxHeight;
+        const widthReduction = state.containerWidth * (1 - scale.target);
+        const marginWidth = widthReduction - state.margin.left - state.margin.right;
+        left.current = state.margin.left + marginWidth / 2;
       } else if (state.fitMode === FitMode.Width) {
-        zoom.target = window.innerWidth / state.maxWidth;
+        scale.target = Math.max(
+          0,
+          (state.containerWidth - state.margin.left - state.margin.right) / state.containerWidth,
+        );
+        left.current = state.margin.left;
+        zoom.target = state.containerWidth / state.maxWidth;
+        const heightReduction = state.containerHeight * (1 - scale.target);
+        const marginHeight = heightReduction - state.margin.top - state.margin.bottom;
+        top.current = state.margin.top + marginHeight / 2;
       } else {
         zoom.target = state.zoom;
       }
+      // console.log(zoom.current, zoom.target, scale.current, scale.target);
+      scale.current = scale.target;
       zoom.current = zoom.target;
+      // left.current = left.target;
+      // top.current = top.target;
     }
     resetPageProps();
     if (state.layout === LayoutTypes.Fixed) {
@@ -227,6 +271,7 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
       zoom.current = zoom.target;
       zoom.forceUpdate = true;
       reCalcScrollLimits(state);
+      console.log('from onZoomChange');
       executeTransitions();
     }
   };
@@ -239,6 +284,7 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
       updateState({
         forceScroll: undefined,
       });
+      console.log('from onForceScrollChange');
       executeTransitions();
     }
   };
@@ -249,6 +295,7 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
       updateState({
         animateToScroll: undefined,
       });
+      console.log('from onAnimateToScroll');
       executeTransitions();
     }
   };
