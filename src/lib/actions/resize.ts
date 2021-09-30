@@ -28,6 +28,14 @@ const resize: ActionDispatcher<Resize> = async ({ state }) => {
     await redrawUserHighlights(state);
     return recalculateUpdate;
   }
+  if (state.layout === LayoutTypes.Fixed) {
+    const { readGardenContainerNode } = state;
+    if (readGardenContainerNode) {
+      const { width: containerWidth, height: containerHeight } =
+        readGardenContainerNode.getBoundingClientRect();
+      return { containerWidth, containerHeight };
+    }
+  }
   return {};
 };
 

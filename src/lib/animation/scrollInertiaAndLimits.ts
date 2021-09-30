@@ -10,10 +10,11 @@ const scrollInertiaAndLimits = (
   state: State,
   scroll: InterpolationValue,
   lastDelta: number,
-  executeTransitions: () => void,
+  executeTransitions: (instant?: boolean) => void,
   dispatch: DispatchAPIAction,
   avoidInertia = false,
   isAltScroll = false,
+  instant = false,
 ): void => {
   let min: number | null = null;
   let max: number | null = null;
@@ -87,6 +88,6 @@ const scrollInertiaAndLimits = (
       dispatch({ type: 'navigateToNextChapter' });
     }
   }
-  executeTransitions();
+  executeTransitions(instant);
 };
 export default scrollInertiaAndLimits;
