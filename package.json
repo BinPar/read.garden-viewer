@@ -8,7 +8,7 @@
     "build-dev": "nodemon --config nodemon.json --exec 'tsc;webpack --config webpack.config.js'",
     "generate-contents": "rm -rf ./web/books;ts-node-dev ./src/server/scripts/generateContents.ts",
     "lint": "eslint --config ./.eslintrc ./src --ext .js,.jsx,.ts,.tsx",
-    "publish-web": "npm run build;rm -r ../read.garden/web/sdk/read.garden-viewer;mkdir ../read.garden/web/sdk/read.garden-viewer;cp -R ./dist/* ../read.garden/web/sdk/read.garden-viewer;cp ./web/css/read.garden-viewer.css ../read.garden/web/public/css/",
+    "publish-web": "rm -rf ./dist;npm run build;rm -r ../read.garden/web/sdk/read.garden-viewer;mkdir ../read.garden/web/sdk/read.garden-viewer;cp -R ./dist/* ../read.garden/web/sdk/read.garden-viewer;cp ./web/css/read.garden-viewer.css ../read.garden/web/public/css/",
     "publish-app": "rm -rf ./dist;tsc -p tsconfig.app.json;webpack --config webpack.config.app.js;cp ./web/css/read.garden-viewer.css ../read.garden-mobile/sdk-viewer/css/;cp -R ./web/img ../read.garden-mobile/sdk-viewer/",
     "server-dev": "NODE_ENV=development ts-node-dev --debug --respawn ./src/server/index.ts",
     "start": "node ./dist/server/index.js",
