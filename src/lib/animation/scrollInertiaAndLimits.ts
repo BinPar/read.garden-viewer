@@ -88,7 +88,6 @@ const scrollInertiaAndLimits = (
       dispatch({ type: 'navigateToNextChapter' });
     }
   }
-  console.log('from scrollInertiaAndLimits', isAltScroll);
   executeTransitions(instant);
 };
 export default scrollInertiaAndLimits;

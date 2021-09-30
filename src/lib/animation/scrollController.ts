@@ -40,7 +40,6 @@ export const reCalcScrollLimits = (
     scroll.target = scrollLimits.minScroll;
     scroll.speed = 0;
   }
-  console.log({ ...scrollLimits }, scroll.current, scroll.target);
   const altScrollLimits = getMinAndMaxAltScroll(state);
   if (altScroll.current > altScrollLimits.maxScroll) {
     altScroll.target = altScrollLimits.maxScroll;
@@ -49,7 +48,6 @@ export const reCalcScrollLimits = (
     altScroll.target = altScrollLimits.minScroll;
     altScroll.speed = 0;
   }
-  console.log({ ...altScrollLimits }, altScroll.current, altScroll.target);
   if (instant) {
     scroll.current = scroll.target;
     altScroll.current = altScroll.target;
@@ -346,7 +344,6 @@ const scrollController = (
           }
         }
       }
-      console.log('from onDragMove');
       executeTransitions();
       scroll.forceUpdate = false;
       lastMoveMilliseconds = new Date().getTime();
@@ -401,7 +398,6 @@ const scrollController = (
         updateState({ fitMode: undefined });
         updateZoom(zoom.target - ev.deltaY * state.zoomSpeed, state);
         reCalcScrollLimits(state);
-        console.log('from onWheel 1');
         executeTransitions();
       }
       ev.preventDefault();
@@ -449,7 +445,6 @@ const scrollController = (
         lastDelta = 0;
       }
       scroll.target = scroll.current;
-      console.log('from onWheel 2');
       executeTransitions();
       scroll.forceUpdate = false;
       if (onWheelStopTimeout) {
