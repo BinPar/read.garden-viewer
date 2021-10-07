@@ -90,29 +90,46 @@ const zoomControls = async (
     fitWidth.classList.add('active');
   }
 
+  const onFitPage = (): void => {
+    const action: SetFitMode = {
+      type: 'setFitMode',
+      fitMode: FitMode.Page,
+      center: true,
+    };
+    dispatcher(action);
+  };
+
+  const fitPage = document.createElement('button');
+  fitPage.innerText = 'Fit page';
+  fitPage.onclick = onFitPage;
+  if (state.layout === LayoutTypes.Fixed && state.fitMode === FitMode.Page) {
+    fitWidth.classList.add('active');
+  }
+
   const onFitModeChange: AddOnChangeEvent<FitMode | undefined> = {
     type: 'addOnChangeEvent',
     propertyName: 'fitMode',
     event: (newValue) => {
-      if (!newValue) {
-        fitWidth.classList.remove('active');
-        fitHeight.classList.remove('active');
-      }
+      fitWidth.classList.remove('active');
+      fitHeight.classList.remove('active');
+      fitPage.classList.remove('active');
       if (newValue === FitMode.Height) {
         fitHeight.classList.add('active');
-        fitWidth.classList.remove('active');
       }
       if (newValue === FitMode.Width) {
         fitWidth.classList.add('active');
-        fitHeight.classList.remove('active');
       }
-    }
-  }
+      if (newValue === FitMode.Page) {
+        fitPage.classList.add('active');
+      }
+    },
+  };
   await dispatcher(onFitModeChange);
   await dispatcher(onZoomChange);
 
   container.appendChild(fitHeight);
   container.appendChild(fitWidth);
+  container.appendChild(fitPage);
 };
 
 export default zoomControls;

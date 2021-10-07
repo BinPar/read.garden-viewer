@@ -2,6 +2,7 @@
 import { DispatchAPIAction } from '../../model/actions/common';
 import { State } from '../../model/state';
 import { FitMode, LayoutTypes } from '../../model/viewerSettings';
+import navigateToContentSlug from '../../utils/navigateToContentSlug';
 import setCSSProperty from '../../utils/setCSSProperty';
 import { updateState } from '../state';
 import { addOnChangeEventListener } from '../state/stateChangeEvents';
@@ -174,8 +175,8 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
 
   const resetPageProps = (): void => {
     const targetSlugScrollPosition = getScrollFromContentSlug(state) ?? 0;
-    scroll.current = targetSlugScrollPosition;
-    scroll.target = scroll.current;
+    scroll.target = targetSlugScrollPosition;
+    scroll.current = scroll.target;
     scroll.speed = 0;
     recalculateCurrentPage(state, scroll.current, true);
   };
@@ -206,37 +207,64 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
     scrollingElement.scrollTop = 0;
   };
 
+  const fitHeight = (): void => {
+    if (state.layout === LayoutTypes.Fixed) {
+      scale.target = Math.max(
+        0,
+        (state.containerHeight - state.margin.top - state.margin.bottom) / state.containerHeight,
+      );
+      top.target = state.margin.top;
+      zoom.target = state.containerHeight / state.maxHeight;
+      if (state.scrollMode === 'horizontal') {
+        left.target = state.margin.left;
+      } else {
+        const widthReduction = state.containerWidth * (1 - scale.target);
+        const marginWidth = widthReduction - state.margin.left - state.margin.right;
+        left.target = state.margin.left + marginWidth / 2;
+      }
+    }
+  };
+
+  const fitWidth = (): void => {
+    if (state.layout === LayoutTypes.Fixed) {
+      scale.target = Math.max(
+        0,
+        (state.containerWidth - state.margin.left - state.margin.right) / state.containerWidth,
+      );
+      left.target = state.margin.left;
+      zoom.target = state.containerWidth / state.maxWidth;
+      if (state.scrollMode === 'vertical') {
+        top.target = state.margin.top;
+      } else {
+        const heightReduction = state.containerHeight * (1 - scale.target);
+        const marginHeight = heightReduction - state.margin.top - state.margin.bottom;
+        top.target = state.margin.top + marginHeight / 2;
+      }
+    }
+  };
+
   const onChapterChange = (): void => {
     resetPageScroll();
     if (state.layout === LayoutTypes.Fixed) {
       if (state.fitMode === FitMode.Height) {
-        scale.target = Math.max(
-          0,
-          (state.containerHeight - state.margin.top - state.margin.bottom) / state.containerHeight,
-        );
-        top.target = state.margin.top;
-        zoom.target = state.containerHeight / state.maxHeight;
-        if (state.scrollMode === 'horizontal') {
-          left.target = state.margin.left;
-        } else {
-          const widthReduction = state.containerWidth * (1 - scale.target);
-          const marginWidth = widthReduction - state.margin.left - state.margin.right;
-          left.target = state.margin.left + marginWidth / 2;
-        }
+        fitHeight();
       } else if (state.fitMode === FitMode.Width) {
-        scale.target = Math.max(
+        fitWidth();
+      } else if (state.fitMode === FitMode.Page) {
+        const fitWidthZoom = Math.max(
           0,
           (state.containerWidth - state.margin.left - state.margin.right) / state.containerWidth,
         );
-        left.target = state.margin.left;
-        zoom.target = state.containerWidth / state.maxWidth;
-        if (state.scrollMode === 'vertical') {
-          top.target = state.margin.top;
+        const fitHeightZoom = Math.max(
+          0,
+          (state.containerHeight - state.margin.top - state.margin.bottom) / state.containerHeight,
+        );
+        if (fitWidthZoom < fitHeightZoom) {
+          fitWidth();
         } else {
-          const heightReduction = state.containerHeight * (1 - scale.target);
-          const marginHeight = heightReduction - state.margin.top - state.margin.bottom;
-          top.target = state.margin.top + marginHeight / 2;
+          fitHeight();
         }
+        navigateToContentSlug(state.contentSlug);
       } else {
         zoom.target = state.zoom;
       }
@@ -275,6 +303,7 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
       zoom.forceUpdate = true;
       reCalcScrollLimits(state);
       executeTransitions();
+      zoom.forceUpdate = false;
     }
   };
 
@@ -283,10 +312,12 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
       scroll.target = newScroll * -1;
       scroll.current = scroll.target;
       scroll.speed = 0;
+      scroll.forceUpdate = true;
       updateState({
         forceScroll: undefined,
       });
       executeTransitions();
+      scroll.forceUpdate = false;
     }
   };
 

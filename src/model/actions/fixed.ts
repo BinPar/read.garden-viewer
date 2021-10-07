@@ -47,6 +47,10 @@ export interface SetFitMode extends Action {
    * Desired fit mode
    */
   fitMode: FitMode;
+  /**
+   * Center current page
+   */
+  center?: boolean;
 }
 
 /**

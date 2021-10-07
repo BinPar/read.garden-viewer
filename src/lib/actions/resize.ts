@@ -8,6 +8,7 @@ import { clean } from '../../utils/highlights/search';
 import setCSSProperty from '../../utils/setCSSProperty';
 
 import recalculate from '../../viewer/recalculate';
+import { updateState } from '../state';
 
 /**
  * Resize action
@@ -33,7 +34,12 @@ const resize: ActionDispatcher<Resize> = async ({ state }) => {
     if (readGardenContainerNode) {
       const { width: containerWidth, height: containerHeight } =
         readGardenContainerNode.getBoundingClientRect();
-      return { containerWidth, containerHeight };
+      updateState({ containerWidth, containerHeight });
+      const { fitMode } = state;
+      if (fitMode) {
+        updateState({ fitMode: undefined });
+        updateState({ fitMode });
+      }
     }
   }
   return {};

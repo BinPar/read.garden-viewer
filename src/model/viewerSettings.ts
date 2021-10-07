@@ -28,6 +28,10 @@
    * Fit height
    */
   Height = 'height',
+  /**
+   * Fit page
+   */
+  Page = 'page',
 }
 
 /**
