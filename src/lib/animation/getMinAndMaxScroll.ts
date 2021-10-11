@@ -34,9 +34,11 @@ const getMinAndMaxScroll = (state: State, forceMargin: number | null = null): Mi
           const targetScale = Math.abs(scale.target * zoom.target);
           const correctorFix = -leftCorrector.target / targetScale;
           maxScroll = correctorFix;
-          const maxScrollableWidth =
+          const maxScrollableWidth = Math.max(
             state.totalWidth -
-            (state.containerWidth - (state.margin.left + state.margin.right * 2)) / targetScale;
+              (state.containerWidth - (state.margin.left + state.margin.right * 2)) / targetScale,
+            0,
+          );
           minScroll = -1 * maxScrollableWidth + correctorFix;
         }
       }
@@ -60,9 +62,11 @@ const getMinAndMaxScroll = (state: State, forceMargin: number | null = null): Mi
           const targetScale = Math.abs(scale.target * zoom.target);
           const correctorFix = -topCorrector.target / targetScale;
           maxScroll = correctorFix;
-          const maxScrollableHeight =
+          const maxScrollableHeight = Math.max(
             state.totalHeight -
-            (state.containerHeight - (state.margin.top + state.margin.bottom)) / targetScale;
+              (state.containerHeight - (state.margin.top + state.margin.bottom)) / targetScale,
+            0,
+          );
           minScroll = -1 * maxScrollableHeight + correctorFix;
         }
       }
