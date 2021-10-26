@@ -115,6 +115,10 @@ export const initializeState = (initialConfig: InitialConfig): void => {
       textAlign: config.initialTextAlign ?? defaultFlow.textAlign,
       lineHeight: config.initialLineHeight ?? defaultFlow.lineHeight,
     };
+
+    if (config.initialFontSize) {
+      state.fontSize = config.initialFontSize;
+    }
   }
 
   if (config.layoutType === 'fixed') {
