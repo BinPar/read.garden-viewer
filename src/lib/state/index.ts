@@ -89,7 +89,7 @@ export const initializeState = (initialConfig: InitialConfig): void => {
     pageNumber: 1, // From initial config
     toggleReadModeOnClick: config.toggleReadModeOnClick ?? defaultGlobal.toggleReadModeOnClick,
     readMode: config.initialReadMode ?? defaultGlobal.readMode,
-    searchTerms: new Array<string>(),
+    searchTerms: config.initialSearchTerms,
     searchRanges: new Array<Range>(),
     highlightersLayers: new Map<string, HTMLDivElement>(),
     currentUserHighlights: new Map<string, UserHighlightInfo>(),

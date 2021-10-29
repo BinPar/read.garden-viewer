@@ -84,6 +84,10 @@ export interface DefaultConfig {
    */
   initialTheme: ViewerTheme;
   /**
+   * Search terms to highlight
+   */
+  initialSearchTerms: string[];
+  /**
    * Zoom config
    * @scope Fixed
    */
