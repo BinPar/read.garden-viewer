@@ -59,6 +59,7 @@ const showSelectionMenu: ActionDispatcher<ShowSelectionMenu> = async ({ action, 
             type: 'onSelectionMenuOptionClick',
             key: option.key,
             slug: state.slug,
+            productSlug: state.productSlug,
           };
           if (action.key) {
             event.highlightKey = action.key;
@@ -101,6 +102,7 @@ const showSelectionMenu: ActionDispatcher<ShowSelectionMenu> = async ({ action, 
             type: 'onDeleteOptionClick',
             key: action.key,
             slug: state.slug,
+            productSlug: state.productSlug,
           };
           state.config.eventHandler(event);
         }

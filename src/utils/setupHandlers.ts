@@ -18,6 +18,7 @@ const setupHandlers = async (state: State, dispatch: DispatchAPIAction): Promise
     const loadNewContent: LoadNewContent = {
       type: 'loadNewContent',
       slug: state.config.slug,
+      productSlug: state.productSlug,
       contentSlug: state.config.contentSlug,
     };
     state.config.eventHandler(loadNewContent);

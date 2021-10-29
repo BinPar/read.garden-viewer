@@ -188,6 +188,7 @@ const drawExtensors = (
         const event: OnUserSelect = {
           type: 'onUserSelect',
           slug: state.slug,
+          productSlug: state.productSlug,
         };
         state.config.eventHandler(event);
       }

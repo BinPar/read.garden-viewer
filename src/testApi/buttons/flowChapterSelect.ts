@@ -69,6 +69,7 @@ const flowChapterSelect = (
       state.config.eventHandler({
         type: 'loadNewContent',
         slug: state.config.slug,
+        productSlug: state.productSlug,
         contentSlug: select.value,
       });
     }

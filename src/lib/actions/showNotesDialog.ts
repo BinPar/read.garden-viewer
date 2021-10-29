@@ -126,6 +126,7 @@ const showNotesDialog: ActionDispatcher<ShowNotesDialog> = async ({ action, stat
               type: 'onChangeNote',
               key: option.key,
               slug: state.slug,
+              productSlug: state.productSlug,
               highlightKey: action.highlightKey!,
               selectionInfo: action.selectionInfo,
               editing,
@@ -169,6 +170,7 @@ const showNotesDialog: ActionDispatcher<ShowNotesDialog> = async ({ action, stat
         const event: OnSaveNote = {
           type: 'onSaveNote',
           slug: state.slug,
+          productSlug: state.productSlug,
           note: textarea.value,
           key,
           highlightKey,
@@ -195,6 +197,7 @@ const showNotesDialog: ActionDispatcher<ShowNotesDialog> = async ({ action, stat
         const event: OnCancelNewNote = {
           type: 'onCancelNewNote',
           slug: state.slug,
+          productSlug: state.productSlug,
         };
         state.config.eventHandler(event);
       }
@@ -221,6 +224,7 @@ const showNotesDialog: ActionDispatcher<ShowNotesDialog> = async ({ action, stat
           const deleteEvent: OnDeleteOptionClick = {
             type: 'onDeleteOptionClick',
             slug: state.slug,
+            productSlug: state.productSlug,
             key: action.highlightKey!,
           };
           state.config.eventHandler(deleteEvent);

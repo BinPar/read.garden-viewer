@@ -31,6 +31,7 @@ const searchButtons = (
       state.config.eventHandler({
         type: 'getTerms',
         slug: state.config.slug,
+        productSlug: state.productSlug,
         text: input.value,
       });
     }

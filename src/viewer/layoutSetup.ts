@@ -20,6 +20,7 @@ const layoutSetup = (state: State): void => {
     const event: GetContentsInfo = {
       type: 'getContentsInfo',
       slug: state.slug,
+      productSlug: state.productSlug,
     };
     if (state.config.eventHandler) {
       state.config.eventHandler(event);

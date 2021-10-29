@@ -4,6 +4,17 @@ export interface ReadGardenEvent {
   type: string;
 }
 
+export interface EventWithSlugs {
+  /**
+   * Slug of the first level content (book, work...) to load
+   */
+  slug: string;
+  /**
+   * Product slug (in case it's different from main slug)
+   */
+   productSlug: string;
+}
+
 /**
  * On page change event
  */
@@ -18,12 +29,8 @@ export interface PageChange extends ReadGardenEvent {
 /**
  * On new content needed
  */
-export interface LoadNewContent extends ReadGardenEvent {
+export interface LoadNewContent extends ReadGardenEvent, EventWithSlugs {
   type: 'loadNewContent';
-  /**
-   * Slug of the first level content (book, work...) to load
-   */
-  slug: string;
   /**
    * Slug of the second level content (page, chapter...) to load
    */
@@ -34,31 +41,19 @@ export interface LoadNewContent extends ReadGardenEvent {
   goToEnd?: boolean;
 }
 
-export interface GetContentsInfo extends ReadGardenEvent {
+export interface GetContentsInfo extends ReadGardenEvent, EventWithSlugs {
   type: 'getContentsInfo';
-  /**
-   * Slug of the first level content (book, work...)
-   */
-  slug: string;
 }
 
-export interface GetTerms extends ReadGardenEvent {
+export interface GetTerms extends ReadGardenEvent, EventWithSlugs {
   type: 'getTerms';
-  /**
-   * Slug of the first level content (book, work...)
-   */
-  slug: string;
   /**
    * Text to look for
    */
   text: string;
 }
 
-export interface LoadChapterInfo {
-  /**
-   * Slug of the first level content (book, work...)
-   */
-  slug: string;
+export interface LoadChapterInfo extends EventWithSlugs {
   /**
    * Current slug of the second level content (page, chapter...)
    */
@@ -74,43 +69,37 @@ export interface LoadPreviousChapter extends ReadGardenEvent, LoadChapterInfo {
   goToEnd?: boolean;
 }
 
-export interface OnUserSelect extends ReadGardenEvent {
+export interface OnUserSelect extends ReadGardenEvent, EventWithSlugs {
   type: 'onUserSelect';
-  slug: string;
 }
 
-export interface OnHighlightClick extends ReadGardenEvent {
+export interface OnHighlightClick extends ReadGardenEvent, EventWithSlugs {
   type: 'onHighlightClick';
-  slug: string;
   key: string;
   ranges: SelectionRange[];
 }
 
-export interface OnSelectionMenuOptionClick extends ReadGardenEvent {
+export interface OnSelectionMenuOptionClick extends ReadGardenEvent, EventWithSlugs {
   type: 'onSelectionMenuOptionClick';
   key: string;
-  slug: string;
   highlightKey?: string;
   selectionInfo?: SelectionRange;
 }
 
-export interface OnCancelNewNote extends ReadGardenEvent {
+export interface OnCancelNewNote extends ReadGardenEvent, EventWithSlugs {
   type: 'onCancelNewNote';
-  slug: string;
 }
 
-export interface OnSaveNote extends ReadGardenEvent {
+export interface OnSaveNote extends ReadGardenEvent, EventWithSlugs {
   type: 'onSaveNote';
-  slug: string;
   note: string;
   key: string;
   highlightKey?: string;
   selectionInfo?: SelectionRange;
 }
 
-export interface OnChangeNote extends ReadGardenEvent {
+export interface OnChangeNote extends ReadGardenEvent, EventWithSlugs {
   type: 'onChangeNote';
-  slug: string;
   key: string;
   highlightKey: string;
   editing: boolean;
@@ -118,15 +107,13 @@ export interface OnChangeNote extends ReadGardenEvent {
   selectionInfo?: SelectionRange;
 }
 
-export interface OnDeleteOptionClick extends ReadGardenEvent {
+export interface OnDeleteOptionClick extends ReadGardenEvent, EventWithSlugs {
   type: 'onDeleteOptionClick';
   key: string;
-  slug: string;
 }
 
-export interface OnLinkClick extends ReadGardenEvent {
+export interface OnLinkClick extends ReadGardenEvent, EventWithSlugs {
   type: 'onLinkClick';
-  slug: string;
   url: string | null;
   querySelector: string;
 }

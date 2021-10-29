@@ -100,6 +100,7 @@ const scrollController = (
           const onHighlightClick: OnHighlightClick = {
             type: 'onHighlightClick',
             slug: state.slug,
+            productSlug: state.productSlug,
             key: clickedHighlight,
             ranges: [{ start, end, obfuscatedText }],
           };
@@ -244,6 +245,7 @@ const scrollController = (
         const event: OnLinkClick = {
           type: 'onLinkClick',
           slug: state.slug,
+          productSlug: state.productSlug,
           url: clickedLink.getAttribute('href'),
           querySelector: `[data-link="${clickedLink.dataset.link}"]`,
         };
@@ -291,6 +293,7 @@ const scrollController = (
         const event: OnUserSelect = {
           type: 'onUserSelect',
           slug: state.slug,
+          productSlug: state.productSlug,
         };
         state.config.eventHandler(event);
       }

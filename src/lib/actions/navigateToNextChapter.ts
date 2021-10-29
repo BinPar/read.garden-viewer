@@ -12,6 +12,7 @@ const navigateToNextChapter: ActionDispatcher<NavigateToNextChapter> = async ({ 
     const event: LoadNextChapter = {
       type: 'loadNextChapter',
       slug: state.slug,
+      productSlug: state.productSlug,
       currentContentSlug,
     };
     state.config.eventHandler(event);

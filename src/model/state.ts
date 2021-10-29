@@ -19,6 +19,10 @@ export interface GlobalState {
    */
   slug: string;
   /**
+   * Product slug (in case it's different from main slug)
+   */
+  productSlug: string;
+  /**
    * True if user is dragging the scroll
    */
   dragging: boolean;

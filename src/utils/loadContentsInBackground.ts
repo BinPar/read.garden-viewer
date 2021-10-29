@@ -36,6 +36,7 @@ const loadContentsInBackground = async (state = getState(), currentContentSlug?:
         const event: LoadNewContent = {
           type: 'loadNewContent',
           slug: state.slug,
+          productSlug: state.productSlug,
           contentSlug: content.slug,
         };
         updateState({ loadingContent: content.slug });

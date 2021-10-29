@@ -200,6 +200,10 @@ export interface RequiredConfig {
    */
   slug: string;
   /**
+   * Product slug (in case it's different from main slug)
+   */
+  productSlug: string;
+  /**
    * Initial content slug (virtual page in flow, page in fixed)
    */
   contentSlug: string;

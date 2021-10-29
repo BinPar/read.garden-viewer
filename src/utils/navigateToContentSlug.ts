@@ -19,6 +19,7 @@ const navigateToContentSlug = (contentSlug: string, state = getState()) => {
         const event: LoadNewContent = {
           type: 'loadNewContent',
           slug: state.slug,
+          productSlug: state.productSlug,
           contentSlug,
         };
         /**
