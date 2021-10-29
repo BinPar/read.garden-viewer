@@ -74,7 +74,7 @@ export const initializeState = (initialConfig: InitialConfig): void => {
     },
     title: 'Title', // From initial config
     slug: config.slug,
-    productSlug: config.productSlug,
+    productSlug: config.productSlug || config.slug,
     contentSlug: config.contentSlug,
     theme: config.initialTheme ?? defaultGlobal.theme,
     dragging: false,
