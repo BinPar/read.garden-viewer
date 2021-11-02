@@ -1,6 +1,8 @@
 /* eslint-disable no-bitwise */
 /* eslint-disable no-param-reassign */
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import log from 'loglevel';
+
 import { SetReadMode } from '../../model/actions/global';
 import { DispatchAPIAction } from '../../model/actions/common';
 import { SelectionInfo, SyntheticEvent } from '../../model/dom';
@@ -27,6 +29,10 @@ import clearSelection from '../../utils/highlights/clearSelection';
 import getFixedContentContainer from '../../utils/highlights/getFixedContentContainer';
 import getClickedLink from '../../utils/highlights/getClickedLink';
 import { addOnChangeEventListener } from '../state/stateChangeEvents';
+import { Coordinates } from '../../model';
+import getTouches from '../../utils/getTouches';
+import calculateDistance from '../../utils/calculateDistance';
+import getTouchCenter from '../../utils/getTouchCenter';
 
 export const reCalcScrollLimits = (
   state: (GlobalState & FixedState & ScrolledState) | (GlobalState & FixedState & PaginatedState),
@@ -59,27 +65,79 @@ const scrollController = (
   dispatch: DispatchAPIAction,
   executeTransitions: (instant?: boolean) => void,
 ): void => {
+  const { selectionHighlightsNode } = state as Required<State>;
+
   let mouseDown = false;
   let lastDelta = 0;
   let altDelta = 0;
+  let fingers = 0;
   let lastX: null | number = null;
   let lastY: null | number = null;
   let lastMoveMilliseconds: number = new Date().getTime();
-
-  const { selectionHighlightsNode } = state as Required<State>;
+  let lastTouchStart: number = 0;
+  let lastZoomCenter: Coordinates | null = null;
+  let startTouches = new Array<Coordinates>();
+  let nthZoom = 0;
+  let lastZoom = 1;
+  let zoomFactor = 1;
   let initialSelection: SelectionInfo | null = null;
   let currentSelection: Range | null = null;
+  let isFirstMove = true;
+  let isDoubleTap = false;
+  let isZooming = false;
   let isSelecting = false;
   let mobileSelection = false;
   let clickedLink: HTMLAnchorElement | null = null;
   let mobileSelectionTimeout: NodeJS.Timeout | null = null;
 
+  const detectDoubleTap = (ev: TouchEvent): void => {
+    const time = new Date().getTime();
+    if (fingers > 1) {
+      lastTouchStart = 0;
+    }
+    isDoubleTap = time - lastTouchStart < state.config.doubleTapThreshold;
+    if (fingers === 1) {
+      lastTouchStart = time;
+    }
+  };
+
+  const handleZoom = (ev: TouchEvent, newZoom: number): void => {
+    const touchCenter = getTouchCenter(getTouches(ev));
+    let theZoom = newZoom / lastZoom;
+    lastZoom = newZoom;
+    nthZoom += 1;
+    if (nthZoom > 3) {
+      const originalZoomFactor = zoomFactor;
+      zoomFactor *= theZoom;
+      theZoom = zoomFactor / originalZoomFactor;
+      if (zoom.current === zoom.target) {
+        zoom.target = zoom.current * theZoom;
+      } else {
+        zoom.target *= theZoom;
+      }
+      zoom.target = Math.min(state.config.zoom.max, Math.max(zoom.target, state.config.zoom.min));
+      updateState({ animate: false });
+      executeTransitions();
+      updateState({ animate: true });
+    }
+    lastZoomCenter = touchCenter;
+  };
+
   const onDragStart = (ev: MouseEvent | TouchEvent): void => {
+    if (ev.type === 'touchstart') {
+      isFirstMove = true;
+      fingers = (ev as TouchEvent).touches.length;
+      detectDoubleTap(ev as TouchEvent);
+    } else {
+      isFirstMove = false;
+    }
+
     clearSelection();
     removeExtensors(state);
     removeSelectionMenu(state);
     removeNotesDialog(state);
-    if (ev.type === 'touchstart' || (ev as MouseEvent).button === 0) {
+
+    if ((ev.type === 'touchstart' && fingers === 1) || (ev as MouseEvent).button === 0) {
       setCSSProperty('user-select', 'none');
       initialSelection = null;
       currentSelection = null;
@@ -310,6 +368,31 @@ const scrollController = (
   };
 
   const onDragMove = (ev: MouseEvent | TouchEvent): void => {
+    if (ev.type === 'touchmove' && fingers === 2 && !isDoubleTap) {
+      isZooming = true;
+      mouseDown = false;
+      mobileSelection = false;
+      isSelecting = false;
+      initialSelection = null;
+      currentSelection = null;
+      const touchEvent = ev as TouchEvent;
+      ev.stopPropagation();
+      ev.preventDefault();
+      if (isFirstMove) {
+        lastZoom = 1;
+        nthZoom = 0;
+        lastZoomCenter = null;
+        isZooming = true;
+        startTouches = getTouches(touchEvent);
+      } else if (startTouches.length === 2 && touchEvent.touches.length === 2) {
+        handleZoom(touchEvent, calculateDistance(startTouches, getTouches(touchEvent)));
+      } else {
+        log.warn('Not first move and not same touches');
+      }
+      isFirstMove = false;
+      return;
+    }
+
     clickedLink = null;
     if (mobileSelectionTimeout) {
       updateState({
@@ -319,6 +402,7 @@ const scrollController = (
       mobileSelectionTimeout = null;
       mobileSelection = false;
     }
+
     if (mouseDown) {
       ev.stopPropagation();
       if (!state.dragging) {

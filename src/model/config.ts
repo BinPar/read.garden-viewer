@@ -88,6 +88,10 @@ export interface DefaultConfig {
    */
   initialSearchTerms: string[];
   /**
+   * Max time between taps when double tap in `ms` (Default: `300`)
+   */
+  doubleTapThreshold: number;
+  /**
    * Zoom config
    * @scope Fixed
    */
