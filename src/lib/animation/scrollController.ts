@@ -13,7 +13,7 @@ import { updateState } from '../state';
 import getCoordinatesFromEvent from './getCoordinatesFromEvent';
 import getMinAndMaxScroll, { getMinAndMaxAltScroll } from './getMinAndMaxScroll';
 import getSyntheticEvent from './getSyntheticEvent';
-import { InterpolationValue, zoom, scale, altScroll, scroll } from './interpolationValues';
+import { InterpolationValue, zoom, scale, altScroll, scroll, left } from './interpolationValues';
 import getWordSelection from './getWordSelection';
 import scrollInertiaAndLimits from './scrollInertiaAndLimits';
 import { LayoutTypes } from '../../model/viewerSettings';
@@ -33,6 +33,7 @@ import { Coordinates } from '../../model';
 import getTouches from '../../utils/getTouches';
 import calculateDistance from '../../utils/calculateDistance';
 import getTouchCenter from '../../utils/getTouchCenter';
+import recalculateCurrentPage from './recalculateCurrentPage';
 
 export const reCalcScrollLimits = (
   state: (GlobalState & FixedState & ScrolledState) | (GlobalState & FixedState & PaginatedState),
@@ -84,7 +85,7 @@ const scrollController = (
   let currentSelection: Range | null = null;
   let isFirstMove = true;
   let isDoubleTap = false;
-  let isZooming = false;
+  let updatePlanned = false;
   let isSelecting = false;
   let mobileSelection = false;
   let clickedLink: HTMLAnchorElement | null = null;
@@ -102,25 +103,48 @@ const scrollController = (
   };
 
   const handleZoom = (ev: TouchEvent, newZoom: number): void => {
-    const touchCenter = getTouchCenter(getTouches(ev));
-    let theZoom = newZoom / lastZoom;
-    lastZoom = newZoom;
-    nthZoom += 1;
-    if (nthZoom > 3) {
-      const originalZoomFactor = zoomFactor;
-      zoomFactor *= theZoom;
-      theZoom = zoomFactor / originalZoomFactor;
-      if (zoom.current === zoom.target) {
-        zoom.target = zoom.current * theZoom;
-      } else {
+    if (state.layout === LayoutTypes.Fixed) {
+      const touchCenter = getTouchCenter(getTouches(ev));
+      nthZoom += 1;
+      if (nthZoom > 3) {
+        let theZoom = newZoom / lastZoom;
+        lastZoom = newZoom;
+        const originalZoomFactor = zoomFactor;
+        zoomFactor *= theZoom;
+        theZoom = zoomFactor / originalZoomFactor;
         zoom.target *= theZoom;
+        zoom.target = Math.min(state.config.zoom.max, Math.max(zoom.target, state.config.zoom.min));
+        if (lastZoomCenter) {
+          // top => scroll.current debería aumentar
+          // bottom => scroll.current debería
+          const factor =
+            state.containerHeight /
+            (state.containerHeight - state.margin.top - state.margin.bottom);
+          scroll.target -= (touchCenter.y - lastZoomCenter.y) / factor;
+          console.log({
+            current: scroll.current,
+            target: scroll.target,
+            dif: touchCenter.y - lastZoomCenter.y,
+            currentScale: scale.target,
+            factor,
+          });
+          altScroll.target -= (touchCenter.x - lastZoomCenter.x) / factor;
+          reCalcScrollLimits(state, true);
+        }
+        if (updatePlanned) {
+          return;
+        }
+        updatePlanned = true;
+        setTimeout(() => {
+          updatePlanned = false;
+          updateState({ animate: false });
+          executeTransitions();
+          updateState({ animate: true });
+          recalculateCurrentPage(state, scroll.current, true);
+        }, 0);
       }
-      zoom.target = Math.min(state.config.zoom.max, Math.max(zoom.target, state.config.zoom.min));
-      updateState({ animate: false });
-      executeTransitions();
-      updateState({ animate: true });
+      lastZoomCenter = touchCenter;
     }
-    lastZoomCenter = touchCenter;
   };
 
   const onDragStart = (ev: MouseEvent | TouchEvent): void => {
@@ -369,7 +393,6 @@ const scrollController = (
 
   const onDragMove = (ev: MouseEvent | TouchEvent): void => {
     if (ev.type === 'touchmove' && fingers === 2 && !isDoubleTap) {
-      isZooming = true;
       mouseDown = false;
       mobileSelection = false;
       isSelecting = false;
@@ -382,7 +405,6 @@ const scrollController = (
         lastZoom = 1;
         nthZoom = 0;
         lastZoomCenter = null;
-        isZooming = true;
         startTouches = getTouches(touchEvent);
       } else if (startTouches.length === 2 && touchEvent.touches.length === 2) {
         handleZoom(touchEvent, calculateDistance(startTouches, getTouches(touchEvent)));
