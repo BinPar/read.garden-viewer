@@ -121,13 +121,13 @@ const scrollController = (
             state.containerHeight /
             (state.containerHeight - state.margin.top - state.margin.bottom);
           scroll.target -= (touchCenter.y - lastZoomCenter.y) / factor;
-          console.log({
-            current: scroll.current,
-            target: scroll.target,
-            dif: touchCenter.y - lastZoomCenter.y,
-            currentScale: scale.target,
-            factor,
-          });
+          // console.log({
+          //   current: scroll.current,
+          //   target: scroll.target,
+          //   dif: touchCenter.y - lastZoomCenter.y,
+          //   currentScale: scale.target,
+          //   factor,
+          // });
           altScroll.target -= (touchCenter.x - lastZoomCenter.x) / factor;
           reCalcScrollLimits(state, true);
         }
