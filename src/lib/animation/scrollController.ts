@@ -114,22 +114,26 @@ const scrollController = (
         theZoom = zoomFactor / originalZoomFactor;
         zoom.target *= theZoom;
         zoom.target = Math.min(state.config.zoom.max, Math.max(zoom.target, state.config.zoom.min));
-        if (lastZoomCenter) {
-          // top => scroll.current debería aumentar
-          // bottom => scroll.current debería
-          const factor =
-            state.containerHeight /
-            (state.containerHeight - state.margin.top - state.margin.bottom);
-          scroll.target -= (touchCenter.y - lastZoomCenter.y) / factor;
-          // console.log({
-          //   current: scroll.current,
-          //   target: scroll.target,
-          //   dif: touchCenter.y - lastZoomCenter.y,
-          //   currentScale: scale.target,
-          //   factor,
-          // });
-          altScroll.target -= (touchCenter.x - lastZoomCenter.x) / factor;
+        if (zoom.current !== zoom.target) {
+          if (state.scrollMode === 'vertical') {
+            scroll.target -= (theZoom - 1) * (touchCenter.y / zoom.target);
+            altScroll.target -= (theZoom - 1) * (touchCenter.x / zoom.target);
+          }
+          if (state.scrollMode === 'horizontal') {
+            scroll.target -= (theZoom - 1) * (touchCenter.x / zoom.target);
+            altScroll.target -= (theZoom - 1) * (touchCenter.y / zoom.target);
+          }
           reCalcScrollLimits(state, true);
+        }
+        if (lastZoomCenter) {
+          if (state.scrollMode === 'vertical') {
+            scroll.target += touchCenter.y - lastZoomCenter.y;
+            altScroll.target += touchCenter.x - lastZoomCenter.x;
+          }
+          if (state.scrollMode === 'horizontal') {
+            scroll.target += touchCenter.x - lastZoomCenter.x;
+            altScroll.target += touchCenter.y - lastZoomCenter.y;
+          }
         }
         if (updatePlanned) {
           return;
