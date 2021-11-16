@@ -143,7 +143,7 @@ const scrollController = (
           updatePlanned = false;
           updateState({ animate: false });
           executeTransitions();
-          updateState({ animate: true });
+          updateState({ animate: true, fitMode: undefined });
           recalculateCurrentPage(state, scroll.current, true);
         }, 0);
       }
