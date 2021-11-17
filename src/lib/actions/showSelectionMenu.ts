@@ -8,6 +8,16 @@ import getSelectionRangeFromSelection from '../../utils/getSelectionRangeFromSel
 import { removeExtensors } from '../../utils/highlights/drawExtensors';
 import getMenuPositions from '../../utils/highlights/getMenuPositions';
 
+let menu: HTMLDivElement;
+
+const getMenu = (): HTMLDivElement => {
+  if (!menu) {
+    menu = document.createElement('div');
+    menu.classList.add('rg-selection-menu');
+  }
+  return menu;
+};
+
 const showSelectionMenu: ActionDispatcher<ShowSelectionMenu> = async ({ action, state }) => {
   const { key } = action;
   const { currentSelection } = state;
@@ -16,15 +26,14 @@ const showSelectionMenu: ActionDispatcher<ShowSelectionMenu> = async ({ action, 
   if (key || currentSelection) {
     const { left, top, arrowDown } = getMenuPositions(state, 70, key, currentSelection);
 
-    const menu = document.createElement('div');
-    menu.classList.add('rg-selection-menu');
-    menu.classList.add(`rg-${arrowDown ? 'bottom' : 'top'}-arrow`);
-    menu.style.top = `${top}px`;
-    menu.style.left = `${left}px`;
+    const currentMenu = getMenu();
+    currentMenu.classList.add(`rg-${arrowDown ? 'bottom' : 'top'}-arrow`);
+    currentMenu.style.top = `${top}px`;
+    currentMenu.style.left = `${left}px`;
 
     const wrapper = document.createElement('div');
     wrapper.classList.add('rg-selection-menu-wrapper');
-    menu.appendChild(wrapper);
+    currentMenu.appendChild(wrapper);
 
     const holder = document.createElement('div');
     holder.classList.add('rg-selection-menu-holder');
@@ -35,9 +44,9 @@ const showSelectionMenu: ActionDispatcher<ShowSelectionMenu> = async ({ action, 
       e.stopPropagation();
     };
 
-    menu.onmousedown = onMouseDown;
-    menu.ontouchstart = onMouseDown;
-    menu.onclick = onMouseDown;
+    currentMenu.onmousedown = onMouseDown;
+    currentMenu.ontouchstart = onMouseDown;
+    currentMenu.onclick = onMouseDown;
 
     action.options.forEach((option) => {
       const button = document.createElement('button');
@@ -111,8 +120,8 @@ const showSelectionMenu: ActionDispatcher<ShowSelectionMenu> = async ({ action, 
       holder.appendChild(button);
     }
 
-    state.contentWrapperNode!.appendChild(menu);
-    selectionMenu = menu;
+    state.contentWrapperNode!.appendChild(currentMenu);
+    selectionMenu = currentMenu;
   } else {
     log.warn(`No current selection nor user selection info at 'showSelectionMenu'`);
     selectionMenu = null;
