@@ -7,6 +7,7 @@ import { OnDeleteOptionClick, OnSelectionMenuOptionClick } from '../../model/eve
 import getSelectionRangeFromSelection from '../../utils/getSelectionRangeFromSelection';
 import { removeExtensors } from '../../utils/highlights/drawExtensors';
 import getMenuPositions from '../../utils/highlights/getMenuPositions';
+import removeAllChildren from '../../utils/removeAllChildren';
 
 let menu: HTMLDivElement;
 
@@ -15,6 +16,7 @@ const getMenu = (): HTMLDivElement => {
     menu = document.createElement('div');
     menu.classList.add('rg-selection-menu');
   }
+  removeAllChildren(menu);
   return menu;
 };
 
@@ -128,7 +130,7 @@ const showSelectionMenu: ActionDispatcher<ShowSelectionMenu> = async ({ action, 
   }
 
   return {
-    selectionMenu
+    selectionMenu,
   };
 };
 
