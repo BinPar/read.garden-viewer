@@ -5,6 +5,7 @@ const books: string[] = [
   'sistema-respiratorio', // PDF
   'demo-1', // EPUB with .xpgt problem
   'admin-upload', // Single page PDF
+  'bioquimica',
 ];
 
 export default books;

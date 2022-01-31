@@ -8,6 +8,12 @@ import extendToWord from '../extendToWord';
 import cleanText from './cleanText';
 import getSortedTerms from './getSortedTerms';
 
+const cleanCurrentText = (src: string): string =>
+  src
+    .trim()
+    .replace(/^([.,/#¡!¿?$%^&*;:{}=«»\-_`~()\][])+/g, '')
+    .replace(/([.,/#¡!¿?$%^&*;:{}=«»\-_`~()\][])+$/g, '');
+
 /**
  * Gets ranges for every appearance of provided terms
  * @param contentWrapper DOM node containing content
@@ -47,7 +53,7 @@ const getSearchHighlightsRanges = (contentWrapper: HTMLElement, terms: string[])
     let searching = true;
     let rangeIsOutside = false;
     let currentText = currentSelection.toString();
-    currentText = currentText.trim().replace(/([.,/#¡!¿?$%^&*;:{}=«»\-_`~()\][])+$/g, '');
+    currentText = cleanCurrentText(currentText);
 
     const searchWords = sortedTerms.map((text): string[] => cleanText(text).split(' '));
     const wordsToSearch = [...searchWords.map((words): string[] => [...words])];
@@ -151,7 +157,7 @@ const getSearchHighlightsRanges = (contentWrapper: HTMLElement, terms: string[])
           log.warn('Iteration limit reached in getSearchHighlightsRanges');
           searching = false;
         }
-        currentText = currentText.trim().replace(/([.,/#¡!¿?$%^&*;:{}=«»\-_`~()\][])+$/g, '');
+        currentText = cleanCurrentText(currentText);
         const { startContainer } = currentSelection.getRangeAt(0);
         try {
           rangeIsOutside =
