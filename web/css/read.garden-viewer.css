@@ -80,6 +80,7 @@ div#rg-container {
   width: 100%;
   height: 100%;
   filter: var(--theme-filter, none);
+  font-variant-ligatures: no-common-ligatures;
 }
 
 div#rg-container .rg-bg-cleaner {
