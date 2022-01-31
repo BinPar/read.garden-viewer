@@ -139,15 +139,24 @@ div.rg-content-wrapper #rg-content-placeholder > div a {
   margin: 0;
 }
 
-.rg-fixed-layout div.rg-content-wrapper div#rg-content-placeholder > .rg-fixed-content-container.rg-avoid-invert {
+.rg-fixed-layout
+  div.rg-content-wrapper
+  div#rg-content-placeholder
+  > .rg-fixed-content-container.rg-avoid-invert {
   filter: var(--theme-filter, none);
 }
 
-.rg-vertical-scroll.rg-fixed-layout div.rg-content-wrapper div#rg-content-placeholder > .rg-fixed-content-container {
+.rg-vertical-scroll.rg-fixed-layout
+  div.rg-content-wrapper
+  div#rg-content-placeholder
+  > .rg-fixed-content-container {
   top: var(--page-top);
 }
 
-.rg-horizontal-scroll.rg-fixed-layout div.rg-content-wrapper div#rg-content-placeholder > .rg-fixed-content-container {
+.rg-horizontal-scroll.rg-fixed-layout
+  div.rg-content-wrapper
+  div#rg-content-placeholder
+  > .rg-fixed-content-container {
   left: var(--page-left);
 }
 
