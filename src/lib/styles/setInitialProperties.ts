@@ -2,6 +2,7 @@ import { State } from '../../model/state';
 import { LayoutTypes } from '../../model/viewerSettings';
 
 import setCSSProperty from '../../utils/setCSSProperty';
+import removeCSSProperty from '../../utils/removeCSSProperty';
 
 /**
  * Sets initial CSS properties values.
@@ -41,6 +42,8 @@ const setInitialProperties = (state: State): void => {
 
   if (state.theme === 'dark') {
     setCSSProperty('theme-filter', 'invert(1)');
+  } else {
+    removeCSSProperty('theme-filter');
   }
 
   if (state.layout === LayoutTypes.Flow) {
