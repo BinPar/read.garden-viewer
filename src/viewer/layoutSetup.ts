@@ -23,7 +23,10 @@ const layoutSetup = (state: State): void => {
       productSlug: state.productSlug,
     };
     if (state.config.eventHandler) {
-      state.config.eventHandler(event);
+      state.config.eventHandler(event).catch((ex) => {
+        const { stack, message } = ex as Error;
+        console.error('Error at event handler', stack || message);
+      });
     }
   } else {
     updateState({ wrapperReady: true });

@@ -16,7 +16,10 @@ export const setupGlobalEvents = (state: State, dispatcher: DispatchAPIAction): 
     const action: Resize = {
       type: 'resize',
     };
-    dispatcher(action);
+    dispatcher(action).catch((ex) => {
+      const { stack, message } = ex as Error;
+      console.error('Error dispatching action', stack || message);
+    });
   };
 
   window.addEventListener('resize', onResize);

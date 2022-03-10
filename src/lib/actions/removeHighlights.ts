@@ -1,5 +1,6 @@
 import { ActionDispatcher, RemoveHighlights } from '../../model';
 
+// eslint-disable-next-line @typescript-eslint/require-await
 const removeHighlights: ActionDispatcher<RemoveHighlights> = async ({ action, state }) => {
   action.keys.forEach((key) => {
     const highlights = state.currentUserDomHighlights.get(key);

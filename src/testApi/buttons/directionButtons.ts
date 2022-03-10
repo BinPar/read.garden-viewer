@@ -17,14 +17,20 @@ const directionButtons = (
     const moveLeft: MovePrev = {
       type: 'movePrev',
     };
-    dispatcher(moveLeft);
+    dispatcher(moveLeft).catch((ex) => {
+      const { stack, message } = ex as Error;
+      console.error('Error at dispatcher', stack || message);
+    });
   };
 
   const onRight = (): void => {
     const moveRight: MoveNext = {
       type: 'moveNext',
     };
-    dispatcher(moveRight);
+    dispatcher(moveRight).catch((ex) => {
+      const { stack, message } = ex as Error;
+      console.error('Error at dispatcher', stack || message);
+    });
   };
 
   leftButton.onclick = onLeft;

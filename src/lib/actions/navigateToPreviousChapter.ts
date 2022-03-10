@@ -6,6 +6,7 @@ import { LayoutTypes } from '../../model/viewerSettings';
 const navigateToPreviousChapter: ActionDispatcher<NavigateToPreviousChapter> = async ({
   state,
   action,
+  // eslint-disable-next-line @typescript-eslint/require-await
 }) => {
   if (state.layout === LayoutTypes.Fixed) {
     throw new Error('Action not allowed in fixed mode');
@@ -19,7 +20,10 @@ const navigateToPreviousChapter: ActionDispatcher<NavigateToPreviousChapter> = a
       currentContentSlug,
       goToEnd: action.goToEnd,
     };
-    state.config.eventHandler(event);
+    state.config.eventHandler(event).catch((ex) => {
+      const { stack, message } = ex as Error;
+      console.error('Error at event handler', stack || message);
+    });
   }
   return {};
 };

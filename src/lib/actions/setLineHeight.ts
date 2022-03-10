@@ -25,19 +25,24 @@ const setLineHeight: ActionDispatcher<SetLineHeight> = async ({ state, action })
       removeNotesDialog(state);
       removeUserHighlights(state);
       setCSSProperty('line-height', `${action.lineHeight}em`);
-      recalculate(state).then(async (recalculateUpdate): Promise<void> => {
-        setCSSProperty('viewer-margin-top', '0');
-        resolve({
-          ...recalculateUpdate,
-          layout: state.layout,
-          scrollMode: state.scrollMode,
-          lineHeight: action.lineHeight,
+      recalculate(state)
+        .then(async (recalculateUpdate): Promise<void> => {
+          setCSSProperty('viewer-margin-top', '0');
+          resolve({
+            ...recalculateUpdate,
+            layout: state.layout,
+            scrollMode: state.scrollMode,
+            lineHeight: action.lineHeight,
+          });
+          await redrawUserHighlights(state);
+          if (state.searchRanges.length && state.searchTermsHighlightsNode) {
+            drawHighlights(state.searchTermsHighlightsNode, state.searchRanges);
+          }
+        })
+        .catch((ex) => {
+          const { stack, message } = ex as Error;
+          console.error('Error at recalculate', stack || message);
         });
-        await redrawUserHighlights(state);
-        if (state.searchRanges.length && state.searchTermsHighlightsNode) {
-          drawHighlights(state.searchTermsHighlightsNode, state.searchRanges);
-        }
-      });
     });
   }
 

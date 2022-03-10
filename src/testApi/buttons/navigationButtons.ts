@@ -18,6 +18,9 @@ const navigationButtons = (
     }
     contentSlugSelect(container, state, dispatcher, jsonIndex);
     directionButtons(container, state, dispatcher);
+  }).catch((ex) => {
+    const { stack, message } = ex as Error;
+    console.error('Error loading index file', stack || message);
   });
 };
 

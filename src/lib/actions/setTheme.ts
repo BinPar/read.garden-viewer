@@ -4,6 +4,7 @@ import { SetTheme } from '../../model/actions/global';
 import removeCSSProperty from '../../utils/removeCSSProperty';
 import setCSSProperty from '../../utils/setCSSProperty';
 
+// eslint-disable-next-line @typescript-eslint/require-await
 const setTheme: ActionDispatcher<SetTheme> = async ({ state, action }) => {
   const { theme } = action;
   if (state.theme !== theme) {

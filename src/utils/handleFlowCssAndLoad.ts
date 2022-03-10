@@ -2,7 +2,6 @@ import { LayoutTypes } from '../model/viewerSettings';
 
 import { getState } from '../lib/state';
 
-
 /**
  * Handles contents CSS urls and waits for load before calling provided callback
  * @param url CSS url
@@ -21,7 +20,7 @@ const handleFlowCssAndLoad = (url: string, callback: () => any): void => {
   const link = document.createElement('link');
   link.rel = 'stylesheet';
   link.type = 'text/css';
-  const onLoad = () => {
+  const onLoad = (): void => {
     link.removeEventListener('load', onLoad);
     callback();
   };

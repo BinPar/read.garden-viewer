@@ -13,7 +13,7 @@ const download = (url: string, filePath: string): Promise<void> =>
     https
       .get(url, (response): void => {
         if (response.statusCode !== 200) {
-          reject(new Error(`Response status was ${response.statusCode}`));
+          reject(new Error(`Response status was ${response.statusCode || 'unknown'}`));
         } else {
           log.info(`Downloading ${url}...`);
           response.on('error', reject);

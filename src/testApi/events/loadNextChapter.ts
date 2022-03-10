@@ -34,11 +34,14 @@ const loadNextChapter: EventHandler<LoadNextChapter> = async (event, dispatch) =
     slug,
     label,
     contentSlug: label.toLowerCase(),
-    cssURL: `${testingConfig.baseURL}books/${slug}/${nextContent.cssUrl}`,
+    cssURL: `${testingConfig.baseURL}books/${slug}/${nextContent.cssUrl!}`,
     htmlContent: html.replace('<div', `<div class="c${chapterNumber}"`),
     chapterNumber,
   };
-  dispatch(action);
+  dispatch(action).catch((ex) => {
+    const { stack, message } = ex as Error;
+    console.error('Error dispatching action', stack || message);
+  });
 };
 
 export default loadNextChapter;

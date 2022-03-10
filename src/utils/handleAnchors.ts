@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import getId from 'shortid';
+import { generate } from 'shortid';
 
 import { getState } from '../lib/state';
 
@@ -7,8 +7,9 @@ const handleAnchors = (element: HTMLElement, state = getState()): void => {
   if (state.config.eventHandler) {
     const anchors = element.querySelectorAll('a');
     anchors.forEach((a) => {
-      const id = `link-${getId()}`;
-      a.dataset.link = id;
+      const id = generate();
+      const link = `link-${id}`;
+      a.dataset.link = link;
       a.onclick = (e): void => {
         e.preventDefault();
       };

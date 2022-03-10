@@ -32,7 +32,9 @@ for (let i = 0, l = changeHandlers.length; i < l; i++) {
     map.set(value, handler);
   } else {
     // eslint-disable-next-line no-console
-    console.warn(`Duplicated handler for property ${property} and value ${value}`);
+    console.warn(
+      `Duplicated handler for property ${property} and value ${value?.toString() || ''}`,
+    );
   }
 }
 
@@ -156,12 +158,14 @@ export const initializeState = (initialConfig: InitialConfig): void => {
 export const getState = (): State => state;
 
 export const updateState = (newState: Partial<State>): void => {
-  const updatableState = state as any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const updatableState = state;
   Object.keys(newState).forEach((key) => {
-    const newValue = (newState as any)[key];
-    if (newValue !== updatableState[key]) {
-      const oldValue = updatableState[key];
-      updatableState[key] = newValue;
+    const stateKey = key as keyof State;
+    const newValue = newState[stateKey];
+    if (newValue !== updatableState[stateKey]) {
+      const oldValue = updatableState[stateKey];
+      (updatableState as Record<keyof State, unknown>)[stateKey] = newValue;
       const propertyHandlers = handlers.get(key);
       if (propertyHandlers) {
         const changeHandler = propertyHandlers.get(newValue);
@@ -170,7 +174,7 @@ export const updateState = (newState: Partial<State>): void => {
         }
       }
       notifyEventHandler<typeof newValue>(
-        key as StatePropertyNames<typeof newValue>,
+        stateKey as StatePropertyNames<typeof newValue>,
         newValue,
         oldValue,
       );

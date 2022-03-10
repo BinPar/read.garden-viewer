@@ -9,6 +9,7 @@ import navigateToContentSlug from '../../utils/navigateToContentSlug';
  * @param context.action Viewer action
  * @returns
  */
+// eslint-disable-next-line @typescript-eslint/require-await
 const navigateToPage: ActionDispatcher<NavigateToPage> = async ({ state, action }) => {
   if (action.contentSlug !== state.contentSlug) {
     navigateToContentSlug(action.contentSlug);

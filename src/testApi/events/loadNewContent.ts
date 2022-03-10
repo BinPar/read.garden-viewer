@@ -30,7 +30,7 @@ const loadNewContent: EventHandler<LoadNewContent> = async (event, dispatch) => 
   if (layout === LayoutTypes.Flow) {
     chapterNumber = parseInt(currentContent.cssUrl!.split('/')[1]!, 10) + 1;
     htmlContent = htmlContent.replace('<div', `<div class="c${chapterNumber}"`);
-    cssURL = `${testingConfig.baseURL}books/${slug}/${currentContent.cssUrl}`;
+    cssURL = `${testingConfig.baseURL}books/${slug}/${currentContent.cssUrl!}`;
   }
   if (layout === LayoutTypes.Fixed) {
     if (index.cssURL) {
@@ -39,7 +39,7 @@ const loadNewContent: EventHandler<LoadNewContent> = async (event, dispatch) => 
     } else {
       const fixedChapterNumber = parseInt(currentContent.cssUrl!.split('/')[1]!, 10) + 1;
       htmlContent = htmlContent.replace('<div', `<div class="c${fixedChapterNumber}"`);
-      cssURL = `${testingConfig.baseURL}books/${slug}/${currentContent.cssUrl}`;
+      cssURL = `${testingConfig.baseURL}books/${slug}/${currentContent.cssUrl!}`;
     }
   }
   const action: AppendNewContent = {
@@ -52,7 +52,10 @@ const loadNewContent: EventHandler<LoadNewContent> = async (event, dispatch) => 
     cssURL,
     htmlContent,
   };
-  dispatch(action);
+  dispatch(action).catch((ex) => {
+    const { stack, message } = ex as Error;
+    console.error('Error dispatching appendNewContent action', stack || message);
+  });
 };
 
 export default loadNewContent;

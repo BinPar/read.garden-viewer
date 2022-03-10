@@ -17,13 +17,13 @@ const generate = async (cdn?: string, destDir?: string): Promise<void> => {
   const cndToUse = cdn || cdnDomain;
   const booksPath = destDir || path.join(__dirname, '../../../web/books');
   await ensureDir(booksPath);
-  for(let i=0; i< books.length;i++) {
+  for (let i = 0; i < books.length; i++) {
     const book = books[i];
-    const remoteURI = `https://${cndToUse}/books/${book}/${book}.bp`;
+    const remoteURI = `https://${cndToUse!}/books/${book}/${book}.bp`;
     const bookPath = `${booksPath}/${book}`;
     const bookFile = `${booksPath}/${book}/${book}.bp`;
     try {
-      await ensureDir(bookPath);      
+      await ensureDir(bookPath);
       await download(remoteURI, bookFile);
       await oneFileToPath(bookFile, bookPath);
     } catch (ex) {

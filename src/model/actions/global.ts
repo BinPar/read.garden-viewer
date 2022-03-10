@@ -143,8 +143,8 @@ export interface ShowNotesDialog extends Action {
   selectionInfo?: SelectionRange;
   options?: SelectionOption[];
   confirmationMessage?: string;
-  confirmationOkText?: string
-  confirmationCancelText?: string
+  confirmationOkText?: string;
+  confirmationCancelText?: string;
 }
 
 export interface RemoveSelectionMenu extends Action {

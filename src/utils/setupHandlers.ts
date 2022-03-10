@@ -21,7 +21,10 @@ const setupHandlers = async (state: State, dispatch: DispatchAPIAction): Promise
       productSlug: state.productSlug,
       contentSlug: state.config.contentSlug,
     };
-    state.config.eventHandler(loadNewContent);
+    state.config.eventHandler(loadNewContent).catch((ex) => {
+      const { stack, message } = ex as Error;
+      console.error('Error at event handler', stack || message);
+    });
   } else if (state.layout === LayoutTypes.Fixed) {
     layoutSetup(state);
   }
@@ -31,7 +34,10 @@ const setupHandlers = async (state: State, dispatch: DispatchAPIAction): Promise
       propertyName: 'contentSlug',
       event: () => {
         loadContentsInBackground(state);
-        redrawUserHighlights(state);
+        redrawUserHighlights(state).catch((ex) => {
+          const { stack, message } = ex as Error;
+          console.error('Error redrawing user highlights', stack || message);
+        });
       },
     };
     await dispatch(onPageChange);

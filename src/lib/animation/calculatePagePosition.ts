@@ -2,7 +2,7 @@ import { State } from '../../model/state';
 import { LayoutTypes } from '../../model/viewerSettings';
 import { scale, zoom, leftCorrector, topCorrector } from './interpolationValues';
 
-const calculatePagePosition = (currentScroll: number, state: State) => {
+const calculatePagePosition = (currentScroll: number, state: State): number => {
   let scrollPosition = Math.round(currentScroll * -1);
   if (state.scrollMode === 'horizontal') {
     if (state.layout === LayoutTypes.Fixed) {

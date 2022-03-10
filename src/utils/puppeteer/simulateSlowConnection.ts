@@ -2,7 +2,7 @@
  * Simulates a slow connection in chrome browser
  * and disables network cache
  */
-const simulateSlowConnection = async () => {
+const simulateSlowConnection = async (): Promise<void> => {
   // This config is only for chrome
   if (process.env.FIREFOX !== 'true') {
     // Set a slow connection
@@ -16,6 +16,6 @@ const simulateSlowConnection = async () => {
     });
     await page.setCacheEnabled(false);
   }
-}
+};
 
 export default simulateSlowConnection;

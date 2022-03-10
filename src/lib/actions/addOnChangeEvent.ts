@@ -12,10 +12,11 @@ import { addOnChangeEventListener } from '../state/stateChangeEvents';
 const addOnChangeEvent: ActionDispatcher<AddOnChangeEvent<any>> = async ({
   action,
   state,
+  // eslint-disable-next-line @typescript-eslint/require-await
 }): Promise<Partial<State>> => {
   addOnChangeEventListener(action.propertyName, action.event);
   if (action.returnValue) {
-    action.event((state as any)[action.propertyName as any], undefined);
+    action.event(state[action.propertyName as keyof State], undefined);
   }
   return {};
 };

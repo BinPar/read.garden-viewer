@@ -20,6 +20,7 @@ const getMenu = (): HTMLDivElement => {
   return menu;
 };
 
+// eslint-disable-next-line @typescript-eslint/require-await
 const showSelectionMenu: ActionDispatcher<ShowSelectionMenu> = async ({ action, state }) => {
   const { key } = action;
   const { currentSelection } = state;
@@ -84,7 +85,10 @@ const showSelectionMenu: ActionDispatcher<ShowSelectionMenu> = async ({ action, 
           } else {
             log.warn('Clicked on selection menu option without key nor state.currentSelection');
           }
-          state.config.eventHandler(event);
+          state.config.eventHandler(event).catch((ex) => {
+            const { stack, message } = ex as Error;
+            console.error('Error at event handler', stack || message);
+          });
         }
         removeExtensors(state);
       };
@@ -115,7 +119,10 @@ const showSelectionMenu: ActionDispatcher<ShowSelectionMenu> = async ({ action, 
             slug: state.slug,
             productSlug: state.productSlug,
           };
-          state.config.eventHandler(event);
+          state.config.eventHandler(event).catch((ex) => {
+            const { stack, message } = ex as Error;
+            console.error('Error at event handler', stack || message);
+          });
         }
       };
       button.onclick = onClick;

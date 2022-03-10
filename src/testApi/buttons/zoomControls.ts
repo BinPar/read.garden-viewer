@@ -22,7 +22,10 @@ const zoomControls = async (
         type: 'setZoom',
         zoom,
       };
-      dispatcher(action);
+      dispatcher(action).catch((ex) => {
+        const { stack, message } = ex as Error;
+        console.error('Error dispatching action', stack || message);
+      });
     }
   };
 
@@ -65,7 +68,10 @@ const zoomControls = async (
       type: 'setFitMode',
       fitMode: FitMode.Height,
     };
-    dispatcher(action);
+    dispatcher(action).catch((ex) => {
+      const { stack, message } = ex as Error;
+      console.error('Error dispatching action', stack || message);
+    });
   };
 
   const fitHeight = document.createElement('button');
@@ -80,7 +86,10 @@ const zoomControls = async (
       type: 'setFitMode',
       fitMode: FitMode.Width,
     };
-    dispatcher(action);
+    dispatcher(action).catch((ex) => {
+      const { stack, message } = ex as Error;
+      console.error('Error dispatching action', stack || message);
+    });
   };
 
   const fitWidth = document.createElement('button');
@@ -96,7 +105,10 @@ const zoomControls = async (
       fitMode: FitMode.Page,
       center: true,
     };
-    dispatcher(action);
+    dispatcher(action).catch((ex) => {
+      const { stack, message } = ex as Error;
+      console.error('Error dispatching action', stack || message);
+    });
   };
 
   const fitPage = document.createElement('button');

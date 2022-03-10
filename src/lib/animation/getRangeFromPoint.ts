@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { SyntheticEvent } from '../../model/dom';
 import getSelection from './getSelection';
 
@@ -30,7 +32,7 @@ const getRangeFromPoint = (evt: SyntheticEvent, extendToWord = false): Range => 
       range.collapse(true);
     } else if ((document as any).caretPositionFromPoint) {
       // Try the standards-based way next
-      const pos = (document as any).caretPositionFromPoint(x, y) as any;
+      const pos = (document as any).caretPositionFromPoint(x, y);
       range = document.createRange();
       range.setStart(pos.offsetNode, pos.offset);
       range.collapse(true);

@@ -33,6 +33,9 @@ const searchButtons = (
         slug: state.config.slug,
         productSlug: state.productSlug,
         text: input.value,
+      }).catch((ex) => {
+        const { stack, message } = ex as Error;
+        console.error('Error at event handler', stack || message);
       });
     }
   };

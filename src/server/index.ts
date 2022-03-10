@@ -5,7 +5,6 @@ import * as liveServer from 'live-server';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import * as ngrok from 'ngrok';
 
-
 const params: liveServer.LiveServerParams = {
   port: process.env.PORT ? parseInt(process.env.PORT, 10) : 3000,
   root: './web',
@@ -23,4 +22,7 @@ const runNgrok = async (): Promise<void> => {
   log.warn(`Listening on: ${url}`);
 };
 
-runNgrok();
+runNgrok().catch((ex) => {
+  const { stack, message } = ex as Error;
+  console.error('Error running ngrok', stack || message);
+});

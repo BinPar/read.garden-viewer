@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /**
  * Gets selection if client side
  * @returns Selection
@@ -11,10 +13,9 @@ const getSelection = (): Selection | null => {
     if (document.getSelection) {
       return document.getSelection();
     }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const selection = (document as any).selection && (document as any).selection.createRange();
     if (selection.text) {
-      return selection;
+      return selection as Selection;
     }
   }
   return null;

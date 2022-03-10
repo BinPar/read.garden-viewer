@@ -190,7 +190,10 @@ const drawExtensors = (
           slug: state.slug,
           productSlug: state.productSlug,
         };
-        state.config.eventHandler(event);
+        state.config.eventHandler(event).catch((ex) => {
+          const { stack, message } = ex as Error;
+          console.error('Error at event handler', stack || message);
+        });
       }
     }
   };

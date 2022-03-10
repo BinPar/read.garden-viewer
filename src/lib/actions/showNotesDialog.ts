@@ -14,6 +14,7 @@ import getConfirmationDialog from '../../utils/highlights/getConfirmationDialog'
 import getMenuPositions from '../../utils/highlights/getMenuPositions';
 import { updateState } from '../state';
 
+// eslint-disable-next-line @typescript-eslint/require-await
 const showNotesDialog: ActionDispatcher<ShowNotesDialog> = async ({ action, state }) => {
   const { key, highlightKey } = action;
   const { currentSelection } = state;
@@ -134,7 +135,10 @@ const showNotesDialog: ActionDispatcher<ShowNotesDialog> = async ({ action, stat
             if (editing) {
               event.note = textarea.value;
             }
-            state.config.eventHandler(event);
+            state.config.eventHandler(event).catch((ex) => {
+              const { stack, message } = ex as Error;
+              console.error('Error at event handler', stack || message);
+            });
           }
         };
         button.onclick = onClick;
@@ -178,7 +182,10 @@ const showNotesDialog: ActionDispatcher<ShowNotesDialog> = async ({ action, stat
         if (!highlightKey && state.currentSelection) {
           event.selectionInfo = getSelectionRangeFromSelection(state.currentSelection);
         }
-        state.config.eventHandler(event);
+        state.config.eventHandler(event).catch((ex) => {
+          const { stack, message } = ex as Error;
+          console.error('Error at event handler', stack || message);
+        });
       } else if (!textarea.value.trim()) {
         textarea.focus();
       }
@@ -199,7 +206,10 @@ const showNotesDialog: ActionDispatcher<ShowNotesDialog> = async ({ action, stat
           slug: state.slug,
           productSlug: state.productSlug,
         };
-        state.config.eventHandler(event);
+        state.config.eventHandler(event).catch((ex) => {
+          const { stack, message } = ex as Error;
+          console.error('Error at event handler', stack || message);
+        });
       }
     };
 
@@ -227,7 +237,10 @@ const showNotesDialog: ActionDispatcher<ShowNotesDialog> = async ({ action, stat
             productSlug: state.productSlug,
             key: action.highlightKey!,
           };
-          state.config.eventHandler(deleteEvent);
+          state.config.eventHandler(deleteEvent).catch((ex) => {
+            const { stack, message } = ex as Error;
+            console.error('Error at event handler', stack || message);
+          });
         }
       };
       const onCancelDelete = (e: Event): void => {

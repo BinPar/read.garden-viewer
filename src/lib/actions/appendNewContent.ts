@@ -95,12 +95,15 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
             const onStylesLoad = (): void => {
               newLink.removeEventListener('load', onStylesLoad);
               newLink.removeEventListener('error', onStylesLoad);
-              const checkFonts = () => {
+              const checkFonts = (): void => {
                 window.requestAnimationFrame(() => {
                   window.requestAnimationFrame(() => {
                     const checkStatus = (): void => {
                       if (document.fonts.status === 'loaded') {
-                        done();
+                        done().catch((ex) => {
+                          const { stack, message } = ex as Error;
+                          console.error('Error at styles loaded', stack || message);
+                        });
                       } else {
                         setTimeout(checkStatus, 16);
                       }
@@ -114,7 +117,12 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
                 checkFonts();
                 return;
               }
-              Promise.all(Array.from(images).map((i) => checkImagesHeight([i]))).then(checkFonts);
+              Promise.all(Array.from(images).map((i) => checkImagesHeight([i])))
+                .then(checkFonts)
+                .catch((ex) => {
+                  const { stack, message } = ex as Error;
+                  console.error('Error checking images', stack || message);
+                });
             };
             if (!action.cssURL || action.cssURL === dynamicStyleNode!.href) {
               replace = false;
@@ -144,9 +152,9 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
       container.innerHTML = action.htmlContent;
 
       setTimeout(() => {
-        const done = async (): Promise<void> => {
+        const done = (): void => {
           container.classList.remove('rg-loading');
-          handleAnchors(container!, state);
+          handleAnchors(container, state);
           const finalPartialState: Partial<State> = {
             slug: action.slug,
             cssLoaded: true,
@@ -158,7 +166,7 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
           resolve(finalPartialState);
           highlightTerms(state.searchTerms);
         };
-        const checkFonts = () => {
+        const checkFonts = (): void => {
           dynamicStyleNode!.removeEventListener('load', checkFonts);
           setTimeout(() => {
             const checkStatus = (): void => {

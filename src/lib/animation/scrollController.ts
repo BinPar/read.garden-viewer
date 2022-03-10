@@ -5,7 +5,7 @@ import log from 'loglevel';
 
 import { SetReadMode } from '../../model/actions/global';
 import { DispatchAPIAction } from '../../model/actions/common';
-import { SelectionInfo, SyntheticEvent } from '../../model/dom';
+import { SelectionInfo } from '../../model/dom';
 import { FixedState, GlobalState, PaginatedState, ScrolledState, State } from '../../model/state';
 import { drawHighlights } from '../../utils/highlights';
 import setCSSProperty from '../../utils/setCSSProperty';
@@ -13,7 +13,7 @@ import { updateState } from '../state';
 import getCoordinatesFromEvent from './getCoordinatesFromEvent';
 import getMinAndMaxScroll, { getMinAndMaxAltScroll } from './getMinAndMaxScroll';
 import getSyntheticEvent from './getSyntheticEvent';
-import { InterpolationValue, zoom, scale, altScroll, scroll, left } from './interpolationValues';
+import { zoom, scale, altScroll, scroll } from './interpolationValues';
 import getWordSelection from './getWordSelection';
 import scrollInertiaAndLimits from './scrollInertiaAndLimits';
 import { LayoutTypes } from '../../model/viewerSettings';
@@ -75,7 +75,7 @@ const scrollController = (
   let lastX: null | number = null;
   let lastY: null | number = null;
   let lastMoveMilliseconds: number = new Date().getTime();
-  let lastTouchStart: number = 0;
+  let lastTouchStart = 0;
   let lastZoomCenter: Coordinates | null = null;
   let startTouches = new Array<Coordinates>();
   let nthZoom = 0;
@@ -191,7 +191,10 @@ const scrollController = (
             ranges: [{ start, end, obfuscatedText }],
           };
           const handler = state.config.eventHandler!;
-          handler(onHighlightClick);
+          handler(onHighlightClick).catch((ex) => {
+            const { stack, message } = ex as Error;
+            console.error('Error at handler', stack || message);
+          });
           updateState({
             lastClickCoords: { x: syntheticEvent.clientX, y: syntheticEvent.clientY },
             highlightClicked: true,
@@ -333,9 +336,12 @@ const scrollController = (
           slug: state.slug,
           productSlug: state.productSlug,
           url: clickedLink.getAttribute('href'),
-          querySelector: `[data-link="${clickedLink.dataset.link}"]`,
+          querySelector: `[data-link="${clickedLink.dataset.link || ''}"]`,
         };
-        state.config.eventHandler(event);
+        state.config.eventHandler(event).catch((ex) => {
+          const { stack, message } = ex as Error;
+          console.error('Error at event handler', stack || message);
+        });
       }
 
       setTimeout(() => {
@@ -381,7 +387,10 @@ const scrollController = (
           slug: state.slug,
           productSlug: state.productSlug,
         };
-        state.config.eventHandler(event);
+        state.config.eventHandler(event).catch((ex) => {
+          const { stack, message } = ex as Error;
+          console.error('Error at event handler', stack || message);
+        });
       }
     }
     if (state.highlightClicked) {
@@ -498,14 +507,20 @@ const scrollController = (
             type: 'setReadMode',
             readModeActive: true,
           };
-          dispatch(action);
+          dispatch(action).catch((ex) => {
+            const { stack, message } = ex as Error;
+            console.error('Error dispatching action', stack || message);
+          });
         }
         if (ev.deltaY > 0 && state.readMode) {
           const action: SetReadMode = {
             type: 'setReadMode',
             readModeActive: false,
           };
-          dispatch(action);
+          dispatch(action).catch((ex) => {
+            const { stack, message } = ex as Error;
+            console.error('Error dispatching action', stack || message);
+          });
         }
       } else {
         updateState({ fitMode: undefined });

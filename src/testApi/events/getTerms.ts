@@ -25,7 +25,10 @@ const getTerms: EventHandler<GetTerms> = async (
     terms: Array.from(obfuscatedTerms),
   };
 
-  dispatch(action);
+  dispatch(action).catch((ex) => {
+    const { stack, message } = ex as Error;
+    console.error('Error dispatching action', stack || message);
+  });
 };
 
 export default getTerms;

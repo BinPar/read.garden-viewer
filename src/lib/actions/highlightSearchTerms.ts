@@ -8,6 +8,7 @@ import { updateState } from '../state';
  * @param state.action Viewer action
  * @returns Partial state update
  */
+// eslint-disable-next-line @typescript-eslint/require-await
 const highlightSearchTerms: ActionDispatcher<HighlightSearchTerms> = async ({ state, action }) => {
   const { terms } = action;
   clean(state);

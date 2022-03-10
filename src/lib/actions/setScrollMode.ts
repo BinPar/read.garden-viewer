@@ -25,19 +25,24 @@ const setScrollMode: ActionDispatcher<SetScrollMode> = async ({ state, action })
       document.body.classList.remove(`rg-${state.scrollMode}-scroll`);
       document.body.classList.add(`rg-${scrollMode}-scroll`);
       updateState({ scrollMode });
-      recalculate(state).then(async (recalculateUpdate): Promise<void> => {
-        setCSSProperty('viewer-margin-top', '0');
-        resolve({
-          ...recalculateUpdate,
-          layout: state.layout,
-          scrollMode,
+      recalculate(state)
+        .then(async (recalculateUpdate): Promise<void> => {
+          setCSSProperty('viewer-margin-top', '0');
+          resolve({
+            ...recalculateUpdate,
+            layout: state.layout,
+            scrollMode,
+          });
+          removeUserHighlights(state);
+          await redrawUserHighlights(state);
+          if (state.searchRanges.length && state.searchTermsHighlightsNode) {
+            drawHighlights(state.searchTermsHighlightsNode, state.searchRanges);
+          }
+        })
+        .catch((ex) => {
+          const { stack, message } = ex as Error;
+          console.error('Error recalculating', stack || message);
         });
-        removeUserHighlights(state);
-        await redrawUserHighlights(state);
-        if (state.searchRanges.length && state.searchTermsHighlightsNode) {
-          drawHighlights(state.searchTermsHighlightsNode, state.searchRanges);
-        }
-      });
     });
   }
   return {};

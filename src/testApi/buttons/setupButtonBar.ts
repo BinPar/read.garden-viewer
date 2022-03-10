@@ -29,20 +29,35 @@ const setupButtonBar = async (state: State, dispatcher: DispatchAPIAction): Prom
     const testingButtonsPanel = document.createElement('div');
     testingButtonsPanel.id = 'testing-buttons-panel';
     document.body.appendChild(testingButtonsPanel);
-    readModeToggle(testingButtonsPanel, state, dispatcher);
-    debugViewerSafeArea(testingButtonsPanel, state, dispatcher);
+    readModeToggle(testingButtonsPanel, state, dispatcher).catch((ex) => {
+      const { stack, message } = ex as Error;
+      console.error('Error at read mode toggle button setup', stack || message);
+    });
+    debugViewerSafeArea(testingButtonsPanel, state, dispatcher).catch((ex) => {
+      const { stack, message } = ex as Error;
+      console.error('Error at debug viewer safe area button setup', stack || message);
+    });
     scrollModeButtons(testingButtonsPanel, state, dispatcher);
     searchButtons(testingButtonsPanel, state);
-    themeButtons(testingButtonsPanel, state, dispatcher);
+    themeButtons(testingButtonsPanel, state, dispatcher).catch((ex) => {
+      const { stack, message } = ex as Error;
+      console.error('Error at theme buttons setup', stack || message);
+    });
     if (state.layout === LayoutTypes.Flow) {
-      fontSizeButtons(testingButtonsPanel, state, dispatcher);
+      fontSizeButtons(testingButtonsPanel, state, dispatcher).catch((ex) => {
+        const { stack, message } = ex as Error;
+        console.error('Error at font size buttons setup', stack || message);
+      });
       fontFamilyButtons(testingButtonsPanel, state, dispatcher);
       textAlignButtons(testingButtonsPanel, state, dispatcher);
       lineHeightButtons(testingButtonsPanel, state, dispatcher);
       chapterNavigationButtons(testingButtonsPanel, state, dispatcher);
     }
     if (state.layout === LayoutTypes.Fixed) {
-      zoomControls(testingButtonsPanel, state, dispatcher);
+      zoomControls(testingButtonsPanel, state, dispatcher).catch((ex) => {
+        const { stack, message } = ex as Error;
+        console.error('Error at zoom controls setup', stack || message);
+      });
     }
     navigationButtons(testingButtonsPanel, state, dispatcher);
   };

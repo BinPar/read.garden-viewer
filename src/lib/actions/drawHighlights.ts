@@ -7,10 +7,14 @@ import getRangesFromSelectionRanges from '../../utils/getRangesFromSelectionRang
 import { drawHighlights as drawDomHighlights } from '../../utils/highlights';
 import removeLayerHighlights from '../../utils/highlights/removeLayerHighlights';
 
+// eslint-disable-next-line @typescript-eslint/require-await
 const drawHighlights: ActionDispatcher<DrawHighlights> = async ({ action, state }) => {
   if (!state.cssLoaded || !state.wrapperReady) {
     setTimeout(() => {
-      drawHighlights({ action, state });
+      drawHighlights({ action, state }).catch((ex) => {
+        const { stack, message } = ex as Error;
+        console.error('Error at drawHighlights', stack || message);
+      });
     }, 64);
     return {};
   }

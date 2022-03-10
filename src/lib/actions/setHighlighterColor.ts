@@ -1,5 +1,6 @@
 import { ActionDispatcher, SetHighlighterColor, UserHighlightInfo } from '../../model';
 
+// eslint-disable-next-line @typescript-eslint/require-await
 const setHighlighterColor: ActionDispatcher<SetHighlighterColor> = async ({ state, action }) => {
   const { highlightersLayers, currentUserHighlights } = state;
   const highlighterLayer = highlightersLayers.get(action.key);

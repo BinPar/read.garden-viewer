@@ -41,7 +41,10 @@ const themeButtons = async (
       type: 'setTheme',
       theme,
     };
-    dispatcher(action);
+    dispatcher(action).catch((ex) => {
+      const { stack, message } = ex as Error;
+      console.error('Error dispatching action', stack || message);
+    });
   };
 
   lightButton.onclick = onChange;

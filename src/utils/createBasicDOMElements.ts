@@ -87,8 +87,8 @@ const createBasicDOMElements = (state: State): void => {
 
   document.body.appendChild(readGardenContainerNode);
 
-  const containerWidth = contentWrapperNode!.clientWidth;
-  const containerHeight = contentWrapperNode!.clientHeight;
+  const containerWidth = contentWrapperNode.clientWidth;
+  const containerHeight = contentWrapperNode.clientHeight;
 
   updateState({
     basicDOMElementsCreated: true,

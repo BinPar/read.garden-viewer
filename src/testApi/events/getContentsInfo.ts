@@ -25,7 +25,10 @@ const getContentsInfo: EventHandler<GetContentsInfo> = async (event, dispatch): 
       };
     }),
   };
-  dispatch(action);
+  dispatch(action).catch((ex) => {
+    const { stack, message } = ex as Error;
+    console.error('Error dispatching action', stack || message);
+  });
 };
 
 export default getContentsInfo;

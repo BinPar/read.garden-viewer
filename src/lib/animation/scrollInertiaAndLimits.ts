@@ -83,9 +83,15 @@ const scrollInertiaAndLimits = (
         type: 'navigateToPreviousChapter',
         goToEnd: true,
       };
-      dispatch(navigateToPrevious);
+      dispatch(navigateToPrevious).catch((ex) => {
+        const { stack, message } = ex as Error;
+        console.error('Error dispatching action', stack || message);
+      });
     } else if (scroll.current <= scrollLimits.minScroll) {
-      dispatch({ type: 'navigateToNextChapter' });
+      dispatch({ type: 'navigateToNextChapter' }).catch((ex) => {
+        const { stack, message } = ex as Error;
+        console.error('Error dispatching action', stack || message);
+      });
     }
   }
   executeTransitions(instant);

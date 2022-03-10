@@ -28,7 +28,10 @@ const viewer: ViewerFunction = (config) => {
   createBasicDOMElements(state);
   setupGlobalEvents(state, api.dispatch);
   animationController(state, api.dispatch);
-  setupHandlers(state, api.dispatch);
+  setupHandlers(state, api.dispatch).catch((ex) => {
+    const { stack, message } = ex as Error;
+    console.error('Error at handlers setup', stack || message);
+  });
   log.debug('Viewer Initialized');
   return api;
 };

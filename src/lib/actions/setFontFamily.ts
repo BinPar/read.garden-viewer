@@ -63,12 +63,18 @@ const setFontFamily: ActionDispatcher<SetFontFamily> = async ({ state, action })
       };
       const checkFonts = (): void => {
         if (document.fonts.status === 'loaded') {
-          changeFontFamily();
+          changeFontFamily().catch((ex) => {
+            const { stack, message } = ex as Error;
+            console.error('Error changing font family', stack || message);
+          });
           return;
         }
-        document.fonts.onloadingdone = () => {
+        document.fonts.onloadingdone = (): void => {
           document.fonts.onloadingdone = null;
-          changeFontFamily();
+          changeFontFamily().catch((ex) => {
+            const { stack, message } = ex as Error;
+            console.error('Error changing font family', stack || message);
+          });
         };
       };
       setCSSProperty('viewer-margin-top', '200vh');

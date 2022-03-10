@@ -24,7 +24,7 @@ const getMenuPositions = (
   let maxLeft = Infinity;
 
   if (state.layout === LayoutTypes.Flow && state.lastClickCoords) {
-    const clickLeft = clientToContentWrapperLeft(state.lastClickCoords!.x);
+    const clickLeft = clientToContentWrapperLeft(state.lastClickCoords.x);
     minLeft = Math.floor(clickLeft / state.totalColumnWidth) * state.totalColumnWidth;
     maxLeft = minLeft + state.totalColumnWidth;
   }

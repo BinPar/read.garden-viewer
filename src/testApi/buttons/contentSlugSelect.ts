@@ -27,7 +27,10 @@ const contentSlugSelect = (
         type: 'navigateToPage',
         contentSlug: select.value,
       };
-      dispatcher(action);
+      dispatcher(action).catch((ex) => {
+    const { stack, message } = ex as Error;
+    console.error('Error at dispatcher', stack || message);
+  });
     }
   };
 
@@ -44,7 +47,10 @@ const contentSlugSelect = (
     event: onContentSlugChanged,
   };
   select.value = `${state.contentSlug}`;
-  dispatcher(contentSlugChanged);
+  dispatcher(contentSlugChanged).catch((ex) => {
+    const { stack, message } = ex as Error;
+    console.error('Error at dispatcher', stack || message);
+  });
 };
 
 export default contentSlugSelect;

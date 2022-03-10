@@ -40,7 +40,7 @@ const appendItems = (
       container.appendChild(optionGroup);
     } else {
       const option = document.createElement('option');
-      option.innerText = `${title} (${label})`;
+      option.innerText = `${title} (${label || ''})`;
       option.value = label || '';
       if (label) {
         values.push(parseInt(label, 10));
@@ -71,6 +71,9 @@ const flowChapterSelect = (
         slug: state.config.slug,
         productSlug: state.productSlug,
         contentSlug: select.value,
+      }).catch((ex) => {
+        const { stack, message } = ex as Error;
+        console.error('Error at event handler', stack || message);
       });
     }
   };
@@ -80,7 +83,7 @@ const flowChapterSelect = (
 
   const onContentSlugChanged = (contentSlug: string): void => {
     const target = parseInt(contentSlug, 10);
-    const value = values.find((v, i) => target >= v && (values[i + 1] ?? Infinity) > target);
+    const value = values.find((v, i) => target >= v && (values[i + 1] ?? Infinity) > target)!;
     select.value = `${value}`;
   };
 
@@ -90,7 +93,10 @@ const flowChapterSelect = (
     event: onContentSlugChanged,
   };
 
-  dispatcher(contentSlugChanged);
+  dispatcher(contentSlugChanged).catch((ex) => {
+    const { stack, message } = ex as Error;
+    console.error('Error at dispatcher', stack || message);
+  });
 };
 
 export default flowChapterSelect;

@@ -14,7 +14,10 @@ export const getState = (): State => state;
 
 export const setState = (newState: State): void => {
   state = newState;
-  setupButtonBar(state, dispatcher);
+  setupButtonBar(state, dispatcher).catch((ex) => {
+    const { stack, message } = ex as Error;
+    console.error('Error in setup button bar', stack || message);
+  });
 };
 
 export const setDispatcher = (newDispatcher: DispatchAPIAction): void => {
@@ -35,7 +38,10 @@ export const eventHandler: ReadGardenEventHandler = (event) =>
       } else {
         const promise = eventReference(event, dispatcher);
         if (promise) {
-          promise.then(resolve);
+          promise.then(resolve).catch((ex) => {
+            const { stack, message } = ex as Error;
+            console.error('Error at event handler promise', stack || message);
+          });
         }
       }
     } else {

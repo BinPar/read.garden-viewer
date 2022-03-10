@@ -33,19 +33,24 @@ export const setSize = async (size: number, state: State): Promise<Partial<State
     removeNotesDialog(state);
     removeUserHighlights(state);
     setCSSProperty('font-size', `${size}px`);
-    recalculate(state).then(async (recalculateUpdate): Promise<void> => {
-      setCSSProperty('viewer-margin-top', '0');
-      resolve({
-        ...recalculateUpdate,
-        layout: state.layout,
-        scrollMode: state.scrollMode,
-        fontSize: size,
+    recalculate(state)
+      .then(async (recalculateUpdate): Promise<void> => {
+        setCSSProperty('viewer-margin-top', '0');
+        resolve({
+          ...recalculateUpdate,
+          layout: state.layout,
+          scrollMode: state.scrollMode,
+          fontSize: size,
+        });
+        await redrawUserHighlights(state);
+        if (state.searchRanges.length && state.searchTermsHighlightsNode) {
+          drawHighlights(state.searchTermsHighlightsNode, state.searchRanges);
+        }
+      })
+      .catch((ex) => {
+        const { stack, message } = ex as Error;
+        console.error('Error at recalculate', stack || message);
       });
-      await redrawUserHighlights(state);
-      if (state.searchRanges.length && state.searchTermsHighlightsNode) {
-        drawHighlights(state.searchTermsHighlightsNode, state.searchRanges);
-      }
-    });
   });
 };
 

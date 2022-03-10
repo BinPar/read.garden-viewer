@@ -8,6 +8,7 @@ import setCSSProperty from '../../utils/setCSSProperty';
  * @param context.action Viewer action
  * @returns state update
  */
+// eslint-disable-next-line @typescript-eslint/require-await
 const setDebugViewerSafeArea: ActionDispatcher<SetDebugViewerSafeArea> = async ({ action }) => {
   setCSSProperty('debug-viewer-safe-area', `${action.value ? 1 : 0}`);
   return {
