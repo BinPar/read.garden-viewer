@@ -6,6 +6,7 @@ import {
   ScrollModes,
   SelectionOption,
   SelectionRange,
+  TextCopyOption,
   ViewerTheme,
 } from '../viewerSettings';
 import { Action } from './common';
@@ -130,6 +131,7 @@ export interface ShowSelectionMenu extends Action {
   options: SelectionOption[];
   key?: string;
   deleteOption?: HighlightDeleteOption;
+  copyOption?: TextCopyOption;
 }
 
 export interface ShowNotesDialog extends Action {

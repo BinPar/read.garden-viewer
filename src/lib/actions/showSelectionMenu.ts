@@ -2,7 +2,11 @@ import log from 'loglevel';
 
 import { ActionDispatcher } from '../../model/actions/actionDispatcher';
 import { ShowSelectionMenu } from '../../model/actions/global';
-import { OnDeleteOptionClick, OnSelectionMenuOptionClick } from '../../model/events';
+import {
+  OnCopyOptionClick,
+  OnDeleteOptionClick,
+  OnSelectionMenuOptionClick,
+} from '../../model/events';
 
 import getSelectionRangeFromSelection from '../../utils/getSelectionRangeFromSelection';
 import { removeExtensors } from '../../utils/highlights/drawExtensors';
@@ -95,6 +99,40 @@ const showSelectionMenu: ActionDispatcher<ShowSelectionMenu> = async ({ action, 
       button.onclick = onClick;
       holder.appendChild(button);
     });
+
+    if (action.copyOption) {
+      const separator = document.createElement('span');
+      separator.classList.add('rg-separator');
+      holder.appendChild(separator);
+
+      const button = document.createElement('button');
+      button.disabled = !!action.copyOption.disabled;
+      button.title = action.copyOption.title;
+      button.innerText = action.copyOption.title;
+      button.classList.add('rg-selection-option', 'rg-copy');
+      if (action.copyOption.className) {
+        button.classList.add(action.copyOption.className);
+      }
+      if (action.copyOption.style) {
+        button.setAttribute('style', action.copyOption.style);
+      }
+      const onClick = (): void => {
+        if (state.config.eventHandler && state.currentSelection) {
+          const event: OnCopyOptionClick = {
+            type: 'onCopyOptionClick',
+            slug: state.slug,
+            productSlug: state.productSlug,
+            obfuscatedText: state.currentSelection?.toString() || '',
+          };
+          state.config.eventHandler(event).catch((ex) => {
+            const { stack, message } = ex as Error;
+            console.error('Error at event handler', stack || message);
+          });
+        }
+      };
+      button.onclick = onClick;
+      holder.appendChild(button);
+    }
 
     if (action.key && action.deleteOption) {
       const separator = document.createElement('span');

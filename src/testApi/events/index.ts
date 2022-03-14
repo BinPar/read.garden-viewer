@@ -7,6 +7,7 @@ import loadNextChapter from './loadNextChapter';
 import onUserSelect from './onUserSelect';
 import onSelectionMenuOptionClick from './onSelectionMenuOptionClick';
 import onHighlightClick from './onHighlightClick';
+import onCopyOptionClick from './onCopyOptionClick';
 
 export default {
   pageChange,
@@ -18,4 +19,5 @@ export default {
   onUserSelect,
   onSelectionMenuOptionClick,
   onHighlightClick,
+  onCopyOptionClick,
 };

@@ -12,7 +12,7 @@ export interface EventWithSlugs {
   /**
    * Product slug (in case it's different from main slug)
    */
-   productSlug: string;
+  productSlug: string;
 }
 
 /**
@@ -112,6 +112,11 @@ export interface OnDeleteOptionClick extends ReadGardenEvent, EventWithSlugs {
   key: string;
 }
 
+export interface OnCopyOptionClick extends ReadGardenEvent, EventWithSlugs {
+  type: 'onCopyOptionClick';
+  obfuscatedText: string;
+}
+
 export interface OnLinkClick extends ReadGardenEvent, EventWithSlugs {
   type: 'onLinkClick';
   url: string | null;
@@ -132,6 +137,7 @@ export type ReadGardenEvents =
   | OnSaveNote
   | OnChangeNote
   | OnDeleteOptionClick
+  | OnCopyOptionClick
   | OnLinkClick;
 
 export type ReadGardenEventHandler = (event: ReadGardenEvents) => Promise<void>;

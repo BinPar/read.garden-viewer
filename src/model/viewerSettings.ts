@@ -185,6 +185,13 @@ export interface HighlightDeleteOption {
   style?: string;
 }
 
+export interface TextCopyOption {
+  title: string;
+  className?: string;
+  style?: string;
+  disabled?: boolean;
+}
+
 export interface MenuPosition {
   top: number;
   left: number;

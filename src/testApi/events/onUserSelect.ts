@@ -7,6 +7,9 @@ const onUserSelect: EventHandler<OnUserSelect> = async (event, dispatch) => {
   const action: ShowSelectionMenu = {
     type: 'showSelectionMenu',
     options: getHighlighters(),
+    copyOption: {
+      title: 'Copiar',
+    },
   };
   await dispatch(action);
 };

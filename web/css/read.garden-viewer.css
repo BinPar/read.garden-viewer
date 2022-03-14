@@ -121,7 +121,7 @@ div.rg-content-wrapper {
 }
 
 .rg-flow-layout div.rg-content-wrapper #rg-content-placeholder span[data-page] {
-  display: block;
+  display: inline-block;
 }
 
 div.rg-content-wrapper #rg-content-placeholder > div a {
@@ -794,11 +794,31 @@ div.rg-notes-dialog .rg-notes-dialog-wrapper .rg-notes-dialog-holder .rg-notes-d
 
 .rg-selection-option.rg-delete:after,
 .rg-notes-delete:after {
-  background-color: #979797;
   mask-image: url(../img/icons/delete.svg);
   -webkit-mask-image: url(../img/icons/delete.svg);
 }
 
-.rg-selection-option.rg-delete:hover:after {
+.rg-selection-option.rg-copy:after {
+  mask-image: url(../img/icons/copy.svg);
+  -webkit-mask-image: url(../img/icons/copy.svg);
+}
+
+.rg-selection-option.rg-delete:after,
+.rg-notes-delete:after,
+.rg-selection-option.rg-copy:after {
+  background-color: #979797;
+}
+
+.rg-selection-option.rg-delete:hover:after,
+.rg-notes-delete:hover:after,
+.rg-selection-option.rg-copy:not(:disabled):hover:after {
   background-color: #4d4d4d;
+}
+
+div.rg-selection-menu .rg-selection-menu-wrapper .rg-selection-menu-holder .rg-selection-option:disabled {
+  cursor: default;
+}
+
+div.rg-selection-menu .rg-selection-menu-wrapper .rg-selection-menu-holder .rg-selection-option:disabled:after {
+  opacity: .5;
 }
