@@ -34,11 +34,15 @@ const getMinAndMaxScroll = (state: State, forceMargin: number | null = null): Mi
           const targetScale = Math.abs(scale.target * zoom.target);
           const correctorFix = -leftCorrector.target / targetScale;
           maxScroll = correctorFix;
-          const maxScrollableWidth = Math.max(
-            state.totalWidth -
-              (state.containerWidth - (state.margin.left + state.margin.right * 2)) / targetScale,
-            0,
-          );
+          let maxScrollableWidth = 0;
+          const availableWidth = state.containerWidth - (state.margin.left + state.margin.right);
+          const totalWidth = state.totalWidth * targetScale;
+          if (availableWidth > totalWidth) {
+            maxScrollableWidth = (state.totalWidth - availableWidth / targetScale) / 2;
+            maxScroll = -1 * maxScrollableWidth;
+          } else {
+            maxScrollableWidth = Math.max(state.totalWidth - availableWidth / targetScale, 0);
+          }
           minScroll = -1 * maxScrollableWidth + correctorFix;
         }
       }
@@ -62,11 +66,15 @@ const getMinAndMaxScroll = (state: State, forceMargin: number | null = null): Mi
           const targetScale = Math.abs(scale.target * zoom.target);
           const correctorFix = -topCorrector.target / targetScale;
           maxScroll = correctorFix;
-          const maxScrollableHeight = Math.max(
-            state.totalHeight -
-              (state.containerHeight - (state.margin.top + state.margin.bottom)) / targetScale,
-            0,
-          );
+          let maxScrollableHeight = 0;
+          const availableHeight = state.containerHeight - (state.margin.top + state.margin.bottom);
+          const totalHeight = state.totalHeight * targetScale;
+          if (availableHeight > totalHeight) {
+            maxScrollableHeight = (state.totalHeight - availableHeight / targetScale) / 2;
+            maxScroll = -1 * maxScrollableHeight;
+          } else {
+            maxScrollableHeight = Math.max(state.totalHeight - availableHeight / targetScale, 0);
+          }
           minScroll = -1 * maxScrollableHeight + correctorFix;
         }
       }

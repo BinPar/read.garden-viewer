@@ -45,6 +45,7 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
   updateState({
     animate: false,
     animating: false,
+    interpolationValues,
   });
 
   const applyCSSProps = (): void => {
@@ -188,7 +189,7 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
       scroll.target = scroll.current;
       scroll.speed = 0;
       if (state.layout === LayoutTypes.Fixed) {
-        reCalcScrollLimits(state);
+        reCalcScrollLimits(state, true);
       }
       applyCSSProps();
     }, 0);
@@ -301,7 +302,7 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
       zoom.target = state.zoom;
       zoom.current = zoom.target;
       zoom.forceUpdate = true;
-      reCalcScrollLimits(state);
+      reCalcScrollLimits(state, true);
       executeTransitions();
       zoom.forceUpdate = false;
     }

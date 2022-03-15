@@ -6,6 +6,7 @@ const books: string[] = [
   'demo-1', // EPUB with .xpgt problem
   'admin-upload', // Single page PDF
   'bioquimica',
+  'hepatologia',
 ];
 
 export default books;

@@ -40,7 +40,7 @@ export const reCalcScrollLimits = (
   instant = false,
 ): void => {
   const scrollLimits = getMinAndMaxScroll(state);
-  if (scroll.current > scrollLimits.maxScroll) {
+  if (scroll.target > scrollLimits.maxScroll) {
     scroll.target = scrollLimits.maxScroll;
     scroll.speed = 0;
   } else if (scroll.target < scrollLimits.minScroll) {
@@ -48,7 +48,7 @@ export const reCalcScrollLimits = (
     scroll.speed = 0;
   }
   const altScrollLimits = getMinAndMaxAltScroll(state);
-  if (altScroll.current > altScrollLimits.maxScroll) {
+  if (altScroll.target > altScrollLimits.maxScroll) {
     altScroll.target = altScrollLimits.maxScroll;
     altScroll.speed = 0;
   } else if (altScroll.target < altScrollLimits.minScroll) {

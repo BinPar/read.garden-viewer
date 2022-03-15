@@ -152,6 +152,7 @@ div.rg-content-wrapper #rg-content-placeholder > div a {
   div#rg-content-placeholder
   > .rg-fixed-content-container {
   top: var(--page-top);
+  margin-left: calc((var(--max-width) - var(--page-width)) / 2);
 }
 
 .rg-horizontal-scroll.rg-fixed-layout
@@ -159,6 +160,7 @@ div.rg-content-wrapper #rg-content-placeholder > div a {
   div#rg-content-placeholder
   > .rg-fixed-content-container {
   left: var(--page-left);
+  margin-top: calc((var(--max-height) - var(--page-height)) / 2);
 }
 
 .rg-fixed-layout.rg-horizontal-scroll div.rg-content-wrapper div#rg-content-placeholder {

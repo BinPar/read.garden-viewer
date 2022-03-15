@@ -47,6 +47,8 @@ const setContentsInfo: ActionDispatcher<SetContentsInfo> = async ({ state, actio
     container.dataset.order = `${order}`;
     container.dataset.slug = slug;
     container.dataset.label = label;
+    container.style.setProperty('--page-width', `${width}px`);
+    container.style.setProperty('--page-height', `${height}px`);
     container.style.setProperty('--page-top', `${top}px`);
     container.style.setProperty('--page-left', `${left}px`);
     if (unaffected.has(slug)) {
@@ -81,13 +83,15 @@ const setContentsInfo: ActionDispatcher<SetContentsInfo> = async ({ state, actio
     }
     previousContent = contentInfo;
   }
-
+  
   if (previousContent) {
     previousContent.next = prev;
   }
 
   setCSSProperty('total-width', `${totalWidth}px`);
   setCSSProperty('total-height', `${totalHeight}px`);
+  setCSSProperty('max-width', `${maxWidth}px`);
+  setCSSProperty('max-height', `${maxHeight}px`);
   contentPlaceholderNode.append(...containers);
 
   return new Promise<Partial<State>>((resolve) => {

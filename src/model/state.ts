@@ -1,3 +1,4 @@
+import { InterpolationValue } from '../lib/animation/interpolationValues';
 import { Config } from './config';
 import { Coordinates } from './highlights';
 import {
@@ -236,6 +237,10 @@ export interface GlobalState {
    * Viewer has been unmounted
    */
   unmounted?: boolean;
+  /**
+   * 
+   */
+  interpolationValues: InterpolationValue[];
 }
 
 /**

@@ -27,7 +27,7 @@ const scrollInertiaAndLimits = (
     let found = false;
     let target: number | null = null;
     let i = 0;
-    state.slugByPosition.forEach((value, key) => {
+    state.slugByPosition.forEach((_, key) => {
       if (!found && i++ % state.columnsInViewport === 0) {
         if (min === null) {
           min = key;
