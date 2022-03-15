@@ -110,6 +110,35 @@ div#rg-viewer {
     scale(var(--scale));
 }
 
+.rg-scroller {
+  position: absolute;
+  background: transparent;
+}
+
+.rg-horizontal-scroll .rg-scroller {
+  bottom: 0;
+  height: 15px;
+  width: 100%;
+  overflow-y: visible;
+  overflow-x: scroll;
+}
+.rg-horizontal-scroll .rg-scroller-content {
+  height: 15px;
+  width: var(--total-width);
+}
+
+.rg-vertical-scroll .rg-scroller {
+  right: 0;
+  width: 5px;
+  height: 100%;
+  overflow-x: visible;
+  overflow-y: scroll;
+}
+.rg-vertical-scroll .rg-scroller-content {
+  width: 100%;
+  height: var(--total-height);
+}
+
 div.rg-content-wrapper {
   outline: solid var(--safe-area-border-width) red;
   margin: var(--safe-area-margin-correction);

@@ -66,6 +66,15 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
     setCSSProperty('scale', `${targetScale}`);
     setCSSProperty('horizontal-translate', `${scrollLeft}px`);
     setCSSProperty('vertical-translate', `${scrollTop}px`);
+    if (state.scrollerNode) {
+      updateState({ updatingScroller: true });
+      state.scrollerNode.scrollLeft = -1 * scroll.current;
+      window.requestAnimationFrame(() => {
+        if (state.updatingScroller) {
+          updateState({ updatingScroller: false });
+        }
+      });
+    }
     zoomUpdatedByApplyCSSProps = true;
     updateState({ scrollLeft, scrollTop, scale: targetScale, zoom: zoom.current });
     zoomUpdatedByApplyCSSProps = false;

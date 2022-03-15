@@ -23,6 +23,13 @@ SCOPES:
 
 export type LayoutType = 'fixed' | 'flow';
 
+export interface ExperimentalConfig {
+  /**
+   * Show scrollbars
+   */
+  scrollbars?: boolean;
+}
+
 export interface DefaultConfig {
   /**
    * Will be the viewer mode when first displaying a content fixed book (PDF, EPUB 3 Fixed, etc)
@@ -192,6 +199,10 @@ export interface DefaultConfig {
    * Custom search highlight color
    */
   searchHighlightColor?: string;
+  /**
+   * Experimental config
+   */
+  experimental?: ExperimentalConfig;
 }
 
 export interface RequiredConfig {

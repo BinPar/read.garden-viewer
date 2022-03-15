@@ -582,8 +582,21 @@ const scrollController = (
       ev.preventDefault();
     }
   };
+
+  const onScroll = (ev: Event): void => {
+    if (!state.updatingScroller) {
+      ev.preventDefault();
+      scroll.current = -1 * state.scrollerNode!.scrollLeft;
+      scroll.target = scroll.current;
+      executeTransitions(true);
+    }
+  };
+
   state.readGardenContainerNode?.addEventListener('mousedown', onDragStart);
   state.readGardenContainerNode?.addEventListener('touchstart', onDragStart);
+  if (state.scrollerNode) {
+    state.scrollerNode.addEventListener('scroll', onScroll);
+  }
   window.addEventListener('mouseup', onDragEnd);
   window.addEventListener('touchend', onDragEnd);
   window.addEventListener('mousemove', onDragMove);

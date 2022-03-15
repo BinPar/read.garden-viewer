@@ -76,6 +76,18 @@ const createBasicDOMElements = (state: State): void => {
   readGardenViewerNode.appendChild(searchTermsHighlightsNode);
   // #endregion Content Wrapper Siblings
 
+  let scrollerNode: HTMLDivElement | undefined;
+
+  if (state.config.experimental?.scrollbars) {
+    scrollerNode = document.createElement('div');
+    scrollerNode.classList.add('rg-scroller');
+
+    const scrollerContentNode = document.createElement('div');
+    scrollerContentNode.classList.add('rg-scroller-content');
+    scrollerNode.appendChild(scrollerContentNode);
+    readGardenContainerNode.appendChild(scrollerNode);
+  }
+
   const dynamicStyleNode = document.createElement('link');
   dynamicStyleNode.rel = 'stylesheet';
   dynamicStyleNode.type = 'text/css';
@@ -105,6 +117,7 @@ const createBasicDOMElements = (state: State): void => {
     dynamicStyleNode,
     containerWidth,
     containerHeight,
+    scrollerNode,
   });
 };
 

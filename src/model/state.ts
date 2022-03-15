@@ -58,6 +58,10 @@ export interface GlobalState {
    */
   animating: boolean;
   /**
+   * True when scroll is being updated programmatically
+   */
+  updatingScroller: boolean;
+  /**
    * True when the viewer can do animations
    * if it is set to false, any view transition will be
    * applied directly without any animation
@@ -113,6 +117,10 @@ export interface GlobalState {
    * Search terms highlights layer DOM node
    */
   searchTermsHighlightsNode?: HTMLDivElement;
+  /**
+   * Scroller node
+   */
+  scrollerNode?: HTMLDivElement;
   /**
    * Dynamic styles DOM node
    */
