@@ -1,63 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui"
+    />
+    <title>Read.Garden Testing Viewer Sistema Respiratorio (PDF)</title>
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="description" content="Viewer used by to test the Sistema Respiratorio content" />
+    <link rel="preload" as="style" href="/css/readium.css" />
+    <link rel="stylesheet" type="text/css" href="/css/readium.css" />
+    <link rel="preload" as="style" href="/css/read.garden-viewer.css" />
+    <link rel="stylesheet" type="text/css" href="/css/read.garden-viewer.css" />
+    <link rel="preload" as="style" href="/css/fonts.css" />
+    <link rel="stylesheet" type="text/css" href="/css/fonts.css" />
+    <link rel="stylesheet" type="text/css" href="/css/read.garden-testing-ui.css" />
+    <script src="/js/read.garden-test-api.js"></script>
+    <script src="/js/read.garden-viewer.js"></script>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport"
-    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui" />
-  <title>Read.Garden Testing Viewer Sistema Respiratorio (PDF)</title>
-  <link rel="icon" href="/favicon.ico" />
-  <meta name="description" content="Viewer used by to test the Sistema Respiratorio content" />
-  <link rel="preload" as="style" href="/css/readium.css" />
-  <link rel="stylesheet" type="text/css" href="/css/readium.css" />
-  <link rel="preload" as="style" href="/css/read.garden-viewer.css" />
-  <link rel="stylesheet" type="text/css" href="/css/read.garden-viewer.css" />
-  <link rel="preload" as="style" href="/css/fonts.css" />
-  <link rel="stylesheet" type="text/css" href="/css/fonts.css" />
-  <link rel="stylesheet" type="text/css" href="/css/read.garden-testing-ui.css" />
-  <script src="/js/read.garden-test-api.js"></script>
-  <script src="/js/read.garden-viewer.js"></script>
-</head>
-
-<body></body>
-<script type="text/javascript">
-  window.readGardenApi = window.readGardenViewer({
-    layoutType: 'fixed',
-    initialScrollMode: 'vertical',
-    initialFitMode: 'height',
-    eventHandler: window.readGardenEventHandler,
-    slug: 'sistema-respiratorio',
-    contentSlug: '16',
-    initialFontFamily: 'Obf-Helvetica',
-    initialReadMode: true,
-    availableFontFamilies: [
-      'Obf-Helvetica',
-      'Obf-OpenDyslexic',
-      'Obf-AmericanTypewriter',
-      'Obf-RobotoSlab',
-      'Obf-Baskerville',
-      'Obf-Tahoma',
-      'Obf-TimesNewRoman',
-    ],
-    readModeMargin: {
-      top: 20,
-      left: 100,
-      bottom: 70,
-      right: 20,
-    },
-    uiModeMargin: {
-      top: 20,
-      left: 450,
-      bottom: 70,
-      right: 20,
-    },
-    toggleReadModeOnClick: false,
-    paddingTop: 0,
-    paddingBottom: 0,
-  });
-  window.readGardenSetDispatcher(window.readGardenApi.dispatch);
-  window.readGardenSetState(window.readGardenApi.state);
-</script>
-<div style="border: 1px solid #ff9966;position: fixed;top: 20px;bottom:70px;z-index: 10000;left: 100px;right: 20px;pointer-events: none;"></div>
-<div style="border: 1px solid #ff3355;position: fixed;top: 20px;bottom:70px;;z-index: 10000;left: 450px;right: 20px;pointer-events: none;"></div>
+  <body></body>
+  <script type="text/javascript">
+    window.readGardenApi = window.readGardenViewer({
+      layoutType: 'fixed',
+      initialScrollMode: 'vertical',
+      initialFitMode: 'height',
+      eventHandler: window.readGardenEventHandler,
+      slug: 'sistema-respiratorio',
+      contentSlug: '16',
+      initialFontFamily: 'Obf-Helvetica',
+      initialReadMode: true,
+      availableFontFamilies: [
+        'Obf-Helvetica',
+        'Obf-OpenDyslexic',
+        'Obf-AmericanTypewriter',
+        'Obf-RobotoSlab',
+        'Obf-Baskerville',
+        'Obf-Tahoma',
+        'Obf-TimesNewRoman',
+      ],
+      readModeMargin: {
+        top: 20,
+        left: 100,
+        bottom: 70,
+        right: 20,
+      },
+      uiModeMargin: {
+        top: 20,
+        left: 450,
+        bottom: 70,
+        right: 20,
+      },
+      toggleReadModeOnClick: false,
+      paddingTop: 0,
+      paddingBottom: 0,
+      fixedPagesGap: 'pairs',
+    });
+    window.readGardenSetDispatcher(window.readGardenApi.dispatch);
+    window.readGardenSetState(window.readGardenApi.state);
+  </script>
 </html>

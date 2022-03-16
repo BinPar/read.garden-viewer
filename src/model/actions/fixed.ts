@@ -1,6 +1,6 @@
 import { Action } from './common';
 import { FixedContentInfo } from '../state';
-import { FitMode } from '../viewerSettings';
+import { FitMode, GapMode } from '../viewerSettings';
 
 /**
  * Names of the action types for Fixed Layout Actions
@@ -54,6 +54,17 @@ export interface SetFitMode extends Action {
 }
 
 /**
+ * Sets gap mode to desired mode
+ */
+export interface SetGapMode extends Action {
+  type: 'setGapMode';
+  /**
+   * Desired gap mode
+   */
+  gapMode: GapMode;
+}
+
+/**
  * Actions for FixedLayout
  */
-export type FixedActions = SetSinglePageMode | SetContentsInfo | SetZoom | SetFitMode;
+export type FixedActions = SetSinglePageMode | SetContentsInfo | SetZoom | SetFitMode | SetGapMode;

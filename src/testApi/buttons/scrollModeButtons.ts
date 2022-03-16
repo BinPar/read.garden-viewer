@@ -1,7 +1,7 @@
 import { SetScrollMode } from '../../model/actions/global';
 import { DispatchAPIAction } from '../../model/actions/common';
 import { State } from '../../model/state';
-import { LayoutTypes, ScrollModes } from '../../model/viewerSettings';
+import { ScrollModes } from '../../model/viewerSettings';
 
 const scrollModeButtons = (
   container: HTMLDivElement,
@@ -21,9 +21,7 @@ const scrollModeButtons = (
   select.appendChild(verticalOption);
 
   const updateSelected = (): void => {
-    if (state.layout === LayoutTypes.Flow) {
-      select.value = state.scrollMode;
-    }
+    select.value = state.scrollMode;
   };
 
   const onChange = async (): Promise<void> => {

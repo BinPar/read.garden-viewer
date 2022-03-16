@@ -1,8 +1,9 @@
 import { FixedState, FixedViewerContentInfo } from '../../model/state';
-import { LayoutTypes } from '../../model/viewerSettings';
+import { GapMode, LayoutTypes } from '../../model/viewerSettings';
 
 const defaultFixed: FixedState = {
   layout: LayoutTypes.Fixed,
+  fixedInfo: [],
   contentsByOrder: new Map<number, FixedViewerContentInfo>(),
   contentsBySlug: new Map<string, FixedViewerContentInfo>(),
   contentsInfo: new Array<FixedViewerContentInfo>(),
@@ -22,6 +23,8 @@ const defaultFixed: FixedState = {
   verticalTranslate: 0,
   maxHeight: 0,
   maxWidth: 0,
+  gapMode: GapMode.None,
+  gapSize: 16,
 };
 
 export default defaultFixed;

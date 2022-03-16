@@ -31,6 +31,7 @@ import setHighlighterColor from './setHighlighterColor';
 import moveNext from './moveNext';
 import movePrev from './movePrev';
 import setLineHeight from './setLineHeight';
+import setGapMode from './setGapMode';
 
 /**
  * List of all action dispatchers
@@ -69,6 +70,7 @@ const actionDispatchers  = {
   setHighlighterColor,
   moveNext,
   movePrev,
+  setGapMode,
 };
 
 export default actionDispatchers;

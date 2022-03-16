@@ -75,6 +75,29 @@ body.rg-flow-layout::-webkit-scrollbar {
   display: none;
 }
 
+.rg-viewer-safe-area {
+  position: fixed;
+  pointer-events: none;
+  border-style: solid;
+  border-width: var(--safe-area-border-width);
+}
+
+.rg-viewer-safe-area.rg-read-mode-safe {
+  border-color: #ff9966;
+  top: var(--safe-area-read-top);
+  left: var(--safe-area-read-left);
+  right: var(--safe-area-read-right);
+  bottom: var(--safe-area-read-bottom);
+}
+
+.rg-viewer-safe-area.rg-ui-mode-safe {
+  border-color: #ff3355;
+  top: var(--safe-area-ui-top);
+  left: var(--safe-area-ui-left);
+  right: var(--safe-area-ui-right);
+  bottom: var(--safe-area-ui-bottom);
+}
+
 div#rg-container {
   position: relative;
   width: 100%;
@@ -846,10 +869,16 @@ div.rg-notes-dialog .rg-notes-dialog-wrapper .rg-notes-dialog-holder .rg-notes-d
   background-color: #4d4d4d;
 }
 
-div.rg-selection-menu .rg-selection-menu-wrapper .rg-selection-menu-holder .rg-selection-option:disabled {
+div.rg-selection-menu
+  .rg-selection-menu-wrapper
+  .rg-selection-menu-holder
+  .rg-selection-option:disabled {
   cursor: default;
 }
 
-div.rg-selection-menu .rg-selection-menu-wrapper .rg-selection-menu-holder .rg-selection-option:disabled:after {
-  opacity: .5;
+div.rg-selection-menu
+  .rg-selection-menu-wrapper
+  .rg-selection-menu-holder
+  .rg-selection-option:disabled:after {
+  opacity: 0.5;
 }

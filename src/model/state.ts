@@ -3,6 +3,7 @@ import { Config } from './config';
 import { Coordinates } from './highlights';
 import {
   FitMode,
+  GapMode,
   LayoutTypes,
   LineHeight,
   Margin,
@@ -246,6 +247,10 @@ export interface GlobalState {
    */
   unmounted?: boolean;
   /**
+   * To avoid resets
+   */
+  avoidReset?: boolean;
+  /**
    * 
    */
   interpolationValues: InterpolationValue[];
@@ -387,6 +392,10 @@ export interface FixedState {
    */
   contentsInfo: FixedViewerContentInfo[];
   /**
+   * Raw fixed contents info
+   */
+  fixedInfo: FixedContentInfo[];
+  /**
    * Contents max width
    */
   maxWidth: number;
@@ -424,6 +433,14 @@ export interface FixedState {
    * Minimum Zoom Value
    */
   minimumZoomValue: number;
+  /**
+   * Gap mode
+   */
+  gapMode: GapMode;
+  /**
+   * Gap size (in pixels)
+   */
+  gapSize: number;
 }
 
 export interface FlowState {

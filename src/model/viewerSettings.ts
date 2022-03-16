@@ -34,6 +34,21 @@
   Page = 'page',
 }
 
+export enum GapMode {
+  /**
+   * Will create gap between every page
+   */
+  All = 'all',
+  /**
+   * Will find page number 1 and create gap between pairs
+   */
+  Pairs = 'pairs',
+  /**
+   * [**default**] Won't create any gap between pages
+   */
+  None = 'none',
+}
+
 /**
  * Zoom state
  */

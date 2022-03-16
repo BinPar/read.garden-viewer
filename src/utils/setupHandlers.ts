@@ -3,6 +3,7 @@ import { DispatchAPIAction } from '../model/actions/common';
 import { LoadNewContent } from '../model/events';
 import { State } from '../model/state';
 import { LayoutTypes } from '../model/viewerSettings';
+
 import loadContentsInBackground from './loadContentsInBackground';
 import layoutSetup from '../viewer/layoutSetup';
 import redrawUserHighlights from './highlights/redrawUserHighlights';
@@ -41,14 +42,6 @@ const setupHandlers = async (state: State, dispatch: DispatchAPIAction): Promise
       },
     };
     await dispatch(onPageChange);
-    const onLayoutReady: AddOnChangeEvent<boolean> = {
-      type: 'addOnChangeEvent',
-      propertyName: 'wrapperReady',
-      event: () => {
-        loadContentsInBackground(state);
-      },
-    };
-    await dispatch(onLayoutReady);
   }
 };
 

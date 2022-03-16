@@ -154,6 +154,7 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
       setTimeout(() => {
         const done = (): void => {
           container.classList.remove('rg-loading');
+          setCSSProperty('viewer-margin-top', '0');
           handleAnchors(container, state);
           const finalPartialState: Partial<State> = {
             slug: action.slug,

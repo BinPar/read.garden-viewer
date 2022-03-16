@@ -26,17 +26,17 @@ const themeButtons = async (
     active.classList.add('active');
     inactive.classList.remove('active');
   };
-  
+
   const onDarkModeChanged: AddOnChangeEvent<ViewerTheme> = {
     type: 'addOnChangeEvent',
     propertyName: 'theme',
     event: updateValue,
-  }
+  };
 
   await dispatcher(onDarkModeChanged);
-  
+
   const onChange = (e: MouseEvent): void => {
-    const theme = (e.target as HTMLButtonElement)!.value as ViewerTheme;
+    const theme = (e.target as HTMLButtonElement).value as ViewerTheme;
     const action: SetTheme = {
       type: 'setTheme',
       theme,

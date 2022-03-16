@@ -19,7 +19,6 @@ const setInitialProperties = (state: State): void => {
   setCSSProperty('column-width', '0px');
   setCSSProperty('current-selection-extensors-color', '#3273ff');
   setCSSProperty('current-selection-highlights-color', '#f2b818');
-  setCSSProperty('debug-viewer-safe-area', `${state.debugViewerSafeArea ? 1 : 0}`);
   setCSSProperty('extensors-pointer-events', 'auto');
   setCSSProperty('highlights-pointer-events', 'none');
   setCSSProperty('horizontal-translate', '0');
@@ -28,7 +27,6 @@ const setInitialProperties = (state: State): void => {
   setCSSProperty('padding-bottom', `${state.config.paddingBottom}px`);
   setCSSProperty('pointer-events', 'auto');
   setCSSProperty('scale', `${state.scale}`);
-  setCSSProperty('safe-area-border-width', 'calc(2px * var(--debug-viewer-safe-area))');
   setCSSProperty('search-highlights-color', state.config.searchHighlightColor || '#fdff04');
   setCSSProperty('sepia-viewer-color', '0');
   setCSSProperty('text-align', 'initial');
@@ -39,6 +37,17 @@ const setInitialProperties = (state: State): void => {
   setCSSProperty('user-select-end', 'none');
   setCSSProperty('vertical-translate', '0');
   setCSSProperty('viewer-margin-top', '200vh');
+
+  setCSSProperty('debug-viewer-safe-area', `${state.debugViewerSafeArea ? 1 : 0}`);
+  setCSSProperty('safe-area-border-width', 'calc(1px * var(--debug-viewer-safe-area))');
+  setCSSProperty('safe-area-read-top', `${state.config.readModeMargin.top}px`);
+  setCSSProperty('safe-area-read-left', `${state.config.readModeMargin.left}px`);
+  setCSSProperty('safe-area-read-right', `${state.config.readModeMargin.right}px`);
+  setCSSProperty('safe-area-read-bottom', `${state.config.readModeMargin.bottom}px`);
+  setCSSProperty('safe-area-ui-top', `${state.config.uiModeMargin.top}px`);
+  setCSSProperty('safe-area-ui-left', `${state.config.uiModeMargin.left}px`);
+  setCSSProperty('safe-area-ui-right', `${state.config.uiModeMargin.right}px`);
+  setCSSProperty('safe-area-ui-bottom', `${state.config.uiModeMargin.bottom}px`);
 
   if (state.theme === 'dark') {
     setCSSProperty('theme-filter', 'invert(1)');

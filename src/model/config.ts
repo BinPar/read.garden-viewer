@@ -2,6 +2,7 @@ import { ReadGardenEventHandler } from './events';
 import {
   FitMode,
   FontSize,
+  GapMode,
   LineHeight,
   Margin,
   NewContent,
@@ -199,6 +200,15 @@ export interface DefaultConfig {
    * Custom search highlight color
    */
   searchHighlightColor?: string;
+  /**
+   * Desired fixed pages gap mode.
+   */
+  fixedPagesGap?: GapMode;
+  /**
+   * Will only be used if `fixedPagesGap` is set to `all` or `pairs`.
+   * Gap size in pixels.
+   */
+  fixedPagesGapSize?: number;
   /**
    * Experimental config
    */

@@ -134,6 +134,8 @@ export const initializeState = (initialConfig: InitialConfig): void => {
       loadedCssUrls: new Set<string>(),
       minimumZoomValue: config.zoom.min ?? defaultFixed.minimumZoomValue,
       maximumZoomValue: config.zoom.max ?? defaultFixed.maximumZoomValue,
+      gapMode: config.fixedPagesGap ?? defaultFixed.gapMode,
+      gapSize: config.fixedPagesGapSize ?? defaultFixed.gapSize,
     };
 
     if (config.initialContent) {

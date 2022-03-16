@@ -184,11 +184,13 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
   };
 
   const resetPageProps = (): void => {
-    const targetSlugScrollPosition = getScrollFromContentSlug(state) ?? 0;
-    scroll.target = targetSlugScrollPosition;
-    scroll.current = scroll.target;
-    scroll.speed = 0;
-    recalculateCurrentPage(state, scroll.current, true);
+    if (!state.avoidReset) {
+      const targetSlugScrollPosition = getScrollFromContentSlug(state) ?? 0;
+      scroll.target = targetSlugScrollPosition;
+      scroll.current = scroll.target;
+      scroll.speed = 0;
+      recalculateCurrentPage(state, scroll.current, true);
+    }
   };
 
   const onScrollModeChange = (): void => {
