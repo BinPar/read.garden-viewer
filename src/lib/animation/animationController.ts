@@ -6,6 +6,7 @@ import navigateToContentSlug from '../../utils/navigateToContentSlug';
 import setCSSProperty from '../../utils/setCSSProperty';
 import { updateState } from '../state';
 import { addOnChangeEventListener } from '../state/stateChangeEvents';
+import getMinAndMaxScroll from './getMinAndMaxScroll';
 import getScrollFromContentSlug from './getScrollFromContentSlug';
 import interpolate from './interpolate';
 import {
@@ -83,6 +84,17 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
         );
       } else if (state.scrollMode === 'vertical') {
         state.scrollerNode.scrollTop = -1 * scroll.current;
+        setCSSProperty(
+          'prev-chapter-navigation-opacity',
+          state.scrollerNode.scrollTop < state.scrollerNode.scrollHeight * 0.1 ? '1' : '0',
+        );
+        setCSSProperty(
+          'next-chapter-navigation-opacity',
+          state.scrollerNode.scrollTop + state.containerHeight >
+            state.scrollerNode.scrollHeight * 0.9
+            ? '1'
+            : '0',
+        );
       }
       window.requestAnimationFrame(() => {
         if (state.updatingScroller) {
@@ -224,9 +236,19 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
   const onContentSlugChanged = (slug: string): void => {
     const targetSlugScrollPosition = getScrollFromContentSlug(state, slug);
     if (targetSlugScrollPosition !== null && state.forceScroll === undefined) {
-      scroll.target = targetSlugScrollPosition;
+      const scrollLimits = getMinAndMaxScroll(state);
+      if (targetSlugScrollPosition > scrollLimits.maxScroll) {
+        scroll.target = scrollLimits.maxScroll;
+        scroll.forceUpdate = true;
+      } else if (targetSlugScrollPosition < scrollLimits.minScroll) {
+        scroll.target = scrollLimits.minScroll;
+        scroll.forceUpdate = true;
+      } else {
+        scroll.target = targetSlugScrollPosition;
+      }
     }
     executeTransitions();
+    scroll.forceUpdate = false;
   };
 
   const resetPageScroll = (): void => {

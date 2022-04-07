@@ -56,7 +56,7 @@ const scrollInertiaAndLimits = (
       scroll.target = target * -1;
     }
   } else if (state.layout === LayoutTypes.Flow) {
-    max = state.totalHeight - window.innerHeight;
+    max = state.totalHeight + state.config.paddingBottom + state.config.paddingTop;
   } else {
     let scrollLimits: MinAndMaxScroll;
     if (isAltScroll) {
