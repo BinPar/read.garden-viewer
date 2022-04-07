@@ -77,6 +77,8 @@ const createBasicDOMElements = (state: State): void => {
   // #endregion Content Wrapper Siblings
 
   let scrollerNode: HTMLDivElement | undefined;
+  let nextChapterButton: HTMLButtonElement | undefined;
+  let prevChapterButton: HTMLButtonElement | undefined;
 
   if (state.config.experimental?.scrollbars) {
     scrollerNode = document.createElement('div');
@@ -86,6 +88,14 @@ const createBasicDOMElements = (state: State): void => {
     scrollerContentNode.classList.add('rg-scroller-content');
     scrollerNode.appendChild(scrollerContentNode);
     readGardenContainerNode.appendChild(scrollerNode);
+
+    nextChapterButton = document.createElement('button');
+    nextChapterButton.classList.add('rg-button-chapter-navigation', 'rg-next-chapter');
+    readGardenContainerNode.appendChild(nextChapterButton);
+
+    prevChapterButton = document.createElement('button');
+    prevChapterButton.classList.add('rg-button-chapter-navigation', 'rg-prev-chapter');
+    readGardenContainerNode.appendChild(prevChapterButton);
   }
 
   const dynamicStyleNode = document.createElement('link');
@@ -118,6 +128,8 @@ const createBasicDOMElements = (state: State): void => {
     containerWidth,
     containerHeight,
     scrollerNode,
+    nextChapterButton,
+    prevChapterButton,
   });
 };
 

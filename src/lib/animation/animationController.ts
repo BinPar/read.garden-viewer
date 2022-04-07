@@ -68,7 +68,22 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
     setCSSProperty('vertical-translate', `${scrollTop}px`);
     if (state.scrollerNode) {
       updateState({ updatingScroller: true });
-      state.scrollerNode.scrollLeft = -1 * scroll.current;
+      if (state.scrollMode === 'horizontal') {
+        state.scrollerNode.scrollLeft = -1 * scroll.current;
+        setCSSProperty(
+          'prev-chapter-navigation-opacity',
+          state.scrollerNode.scrollLeft < state.scrollerNode.scrollWidth * 0.1 ? '1' : '0',
+        );
+        setCSSProperty(
+          'next-chapter-navigation-opacity',
+          state.scrollerNode.scrollLeft + state.containerWidth >
+            state.scrollerNode.scrollWidth * 0.9
+            ? '1'
+            : '0',
+        );
+      } else if (state.scrollMode === 'vertical') {
+        state.scrollerNode.scrollTop = -1 * scroll.current;
+      }
       window.requestAnimationFrame(() => {
         if (state.updatingScroller) {
           updateState({ updatingScroller: false });

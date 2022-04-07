@@ -63,6 +63,10 @@ export interface GlobalState {
    */
   updatingScroller: boolean;
   /**
+   * True when scroll is being updated manually
+   */
+  preventUpdateScroll: boolean;
+  /**
    * True when the viewer can do animations
    * if it is set to false, any view transition will be
    * applied directly without any animation
@@ -122,6 +126,14 @@ export interface GlobalState {
    * Scroller node
    */
   scrollerNode?: HTMLDivElement;
+  /**
+   * When scrollbars, next chapter button container
+   */
+  nextChapterButton?: HTMLButtonElement;
+  /**
+   * When scrollbars, prev chapter button container
+   */
+  prevChapterButton?: HTMLButtonElement;
   /**
    * Dynamic styles DOM node
    */

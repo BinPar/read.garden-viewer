@@ -2,7 +2,10 @@
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui"
+    />
     <title>Read.Garden Testing Viewer Acuario (EPUB Flow)</title>
     <link rel="icon" href="/favicon.ico" />
     <meta name="description" content="Viewer used by to test the Acuario content" />
@@ -22,7 +25,7 @@
     window.readGardenApi = window.readGardenViewer({
       layoutType: 'flow',
       eventHandler: window.readGardenEventHandler,
-      slug: 'acuario',      
+      slug: 'acuario',
       contentSlug: '76',
       initialFontFamily: 'Obf-Helvetica',
       initialScrollMode: 'vertical',
@@ -46,7 +49,8 @@
         left: 350,
         bottom: 0,
         right: 0,
-      }
+      },
+      experimental: { scrollbars: true },
     });
     window.readGardenSetDispatcher(window.readGardenApi.dispatch);
     window.readGardenSetState(window.readGardenApi.state);

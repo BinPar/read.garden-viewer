@@ -85,6 +85,7 @@ export const initializeState = (initialConfig: InitialConfig): void => {
     animate: false,
     animating: false,
     updatingScroller: false,
+    preventUpdateScroll: false,
     animationFriction: config.animationFriction,
     animationSpeed: config.animationSpeed,
     animationInertia: config.animationInertia,

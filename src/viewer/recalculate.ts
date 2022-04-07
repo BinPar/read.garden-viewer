@@ -82,6 +82,12 @@ const recalculate = async (state: State): Promise<Partial<State>> => {
         const totalColumns = totalWidth / totalColumnWidth;
 
         setCSSProperty('total-width', `${totalWidth}px`);
+        setCSSProperty(
+          'scroll-width',
+          `${
+            Math.ceil(totalColumns / columnsInViewport) * columnsInViewport * totalColumnWidth - 15
+          }px`,
+        );
 
         const columnsPositions = Array(totalColumns)
           .fill(0)
@@ -174,7 +180,7 @@ const recalculate = async (state: State): Promise<Partial<State>> => {
             }
           }
         }
-        
+
         return;
       }
 
@@ -206,14 +212,17 @@ const recalculate = async (state: State): Promise<Partial<State>> => {
           lastPosition = position;
         });
 
+        const totalHeight = contentPlaceholderNode!.getBoundingClientRect().height / state.scale;
+
         resolve({
           ...globalUpdate,
           columnGap,
-          totalHeight: contentPlaceholderNode!.getBoundingClientRect().height / state.scale,
+          totalHeight,
           lastPosition,
           positionBySlug,
           slugByPosition,
         });
+        setCSSProperty('scroll-height', `${totalHeight}px`);
         return;
       }
 

@@ -23,9 +23,11 @@ const setInitialProperties = (state: State): void => {
   setCSSProperty('highlights-pointer-events', 'none');
   setCSSProperty('horizontal-translate', '0');
   setCSSProperty('invert-viewer-color', '0');
+  setCSSProperty('next-chapter-navigation-opacity', '0');
   setCSSProperty('padding-top', `${state.config.paddingTop}px`);
   setCSSProperty('padding-bottom', `${state.config.paddingBottom}px`);
   setCSSProperty('pointer-events', 'auto');
+  setCSSProperty('prev-chapter-navigation-opacity', '0');
   setCSSProperty('scale', `${state.scale}`);
   setCSSProperty('search-highlights-color', state.config.searchHighlightColor || '#fdff04');
   setCSSProperty('sepia-viewer-color', '0');
@@ -33,6 +35,7 @@ const setInitialProperties = (state: State): void => {
   setCSSProperty('total-column-width', '0px');
   setCSSProperty('total-height', '0px');
   setCSSProperty('total-width', '0px');
+  setCSSProperty('scroll-width', '0px');
   setCSSProperty('user-select', 'none');
   setCSSProperty('user-select-end', 'none');
   setCSSProperty('vertical-translate', '0');

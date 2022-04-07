@@ -34,6 +34,8 @@ import getTouches from '../../utils/getTouches';
 import calculateDistance from '../../utils/calculateDistance';
 import getTouchCenter from '../../utils/getTouchCenter';
 import recalculateCurrentPage from './recalculateCurrentPage';
+import navigateToPreviousChapter from '../actions/navigateToPreviousChapter';
+import navigateToNextChapter from '../actions/navigateToNextChapter';
 
 export const reCalcScrollLimits = (
   state: (GlobalState & FixedState & ScrolledState) | (GlobalState & FixedState & PaginatedState),
@@ -584,18 +586,55 @@ const scrollController = (
   };
 
   const onScroll = (ev: Event): void => {
+    if (state.scrollMode === 'horizontal') {
+      lastDelta = (-1 * state.scrollerNode!.scrollLeft - scroll.current) * 0.1;
+    }
     if (!state.updatingScroller) {
       ev.preventDefault();
-      scroll.current = -1 * state.scrollerNode!.scrollLeft;
-      scroll.target = scroll.current;
-      executeTransitions(true);
+      if (state.scrollMode === 'horizontal') {
+        scroll.target = -1 * state.scrollerNode!.scrollLeft;
+        scroll.current = scroll.target;
+      } else if (state.scrollMode === 'vertical') {
+        scroll.target = -1 * state.scrollerNode!.scrollTop;
+        scroll.current = scroll.target;
+      }
+      executeTransitions(mouseDown);
     }
+  };
+
+  const onNextChapter = (ev: Event): void => {
+    ev.preventDefault();
+    ev.stopPropagation();
+    navigateToNextChapter({
+      action: {
+        type: 'navigateToNextChapter',
+      },
+      state,
+    }).catch(console.error);
+  };
+
+  const onPrevChapter = (ev: Event): void => {
+    ev.preventDefault();
+    ev.stopPropagation();
+    navigateToPreviousChapter({
+      action: {
+        type: 'navigateToPreviousChapter',
+        goToEnd: true,
+      },
+      state,
+    }).catch(console.error);
   };
 
   state.readGardenContainerNode?.addEventListener('mousedown', onDragStart);
   state.readGardenContainerNode?.addEventListener('touchstart', onDragStart);
   if (state.scrollerNode) {
     state.scrollerNode.addEventListener('scroll', onScroll);
+  }
+  if (state.nextChapterButton) {
+    state.nextChapterButton.addEventListener('click', onNextChapter);
+  }
+  if (state.prevChapterButton) {
+    state.prevChapterButton.addEventListener('click', onPrevChapter);
   }
   window.addEventListener('mouseup', onDragEnd);
   window.addEventListener('touchend', onDragEnd);

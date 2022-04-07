@@ -147,19 +147,144 @@ div#rg-viewer {
 }
 .rg-horizontal-scroll .rg-scroller-content {
   height: 15px;
+}
+
+.rg-flow-layout.rg-horizontal-scroll .rg-scroller-content {
+  width: var(--scroll-width);
+}
+
+.rg-fixed-layout.rg-horizontal-scroll .rg-scroller-content {
   width: var(--total-width);
 }
 
 .rg-vertical-scroll .rg-scroller {
   right: 0;
-  width: 5px;
-  height: 100%;
+  width: 15px;
+  height: calc(100% + 15px);
   overflow-x: visible;
   overflow-y: scroll;
 }
+
 .rg-vertical-scroll .rg-scroller-content {
-  width: 100%;
-  height: var(--total-height);
+  width: 15px;
+  height: calc(var(--scroll-height) + var(--padding-top) + var(--padding-bottom));
+}
+
+.rg-button-chapter-navigation {
+  position: fixed;
+  border: 0;
+  cursor: pointer;
+  background-color: #666;
+  transition: opacity .3s;
+}
+
+.rg-button-chapter-navigation.rg-next-chapter {
+  opacity: var(--next-chapter-navigation-opacity, 0);
+}
+
+.rg-button-chapter-navigation.rg-prev-chapter {
+  opacity: var(--prev-chapter-navigation-opacity, 0);
+}
+
+.rg-button-chapter-navigation:hover {
+  background-color: #444;
+}
+
+.rg-button-chapter-navigation::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+
+
+.rg-horizontal-scroll .rg-button-chapter-navigation {
+  width: 30px;
+  height: 20px;
+  bottom: 35px;
+}
+
+.rg-horizontal-scroll .rg-button-chapter-navigation::after {
+  border-top: 20px solid transparent;
+  border-bottom: 20px solid transparent;
+}
+
+.rg-horizontal-scroll .rg-button-chapter-navigation.rg-next-chapter {
+  right: 30px;
+}
+
+.rg-horizontal-scroll .rg-button-chapter-navigation.rg-next-chapter::after {
+  border-left: 20px solid #666;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%) translateX(100%);
+}
+
+.rg-horizontal-scroll .rg-button-chapter-navigation.rg-next-chapter:hover::after {
+  border-left-color: #444;
+}
+
+.rg-horizontal-scroll .rg-button-chapter-navigation.rg-prev-chapter {
+  left: 30px;
+}
+
+.rg-horizontal-scroll .rg-button-chapter-navigation.rg-prev-chapter::after {
+  border-right: 20px solid #666;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%) translateX(-100%);
+}
+
+.rg-horizontal-scroll .rg-button-chapter-navigation.rg-prev-chapter:hover::after {
+  border-right-color: #444;
+}
+
+
+
+
+.rg-vertical-scroll .rg-button-chapter-navigation {
+  border: 0;
+  cursor: pointer;
+  width: 20px;
+  height: 30px;
+  background: #666;
+  right: 35px;
+}
+
+.rg-vertical-scroll .rg-button-chapter-navigation::after {
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent;
+}
+
+.rg-vertical-scroll .rg-button-chapter-navigation.rg-next-chapter {
+  bottom: 30px;
+}
+
+.rg-vertical-scroll .rg-button-chapter-navigation.rg-next-chapter::after {
+  border-top: 20px solid #666;
+  bottom: 0;
+  left: 50%;
+  transform: translateY(100%) translateX(-50%);
+}
+
+.rg-vertical-scroll .rg-button-chapter-navigation.rg-next-chapter:hover::after {
+  border-top-color: #444;
+}
+
+.rg-vertical-scroll .rg-button-chapter-navigation.rg-prev-chapter {
+  top: 30px;
+}
+
+.rg-vertical-scroll .rg-button-chapter-navigation.rg-prev-chapter::after {
+  border-bottom: 20px solid #666;
+  top: 0;
+  left: 50%;
+  transform: translateY(-100%) translateX(-50%);
+}
+
+.rg-vertical-scroll .rg-button-chapter-navigation.rg-prev-chapter:hover::after {
+  border-bottom-color: #444;
 }
 
 div.rg-content-wrapper {
