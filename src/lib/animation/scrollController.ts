@@ -207,7 +207,6 @@ const scrollController = (
       setCSSProperty('user-select', 'text');
       const wordSelection =
         !state.config.disableSelection && getWordSelection(state, ev, syntheticEvent);
-      // alert(JSON.stringify({ ...syntheticEvent, wordSelection: !!wordSelection }));
       setCSSProperty('user-select', 'none');
       if (wordSelection) {
         ev.stopPropagation();
@@ -226,7 +225,7 @@ const scrollController = (
               selectingText: true,
             });
           }, 400);
-        } else {
+        } else if (!clickedLink) {
           ev.preventDefault();
           isSelecting = true;
           return;
