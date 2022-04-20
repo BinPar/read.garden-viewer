@@ -136,8 +136,16 @@ const recalculateCurrentPage = (state: State, currentScroll: number, avoidUpdate
           lastEndPage = endPage;
         }
       }
-    } else {
-      // TODO: Vertical flow logic (is it needed?)
+    } else if (state.slugByPosition) {
+      let lastTarget = '';
+      const slugsPositions = Array.from(state.slugByPosition.entries());
+      for (let i = 0, l = slugsPositions.length; !target && i < l; i++) {
+        const [position, slug] = slugsPositions[i];
+        if (position > scrollPosition && lastTarget) {
+          target = lastTarget;
+        }
+        lastTarget = slug;
+      }
     }
   }
   if (target !== undefined && !avoidUpdate) {
