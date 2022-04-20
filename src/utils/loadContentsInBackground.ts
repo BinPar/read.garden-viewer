@@ -2,7 +2,6 @@ import { LoadNewContent } from '../model/events';
 import { LayoutTypes } from '../model/viewerSettings';
 
 import { getState, updateState } from '../lib/state';
-import { highlightTerms } from './highlights/search';
 
 /**
  * Loads contents in background. Meant for fixed viewer in scroll mode
@@ -45,8 +44,6 @@ const loadContentsInBackground = (state = getState(), currentContentSlug?: strin
           console.error('Error at event handler', stack || message);
         });
       }
-    } else {
-      highlightTerms(state.searchTerms);
     }
   }
 };

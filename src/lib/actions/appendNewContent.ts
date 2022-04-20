@@ -90,7 +90,9 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
               }
               resolve(finalPartialState);
               await redrawUserHighlights(state);
-              highlightTerms(state.searchTerms);
+              setTimeout((): void => {
+                highlightTerms(state.searchTerms);
+              }, 0);
             };
             const onStylesLoad = (): void => {
               newLink.removeEventListener('load', onStylesLoad);
@@ -165,7 +167,9 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
             loadContentsInBackground(state);
           }
           resolve(finalPartialState);
-          highlightTerms(state.searchTerms);
+          setTimeout((): void => {
+            highlightTerms(state.searchTerms);
+          }, 0);
         };
         const checkFonts = (): void => {
           dynamicStyleNode!.removeEventListener('load', checkFonts);
