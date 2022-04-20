@@ -1,3 +1,4 @@
+import escapeRegex from '../../escapeRegex';
 import getSearchHighlightsRanges from './getSearchHighlightsRanges';
 
 /**
@@ -32,13 +33,14 @@ const getRangesRecursively = (
   if (children.some((n) => n.nodeType === Node.TEXT_NODE && n.nodeValue?.trim())) {
     return getSearchHighlightsRanges(container, terms);
   }
-  const regex = new RegExp(terms.join('|'));
-  const globalRegex = new RegExp(terms.join('|'), 'g');
+  const cleanTerms = terms.map(escapeRegex);
+  const regex = new RegExp(cleanTerms.join('|'));
   for (let i = 0, l = children.length; i < l; i++) {
     const child = children[i] as HTMLElement;
     const match = child.textContent?.match(regex);
     if (match) {
       if (!Array.from(child.childNodes).some((n) => n.textContent?.match(regex))) {
+        const globalRegex = new RegExp(cleanTerms.join('|'), 'g');
         const foundTerms = Array.from(child.textContent!.matchAll(globalRegex)).flatMap(
           (t) => t[0],
         );
