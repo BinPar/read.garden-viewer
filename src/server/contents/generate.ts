@@ -18,8 +18,8 @@ const generate = async (cdn?: string, destDir?: string): Promise<void> => {
   const booksPath = destDir || path.join(__dirname, '../../../web/books');
   await ensureDir(booksPath);
   for (let i = 0; i < books.length; i++) {
-    const book = books[i];
-    const remoteURI = `https://${cndToUse!}/books/${book}/${book}.bp`;
+    const [book, url] = books[i];
+    const remoteURI = url || `https://${cndToUse!}/books/${book}/${book}.bp`;
     const bookPath = `${booksPath}/${book}`;
     const bookFile = `${booksPath}/${book}/${book}.bp`;
     try {

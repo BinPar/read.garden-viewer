@@ -32,15 +32,20 @@ const getRangesRecursively = (
   if (children.some((n) => n.nodeType === Node.TEXT_NODE && n.nodeValue?.trim())) {
     return getSearchHighlightsRanges(container, terms);
   }
+  const regex = new RegExp(terms.join('|'));
+  const globalRegex = new RegExp(terms.join('|'), 'g');
   for (let i = 0, l = children.length; i < l; i++) {
     const child = children[i] as HTMLElement;
-    const hasTextNodesChildren = Array.from(child.childNodes).some(
-      (n) => n.nodeType === Node.TEXT_NODE && n.nodeValue?.trim(),
-    );
-    if (hasTextNodesChildren) {
-      ranges.push(...getSearchHighlightsRanges(child, terms));
-    } else {
-      ranges.push(...getRangesRecursively(child, terms));
+    const match = child.textContent?.match(regex);
+    if (match) {
+      if (!Array.from(child.childNodes).some((n) => n.textContent?.match(regex))) {
+        const foundTerms = Array.from(child.textContent!.matchAll(globalRegex)).flatMap(
+          (t) => t[0],
+        );
+        ranges.push(...getSearchHighlightsRanges(child, foundTerms));
+      } else {
+        ranges.push(...getRangesRecursively(child, terms));
+      }
     }
   }
   return ranges;

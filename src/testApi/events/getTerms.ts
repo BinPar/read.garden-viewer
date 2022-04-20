@@ -13,11 +13,14 @@ const getTerms: EventHandler<GetTerms> = async (
   const obfuscatedTerms = new Set<string>();
   const terms = event.text.split(' ');
   terms.forEach((term) => {
-    let index = deobfuscatedText.indexOf(term);
-    while (index !== -1) {
-      obfuscatedTerms.add(obfuscatedText.substr(index, term.length));
-      index = deobfuscatedText.indexOf(term, index + term.length);
-    }
+    const matches = deobfuscatedText.matchAll(new RegExp(term, 'ig'));
+    Array.from(matches).forEach(([match]) => {
+      let index = deobfuscatedText.indexOf(match);
+      while (index !== -1) {
+        obfuscatedTerms.add(obfuscatedText.substr(index, match.length));
+        index = deobfuscatedText.indexOf(match, index + match.length);
+      }
+    });
   });
   
   const action: HighlightSearchTerms = {
