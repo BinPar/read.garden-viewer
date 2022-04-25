@@ -69,29 +69,29 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
     setCSSProperty('vertical-translate', `${scrollTop}px`);
     if (state.scrollerNode) {
       updateState({ updatingScroller: true });
-      if (state.scrollMode === 'horizontal') {
+      if (state.scrollMode === 'horizontal' && state.totalWidth) {
         state.scrollerNode.scrollLeft = -1 * scroll.current;
         setCSSProperty(
           'prev-chapter-navigation-opacity',
-          state.scrollerNode.scrollLeft < state.scrollerNode.scrollWidth * 0.1 ? '1' : '0',
+          state.scrollerNode.scrollLeft < state.containerWidth ? '1' : '0',
         );
         setCSSProperty(
           'next-chapter-navigation-opacity',
           state.scrollerNode.scrollLeft + state.containerWidth >
-            state.scrollerNode.scrollWidth * 0.9
+            state.scrollerNode.scrollWidth - state.containerWidth * 0.9
             ? '1'
             : '0',
         );
-      } else if (state.scrollMode === 'vertical') {
+      } else if (state.scrollMode === 'vertical' && state.totalHeight) {
         state.scrollerNode.scrollTop = -1 * scroll.current;
         setCSSProperty(
           'prev-chapter-navigation-opacity',
-          state.scrollerNode.scrollTop < state.scrollerNode.scrollHeight * 0.1 ? '1' : '0',
+          state.scrollerNode.scrollTop < state.containerHeight ? '1' : '0',
         );
         setCSSProperty(
           'next-chapter-navigation-opacity',
           state.scrollerNode.scrollTop + state.containerHeight >
-            state.scrollerNode.scrollHeight * 0.9
+            state.scrollerNode.scrollHeight - state.containerHeight * 0.9
             ? '1'
             : '0',
         );
@@ -208,6 +208,8 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
     } else {
       executeTransitions();
     }
+    setCSSProperty('scroller-left', `${state.margin.left}px`);
+    setCSSProperty('scroller-scale', `${scale.target}`);
   };
 
   const resetPageProps = (): void => {

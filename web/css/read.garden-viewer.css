@@ -136,13 +136,15 @@ div#rg-viewer {
 .rg-scroller {
   position: absolute;
   background: transparent;
+  filter: var(--theme-filter, none);
 }
 
 .rg-horizontal-scroll .rg-scroller {
-  bottom: 0;
   height: 15px;
-  width: 100%;
-  overflow-y: visible;
+  bottom: 0;
+  left: var(--scroller-left, 0);
+  right: 0;
+  overflow-y: hidden;
   overflow-x: scroll;
 }
 .rg-horizontal-scroll .rg-scroller-content {
@@ -150,18 +152,18 @@ div#rg-viewer {
 }
 
 .rg-flow-layout.rg-horizontal-scroll .rg-scroller-content {
-  width: var(--scroll-width);
+  width: calc(var(--scroll-width) * var(--scroller-scale, 1));
 }
 
 .rg-fixed-layout.rg-horizontal-scroll .rg-scroller-content {
-  width: var(--total-width);
+  width: calc(var(--total-width) * var(--scroller-scale, 1));
 }
 
 .rg-vertical-scroll .rg-scroller {
   right: 0;
   width: 15px;
   height: calc(100% + 15px);
-  overflow-x: visible;
+  overflow-x: hidden;
   overflow-y: scroll;
 }
 
@@ -200,8 +202,6 @@ div#rg-viewer {
   height: 0;
 }
 
-
-
 .rg-horizontal-scroll .rg-button-chapter-navigation {
   width: 30px;
   height: 20px;
@@ -229,7 +229,7 @@ div#rg-viewer {
 }
 
 .rg-horizontal-scroll .rg-button-chapter-navigation.rg-prev-chapter {
-  left: 30px;
+  left: calc(var(--scroller-left, 0) + 30px);
 }
 
 .rg-horizontal-scroll .rg-button-chapter-navigation.rg-prev-chapter::after {

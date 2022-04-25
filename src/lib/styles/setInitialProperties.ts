@@ -36,6 +36,8 @@ const setInitialProperties = (state: State): void => {
   setCSSProperty('total-height', '0px');
   setCSSProperty('total-width', '0px');
   setCSSProperty('scroll-width', '0px');
+  setCSSProperty('scroller-left', `${state.margin.left}px`);
+  setCSSProperty('scroller-scale', '1');
   setCSSProperty('user-select', 'none');
   setCSSProperty('user-select-end', 'none');
   setCSSProperty('vertical-translate', '0');
