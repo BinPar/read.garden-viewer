@@ -587,6 +587,8 @@ const scrollController = (
   const onScroll = (ev: Event): void => {
     if (state.scrollMode === 'horizontal') {
       lastDelta = (-1 * state.scrollerNode!.scrollLeft - scroll.current) * 0.1;
+    } else {
+      lastDelta = (-1 * state.scrollerNode!.scrollTop - scroll.current) * 0.1;
     }
     if (!state.updatingScroller) {
       ev.preventDefault();

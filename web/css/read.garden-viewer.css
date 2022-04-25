@@ -162,7 +162,8 @@ div#rg-viewer {
 .rg-vertical-scroll .rg-scroller {
   right: 0;
   width: 15px;
-  height: calc(100% + 15px);
+  top: 0;
+  bottom: 0;
   overflow-x: hidden;
   overflow-y: scroll;
 }
@@ -170,6 +171,10 @@ div#rg-viewer {
 .rg-vertical-scroll .rg-scroller-content {
   width: 15px;
   height: calc(var(--scroll-height) + var(--padding-top) + var(--padding-bottom));
+}
+
+.rg-fixed-layout.rg-vertical-scroll .rg-scroller-content {
+  height: calc(var(--total-height) + var(--padding-top) + var(--padding-bottom));
 }
 
 .rg-button-chapter-navigation {
@@ -181,6 +186,10 @@ div#rg-viewer {
   background-color: #666;
   transition: opacity .3s;
   background: #666;
+}
+
+.rg-fixed-layout .rg-button-chapter-navigation {
+  display: none;
 }
 
 .rg-button-chapter-navigation.rg-next-chapter {
