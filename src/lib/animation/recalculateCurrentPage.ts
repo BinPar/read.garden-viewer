@@ -54,7 +54,22 @@ const recalculateCurrentPage = (state: State, currentScroll: number, avoidUpdate
           endPage = state.contentsInfo.length - 1;
         }
         if (state.contentPlaceholderNode && state.layout === LayoutTypes.Fixed) {
-          console.log({ scrollPosition, target, startPage, endPage, lastStartPage, lastEndPage });
+          console.log({
+            scrollPosition,
+            target,
+            contentSlug: state.contentSlug,
+            totalWidth: state.totalWidth,
+            scale: scale.current,
+            zoom: zoom.current,
+            startingElementIndex,
+            targetScale,
+            baseScroll,
+            endScroll,
+            startPage,
+            endPage,
+            lastStartPage,
+            lastEndPage,
+          });
           if (lastStartPage !== startPage || endPage !== lastEndPage) {
             const containers = [];
             const pagesToAppend = new Set<number>();
@@ -65,6 +80,9 @@ const recalculateCurrentPage = (state: State, currentScroll: number, avoidUpdate
               }
               pagesToAppend.add(i);
             }
+            console.log({
+              pagesToAppend: Array.from(pagesToAppend),
+            });
             state.contentPlaceholderNode.append(...containers);
             if (lastStartPage !== -1 && (lastStartPage < startPage || lastEndPage > endPage)) {
               for (let i = lastStartPage; i <= lastEndPage; i++) {
