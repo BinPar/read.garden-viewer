@@ -17,6 +17,7 @@ import clearUserHighlights from '../../utils/highlights/clearUserHighlights';
 import redrawUserHighlights from '../../utils/highlights/redrawUserHighlights';
 import { highlightTerms, clean } from '../../utils/highlights/search';
 import handleAnchors from '../../utils/handleAnchors';
+import getCssPropertyValue from '../../utils/getCssPropertyValue';
 
 /**
  * Appends new content to viewer
@@ -153,8 +154,15 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
       container.classList.add('rg-loading');
       container.innerHTML = action.htmlContent;
 
+      console.log({
+        appendNewContent: '',
+        action: { contentSlug: action.contentSlug, cssURL: action.cssURL },
+        margin: getCssPropertyValue('viewer-margin-top') || '',
+      });
+
       setTimeout(() => {
         const done = (): void => {
+          console.log('##### Done!');
           container.classList.remove('rg-loading');
           setCSSProperty('viewer-margin-top', '0');
           handleAnchors(container, state);
@@ -172,9 +180,11 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
           }, 0);
         };
         const checkFonts = (): void => {
+          console.log('checkFonts!');
           dynamicStyleNode!.removeEventListener('load', checkFonts);
           setTimeout(() => {
             const checkStatus = (): void => {
+              console.log({ fontsStatus: document.fonts.status });
               if (document.fonts.status === 'loaded') {
                 done();
               } else {
