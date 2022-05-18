@@ -154,7 +154,11 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
       container.classList.add('rg-loading');
       container.innerHTML = action.htmlContent;
 
-      console.log({ appendNewContent: '', margin: getCssPropertyValue('viewer-margin-top') });
+      console.log({
+        appendNewContent: '',
+        action: { contentSlug: action.contentSlug },
+        margin: getCssPropertyValue('viewer-margin-top') || '',
+      });
 
       setTimeout(() => {
         const done = (): void => {

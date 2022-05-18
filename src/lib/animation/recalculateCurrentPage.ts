@@ -54,7 +54,7 @@ const recalculateCurrentPage = (state: State, currentScroll: number, avoidUpdate
           endPage = state.contentsInfo.length - 1;
         }
         if (state.contentPlaceholderNode && state.layout === LayoutTypes.Fixed) {
-          console.log({ startPage, endPage, lastStartPage, lastEndPage });
+          console.log({ scrollPosition, target, startPage, endPage, lastStartPage, lastEndPage });
           if (lastStartPage !== startPage || endPage !== lastEndPage) {
             const containers = [];
             const pagesToAppend = new Set<number>();
