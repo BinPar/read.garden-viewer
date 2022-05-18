@@ -17,6 +17,7 @@ import clearUserHighlights from '../../utils/highlights/clearUserHighlights';
 import redrawUserHighlights from '../../utils/highlights/redrawUserHighlights';
 import { highlightTerms, clean } from '../../utils/highlights/search';
 import handleAnchors from '../../utils/handleAnchors';
+import getCssPropertyValue from '../../utils/getCssPropertyValue';
 
 /**
  * Appends new content to viewer
@@ -152,6 +153,8 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
       content.cssURL = action.cssURL;
       container.classList.add('rg-loading');
       container.innerHTML = action.htmlContent;
+
+      console.log({ appendNewContent: '', margin: getCssPropertyValue('viewer-margin-top') });
 
       setTimeout(() => {
         const done = (): void => {
