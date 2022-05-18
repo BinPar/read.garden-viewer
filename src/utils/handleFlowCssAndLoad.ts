@@ -27,16 +27,6 @@ const handleFlowCssAndLoad = (url: string, callback: () => any): void => {
     callback();
   };
   link.addEventListener('load', onLoad);
-  link.addEventListener('ended', () => {
-    console.log('ended!');
-  });
-  link.addEventListener('error', (e) => {
-    console.log({ error: '', e: { type: e.type } });
-    callback();
-  });
-  link.addEventListener('abort', () => {
-    console.log('Abort!');
-  });
   document.head.appendChild(link);
   state.fixedStylesNodes.push(link);
   link.href = url;
