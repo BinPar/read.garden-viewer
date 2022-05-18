@@ -28,7 +28,7 @@ const handleFlowCssAndLoad = (url: string, callback: () => any): void => {
   };
   link.addEventListener('load', onLoad);
   link.addEventListener('error', (e) => {
-    console.log(e.message);
+    console.log({ error: '', e });
   });
   link.addEventListener('abort', () => {
     console.log('Abort!');
