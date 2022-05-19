@@ -16,13 +16,11 @@ const handleFlowCssAndLoad = (url: string, callback: () => any): void => {
     callback();
     return;
   }
-  console.log(`Loading CSS ${url}`);
   state.loadedCssUrls.add(url);
   const link = document.createElement('link');
   link.rel = 'stylesheet';
   link.type = 'text/css';
   const onLoad = (): void => {
-    console.log('onLoad!');
     link.removeEventListener('load', onLoad);
     callback();
   };
