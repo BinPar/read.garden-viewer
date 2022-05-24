@@ -8,24 +8,20 @@ const decoder = new TextDecoder();
  * Exchanges pairs of chars in the string
  */
 const fastEncrypt = (input: string): string => {
-
   let lastEqual = input.indexOf('=');
   const source = encoder.encode(input);
-  const end = source.length;
-  const result = new Uint8Array(end);
+  input = '';
+  const swap = new Uint8Array(7);
   let pointer = 0;
-
-  while (pointer + 7 < end && (lastEqual < 0 || lastEqual > 7)) {
+  while (pointer + 7 < source.length && (lastEqual < 0 || lastEqual > 7)) {
     for (let i = 0; i < 7; i++) {
-      result[pointer + i] = source[pointer + encryptIndexes[i]];
+      swap[i] = source[pointer + encryptIndexes[i]];
     }
+    source.set(swap, pointer);
     pointer += 7;
     lastEqual -= 7;
   }
-  for (let i = pointer; i < end; i++) {
-    result[i] = source[i];
-  }
-  return decoder.decode(result);
+  return decoder.decode(source);
 };
 
 export default fastEncrypt;
