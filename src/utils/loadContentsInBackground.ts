@@ -17,7 +17,13 @@ const loadContentsInBackground = (state = getState(), currentContentSlug?: strin
       contentsBySlug,
       config: { fixedViewerPreloadOrder },
     } = state;
-    const { order: currentContentIndex } = contentsBySlug.get(currentContentSlug || contentSlug)!;
+    const slugContent = contentsBySlug.get(currentContentSlug || contentSlug);
+    if (!slugContent) {
+      throw new Error(
+        `Couldn't find content by slug: ${JSON.stringify({ currentContentSlug, contentSlug })}`,
+      );
+    }
+    const { order: currentContentIndex } = slugContent;
     const indexToLoad = fixedViewerPreloadOrder.find((i) => {
       const index = currentContentIndex + i;
       if (index < 0) {
