@@ -128,7 +128,6 @@ div#rg-viewer {
   pointer-events: var(--pointer-events);
   margin-top: var(--viewer-margin-top);
   transform-origin: top left;
-  will-change: transform;
   transform: translateX(var(--horizontal-translate)) translateY(var(--vertical-translate))
     scale(var(--scale));
 }
@@ -314,12 +313,6 @@ div.rg-content-wrapper #rg-content-placeholder > div a {
   pointer-events: auto !important;
 }
 
-.rg-fixed-layout div.rg-content-wrapper div#rg-content-placeholder {
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  transform: translateZ(0);
-}
-
 .rg-fixed-layout div.rg-content-wrapper div#rg-content-placeholder > .rg-fixed-content-container {
   position: absolute;
   margin: 0;
@@ -361,10 +354,6 @@ div.rg-content-wrapper #rg-content-placeholder > div a {
 
 .rg-fixed-layout [data-link] > div {
   border: none !important;
-}
-
-div.rg-fixed-content-container > * {
-  transform: translateZ(0);
 }
 
 div.rg-content-wrapper #rg-content-placeholder > div {
