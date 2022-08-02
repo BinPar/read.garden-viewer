@@ -363,6 +363,10 @@ div.rg-content-wrapper #rg-content-placeholder > div a {
   border: none !important;
 }
 
+div.rg-fixed-content-container > * {
+  transform: translateZ(0);
+}
+
 div.rg-content-wrapper #rg-content-placeholder > div {
   user-select: var(--user-select);
   -webkit-user-select: var(--user-select);
