@@ -104,6 +104,7 @@ div#rg-container {
   height: 100%;
   filter: var(--theme-filter, none);
   font-variant-ligatures: no-common-ligatures;
+  cursor: grab;
 }
 
 div#rg-container .rg-bg-cleaner {
