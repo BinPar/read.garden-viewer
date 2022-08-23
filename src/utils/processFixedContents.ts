@@ -16,12 +16,12 @@ const getContainer = (
   const container = document.createElement('div');
   container.classList.add('rg-fixed-content-container');
   container.style.width = `${width}px`;
-  container.style.height = `${height}px`;
+  container.style.height = `${height - 1}px`;
   container.dataset.order = `${order}`;
   container.dataset.slug = slug;
   container.dataset.label = label;
   container.style.setProperty('--page-width', `${width}px`);
-  container.style.setProperty('--page-height', `${height}px`);
+  container.style.setProperty('--page-height', `${height - 1}px`);
   return container;
 };
 
@@ -54,7 +54,7 @@ const processFixedContents = async (
     const previousInfo = oldContentsByOrder?.get(order);
     const left = Math.max(totalWidth - 1, 0);
     const top = Math.max(totalHeight - 1, 0);
-    totalHeight += height - 1;
+    totalHeight += height - 3;
     totalWidth += width;
     if (gapMode !== GapMode.None) {
       totalHeight += gapSize;
