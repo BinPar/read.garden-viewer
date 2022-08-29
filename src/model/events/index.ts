@@ -41,6 +41,14 @@ export interface LoadNewContent extends ReadGardenEvent, EventWithSlugs {
   goToEnd?: boolean;
 }
 
+export interface ContentLoaded extends ReadGardenEvent, EventWithSlugs {
+  type: 'contentLoaded';
+  /**
+   * Loaded content slug
+   */
+  contentSlug: string;
+}
+
 export interface GetContentsInfo extends ReadGardenEvent, EventWithSlugs {
   type: 'getContentsInfo';
 }
@@ -125,6 +133,7 @@ export interface OnLinkClick extends ReadGardenEvent, EventWithSlugs {
 
 export type ReadGardenEvents =
   | PageChange
+  | ContentLoaded
   | LoadNewContent
   | GetContentsInfo
   | GetTerms
