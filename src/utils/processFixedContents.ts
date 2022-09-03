@@ -8,7 +8,7 @@ const getContainer = (
   info: FixedContentInfo,
   previousInfo?: FixedViewerContentInfo,
 ): HTMLDivElement => {
-  if (previousInfo && previousInfo.container) {
+  if (previousInfo?.container) {
     return previousInfo.container;
   }
 
