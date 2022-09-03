@@ -17,6 +17,7 @@ import clearUserHighlights from '../../utils/highlights/clearUserHighlights';
 import redrawUserHighlights from '../../utils/highlights/redrawUserHighlights';
 import { highlightTerms, clean } from '../../utils/highlights/search';
 import handleAnchors from '../../utils/handleAnchors';
+import { ContentLoaded } from '../../model/events';
 
 /**
  * Appends new content to viewer
@@ -89,6 +90,18 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
                 }
               }
               resolve(finalPartialState);
+              if (state.config.eventHandler) {
+                const event: ContentLoaded = {
+                  type: 'contentLoaded',
+                  contentSlug: action.contentSlug,
+                  slug: action.slug,
+                  productSlug: state.productSlug,
+                };
+                state.config.eventHandler(event).catch((ex) => {
+                  const { stack, message } = ex as Error;
+                  console.error('Error at event handler', stack || message);
+                });
+              }
               await redrawUserHighlights(state);
               setTimeout((): void => {
                 highlightTerms(state.searchTerms);
@@ -167,6 +180,18 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
             loadContentsInBackground(state);
           }
           resolve(finalPartialState);
+          if (state.config.eventHandler) {
+            const event: ContentLoaded = {
+              type: 'contentLoaded',
+              contentSlug: action.contentSlug,
+              slug: action.slug,
+              productSlug: state.productSlug,
+            };
+            state.config.eventHandler(event).catch((ex) => {
+              const { stack, message } = ex as Error;
+              console.error('Error at event handler', stack || message);
+            });
+          }
           setTimeout((): void => {
             highlightTerms(state.searchTerms);
           }, 0);
