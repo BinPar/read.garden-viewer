@@ -6,12 +6,12 @@ import setCSSProperty from './setCSSProperty';
 
 const getContainer = (
   info: FixedContentInfo,
-  state: FixedState,
   previousInfo?: FixedViewerContentInfo,
 ): HTMLDivElement => {
-  if (previousInfo) {
+  if (previousInfo && previousInfo.container) {
     return previousInfo.container;
   }
+
   const { order, width, height, slug, label } = info;
   const container = document.createElement('div');
   container.classList.add('rg-fixed-content-container');
@@ -64,7 +64,7 @@ const processFixedContents = async (
     }
     maxWidth = Math.max(maxWidth, width);
     maxHeight = Math.max(maxHeight, height);
-    const container = getContainer(content, state as FixedState, previousInfo);
+    const container = getContainer(content, previousInfo);
     container.style.setProperty('--page-top', `${top}px`);
     container.style.setProperty('--page-left', `${left}px`);
     if (unaffected.has(slug)) {

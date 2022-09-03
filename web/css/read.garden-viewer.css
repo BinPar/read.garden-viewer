@@ -142,7 +142,7 @@ div#rg-viewer {
 .rg-horizontal-scroll .rg-scroller {
   height: 15px;
   bottom: 0;
-  left: var(--scroller-left, 0);
+  left: calc(var(--scroller-left) - var(--safe-area-read-left));
   right: 0;
   overflow-y: hidden;
   overflow-x: scroll;
