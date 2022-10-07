@@ -21,8 +21,8 @@ const viewer: ViewerFunction = (config) => {
   const state = getState();
   const api: APIInterface = {
     dispatch,
-    state,
-    unmount: (): void => unmount(state),
+    state,    
+    unmount: (): void => unmount(state),    
   };
   setInitialProperties(state);
   createBasicDOMElements(state);
@@ -32,7 +32,7 @@ const viewer: ViewerFunction = (config) => {
     const { stack, message } = ex as Error;
     console.error('Error at handlers setup', stack || message);
   });
-  log.debug('Viewer Initialized');
+  log.debug('Viewer Initialized');  
   return api;
 };
 

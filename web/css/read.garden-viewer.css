@@ -1010,3 +1010,7 @@ div.rg-selection-menu
   .rg-selection-option:disabled:after {
   opacity: 0.5;
 }
+
+a div {
+  outline: solid 1px #ff0000 !important;
+}
