@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
 import log from 'loglevel';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import browserSync from 'browser-sync';
 
 // eslint-disable-next-line import/no-extraneous-dependencies
