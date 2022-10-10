@@ -5,7 +5,7 @@ import log from 'loglevel';
 
 import { SetReadMode } from '../../model/actions/global';
 import { DispatchAPIAction } from '../../model/actions/common';
-import { SelectionInfo } from '../../model/dom';
+import { SelectionInfo, SyntheticEvent } from '../../model/dom';
 import { FixedState, GlobalState, PaginatedState, ScrolledState, State } from '../../model/state';
 import { drawHighlights } from '../../utils/highlights';
 import setCSSProperty from '../../utils/setCSSProperty';
@@ -92,6 +92,7 @@ const scrollController = (
   let mobileSelection = false;
   let clickedLink: HTMLAnchorElement | null = null;
   let isClick = false;
+  let syntheticEvent: SyntheticEvent;
   let mobileSelectionTimeout: NodeJS.Timeout | null = null;
 
   const detectDoubleTap = (ev: TouchEvent): void => {
@@ -173,7 +174,7 @@ const scrollController = (
       initialSelection = null;
       currentSelection = null;
       isSelecting = false;
-      const syntheticEvent = getSyntheticEvent(ev);
+      syntheticEvent = getSyntheticEvent(ev);
       isClick = true;
       const clickedHighlight =
         !state.config.disableSelection &&
@@ -330,10 +331,10 @@ const scrollController = (
       }
 
       if (isClick && state.config.eventHandler) {
-        ev.preventDefault();
-        const syntheticEvent = getSyntheticEvent(ev);
+        isClick = false;
         clickedLink = getClickedLink(syntheticEvent, state);
         if (clickedLink) {
+          ev.preventDefault();
           const event: OnLinkClick = {
             type: 'onLinkClick',
             slug: state.slug,
@@ -368,7 +369,7 @@ const scrollController = (
         mobileSelection = false;
         drawExtensors(highlights, currentSelection, state);
       } else {
-        const syntheticEvent = getSyntheticEvent(ev);
+        syntheticEvent = getSyntheticEvent(ev);
         updateState({
           lastClickCoords: { x: syntheticEvent.clientX, y: syntheticEvent.clientY },
         });

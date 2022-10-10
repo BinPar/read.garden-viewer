@@ -2,6 +2,7 @@ import { State } from '../model/state';
 
 import { updateState } from '../lib/state';
 
+
 export const cleanDOM = (state: State): void => {
   if (state.readGardenContainerNode) {
     state.readGardenContainerNode.remove();
@@ -58,10 +59,13 @@ const createBasicDOMElements = (state: State): void => {
   contentWrapperNode.appendChild(endOfChapterCalculatorNode);
   // #endregion Content Wrapper and child nodes
 
-  // #region Content Wrapper Siblings
-  const pagesLabelsNode = document.createElement('div');
-  pagesLabelsNode.classList.add('rg-pages-labels');
-  readGardenViewerNode.appendChild(pagesLabelsNode);
+  let pagesLabelsNode: HTMLDivElement | undefined;
+  if (state.layout === 'flow') {
+    // #region Content Wrapper Siblings
+    pagesLabelsNode = document.createElement('div');
+    pagesLabelsNode.classList.add('rg-pages-labels');
+    readGardenViewerNode.appendChild(pagesLabelsNode);
+  }
 
   const selectionHighlightsNode = document.createElement('div');
   selectionHighlightsNode.classList.add('rg-highlights-layer', 'rg-selection');

@@ -38,17 +38,23 @@ const getClickedLink = (
 ): HTMLAnchorElement | null => {
   const { contentPlaceholderNode } = state;
   let clickedLink: HTMLAnchorElement | null = null;
-  let element = document.elementFromPoint(syntheticEvent.clientX, syntheticEvent.clientY);
-  while (!clickedLink && element && element.parentElement && element !== contentPlaceholderNode) {
-    if (element.classList.contains('rg-fixed-content-container')) {
-      return detectLinkInFixedPage(element, syntheticEvent);
+  try {
+    let element = document.elementFromPoint(syntheticEvent.clientX, syntheticEvent.clientY);
+
+    while (!clickedLink && element && element.parentElement && element !== contentPlaceholderNode) {
+      if (element.classList.contains('rg-fixed-content-container')) {
+        return detectLinkInFixedPage(element, syntheticEvent);
+      }
+      if (element.nodeName === 'A') {
+        clickedLink = element as HTMLAnchorElement;
+      }
+      element = element.parentElement;
     }
-    if (element.nodeName === 'A') {
-      clickedLink = element as HTMLAnchorElement;
-    }
-    element = element.parentElement;
+    return clickedLink;
+  } catch (err) {
+    console.error(err);
+    return null;
   }
-  return clickedLink;
 };
 
 export default getClickedLink;
