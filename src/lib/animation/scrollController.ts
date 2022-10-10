@@ -91,6 +91,7 @@ const scrollController = (
   let isSelecting = false;
   let mobileSelection = false;
   let clickedLink: HTMLAnchorElement | null = null;
+  let isClick = false;
   let mobileSelectionTimeout: NodeJS.Timeout | null = null;
 
   const detectDoubleTap = (ev: TouchEvent): void => {
@@ -173,10 +174,7 @@ const scrollController = (
       currentSelection = null;
       isSelecting = false;
       const syntheticEvent = getSyntheticEvent(ev);
-      clickedLink = getClickedLink(syntheticEvent, state);
-      if (clickedLink) {
-        ev.preventDefault();
-      }
+      isClick = true;
       const clickedHighlight =
         !state.config.disableSelection &&
         state.config.eventHandler &&
@@ -331,18 +329,23 @@ const scrollController = (
         );
       }
 
-      if (clickedLink && state.config.eventHandler) {
-        const event: OnLinkClick = {
-          type: 'onLinkClick',
-          slug: state.slug,
-          productSlug: state.productSlug,
-          url: clickedLink.getAttribute('href'),
-          querySelector: `[data-link="${clickedLink.dataset.link || ''}"]`,
-        };
-        state.config.eventHandler(event).catch((ex) => {
-          const { stack, message } = ex as Error;
-          console.error('Error at event handler', stack || message);
-        });
+      if (isClick && state.config.eventHandler) {
+        ev.preventDefault();
+        const syntheticEvent = getSyntheticEvent(ev);
+        clickedLink = getClickedLink(syntheticEvent, state);
+        if (clickedLink) {
+          const event: OnLinkClick = {
+            type: 'onLinkClick',
+            slug: state.slug,
+            productSlug: state.productSlug,
+            url: clickedLink.getAttribute('href'),
+            querySelector: `[data-link="${clickedLink.dataset.link || ''}"]`,
+          };
+          state.config.eventHandler(event).catch((ex) => {
+            const { stack, message } = ex as Error;
+            console.error('Error at event handler', stack || message);
+          });
+        }
       }
 
       setTimeout(() => {
@@ -429,6 +432,7 @@ const scrollController = (
       return;
     }
 
+    isClick = false;
     clickedLink = null;
     if (mobileSelectionTimeout) {
       updateState({
