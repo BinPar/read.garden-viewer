@@ -307,7 +307,7 @@ div.rg-content-wrapper {
 }
 
 .rg-flow-layout div.rg-content-wrapper #rg-content-placeholder span[data-page] {
-  display: inline-block;
+  display: block;
 }
 
 div.rg-content-wrapper #rg-content-placeholder > div a {

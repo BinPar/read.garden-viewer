@@ -28,9 +28,15 @@ const loadNewContent: EventHandler<LoadNewContent> = async (event, dispatch) => 
   let cssURL = '';
   let chapterNumber: number | undefined;
   if (layout === LayoutTypes.Flow) {
-    chapterNumber = parseInt(currentContent.cssUrl!.split('/')[1]!, 10) + 1;
-    htmlContent = htmlContent.replace('<div', `<div class="c${chapterNumber}"`);
-    cssURL = `${testingConfig.baseURL}books/${slug}/${currentContent.cssUrl!}`;
+    chapterNumber = currentContent.cssUrl
+      ? parseInt(currentContent.cssUrl.split('/')[1]!, 10) + 1
+      : contents.findIndex((content) =>
+          content.labels.map((l) => l.toLowerCase()).includes(contentSlug),
+        );
+    if (!index.cssURL && currentContent.cssUrl) {
+      htmlContent = `<div class="c${chapterNumber}">${htmlContent}</div>`;
+    }
+    cssURL = `${testingConfig.baseURL}books/${slug}/${index.cssURL || currentContent.cssUrl!}`;
   }
   if (layout === LayoutTypes.Fixed) {
     if (index.cssURL) {
