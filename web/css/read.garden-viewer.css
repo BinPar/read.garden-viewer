@@ -434,13 +434,6 @@ div.rg-content-wrapper #rg-content-placeholder *::selection {
   ) !important;
 }
 
-.rg-flow-layout.rg-vertical-scroll div.rg-content-wrapper img.rg-ready {
-  max-height: min(
-    calc(100vh - var(--padding-top) - var(--padding-bottom)),
-    calc(var(--image-ratio, 100) * calc(100vw - var(--column-gap)))
-  ) !important;
-}
-
 .rg-flow-layout.rg-horizontal-scroll div.rg-content-wrapper img.rg-fit-height {
   display: block !important;
   width: unset !important;
