@@ -23,7 +23,11 @@ const getMenuPositions = (
   let minLeft = 0;
   let maxLeft = Infinity;
 
-  if (state.layout === LayoutTypes.Flow && state.lastClickCoords) {
+  if (
+    state.layout === LayoutTypes.Flow &&
+    state.scrollMode === 'horizontal' &&
+    state.lastClickCoords
+  ) {
     const clickLeft = clientToContentWrapperLeft(state.lastClickCoords.x);
     minLeft = Math.floor(clickLeft / state.totalColumnWidth) * state.totalColumnWidth;
     maxLeft = minLeft + state.totalColumnWidth;
