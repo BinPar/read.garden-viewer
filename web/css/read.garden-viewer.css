@@ -308,6 +308,7 @@ div.rg-content-wrapper {
 
 .rg-flow-layout div.rg-content-wrapper #rg-content-placeholder span[data-page] {
   display: block;
+  float: left;
 }
 
 div.rg-content-wrapper #rg-content-placeholder > div a {
