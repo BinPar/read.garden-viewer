@@ -159,7 +159,12 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
 
     if (state.layout === LayoutTypes.Fixed) {
       const { contentsBySlug } = state;
-      const content = contentsBySlug.get(action.contentSlug)!;
+      const content = contentsBySlug.get(action.contentSlug);
+      if (!content) {
+        console.warn(`No content for slug ${action.contentSlug}`);
+        resolve({});
+        return;
+      }
       const { container } = content;
       content.html = action.htmlContent;
       content.cssURL = action.cssURL;
