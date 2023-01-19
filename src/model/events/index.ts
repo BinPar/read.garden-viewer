@@ -125,6 +125,13 @@ export interface OnCopyOptionClick extends ReadGardenEvent, EventWithSlugs {
   obfuscatedText: string;
 }
 
+export interface OnLinkLoaded extends ReadGardenEvent, Pick<EventWithSlugs, 'slug'> {
+  type: 'onLinkLoaded';
+  link: string;
+  href: string | null;
+  target: string | null;
+}
+
 export interface OnLinkClick extends ReadGardenEvent, EventWithSlugs {
   type: 'onLinkClick';
   url: string | null;
@@ -147,7 +154,8 @@ export type ReadGardenEvents =
   | OnChangeNote
   | OnDeleteOptionClick
   | OnCopyOptionClick
-  | OnLinkClick;
+  | OnLinkClick
+  | OnLinkLoaded;
 
 export type ReadGardenEventHandler = (event: ReadGardenEvents) => Promise<void>;
 

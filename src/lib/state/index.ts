@@ -1,6 +1,7 @@
 import {
   FixedState,
   GlobalState,
+  LinkProps,
   PropChangeHandler,
   ScrolledState,
   State,
@@ -98,6 +99,7 @@ export const initializeState = (initialConfig: InitialConfig): void => {
     highlightersLayers: new Map<string, HTMLDivElement>(),
     currentUserHighlights: new Map<string, UserHighlightInfo>(),
     currentUserDomHighlights: new Map<string, HTMLDivElement[]>(),
+    linksCustomProps: new Map<string, LinkProps>(),
     debugViewerSafeArea: config.debugViewerSafeArea,
     containerWidth: 0,
     containerHeight: 0,

@@ -12,6 +12,12 @@ import {
   UserHighlightInfo,
   ViewerTheme,
 } from './viewerSettings';
+
+export interface LinkProps {
+  href?: string;
+  target?: string;
+}
+
 /**
  * Global state
  */
@@ -263,9 +269,13 @@ export interface GlobalState {
    */
   avoidReset?: boolean;
   /**
-   * 
+   * Interpolation values for animation controller
    */
   interpolationValues: InterpolationValue[];
+  /**
+   * Custom props for content links
+   */
+  linksCustomProps: Map<string, LinkProps>;
 }
 
 /**

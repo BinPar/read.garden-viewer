@@ -188,6 +188,13 @@ export interface MovePrev extends Action {
   type: 'movePrev';
 }
 
+export interface SetLinkProps extends Action {
+  type: 'setLinkHref';
+  link: string;
+  href?: string;
+  target?: string;
+}
+
 /**
  * Actions that affect Fixed and Flow Layout
  */
@@ -213,4 +220,5 @@ export type GlobalActions =
   | RemoveHighlights
   | SetHighlighterColor
   | MoveNext
-  | MovePrev;
+  | MovePrev
+  | SetLinkProps;

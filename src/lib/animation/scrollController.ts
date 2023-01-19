@@ -294,7 +294,6 @@ const scrollController = (
       clearTimeout(mobileSelectionTimeout);
       mobileSelectionTimeout = null;
     }
-    console.log({ mouseDown });
     if (mouseDown) {
       mouseDown = false;
       let inertialDelta = lastDelta;
@@ -331,15 +330,13 @@ const scrollController = (
         );
       }
 
-      console.log({ isClick });
-
       if (isClick && state.config.eventHandler) {
         isClick = false;
-        console.log({ clickedLink });
         clickedLink = getClickedLink(syntheticEvent, state);
-        console.log({ clickedLink });
         if (clickedLink) {
           ev.preventDefault();
+          const customInfo =
+            clickedLink.dataset.link && state.linksCustomProps.get(clickedLink.dataset.link);
           const event: OnLinkClick = {
             type: 'onLinkClick',
             slug: state.slug,
