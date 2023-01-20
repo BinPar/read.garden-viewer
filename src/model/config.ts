@@ -1,4 +1,6 @@
+/* eslint-disable import/no-cycle */
 import { ReadGardenEventHandler } from './events';
+import { LinkProps } from './state';
 import {
   FitMode,
   FontSize,
@@ -213,6 +215,10 @@ export interface DefaultConfig {
    * Experimental config
    */
   experimental?: ExperimentalConfig;
+  /**
+   * Initial links props
+   */
+  linksProps?: Record<string, LinkProps>;
 }
 
 export interface RequiredConfig {

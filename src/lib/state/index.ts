@@ -68,6 +68,14 @@ export const initializeState = (initialConfig: InitialConfig): void => {
     : defaultConfig.uiModeMargin;
   const initialMargins = config.initialReadMode ? config.readModeMargin : config.uiModeMargin;
 
+  const linksCustomProps = new Map<string, LinkProps>();
+
+  if (config.linksProps) {
+    Object.entries(config.linksProps).forEach(([key, value]) => {
+      linksCustomProps.set(key, value);
+    })
+  }
+
   const globalState: GlobalState = {
     ...defaultGlobal,
     config,
@@ -99,7 +107,7 @@ export const initializeState = (initialConfig: InitialConfig): void => {
     highlightersLayers: new Map<string, HTMLDivElement>(),
     currentUserHighlights: new Map<string, UserHighlightInfo>(),
     currentUserDomHighlights: new Map<string, HTMLDivElement[]>(),
-    linksCustomProps: new Map<string, LinkProps>(),
+    linksCustomProps,
     debugViewerSafeArea: config.debugViewerSafeArea,
     containerWidth: 0,
     containerHeight: 0,
