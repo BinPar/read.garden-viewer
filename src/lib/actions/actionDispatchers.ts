@@ -32,6 +32,7 @@ import moveNext from './moveNext';
 import movePrev from './movePrev';
 import setLineHeight from './setLineHeight';
 import setGapMode from './setGapMode';
+import setLinkProps from './setLinkProps';
 
 /**
  * List of all action dispatchers
@@ -71,6 +72,7 @@ const actionDispatchers  = {
   moveNext,
   movePrev,
   setGapMode,
+  setLinkProps,
 };
 
 export default actionDispatchers;

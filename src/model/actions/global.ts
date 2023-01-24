@@ -189,7 +189,7 @@ export interface MovePrev extends Action {
 }
 
 export interface SetLinkProps extends Action {
-  type: 'setLinkHref';
+  type: 'setLinkProps';
   link: string;
   href?: string;
   target?: string;
