@@ -300,6 +300,7 @@ const scrollController = (
       clearTimeout(mobileSelectionTimeout);
       mobileSelectionTimeout = null;
     }
+
     if (mouseDown) {
       mouseDown = false;
       let inertialDelta = lastDelta;
@@ -367,6 +368,7 @@ const scrollController = (
         }
       }, 0);
     }
+
     if (initialSelection && currentSelection) {
       ev.preventDefault();
       updateState({
@@ -628,6 +630,11 @@ const scrollController = (
     }
   };
 
+  const avoidDrag = (ev: Event): void => {
+    ev.preventDefault();
+    ev.stopPropagation();
+  };
+
   const onNextChapter = (ev: Event): void => {
     ev.preventDefault();
     ev.stopPropagation();
@@ -650,6 +657,9 @@ const scrollController = (
       state,
     }).catch(console.error);
   };
+
+  state.readGardenContainerNode?.addEventListener('dragstart', avoidDrag);
+  state.readGardenContainerNode?.addEventListener('dragend', avoidDrag);
 
   state.readGardenContainerNode?.addEventListener('mousedown', onDragStart);
   state.readGardenContainerNode?.addEventListener('touchstart', onDragStart);

@@ -358,6 +358,11 @@ div.rg-content-wrapper #rg-content-placeholder > div a {
   border: none !important;
 }
 
+.rg-fixed-content-container a,
+.rg-fixed-content-container a > div {
+  user-select: none !important;
+}
+
 div.rg-content-wrapper #rg-content-placeholder > div {
   user-select: var(--user-select);
   -webkit-user-select: var(--user-select);
