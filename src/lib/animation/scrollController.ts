@@ -214,6 +214,7 @@ const scrollController = (
         !state.config.disableSelection && getWordSelection(state, ev, syntheticEvent);
       setCSSProperty('user-select', 'none');
       if (wordSelection) {
+        clickedLink = getClickedLink(syntheticEvent, state);
         ev.stopPropagation();
         initialSelection = {
           startContainer: wordSelection.startContainer,
@@ -339,7 +340,7 @@ const scrollController = (
 
       if (isClick && state.config.eventHandler) {
         isClick = false;
-        clickedLink = getClickedLink(syntheticEvent, state);
+        clickedLink = clickedLink || getClickedLink(syntheticEvent, state);
         if (clickedLink) {
           ev.preventDefault();
           const customInfo =
