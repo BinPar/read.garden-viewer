@@ -102,6 +102,11 @@ export interface DefaultConfig {
    */
   doubleTapThreshold: number;
   /**
+   * Timeout before setting isClick to false
+   * @scope Global
+   */
+  clickTimeout: number;
+  /**
    * Zoom config
    * @scope Fixed
    */

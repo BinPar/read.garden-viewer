@@ -18,6 +18,7 @@ const defaultConfig: DefaultConfig = {
   animationSpeed: 300,
   animationInertia: 20,
   doubleTapThreshold: 300,
+  clickTimeout: 200,
   zoom: {
     max: 4,
     min: 0.5,

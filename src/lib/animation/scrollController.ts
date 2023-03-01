@@ -7,6 +7,9 @@ import { SetReadMode } from '../../model/actions/global';
 import { DispatchAPIAction } from '../../model/actions/common';
 import { SelectionInfo, SyntheticEvent } from '../../model/dom';
 import { FixedState, GlobalState, PaginatedState, ScrolledState, State } from '../../model/state';
+import { OnHighlightClick, OnLinkClick, OnUserSelect } from '../../model/events';
+import { Coordinates } from '../../model/highlights';
+
 import { drawHighlights } from '../../utils/highlights';
 import setCSSProperty from '../../utils/setCSSProperty';
 import { updateState } from '../state';
@@ -18,7 +21,6 @@ import getWordSelection from './getWordSelection';
 import scrollInertiaAndLimits from './scrollInertiaAndLimits';
 import { LayoutTypes } from '../../model/viewerSettings';
 import updateZoom from './updateZoom';
-import { OnHighlightClick, OnLinkClick, OnUserSelect } from '../../model/events';
 import getClickedHighlight from './getClickedHighlight';
 import removeSelectionMenu from '../../utils/highlights/removeSelectionMenu';
 import removeNotesDialog from '../../utils/highlights/removeNotesDialog';
@@ -29,7 +31,6 @@ import clearSelection from '../../utils/highlights/clearSelection';
 import getFixedContentContainer from '../../utils/highlights/getFixedContentContainer';
 import getClickedLink from '../../utils/highlights/getClickedLink';
 import { addOnChangeEventListener } from '../state/stateChangeEvents';
-import { Coordinates } from '../../model';
 import getTouches from '../../utils/getTouches';
 import calculateDistance from '../../utils/calculateDistance';
 import getTouchCenter from '../../utils/getTouchCenter';
@@ -91,6 +92,7 @@ const scrollController = (
   let isSelecting = false;
   let mobileSelection = false;
   let clickedLink: HTMLAnchorElement | null = null;
+  let clickSecurityTimeout: NodeJS.Timeout | null = null;
   let isClick = false;
   let syntheticEvent: SyntheticEvent;
   let mobileSelectionTimeout: NodeJS.Timeout | null = null;
@@ -175,6 +177,10 @@ const scrollController = (
       currentSelection = null;
       isSelecting = false;
       syntheticEvent = getSyntheticEvent(ev);
+      if (clickSecurityTimeout) {
+        clearTimeout(clickSecurityTimeout);
+        clickSecurityTimeout = null;
+      }
       isClick = true;
       const clickedHighlight =
         !state.config.disableSelection &&
@@ -435,8 +441,20 @@ const scrollController = (
       return;
     }
 
-    isClick = false;
-    clickedLink = null;
+    if (isClick) {
+      if (clickSecurityTimeout) {
+        isClick = false;
+        clickedLink = null;
+        clearTimeout(clickSecurityTimeout);
+        clickSecurityTimeout = null;
+      } else {
+        clickSecurityTimeout = setTimeout(() => {
+          clickSecurityTimeout = null;
+          isClick = false;
+          clickedLink = null;
+        }, state.config.clickTimeout);
+      }
+    }
     if (mobileSelectionTimeout) {
       updateState({
         selectingText: false,

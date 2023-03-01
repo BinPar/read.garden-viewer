@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui"
     />
-    <title>Read.Garden Testing Viewer 9788582605691 (EPUB Flow)</title>
+    <title>Read.Garden Testing Viewer manual-de-exploracion-musculoesqueletica (PDF)</title>
     <link rel="icon" href="/favicon.ico" />
-    <meta name="description" content="Viewer used by to test the 9788582605691 content" />
+    <meta name="description" content="Viewer used by to test the manual-de-exploracion-musculoesqueletica content" />
     <link rel="preload" as="style" href="/css/readium.css" />
     <link rel="stylesheet" type="text/css" href="/css/readium.css" />
     <link rel="preload" as="style" href="/css/read.garden-viewer.css" />
@@ -23,13 +23,14 @@
   <body></body>
   <script type="text/javascript">
     window.readGardenApi = window.readGardenViewer({
-      layoutType: 'flow',
-      eventHandler: window.readGardenEventHandler,
-      slug: '9788582605691',
-      contentSlug: '46',
-      initialFontSize: 18,
-      initialFontFamily: 'Obf-Helvetica',
+      layoutType: 'fixed',
       initialScrollMode: 'horizontal',
+      initialFitMode: 'height',
+      eventHandler: window.readGardenEventHandler,
+      slug: 'manual-de-exploracion-musculoesqueletica',
+      contentSlug: '180',
+      initialFontFamily: 'Obf-Helvetica',
+      initialReadMode: true,
       availableFontFamilies: [
         'Obf-Helvetica',
         'Obf-OpenDyslexic',
@@ -40,18 +41,20 @@
         'Obf-TimesNewRoman',
       ],
       readModeMargin: {
-        top: 0,
-        left: 0,
-        bottom: 0,
-        right: 0,
+        top: 20,
+        left: 100,
+        bottom: 70,
+        right: 20,
       },
       uiModeMargin: {
-        top: 100,
-        left: 0,
-        bottom: 0,
-        right: 0,
+        top: 20,
+        left: 450,
+        bottom: 70,
+        right: 20,
       },
       toggleReadModeOnClick: false,
+      paddingTop: 0,
+      paddingBottom: 0,
     });
     window.readGardenSetDispatcher(window.readGardenApi.dispatch);
     window.readGardenSetState(window.readGardenApi.state);

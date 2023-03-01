@@ -12,14 +12,14 @@ const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
 browserSync(
   {
     server: 'web',
-    files: ['web/*.*','web/*/*.*'],
+    files: ['web/*.*', 'web/*/*.*'],
     cors: true,
     port,
     startPath: '/hepatologia.html',
     codeSync: true,
   },
   () => {
-    console.log(`Running at http://localhost:${port}`);
+    console.info(`Running at http://localhost:${port}`);
   },
 );
 
