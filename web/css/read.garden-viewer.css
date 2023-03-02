@@ -424,7 +424,7 @@ div.rg-content-wrapper #rg-content-placeholder *::selection {
 .rg-flow-layout.rg-vertical-scroll div.rg-content-wrapper video,
 .rg-flow-layout.rg-vertical-scroll div.rg-content-wrapper table,
 .rg-flow-layout.rg-vertical-scroll div.rg-content-wrapper iframe {
-  max-width: calc(100vw - var(--column-gap));
+  max-width: min(100%, calc(100vw - var(--column-gap)));
 }
 
 .rg-flow-layout div.rg-content-wrapper img.rg-ready,
