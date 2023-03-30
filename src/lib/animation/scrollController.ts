@@ -166,6 +166,7 @@ const scrollController = (
       isFirstMove = false;
     }
 
+    clickedLink = null;
     clearSelection();
     removeExtensors(state);
     removeSelectionMenu(state);
