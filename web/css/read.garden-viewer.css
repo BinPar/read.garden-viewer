@@ -184,7 +184,7 @@ div#rg-viewer {
   margin: 0;
   cursor: pointer;
   background-color: #666;
-  transition: opacity .3s;
+  transition: opacity 0.3s;
   background: #666;
 }
 
@@ -252,8 +252,7 @@ div#rg-viewer {
   border-right-color: #444;
 }
 
-
-
+/* Vertical */
 
 .rg-vertical-scroll .rg-button-chapter-navigation {
   width: 20px;
@@ -408,7 +407,7 @@ div.rg-content-wrapper #rg-content-placeholder *::selection {
 }
 
 .rg-flow-layout div.rg-content-wrapper img.rg-ready,
-.rg-flow-layout div.rg-content-wrapper video,
+.rg-flow-layout div.rg-content-wrapper video:not(:fullscreen),
 .rg-flow-layout div.rg-content-wrapper iframe {
   filter: var(--theme-filter, none);
 }
