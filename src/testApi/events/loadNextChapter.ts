@@ -22,11 +22,19 @@ const loadNextChapter: EventHandler<LoadNextChapter> = async (event, dispatch) =
     log.warn(`Already in last chapter, can't load next chapter`);
     return;
   }
+  const currentContent = contents[currentContentIndex];
   const nextContent = contents[currentContentIndex + 1];
   const url = `${testingConfig.baseURL}books/${slug}/${nextContent.file}`;
   const response = await fetch(url);
-  const html = await response.text();
-  const chapterNumber = parseInt(nextContent.cssUrl!.split('/')[1]!, 10) + 1;
+  let htmlContent = await response.text();
+  let cssURL = '';
+  const chapterNumber = nextContent.cssUrl
+    ? parseInt(nextContent.cssUrl.split('/')[1]!, 10)
+    : currentContentIndex + 1;
+  if (!index.cssURL && currentContent.cssUrl) {
+    htmlContent = `<div class="c${chapterNumber}">${htmlContent}</div>`;
+  }
+  cssURL = `${testingConfig.baseURL}books/${slug}/${index.cssURL || currentContent.cssUrl!}`;
   const label = nextContent.labels.slice().shift()!;
   const action: AppendNewContent = {
     type: 'appendNewContent',
@@ -34,8 +42,8 @@ const loadNextChapter: EventHandler<LoadNextChapter> = async (event, dispatch) =
     slug,
     label,
     contentSlug: label.toLowerCase(),
-    cssURL: `${testingConfig.baseURL}books/${slug}/${nextContent.cssUrl!}`,
-    htmlContent: html.replace('<div', `<div class="c${chapterNumber}"`),
+    cssURL,
+    htmlContent,
     chapterNumber,
   };
   dispatch(action).catch((ex) => {

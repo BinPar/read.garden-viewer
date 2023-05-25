@@ -440,10 +440,7 @@ div.rg-content-wrapper #rg-content-placeholder *::selection {
 }
 
 .rg-flow-layout.rg-horizontal-scroll div.rg-content-wrapper img.rg-fit-height {
-  display: block !important;
   width: unset !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
 }
 
 .rg-loading::before {
@@ -464,12 +461,6 @@ div.rg-content-wrapper #rg-content-placeholder *::selection {
       calc(var(--image-ratio, 100) * var(--column-width))
     ) !important;
   }
-
-  /* .rg-flow-layout.rg-vertical-scroll div.rg-content-wrapper {
-    padding: var(--padding-top)
-      min(calc(var(--column-gap) / 2), calc(0.1 * calc(100vw - var(--column-gap))))
-      var(--padding-bottom);
-  } */
 }
 
 div.rg-content-wrapper.rg-force-text-align * {

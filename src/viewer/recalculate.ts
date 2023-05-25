@@ -10,6 +10,7 @@ import {
 import setCSSProperty from '../utils/setCSSProperty';
 import updatePositionsMaps from '../utils/updatePositionsMaps';
 import getColumnGap from '../utils/getColumnGap';
+import checkImagesHeight from '../utils/checkImagesHeight';
 
 const charWidthFactor = 1.65;
 
@@ -155,6 +156,11 @@ const recalculate = async (state: State): Promise<Partial<State>> => {
 
         if (document.scrollingElement?.scrollTop) {
           document.scrollingElement.scrollTop = 0;
+        }
+
+        const images = contentPlaceholderNode!.querySelectorAll('img');
+        if (images.length) {
+          Array.from(images).map((i) => checkImagesHeight([i], state));
         }
 
         resolve({

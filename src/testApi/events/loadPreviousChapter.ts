@@ -23,15 +23,22 @@ const loadPreviousChapter: EventHandler<LoadPreviousChapter> = async (event, dis
     return;
   }
   const currentContent = contents[currentContentIndex];
-  const currentContentChapterNumber = parseInt(currentContent.cssUrl!.split('/')[1]!, 10);
+  const currentContentChapterNumber = parseInt(currentContent.file.split('/')[1]!, 10);
   const previousContent = contents.find(
-    (c) => parseInt(c.cssUrl!.split('/')[1]!, 10) === currentContentChapterNumber - 1,
+    (c) => parseInt(c.file.split('/')[1]!, 10) === currentContentChapterNumber - 1,
   );
   if (previousContent) {
     const url = `${testingConfig.baseURL}books/${slug}/${previousContent.file}`;
     const response = await fetch(url);
-    const html = await response.text();
-    const chapterNumber = parseInt(previousContent.cssUrl!.split('/')[1]!, 10) + 1;
+    let htmlContent = await response.text();
+    let cssURL = '';
+    const chapterNumber = currentContent.cssUrl
+      ? parseInt(currentContent.cssUrl.split('/')[1]!, 10) + 1
+      : currentContentIndex - 1;
+    if (!index.cssURL && currentContent.cssUrl) {
+      htmlContent = `<div class="c${chapterNumber}">${htmlContent}</div>`;
+    }
+    cssURL = `${testingConfig.baseURL}books/${slug}/${index.cssURL || currentContent.cssUrl!}`;
     const label = event.goToEnd
       ? previousContent.labels.slice().pop()!
       : previousContent.labels.slice().shift()!;
@@ -41,8 +48,8 @@ const loadPreviousChapter: EventHandler<LoadPreviousChapter> = async (event, dis
       slug,
       label,
       contentSlug: label.toLowerCase(),
-      cssURL: `${testingConfig.baseURL}books/${slug}/${previousContent.cssUrl!}`,
-      htmlContent: html.replace('<div', `<div class="c${chapterNumber}"`),
+      cssURL,
+      htmlContent,
       chapterNumber,
       goToEnd: event.goToEnd,
     };
