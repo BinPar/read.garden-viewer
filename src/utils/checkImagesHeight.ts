@@ -54,7 +54,7 @@ const checkImagesHeight = async (
           if (visibleHeight) {
             const containerHeight =
               state.containerHeight - (state.config.paddingBottom + state.config.paddingTop);
-            if (visibleHeight >= containerHeight) {
+            if (visibleHeight >= containerHeight * 0.95) {
               img.classList.add('rg-fit-height');
             }
           }
