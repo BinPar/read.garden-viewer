@@ -29,7 +29,9 @@ const extendToWord = (selection: Selection, contentWrapper: HTMLElement): void =
       }
     }
   }
-  selection.modify('extend', 'forward', 'character');
+  if (!selection.toString().endsWith(' ')) {
+    selection.modify('extend', 'forward', 'character');
+  }
   let iteration = 0;
   while (
     ++iteration < 25 &&

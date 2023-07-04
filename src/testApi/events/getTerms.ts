@@ -3,16 +3,13 @@ import { GetTerms } from '../../model/events';
 import getFileText from '../utils/getFileText';
 import { EventHandler } from './eventHandler';
 
-const getTerms: EventHandler<GetTerms> = async (
-  event,
-  dispatch,
-) => {
+const getTerms: EventHandler<GetTerms> = async (event, dispatch) => {
   const deobfuscatedText = await getFileText(event.slug, 'search.txt');
   const obfuscatedText = await getFileText(event.slug, 'obfuscated-search.txt');
 
   const obfuscatedTerms = new Set<string>();
   const terms = event.text.split(' ');
-  terms.forEach((term) => {
+  [...terms, event.text].forEach((term) => {
     const matches = deobfuscatedText.matchAll(new RegExp(term, 'ig'));
     Array.from(matches).forEach(([match]) => {
       let index = deobfuscatedText.indexOf(match);
@@ -22,7 +19,7 @@ const getTerms: EventHandler<GetTerms> = async (
       }
     });
   });
-  
+
   const action: HighlightSearchTerms = {
     type: 'highlightSearchTerms',
     terms: Array.from(obfuscatedTerms),
