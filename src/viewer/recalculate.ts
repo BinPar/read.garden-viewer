@@ -33,6 +33,8 @@ const recalculate = async (state: State): Promise<Partial<State>> => {
     const containerRect = readGardenContainerNode!.getBoundingClientRect();
     const { width: containerWidth, height: containerHeight } = containerRect;
 
+    console.log({ readGardenContainerNode, containerWidth, containerHeight });
+
     const globalUpdate: Partial<GlobalState> = {
       containerWidth,
       containerHeight,

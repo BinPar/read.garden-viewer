@@ -1,5 +1,3 @@
-import log from 'loglevel';
-
 import getSelection from '../../../lib/animation/getSelection';
 import getFirstTextNode from '../../getFirstTextNode';
 import getNextSibling from '../../getNextSibling';
@@ -154,7 +152,7 @@ const getSearchHighlightsRanges = (contentWrapper: HTMLElement, terms: string[])
         }
         currentText = currentSelection.toString();
         if (iteratorLimit++ > 10000) {
-          log.warn('Iteration limit reached in getSearchHighlightsRanges');
+          console.warn('Iteration limit reached in getSearchHighlightsRanges');
           searching = false;
         }
         currentText = cleanCurrentText(currentText);

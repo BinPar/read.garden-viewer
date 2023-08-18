@@ -1,5 +1,3 @@
-import log from 'loglevel';
-
 import { State } from '../model';
 
 // const getApplyingProperties = (
@@ -42,7 +40,7 @@ const checkImagesHeight = async (
     checkImagesHeightPromises.push(
       new Promise<void>((imageResolve) => {
         const securityTimeout = setTimeout(() => {
-          log.info('Image without width', img);
+          console.info('Image without width', img);
           imageResolve();
         }, 2000);
         const clone = new Image();

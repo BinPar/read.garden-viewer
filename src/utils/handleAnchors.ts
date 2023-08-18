@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import { generate } from 'shortid';
+import * as crypto from 'crypto';
 
 import { OnLinkLoaded } from '../model/events';
 
@@ -9,7 +9,7 @@ const handleAnchors = (element: HTMLElement, state = getState()): void => {
   if (state.config.eventHandler) {
     const anchors = element.querySelectorAll('a');
     anchors.forEach((a) => {
-      const id = generate();
+      const id = crypto.randomUUID();
       const link = `link-${id}`;
       a.dataset.link = link;
       a.onclick = (e): void => {

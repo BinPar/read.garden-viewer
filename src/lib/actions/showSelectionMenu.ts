@@ -1,5 +1,3 @@
-import log from 'loglevel';
-
 import { ActionDispatcher } from '../../model/actions/actionDispatcher';
 import { ShowSelectionMenu } from '../../model/actions/global';
 import {
@@ -87,7 +85,7 @@ const showSelectionMenu: ActionDispatcher<ShowSelectionMenu> = async ({ action, 
           } else if (state.currentSelection) {
             event.selectionInfo = getSelectionRangeFromSelection(state.currentSelection);
           } else {
-            log.warn('Clicked on selection menu option without key nor state.currentSelection');
+            console.warn('Clicked on selection menu option without key nor state.currentSelection');
           }
           state.config.eventHandler(event).catch((ex) => {
             const { stack, message } = ex as Error;
@@ -170,7 +168,7 @@ const showSelectionMenu: ActionDispatcher<ShowSelectionMenu> = async ({ action, 
     state.contentWrapperNode!.appendChild(currentMenu);
     selectionMenu = currentMenu;
   } else {
-    log.warn(`No current selection nor user selection info at 'showSelectionMenu'`);
+    console.warn(`No current selection nor user selection info at 'showSelectionMenu'`);
     selectionMenu = null;
   }
 

@@ -1,4 +1,3 @@
-import log from 'loglevel';
 import {
   ClearSelection,
   DrawHighlights,
@@ -16,7 +15,7 @@ const onSelectionMenuOptionClick: EventHandler<OnSelectionMenuOptionClick> = asy
   const highlighters = getHighlighters();
   const highlighter = highlighters.find((hl) => hl.key === event.key)!;
   if (event.highlightKey) {
-    log.info('Option clicked on highlight (editing)', { event });
+    console.info('Option clicked on highlight (editing)', { event });
   } else {
     if (highlighter.className === 'note') {
       const showNotesDialog: ShowNotesDialog = {

@@ -1,7 +1,6 @@
 /* eslint-disable no-await-in-loop */
 import * as path from 'path';
 import { ensureDir } from '@a2r/fs';
-import log from 'loglevel';
 import books from './data/books';
 import download from './download';
 import oneFileToPath from './oneFileToPath';
@@ -13,7 +12,6 @@ import { cdnDomain } from '../config';
  * @param destDir Destination folder. Defaults to `web/hooks`.
  */
 const generate = async (cdn?: string, destDir?: string): Promise<void> => {
-  log.setLevel('info');
   const cndToUse = cdn || cdnDomain;
   const booksPath = destDir || path.join(__dirname, '../../../web/books');
   await ensureDir(booksPath);
@@ -27,8 +25,8 @@ const generate = async (cdn?: string, destDir?: string): Promise<void> => {
       await download(remoteURI, bookFile);
       await oneFileToPath(bookFile, bookPath);
     } catch (ex) {
-      log.error(`Error downloading ${remoteURI}:`);
-      log.error(ex);
+      console.error(`Error downloading ${remoteURI}:`);
+      console.error(ex);
     }
   }
 };

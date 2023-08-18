@@ -1,4 +1,3 @@
-import log from 'loglevel';
 import { DispatchAPIAction } from '../model/actions/common';
 import { ReadGardenEventHandler, ReadGardenEvents } from '../model/events';
 import { State } from '../model/state';
@@ -8,7 +7,6 @@ import { EventHandler } from './events/eventHandler';
 
 let dispatcher: DispatchAPIAction;
 let state: State;
-log.setLevel('info');
 
 export const getState = (): State => state;
 
@@ -34,7 +32,7 @@ export const eventHandler: ReadGardenEventHandler = (event) =>
         }
       )[event.type];
       if (!eventReference) {
-        log.warn(`Event not implemented ${event.type}`);
+        console.warn(`Event not implemented ${event.type}`);
       } else {
         const promise = eventReference(event, dispatcher);
         if (promise) {

@@ -1,5 +1,3 @@
-import log from 'loglevel';
-
 import { LayoutTypes } from '../model/viewerSettings';
 
 import { getState } from '../lib/state';
@@ -25,14 +23,14 @@ const getCurrentPageInViewport = (): string => {
         const position = getScrollTopPosition(state);
         return contentsInfo.find((c) => c.maxTop > position)?.label || '';
       }
-      log.warn(
+      console.warn(
         `Method getCurrentPageInViewport called in fixed layout but scrollMode is not valid value: ${scrollMode}`,
       );
     }
     if (state.layout === LayoutTypes.Flow) {
       const { scrollMode, slugByPosition } = state;
       if (!slugByPosition || !slugByPosition.size) {
-        log.warn('Missing slugByPosition map, unable to get current page in viewport');
+        console.warn('Missing slugByPosition map, unable to get current page in viewport');
         return '';
       }
       const position =

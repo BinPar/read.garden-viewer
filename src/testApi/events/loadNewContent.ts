@@ -1,5 +1,3 @@
-import log from 'loglevel';
-
 import { AppendNewContent } from '../../model/actions/global';
 import { LoadNewContent } from '../../model/events';
 import { LayoutTypes } from '../../model/viewerSettings';
@@ -19,7 +17,7 @@ const loadNewContent: EventHandler<LoadNewContent> = async (event, dispatch) => 
     content.labels.map((l) => l.toLowerCase()).includes(contentSlug),
   );
   if (!currentContent) {
-    log.error(`No label "${contentSlug}" found in content "${slug}"`);
+    console.error(`No label "${contentSlug}" found in content "${slug}"`);
     return;
   }
   const url = `${testingConfig.baseURL}books/${slug}/${currentContent.file}`;

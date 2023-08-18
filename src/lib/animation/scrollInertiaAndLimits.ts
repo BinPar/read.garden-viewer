@@ -79,6 +79,7 @@ const scrollInertiaAndLimits = (
   if (state.layout === LayoutTypes.Flow) {
     const scrollLimits = getMinAndMaxScroll(state, 100);
     if (scroll.current >= scrollLimits.maxScroll) {
+      console.info('Navigate to prev');
       const navigateToPrevious: NavigateToPreviousChapter = {
         type: 'navigateToPreviousChapter',
         goToEnd: true,
@@ -88,6 +89,7 @@ const scrollInertiaAndLimits = (
         console.error('Error dispatching action', stack || message);
       });
     } else if (scroll.current <= scrollLimits.minScroll) {
+      console.info('Navigate to next');
       dispatch({ type: 'navigateToNextChapter' }).catch((ex) => {
         const { stack, message } = ex as Error;
         console.error('Error dispatching action', stack || message);

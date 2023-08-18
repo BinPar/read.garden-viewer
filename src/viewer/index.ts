@@ -1,5 +1,3 @@
-import log from 'loglevel';
-
 import { APIInterface, ViewerFunction } from '../model/viewer';
 
 import dispatch from '../lib/state/dispatch';
@@ -32,7 +30,7 @@ const viewer: ViewerFunction = (config) => {
     const { stack, message } = ex as Error;
     console.error('Error at handlers setup', stack || message);
   });
-  log.debug('Viewer Initialized');
+  console.debug('Viewer Initialized');
   return api;
 };
 

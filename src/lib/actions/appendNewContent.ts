@@ -62,6 +62,7 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
             let replace = true;
             const newLink = document.createElement('link');
             const done = async (): Promise<void> => {
+              console.log('appendNewContent recalculate');
               const recalculateState = await recalculate(state);
               handleAnchors(contentPlaceholderNode!, state);
               setCSSProperty('viewer-margin-top', '0');

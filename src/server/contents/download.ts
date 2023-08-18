@@ -1,6 +1,5 @@
 import * as fs from 'fs';
 import * as https from 'https';
-import log from 'loglevel';
 
 /**
  * Downloads file from URL to local disk
@@ -15,14 +14,14 @@ const download = (url: string, filePath: string): Promise<void> =>
         if (response.statusCode !== 200) {
           reject(new Error(`Response status was ${response.statusCode || 'unknown'}`));
         } else {
-          log.info(`Downloading ${url}...`);
+          console.info(`Downloading ${url}...`);
           response.on('error', reject);
           file.on('error', reject);
           file.on('close', (): void => {
             resolve();
           });
           response.on('close', (): void => {
-            log.info(`Downloaded ${url}...`);
+            console.info(`Downloaded ${url}...`);
             file.end();
           });
           response.pipe(file);

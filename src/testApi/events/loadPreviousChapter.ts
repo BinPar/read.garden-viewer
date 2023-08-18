@@ -1,4 +1,3 @@
-import log from 'loglevel';
 import testingConfig from '../../config/testing';
 import { AppendNewContent } from '../../model/actions/global';
 
@@ -12,14 +11,14 @@ const loadPreviousChapter: EventHandler<LoadPreviousChapter> = async (event, dis
   const index = await loadIndexFile(slug);
   const { type: layout, contents } = index;
   if (layout === LayoutTypes.Fixed) {
-    log.warn('Event "loadPreviousChapter" is not allowed in fixed contents');
+    console.warn('Event "loadPreviousChapter" is not allowed in fixed contents');
     return;
   }
   const currentContentIndex = contents.findIndex((content) =>
     content.labels.map((l) => l.toLowerCase()).includes(currentContentSlug),
   );
   if (currentContentIndex <= 0) {
-    log.warn(`Already in first chapter, can't load previous chapter`);
+    console.warn(`Already in first chapter, can't load previous chapter`);
     return;
   }
   const currentContent = contents[currentContentIndex];

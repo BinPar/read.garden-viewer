@@ -1,5 +1,3 @@
-import log from 'loglevel';
-
 import {
   ActionDispatcher,
   OnCancelNewNote,
@@ -273,7 +271,7 @@ const showNotesDialog: ActionDispatcher<ShowNotesDialog> = async ({ action, stat
     state.contentWrapperNode!.appendChild(menu);
     textarea.focus();
   } else {
-    log.warn(`No current selection nor user selection info at 'showNotesDialog'`);
+    console.warn(`No current selection nor user selection info at 'showNotesDialog'`);
     notesDialog = null;
   }
 

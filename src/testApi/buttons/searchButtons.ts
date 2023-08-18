@@ -1,4 +1,3 @@
-import log from 'loglevel';
 import { State } from '../../model/state';
 
 const searchButtons = (
@@ -27,7 +26,7 @@ const searchButtons = (
   form.onsubmit = (e): void => {
     e.preventDefault();
     if (input.value && state.config.eventHandler) {
-      log.info('Searching', input.value);
+      console.info('Searching', input.value);
       state.config.eventHandler({
         type: 'getTerms',
         slug: state.config.slug,

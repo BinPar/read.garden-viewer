@@ -1,5 +1,3 @@
-import log from 'loglevel';
-
 import { LoadNewContent } from '../model/events';
 import { LayoutTypes } from '../model/viewerSettings';
 
@@ -35,7 +33,7 @@ const navigateToContentSlug = (contentSlug: string, state = getState()): void=> 
     }
   }
   if (state.scrollMode === 'fixed') {
-    log.warn(
+    console.warn(
       'Page navigation not implemented in fixed mode, it should be controlled by appending new content',
     );
   }

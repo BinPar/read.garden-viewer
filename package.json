@@ -9,6 +9,7 @@
     "generate-contents": "rm -rf ./web/books;ts-node-dev ./src/server/scripts/generateContents.ts",
     "lint": "eslint --config ./.eslintrc ./src --ext .js,.jsx,.ts,.tsx",
     "publish-web": "rm -rf ./dist;tsc -p tsconfig.web.json;rm -r ../read.garden/web/sdk/read.garden-viewer;mkdir ../read.garden/web/sdk/read.garden-viewer;cp -R ./dist/* ../read.garden/web/sdk/read.garden-viewer;cp ./web/css/read.garden-viewer.css ../read.garden/web/public/css/",
+    "publish-t3": "rm -rf ./dist;tsc -p tsconfig.web.json;rm -r ../read.garden-t3/src/viewer;mkdir ../read.garden-t3/src/viewer;cp -R ./dist/* ../read.garden-t3/src/viewer",
     "publish-app": "rm -rf ./dist;tsc -p tsconfig.app.json;webpack --config webpack.config.app.js;cp ./web/css/read.garden-viewer.css ../read.garden-mobile/sdk-viewer/css/;cp -R ./web/img ../read.garden-mobile/sdk-viewer/",
     "server-dev": "NODE_ENV=development ts-node-dev --debug --respawn ./src/server/index.ts",
     "start": "node ./dist/server/index.js",
@@ -39,7 +40,6 @@
     "@types/mkdirp": "^1.0.2",
     "@types/puppeteer": "^5.4.5",
     "@types/serve-handler": "^6.1.1",
-    "@types/shortid": "0.0.29",
     "@typescript-eslint/eslint-plugin": "^5.14.0",
     "@typescript-eslint/parser": "^5.14.0",
     "babel-loader": "^8.2.3",
@@ -74,8 +74,6 @@
   },
   "dependencies": {
     "@a2r/fs": "^1.5.1",
-    "js-base64": "^3.7.2",
-    "loglevel": "^1.8.0",
-    "shortid": "^2.2.16"
+    "js-base64": "^3.7.2"
   }
 }

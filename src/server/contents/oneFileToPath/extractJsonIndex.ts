@@ -1,5 +1,4 @@
 import { Base64 } from 'js-base64';
-import log from 'loglevel';
 
 import { JSONIndex, ExtractedJSONIndexInfo } from '../../../model/oneFileToPath';
 
@@ -28,7 +27,7 @@ const extractJsonIndex = async (pathToFile: string): Promise<ExtractedJSONIndexI
       .split('-')
       .map((bytes) => parseInt(bytes, 10));
 
-    log.trace({
+    console.trace({
       jsonPositions,
       jsonIndexPosition,
       jsonIndexLength,

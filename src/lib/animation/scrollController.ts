@@ -1,7 +1,5 @@
 /* eslint-disable no-bitwise */
 /* eslint-disable no-param-reassign */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import log from 'loglevel';
 
 import { SetReadMode } from '../../model/actions/global';
 import { DispatchAPIAction } from '../../model/actions/common';
@@ -97,7 +95,7 @@ const scrollController = (
   let syntheticEvent: SyntheticEvent;
   let mobileSelectionTimeout: NodeJS.Timeout | null = null;
 
-  const detectDoubleTap = (ev: TouchEvent): void => {
+  const detectDoubleTap = (): void => {
     const time = new Date().getTime();
     if (fingers > 1) {
       lastTouchStart = 0;
@@ -161,7 +159,7 @@ const scrollController = (
     if (ev.type === 'touchstart') {
       isFirstMove = true;
       fingers = (ev as TouchEvent).touches.length;
-      detectDoubleTap(ev as TouchEvent);
+      detectDoubleTap();
     } else {
       isFirstMove = false;
     }
@@ -344,8 +342,6 @@ const scrollController = (
         clickedLink = clickedLink || getClickedLink(syntheticEvent, state);
         if (clickedLink) {
           ev.preventDefault();
-          const customInfo =
-            clickedLink.dataset.link && state.linksCustomProps.get(clickedLink.dataset.link);
           const event: OnLinkClick = {
             type: 'onLinkClick',
             slug: state.slug,
@@ -439,7 +435,7 @@ const scrollController = (
       } else if (startTouches.length === 2 && touchEvent.touches.length === 2) {
         handleZoom(touchEvent, calculateDistance(startTouches, getTouches(touchEvent)));
       } else {
-        log.warn('Not first move and not same touches');
+        console.warn('Not first move and not same touches');
       }
       isFirstMove = false;
       return;

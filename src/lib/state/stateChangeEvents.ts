@@ -1,4 +1,3 @@
-import log from 'loglevel';
 import { PropertyChangeEvent, StatePropertyNames } from '../../model/actions/global';
 
 const internalHandlers = new Map<string, PropertyChangeEvent[]>();
@@ -71,7 +70,7 @@ export const notifyEventHandler = <T>(
         try {
           handler(newValue, oldValue);
         } catch (error) {
-          log.error(error);
+          console.error(error);
         }
       });
     }

@@ -1,5 +1,3 @@
-/* eslint-disable no-console */
-import log from 'loglevel';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import browserSync from 'browser-sync';
 
@@ -25,7 +23,7 @@ browserSync(
 
 const runNgrok = async (): Promise<void> => {
   const url = await ngrok.connect(port);
-  log.warn(`Listening on: ${url}`);
+  console.warn(`Listening on: ${url}`);
 };
 
 runNgrok().catch((ex) => {
