@@ -90,7 +90,10 @@ export interface OnHighlightClick extends ReadGardenEvent, EventWithSlugs {
 export interface OnSelectionMenuOptionClick extends ReadGardenEvent, EventWithSlugs {
   type: 'onSelectionMenuOptionClick';
   key: string;
+  color: string;
+  title: string;
   highlightKey?: string;
+  isNote?: boolean;
   selectionInfo?: SelectionRange;
 }
 

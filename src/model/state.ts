@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 import { InterpolationValue } from '../lib/animation/interpolationValues';
 import { Config } from './config';
 import { Coordinates } from './highlights';

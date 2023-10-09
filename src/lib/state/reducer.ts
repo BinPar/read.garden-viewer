@@ -13,6 +13,7 @@ import dispatchers from '../actions/actionDispatchers';
  */
 const reducer = async (state: State, action: Action): Promise<Partial<State>> => {
   const dispatcher = (dispatchers as { [key: string]: ActionDispatcher<Actions> })[action.type];
+  console.log(`Dispatching action:`, action);
   if (dispatcher) {
     return dispatcher({
       state,

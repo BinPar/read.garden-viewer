@@ -74,6 +74,8 @@ const processFixedContents = async (
     const position = state.scrollMode === 'horizontal' ? left : top;
     positionBySlug.set(slug, position);
     slugByPosition.set(position, slug);
+    const initialContent =
+      (state.config.initialContent?.contentSlug === slug && state.config.initialContent) || undefined;
     const contentInfo: FixedViewerContentInfo = {
       width,
       height,
@@ -81,8 +83,8 @@ const processFixedContents = async (
       slug,
       order,
       container,
-      html: previousInfo?.html || html,
-      cssURL: previousInfo?.cssURL || cssURL,
+      html: previousInfo?.html || html || initialContent?.htmlContent,
+      cssURL: previousInfo?.cssURL || cssURL || initialContent?.cssURL,
       left,
       top,
       maxLeft: totalWidth,

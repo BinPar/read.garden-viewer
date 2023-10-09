@@ -72,7 +72,10 @@ const showSelectionMenu: ActionDispatcher<ShowSelectionMenu> = async ({ action, 
           const event: OnSelectionMenuOptionClick = {
             type: 'onSelectionMenuOptionClick',
             key: option.key,
+            color: option.color,
+            title: option.title,
             slug: state.slug,
+            isNote: option.isNote,
             productSlug: state.productSlug,
           };
           if (action.key) {
