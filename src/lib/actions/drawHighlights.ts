@@ -22,7 +22,10 @@ const drawHighlights: ActionDispatcher<DrawHighlights> = async ({ action, state 
   if (!layer) {
     layer = document.createElement('div');
     layer.classList.add('rg-highlights-layer');
-    layer.setAttribute('style', `--highlighter-color: ${action.color}`);
+    layer.setAttribute(
+      'style',
+      `--highlighter-color: ${action.color}; display: var(--highlighter-${action.key}-display, block)`,
+    );
     state.readGardenViewerNode!.appendChild(layer);
     state.highlightersLayers.set(action.key, layer);
   }
