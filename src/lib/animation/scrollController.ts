@@ -35,6 +35,7 @@ import getTouchCenter from '../../utils/getTouchCenter';
 import recalculateCurrentPage from './recalculateCurrentPage';
 import navigateToPreviousChapter from '../actions/navigateToPreviousChapter';
 import navigateToNextChapter from '../actions/navigateToNextChapter';
+import getSelectionRangeFromSelection from '../../utils/getSelectionRangeFromSelection';
 
 export const reCalcScrollLimits = (
   state: (GlobalState & FixedState & ScrolledState) | (GlobalState & FixedState & PaginatedState),
@@ -399,6 +400,7 @@ const scrollController = (
           type: 'onUserSelect',
           slug: state.slug,
           productSlug: state.productSlug,
+          range: getSelectionRangeFromSelection(currentSelection),
         };
         state.config.eventHandler(event).catch((ex) => {
           const { stack, message } = ex as Error;

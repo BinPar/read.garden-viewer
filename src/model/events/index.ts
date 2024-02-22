@@ -79,6 +79,7 @@ export interface LoadPreviousChapter extends ReadGardenEvent, LoadChapterInfo {
 
 export interface OnUserSelect extends ReadGardenEvent, EventWithSlugs {
   type: 'onUserSelect';
+  range?: SelectionRange;
 }
 
 export interface OnHighlightClick extends ReadGardenEvent, EventWithSlugs {
