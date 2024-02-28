@@ -194,6 +194,18 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
       top.target = newMargins.top + marginHeight / 2;
     }
 
+    // console.log(state.scrollMode, {
+    //   left: {
+    //     ...left,
+    //   },
+    //   top: {
+    //     ...top,
+    //   },
+    //   scale: {
+    //     ...scale,
+    //   },
+    // });
+
     updateState({
       margin: newMargins,
     });
@@ -262,13 +274,18 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
     if (state.layout === LayoutTypes.Fixed) {
       scale.target = Math.max(
         0,
-        (state.containerHeight - state.margin.top - state.margin.bottom) / state.containerHeight,
+        (state.containerHeight - (state.margin.top + state.margin.bottom)) / state.containerHeight,
       );
       top.target = state.margin.top;
       zoom.target = state.containerHeight / state.maxHeight;
+      // console.log({
+      //   scale: scale.target,
+      //   top: top.target,
+      //   zoom: zoom.target,
+      // });
       if (state.scrollMode === 'horizontal') {
         left.target = state.margin.left;
-      } else {
+      } else if (state.scrollMode === 'vertical') {
         const widthReduction = state.containerWidth * (1 - scale.target);
         const marginWidth = widthReduction - state.margin.left - state.margin.right;
         left.target = state.margin.left + marginWidth / 2;

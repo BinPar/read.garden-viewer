@@ -27,12 +27,6 @@ const extractJsonIndex = async (pathToFile: string): Promise<ExtractedJSONIndexI
       .split('-')
       .map((bytes) => parseInt(bytes, 10));
 
-    console.trace({
-      jsonPositions,
-      jsonIndexPosition,
-      jsonIndexLength,
-    });
-
     let base64JsonIndex = await readFileBytes(fd, jsonIndexLength, jsonIndexPosition);
     const encrypted = base64JsonIndex.indexOf('ey') !== 0;
     if (encrypted) {

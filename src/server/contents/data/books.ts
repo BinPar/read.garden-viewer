@@ -37,9 +37,17 @@ const books: string[][] = [
   // ['9786558820789'],
   // ['9786558820703']
   // ['9788565852876'],
+  // [
+  //   '9788491817031',
+  //   'https://anaya-cdn-test.binpar.online/books/desarrollo-adulto-y-envejecimiento/desarrollo-adulto-y-envejecimiento.bp',
+  // ],
   [
-    '9788491817031',
-    'https://anaya-cdn-test.binpar.online/books/desarrollo-adulto-y-envejecimiento/desarrollo-adulto-y-envejecimiento.bp',
+    '9788491347194',
+    'https://duana-contents.s3.eu-west-1.amazonaws.com/books/las-provincias-y-maria-consuelo-reyna/las-provincias-y-maria-consuelo-reyna.bp?response-content-disposition=inline&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEAIaCWV1LXdlc3QtMyJIMEYCIQDzsKoGGMfHvlFlAcESPv950lrADm%2BPkLlhWfwg67USKAIhAOOpNYjkzNn6yF1sm5MSpcmuxE0EGbNrxP%2FPwEIp9UJ8KoYDCOv%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEQAxoMMTE4MTY1NjMwMzU1IgxMEQVa0ZyMtDKilD4q2gL1YyQCWsF0GQlICKJRTehfF4qJA5DsfD6tryrFRSCy42iyg%2B6V7VXKZcARqhcOsG1JNQAMbR%2F8vmKHzzcYLU2JdpqrRmqHyZLBRjSTGNbvNQbF7jnAMkg8amPQFxYqExlzO%2BR%2Bume%2F3FZK62dB%2BNXHC%2BL8Zz5rp0aq2dIoh0dqj3NXo6dhSSUxu81aEDk33GyyDkAyyYeKxOns2hbyVd20ffghGqVzsBjFGwzBqvKhGyRh%2F6%2B0PS4rupS11Pk6JEIqvt%2Fxr4dHaIZc8%2BGyUrxGNGTi7lEfODX%2FYg0K70La7mI%2FwzwDo%2FVUTjpZBBmAtZi5ADTF2XKkwyGUsbOOcqkTkxuJNg8PGhUh18A%2FHGuQSyv18STv8OsVpUQLpX0XkH123ytEn29Leso%2FO0xBO7%2FevffX4CNCi%2FCtaL5hgICrYKQWpYqxDWf8G8CvhWF8QJACPBY%2B83GSXoiIMLOL%2FK4GOrIC%2BUo%2BOToNis0gz5t56vh1ibXFxWmJrmvg5fR20am8rXP2D%2FZHnSJpKMYbjrlp8tTOKBKoaCAnJH%2Bcan7xtyRSACdJ5R55SfKwT7twfc9%2FRtnzJNUbBEqyxJWZtS%2BnpCVjGb%2BQRb1DfShNI%2BX0GyNuB%2BKUDZnWMFNDrY6SV6928z1vV372XdEpX%2BrKpW5rEsmivmCyXlO3vWjBI5VpBVyV9jV60f2XZi%2BAXBj5VacKMdvLO2fMx%2FLBgj4Ozr8%2BlaJG6gtSXcBWKwoNdDN40uV5QoiIi9kZoCCCc1MPNMwpmM4VnhExsh4SyzW1ESf0uXpsEFCACWpgGSZVo%2ByDoOK0h98qJWi177JU3E3JCUYLw67kiZD7zaEyUXQiNGz1geCOck5i54kQy4CqcodrJU1dTSA0&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20240228T100922Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=ASIARXAZYNWJ2BM4ZZPV%2F20240228%2Feu-west-1%2Fs3%2Faws4_request&X-Amz-Signature=cc2633e0b255c56d2af503c86433e6643f9e32645e6b6f1889044ce4ccdfffa3'
+  ],
+  [
+    '9788413576015',
+    'https://read-garden-sintesis-release.s3.eu-west-1.amazonaws.com/books/administracion-de-sistemas-gestores-de-bases-de-datos-3/administracion-de-sistemas-gestores-de-bases-de-datos-3.bp?response-content-disposition=inline&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEAMaCWV1LXdlc3QtMyJGMEQCIDOrFz1VPst5xIFTdTG15xsM52rRzrxwJH4IiGwlykK7AiB36476feSM%2F7HoqIe%2BG0%2FEQZD0SEaqfqBAqpUyHYY%2BJSqGAwjr%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F8BEAEaDDAzODY5MDcxNTk1NiIM%2Fk14yvmikVITiyjlKtoCJBiukzEO58xa2xPOeyuvyk74nTUbK3V16CBZ6Z7GMarEHVp%2BlYX%2B0ySMG4oXdCP9sYrL2S0%2Bb9Z9dSffEUD%2BdPN1xYnolKfq35kaIBGvhX1YZUxKxCv9F5CStTOWFpjOoMu51w1CV7Pr%2BExiHJ00cxpVIeX6MeJ9qaIuxl7bIWZT14lw8jODqG439H%2BZg7eeqkXv%2FmyxeMeZW7iW9ypyS0JBe7JEm0FAm1Qrd5zHnqhElEN0VV1efdWe%2F6adI29hwMS3AlJoQ9bvaSMUtH3ssZKcCQEExC0SSyW1Fboq68vTp2Ilcy2nJy%2F%2B%2FwDJtebPV2VN95tpR122BbZORnbLPklLmVDzkxJ1IDAeORLV2%2B77xoH3%2BWmKsh27neVU3WsmsjfIG3AuUNOotexXCSFSFs1bGZGg2lomsczJzkTDlwN%2B8t8a6UCdDL0WDgxvOGzOcB%2FUxg4IHqfQeDDTj%2FyuBjq0AsVrujwp4AqJldkkA8WYJAuZjcL78kYmhgDzDm85YDmqw96Se%2F1%2FKgpGXSXgbYJNe2lgpIbHr1pLKqlyjXQJWQR8xOjkC52mRxd7LlsdR826WNnhVX8Et4LE3M6U8qSnr4wEgtlSmOtZBh8G4KDqFsQfYAaCjx2%2BNZQcFeTTTw1rKpX3c5FqZ30VDvUY1XssTHdtk4A4WTMo%2FCu%2BdBlr56lFB3rTKa5o3JbOLX97pkAM3IMiU2gPSaIt6lq1a4dVEKnenCHjGFqFtKtzK0SxZPdojE%2FGa5RIiEj9JcR5uh86yCnhLLd%2BQc0MSksQ1VfMA0%2BFzwBbbqfgpMfjOEYd5nZafIxXpRo1kOvlSUUm%2Fmd0OIEOWR%2BBRefFZltot%2B455JqNlBTdvB2JRUt4Y2%2FIZUCsrONp&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20240228T101729Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=ASIAQSARFPE2FETI77Z5%2F20240228%2Feu-west-1%2Fs3%2Faws4_request&X-Amz-Signature=6197b8c6f05e9795247c1e603d62d1536eefaf20935f675e4b717d280b0a5798'
   ],
 ];
 

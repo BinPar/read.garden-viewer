@@ -32,7 +32,7 @@ export const eventHandler: ReadGardenEventHandler = (event) =>
         }
       )[event.type];
       if (!eventReference) {
-        console.warn(`Event not implemented ${event.type}`);
+        // console.warn(`Event not implemented ${event.type}`);
       } else {
         const promise = eventReference(event, dispatcher);
         if (promise) {

@@ -2,7 +2,7 @@ import { PaginatedState } from '../../model/state';
 
 const defaultPaginated: PaginatedState = {
   scrollMode: 'fixed',
-  doublePage: false,
+  doublePage: true,
 };
 
 export default defaultPaginated;

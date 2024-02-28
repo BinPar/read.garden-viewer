@@ -359,6 +359,10 @@ export interface FixedViewerContentInfo extends FixedContentInfo {
    * Max top position (to identify current page on vertical scroll)
    */
   maxTop: number;
+  /**
+   * Pair order (left or right) for fixed scroll double page
+   */
+  pairOrder: boolean;
 }
 
 export interface FixedState {

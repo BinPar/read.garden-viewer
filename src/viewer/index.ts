@@ -17,6 +17,7 @@ import unmount from '../utils/unmount';
 const viewer: ViewerFunction = (config) => {
   initializeState(config);
   const state = getState();
+  // console.log({ state });
   const api: APIInterface = {
     dispatch,
     state,

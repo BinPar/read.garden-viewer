@@ -47,7 +47,7 @@ const processFixedContents = async (
   const containers = [];
   const unaffected = new Set<string>(state.config.themeUnaffectedSlugs || []);
   const pageOne = info.find((i) => i.label === '1');
-  const pairOrder = pageOne ? pageOne.order % 2 : undefined;
+  const pairOrder = pageOne ? pageOne.order % 2 : 0;
   for (let i = 0, l = info.length; i < l; i++) {
     const content = info[i];
     const { width, height, label, slug, order, html, cssURL } = content;
@@ -90,6 +90,7 @@ const processFixedContents = async (
       maxLeft: totalWidth,
       maxTop: totalHeight,
       prev,
+      pairOrder: order % 2 === pairOrder,
     };
     contentsByOrder.set(order, contentInfo);
     contentsBySlug.set(slug, contentInfo);

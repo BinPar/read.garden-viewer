@@ -12,6 +12,18 @@ const updateZoom = (newZoomValue: number, state: State): void => {
     const topCorrection = (window.innerHeight / 2) * zoomDelta;
     leftCorrector.target -= leftCorrection;
     topCorrector.target -= topCorrection;
+    // console.log({
+    //   previousZoom,
+    //   zoom: {
+    //     ...zoom,
+    //   },
+    //   leftCorrector: {
+    //     ...leftCorrector,
+    //   },
+    //   topCorrector: {
+    //     ...topCorrector,
+    //   },
+    // });
   }
 };
 

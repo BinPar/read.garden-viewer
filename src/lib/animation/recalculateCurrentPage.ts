@@ -19,91 +19,69 @@ export const resetLastPage = (): void => {
 const recalculateCurrentPage = (state: State, currentScroll: number, avoidUpdate = false): void => {
   const scrollPosition = Math.round(currentScroll * -1);
   let target: string | undefined;
-  if (state.scrollMode !== 'fixed') {
-    if (state.scrollMode === 'horizontal') {
-      if (state.layout === LayoutTypes.Flow) {
-        target = state.slugByPosition.get(scrollPosition);
+  if (state.scrollMode === 'fixed') {
+    if (state.doublePage) {
+      const current = state.contentsBySlug.get(state.contentSlug);
+      // console.log({ current });
+      const containers = [];
+      if (current) {
+        containers.push(current.container);
+        if (!current.pairOrder) {
+          target = current.slug;
+          if (current.next) {
+            const next = state.contentsBySlug.get(current.next);
+            if (next) {
+              containers.push(next.container);
+            }
+          }
+        } else if (current.prev) {
+          const prev = state.contentsBySlug.get(current.prev);
+          if (prev) {
+            target = prev.slug;
+            containers.push(prev.container);
+          }
+        } else {
+          console.warn(`No initial page for slug: ${state.contentSlug}`);
+        }
+
+        // console.log({ containers });
+
+        if (state.contentPlaceholderNode) {
+          state.contentPlaceholderNode.append(...containers);
+        }
       } else {
-        const targetScale = Math.abs(scale.current * zoom.current);
-        const targetScroll =
-          calculatePagePosition(currentScroll, state) - state.margin.left / targetScale + 1;
-        const baseScroll = targetScroll - state.margin.left / targetScale;
-        const visibleWidth = state.containerWidth / targetScale;
-        const endScroll = baseScroll + visibleWidth;
-        let startPage = 0;
-        let endPage = -1;
-        const startingElementIndex =
-          Math.floor((baseScroll * state.contentsInfo.length) / state.totalWidth) - 2;
-        for (
-          let i = Math.max(0, startingElementIndex), l = state.contentsInfo.length;
-          i < l && endPage === -1;
-          i++
-        ) {
-          const { left, maxLeft, slug } = state.contentsInfo[i];
-          if (left <= baseScroll) {
-            startPage = i;
-          }
-          if (left <= targetScroll) {
-            target = slug;
-          }
-          if (left <= endScroll && maxLeft >= endScroll) {
-            endPage = i;
-          }
-        }
-        if (endPage === -1) {
-          endPage = state.contentsInfo.length - 1;
-        }
-        if (state.contentPlaceholderNode && state.layout === LayoutTypes.Fixed) {
-          if (lastStartPage !== startPage || endPage !== lastEndPage) {
-            const containers = [];
-            const pagesToAppend = new Set<number>();
-            for (let i = startPage; i <= endPage; i++) {
-              const content = state.contentsByOrder.get(i);
-              if (content && !state.contentPlaceholderNode.contains(content.container)) {
-                containers.push(content.container);
-              }
-              pagesToAppend.add(i);
-            }
-            state.contentPlaceholderNode.append(...containers);
-            if (lastStartPage !== -1 && (lastStartPage < startPage || lastEndPage > endPage)) {
-              for (let i = lastStartPage; i <= lastEndPage; i++) {
-                if (!pagesToAppend.has(i)) {
-                  const content = state.contentsByOrder.get(i);
-                  if (content && state.contentPlaceholderNode.contains(content.container)) {
-                    state.contentPlaceholderNode.removeChild(content.container);
-                  }
-                }
-              }
-            }
-            lastStartPage = startPage;
-            lastEndPage = endPage;
-          }
-        }
+        console.warn(`No content for slug: ${state.contentSlug}`);
       }
-    } else if (state.layout === LayoutTypes.Fixed) {
+    } else {
+      target = state.contentSlug;
+    }
+  } else if (state.scrollMode === 'horizontal') {
+    if (state.layout === LayoutTypes.Flow) {
+      target = state.slugByPosition.get(scrollPosition);
+    } else {
       const targetScale = Math.abs(scale.current * zoom.current);
       const targetScroll =
-        calculatePagePosition(currentScroll, state) - state.margin.top / targetScale + 1;
-      const baseScroll = targetScroll - state.margin.top / targetScale;
-      const visibleHeight = state.containerHeight / targetScale;
-      const endScroll = baseScroll + visibleHeight;
+        calculatePagePosition(currentScroll, state) - state.margin.left / targetScale + 1;
+      const baseScroll = targetScroll - state.margin.left / targetScale;
+      const visibleWidth = state.containerWidth / targetScale;
+      const endScroll = baseScroll + visibleWidth;
       let startPage = 0;
       let endPage = -1;
       const startingElementIndex =
-        Math.floor((baseScroll * state.contentsInfo.length) / state.totalHeight) - 1;
+        Math.floor((baseScroll * state.contentsInfo.length) / state.totalWidth) - 2;
       for (
         let i = Math.max(0, startingElementIndex), l = state.contentsInfo.length;
         i < l && endPage === -1;
         i++
       ) {
-        const { top, maxTop, slug } = state.contentsInfo[i];
-        if (top <= baseScroll) {
+        const { left, maxLeft, slug } = state.contentsInfo[i];
+        if (left <= baseScroll) {
           startPage = i;
         }
-        if (top <= targetScroll) {
+        if (left <= targetScroll) {
           target = slug;
         }
-        if (top <= endScroll && maxTop >= endScroll) {
+        if (left <= endScroll && maxLeft >= endScroll) {
           endPage = i;
         }
       }
@@ -136,18 +114,75 @@ const recalculateCurrentPage = (state: State, currentScroll: number, avoidUpdate
           lastEndPage = endPage;
         }
       }
-    } else if (state.slugByPosition) {
-      let lastTarget = '';
-      const slugsPositions = Array.from(state.slugByPosition.entries());
-      for (let i = 0, l = slugsPositions.length; !target && i < l; i++) {
-        const [position, slug] = slugsPositions[i];
-        if (position > scrollPosition && lastTarget) {
-          target = lastTarget;
-        }
-        lastTarget = slug;
+    }
+  } else if (state.layout === LayoutTypes.Fixed) {
+    const targetScale = Math.abs(scale.current * zoom.current);
+    const targetScroll =
+      calculatePagePosition(currentScroll, state) - state.margin.top / targetScale + 1;
+    const baseScroll = targetScroll - state.margin.top / targetScale;
+    const visibleHeight = state.containerHeight / targetScale;
+    const endScroll = baseScroll + visibleHeight;
+    let startPage = 0;
+    let endPage = -1;
+    const startingElementIndex =
+      Math.floor((baseScroll * state.contentsInfo.length) / state.totalHeight) - 1;
+    for (
+      let i = Math.max(0, startingElementIndex), l = state.contentsInfo.length;
+      i < l && endPage === -1;
+      i++
+    ) {
+      const { top, maxTop, slug } = state.contentsInfo[i];
+      if (top <= baseScroll) {
+        startPage = i;
+      }
+      if (top <= targetScroll) {
+        target = slug;
+      }
+      if (top <= endScroll && maxTop >= endScroll) {
+        endPage = i;
       }
     }
+    if (endPage === -1) {
+      endPage = state.contentsInfo.length - 1;
+    }
+    if (state.contentPlaceholderNode && state.layout === LayoutTypes.Fixed) {
+      if (lastStartPage !== startPage || endPage !== lastEndPage) {
+        const containers = [];
+        const pagesToAppend = new Set<number>();
+        for (let i = startPage; i <= endPage; i++) {
+          const content = state.contentsByOrder.get(i);
+          if (content && !state.contentPlaceholderNode.contains(content.container)) {
+            containers.push(content.container);
+          }
+          pagesToAppend.add(i);
+        }
+        state.contentPlaceholderNode.append(...containers);
+        if (lastStartPage !== -1 && (lastStartPage < startPage || lastEndPage > endPage)) {
+          for (let i = lastStartPage; i <= lastEndPage; i++) {
+            if (!pagesToAppend.has(i)) {
+              const content = state.contentsByOrder.get(i);
+              if (content && state.contentPlaceholderNode.contains(content.container)) {
+                state.contentPlaceholderNode.removeChild(content.container);
+              }
+            }
+          }
+        }
+        lastStartPage = startPage;
+        lastEndPage = endPage;
+      }
+    }
+  } else if (state.slugByPosition) {
+    let lastTarget = '';
+    const slugsPositions = Array.from(state.slugByPosition.entries());
+    for (let i = 0, l = slugsPositions.length; !target && i < l; i++) {
+      const [position, slug] = slugsPositions[i];
+      if (position > scrollPosition && lastTarget) {
+        target = lastTarget;
+      }
+      lastTarget = slug;
+    }
   }
+  // console.log({ target });
   if (target !== undefined && !avoidUpdate) {
     updateState({ contentSlug: target });
   } else if (state.layout === LayoutTypes.Fixed && avoidUpdate && target) {
