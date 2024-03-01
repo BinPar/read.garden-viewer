@@ -1,0 +1,51 @@
+.rg-notes-save:after {
+  mask-image: url(../img/icons/check.svg);
+  -webkit-mask-image: url(../img/icons/check.svg);
+}
+
+.rg-notes-edit:after {
+  mask-image: url(../img/icons/edit.svg);
+  -webkit-mask-image: url(../img/icons/edit.svg);
+}
+
+.rg-notes-cancel:after {
+  background-color: #979797;
+  mask-image: url(../img/icons/close.svg);
+  -webkit-mask-image: url(../img/icons/close.svg);
+}
+
+.rg-selection-option.highlighter:after {
+  mask-image: url(../img/icons/highlighter.svg);
+  -webkit-mask-image: url(../img/icons/highlighter.svg);
+}
+
+.rg-selection-option.highlighter:hover:after,
+.rg-selection-option.highlighter.rg-selected:after {
+  mask-image: url(../img/icons/highlighterOn.svg);
+  -webkit-mask-image: url(../img/icons/highlighterOn.svg);
+}
+
+.rg-selection-option.note:after,
+.rg-notes-option:after {
+  mask-image: url(../img/icons/note.svg);
+  -webkit-mask-image: url(../img/icons/note.svg);
+}
+
+.rg-selection-option.note:hover:after,
+.rg-selection-option.note.rg-selected:after,
+.rg-notes-option:hover:after,
+.rg-notes-option.rg-selected:after {
+  mask-image: url(../img/icons/noteOn.svg);
+  -webkit-mask-image: url(../img/icons/noteOn.svg);
+}
+
+.rg-selection-option.rg-delete:after,
+.rg-notes-delete:after {
+  mask-image: url(../img/icons/delete.svg);
+  -webkit-mask-image: url(../img/icons/delete.svg);
+}
+
+.rg-selection-option.rg-copy:after {
+  mask-image: url(../img/icons/copy.svg);
+  -webkit-mask-image: url(../img/icons/copy.svg);
+}

@@ -52,8 +52,9 @@ const processFixedContents = async (
     const content = info[i];
     const { width, height, label, slug, order, html, cssURL } = content;
     const previousInfo = oldContentsByOrder?.get(order);
-    const left = Math.max(totalWidth - 1, 0);
+    const rightSide = order % 2 === pairOrder;
     const top = Math.max(totalHeight - 1, 0);
+    const left = Math.max(totalWidth - 1, 0);
     totalHeight += height - 3;
     totalWidth += width;
     if (gapMode !== GapMode.None) {
@@ -70,12 +71,16 @@ const processFixedContents = async (
     if (unaffected.has(slug)) {
       container.classList.add('rg-avoid-invert');
     }
+    if ((i === 0 && rightSide) || (i === l - 1 && !rightSide)) {
+      container.style.marginLeft = `${width / 2}px`;
+    }
     containers.push(container);
     const position = state.scrollMode === 'horizontal' ? left : top;
     positionBySlug.set(slug, position);
     slugByPosition.set(position, slug);
     const initialContent =
-      (state.config.initialContent?.contentSlug === slug && state.config.initialContent) || undefined;
+      (state.config.initialContent?.contentSlug === slug && state.config.initialContent) ||
+      undefined;
     const contentInfo: FixedViewerContentInfo = {
       width,
       height,
@@ -90,7 +95,7 @@ const processFixedContents = async (
       maxLeft: totalWidth,
       maxTop: totalHeight,
       prev,
-      pairOrder: order % 2 === pairOrder,
+      rightSide,
     };
     contentsByOrder.set(order, contentInfo);
     contentsBySlug.set(slug, contentInfo);

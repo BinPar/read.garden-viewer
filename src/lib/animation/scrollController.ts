@@ -157,6 +157,8 @@ const scrollController = (
   };
 
   const onDragStart = (ev: MouseEvent | TouchEvent): void => {
+    console.log('onDragStart');
+
     if (ev.type === 'touchstart') {
       isFirstMove = true;
       fingers = (ev as TouchEvent).touches.length;
@@ -252,6 +254,7 @@ const scrollController = (
         ? Math.abs(scale.current)
         : Math.abs(scale.current * zoom.current));
     const coordinates = getCoordinatesFromEvent(ev);
+
     if (state.layout === LayoutTypes.Flow) {
       if (state.scrollMode === 'horizontal') {
         if (lastX !== null) {
@@ -268,8 +271,9 @@ const scrollController = (
         lastY = coordinates.y;
       }
     }
+
     if (state.layout === LayoutTypes.Fixed) {
-      if (state.scrollMode === 'horizontal') {
+      if (state.scrollMode === 'horizontal' || state.scrollMode === 'fixed') {
         if (lastX !== null) {
           lastDelta = coordinates.x - lastX;
           lastDelta *= screenToScale;
@@ -297,6 +301,8 @@ const scrollController = (
   };
 
   const onDragEnd = (ev: MouseEvent | TouchEvent): void => {
+    console.log('onDragEnd');
+
     if (mobileSelectionTimeout) {
       clearTimeout(mobileSelectionTimeout);
       mobileSelectionTimeout = null;
@@ -318,6 +324,7 @@ const scrollController = (
       }
       scroll.target = scroll.current + inertialDelta * state.animationInertia;
       scrollInertiaAndLimits(state, scroll, inertialDelta, executeTransitions, dispatch);
+
       if (state.layout === LayoutTypes.Fixed) {
         if (altDelta || timeFromLastMove > 100) {
           if (Math.sign(altDelta) === Math.sign(altInertialDelta)) {
@@ -420,6 +427,8 @@ const scrollController = (
   };
 
   const onDragMove = (ev: MouseEvent | TouchEvent): void => {
+    // console.log('onDragMove');
+
     if (ev.type === 'touchmove' && fingers === 2 && !isDoubleTap) {
       mouseDown = false;
       mobileSelection = false;
@@ -457,6 +466,7 @@ const scrollController = (
         }, state.config.clickTimeout);
       }
     }
+
     if (mobileSelectionTimeout) {
       updateState({
         selectingText: false,
@@ -479,6 +489,7 @@ const scrollController = (
       updateScrollDeltas(ev);
       scroll.current += lastDelta;
       scroll.target = scroll.current;
+
       if (state.layout === LayoutTypes.Fixed) {
         if (state.scrollMode === 'vertical') {
           const fitWidthZoom = window.innerWidth / state.maxWidth;
@@ -486,18 +497,25 @@ const scrollController = (
             altScroll.current += altDelta;
             altScroll.target = altScroll.current;
           }
-        } else if (state.scrollMode === 'horizontal') {
+        }
+        if (state.scrollMode === 'horizontal') {
           const fitHeightZoom = window.innerHeight / state.maxHeight;
           if (fitHeightZoom < zoom.current) {
             altScroll.current += altDelta;
             altScroll.target = altScroll.current;
           }
         }
+        if (state.scrollMode === 'fixed') {
+          altScroll.current += altDelta;
+          altScroll.target = altScroll.current;
+        }
       }
+
       executeTransitions();
       scroll.forceUpdate = false;
       lastMoveMilliseconds = new Date().getTime();
     }
+
     if (isSelecting && initialSelection) {
       setCSSProperty('user-select', 'text');
       if (!state.selectingText) {
@@ -677,6 +695,7 @@ const scrollController = (
   window.addEventListener('mousemove', onDragMove);
   window.addEventListener('touchmove', onDragMove);
   state.readGardenContainerNode?.addEventListener('wheel', onWheel);
+
   addOnChangeEventListener('containerHeight', () => {
     if (state.layout === LayoutTypes.Fixed) {
       if (state.scrollMode === 'vertical') {

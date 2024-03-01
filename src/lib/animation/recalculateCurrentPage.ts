@@ -1,6 +1,7 @@
 import { State } from '../../model/state';
 import { LayoutTypes } from '../../model/viewerSettings';
 import loadContentsInBackground from '../../utils/loadContentsInBackground';
+import setCSSProperty from '../../utils/setCSSProperty';
 import { updateState } from '../state';
 import calculatePagePosition from './calculatePagePosition';
 import { scale, zoom } from './interpolationValues';
@@ -20,40 +21,49 @@ const recalculateCurrentPage = (state: State, currentScroll: number, avoidUpdate
   const scrollPosition = Math.round(currentScroll * -1);
   let target: string | undefined;
   if (state.scrollMode === 'fixed') {
-    if (state.doublePage) {
-      const current = state.contentsBySlug.get(state.contentSlug);
-      // console.log({ current });
-      const containers = [];
-      if (current) {
-        containers.push(current.container);
-        if (!current.pairOrder) {
+    const current = state.contentsBySlug.get(state.contentSlug);
+    const containers = new Array<HTMLDivElement>();
+    if (current) {
+      let maxWidth = current.width;
+      let maxHeight = current.height;
+      containers.push(current.container);
+
+      if (state.doublePage) {
+        if (!current.rightSide) {
           target = current.slug;
           if (current.next) {
             const next = state.contentsBySlug.get(current.next);
             if (next) {
               containers.push(next.container);
+              maxWidth += next.width;
+              maxHeight = Math.max(next.height, maxHeight);
             }
           }
         } else if (current.prev) {
           const prev = state.contentsBySlug.get(current.prev);
           if (prev) {
             target = prev.slug;
-            containers.push(prev.container);
+            containers.unshift(prev.container);
+            maxWidth += prev.width;
+            maxHeight = Math.max(prev.height, maxHeight);
           }
         } else {
           console.warn(`No initial page for slug: ${state.contentSlug}`);
         }
-
-        // console.log({ containers });
-
-        if (state.contentPlaceholderNode) {
-          state.contentPlaceholderNode.append(...containers);
-        }
       } else {
-        console.warn(`No content for slug: ${state.contentSlug}`);
+        target = current.slug;
+      }
+
+      updateState({ maxWidth, maxHeight });
+      setCSSProperty('max-width', `${maxWidth}px`);
+      setCSSProperty('max-height', `${maxHeight}px`);
+
+      if (state.contentPlaceholderNode) {
+        state.contentPlaceholderNode.replaceChildren();
+        state.contentPlaceholderNode.append(...containers);
       }
     } else {
-      target = state.contentSlug;
+      console.warn(`No content for slug: ${state.contentSlug}`);
     }
   } else if (state.scrollMode === 'horizontal') {
     if (state.layout === LayoutTypes.Flow) {
@@ -182,7 +192,6 @@ const recalculateCurrentPage = (state: State, currentScroll: number, avoidUpdate
       lastTarget = slug;
     }
   }
-  // console.log({ target });
   if (target !== undefined && !avoidUpdate) {
     updateState({ contentSlug: target });
   } else if (state.layout === LayoutTypes.Fixed && avoidUpdate && target) {

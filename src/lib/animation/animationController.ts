@@ -2,12 +2,16 @@
 import { DispatchAPIAction } from '../../model/actions/common';
 import { State } from '../../model/state';
 import { FitMode, LayoutTypes } from '../../model/viewerSettings';
+import getFixedScrollContentsHeight from '../../utils/getFixedScrollContentsHeight';
+import getFixedScrollContentsWidth from '../../utils/getFixedScrollContentsWidth';
 import navigateToContentSlug from '../../utils/navigateToContentSlug';
 import setCSSProperty from '../../utils/setCSSProperty';
 import { updateState } from '../state';
 import { addOnChangeEventListener } from '../state/stateChangeEvents';
 import getMinAndMaxScroll from './getMinAndMaxScroll';
 import getScrollFromContentSlug from './getScrollFromContentSlug';
+import recalculateCurrentPage, { resetLastPage } from './recalculateCurrentPage';
+import scrollController, { reCalcScrollLimits } from './scrollController';
 import interpolate from './interpolate';
 import {
   scale,
@@ -20,8 +24,6 @@ import {
   topCorrector,
   resetInterpolationValues,
 } from './interpolationValues';
-import recalculateCurrentPage, { resetLastPage } from './recalculateCurrentPage';
-import scrollController, { reCalcScrollLimits } from './scrollController';
 
 let unmountAnimationsHandler = (): void => {};
 
@@ -59,7 +61,9 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
     const scrollLeft =
       left.current +
       leftCorrector.current +
-      (state.scrollMode === 'horizontal' ? computedScroll : computedAltScroll);
+      (state.scrollMode === 'horizontal' || state.scrollMode === 'fixed'
+        ? computedScroll
+        : computedAltScroll);
     const scrollTop =
       top.current +
       topCorrector.current +
@@ -82,7 +86,8 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
             ? '1'
             : '0',
         );
-      } else if (state.scrollMode === 'vertical' && state.totalHeight) {
+      }
+      if (state.scrollMode === 'vertical' && state.totalHeight) {
         state.scrollerNode.scrollTop = -1 * scroll.current;
         setCSSProperty(
           'prev-chapter-navigation-opacity',
@@ -151,6 +156,7 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
     const newMargins = state.readMode
       ? { ...state.config.readModeMargin }
       : { ...state.config.uiModeMargin };
+
     if (!state.readMode && state.layout === LayoutTypes.Flow) {
       newMargins.bottom += state.fontSize * 3;
     }
@@ -161,15 +167,13 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
     const widthNeededScale = targetWidth / currentWidth;
 
     const currentHeight = state.containerHeight;
-    const verticalMargin =
-      state.layout === LayoutTypes.Fixed && state.fitMode === FitMode.Height
-        ? state.config.readModeMargin.top + state.config.readModeMargin.bottom
-        : newMargins.top + newMargins.bottom;
+    const verticalMargin = newMargins.top + newMargins.bottom;
     const targetHeight = currentHeight - verticalMargin;
     const heightNeededScale = targetHeight / currentHeight;
 
-    scale.target = Math.max(Math.min(widthNeededScale, heightNeededScale), 0);
-    if (state.layout === LayoutTypes.Fixed) {
+    if (state.layout === LayoutTypes.Flow) {
+      scale.target = Math.max(Math.min(widthNeededScale, heightNeededScale), 0);
+    } else {
       if (state.fitMode === FitMode.Height) {
         scale.target = Math.max(heightNeededScale, 0);
       }
@@ -180,35 +184,35 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
 
     if (state.scrollMode === 'horizontal') {
       left.target = newMargins.left;
-    } else {
-      const widthReduction = currentWidth * (1 - scale.target);
-      const marginWidth = widthReduction - newMargins.left - newMargins.right;
-      left.target = newMargins.left + marginWidth / 2;
-    }
-
-    if (state.scrollMode === 'vertical') {
-      top.target = newMargins.top;
-    } else {
       const heightReduction = currentHeight * (1 - scale.target);
       const marginHeight = heightReduction - newMargins.top - newMargins.bottom;
       top.target = newMargins.top + marginHeight / 2;
     }
 
-    // console.log(state.scrollMode, {
-    //   left: {
-    //     ...left,
-    //   },
-    //   top: {
-    //     ...top,
-    //   },
-    //   scale: {
-    //     ...scale,
-    //   },
-    // });
+    if (state.scrollMode === 'vertical') {
+      top.target = newMargins.top;
+      const widthReduction = currentWidth * (1 - scale.target);
+      const marginWidth = widthReduction - newMargins.left - newMargins.right;
+      left.target = newMargins.left + marginWidth / 2;
+    }
+
+    if (state.scrollMode === 'fixed') {
+      const contentsWidth = getFixedScrollContentsWidth(state);
+      const contentsHeight = getFixedScrollContentsHeight(state);
+      if (contentsWidth && contentsHeight) {
+        const realContentsWidth = contentsWidth * scale.target * zoom.target;
+        const availableWidth = window.innerWidth - (state.margin.left + state.margin.right);
+        left.target = state.margin.left - (realContentsWidth - availableWidth) / 2;
+        const realContentsHeight = contentsHeight * scale.target * zoom.target;
+        const availableHeight = window.innerHeight - (state.margin.top + state.margin.bottom);
+        top.target = state.margin.top - (realContentsHeight - availableHeight) / 2;
+      }
+    }
 
     updateState({
       margin: newMargins,
     });
+
     if (instant) {
       left.current = left.target;
       top.current = top.target;
@@ -220,6 +224,7 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
     } else {
       executeTransitions();
     }
+
     setCSSProperty('scroller-left', `${state.margin.left}px`);
     setCSSProperty('scroller-scale', `${scale.target}`);
   };
@@ -248,21 +253,25 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
   };
 
   const onContentSlugChanged = (slug: string): void => {
-    const targetSlugScrollPosition = getScrollFromContentSlug(state, slug);
-    if (targetSlugScrollPosition !== null && state.forceScroll === undefined) {
-      const scrollLimits = getMinAndMaxScroll(state);
-      if (targetSlugScrollPosition > scrollLimits.maxScroll) {
-        scroll.target = scrollLimits.maxScroll;
-        scroll.forceUpdate = true;
-      } else if (targetSlugScrollPosition < scrollLimits.minScroll) {
-        scroll.target = scrollLimits.minScroll;
-        scroll.forceUpdate = true;
-      } else {
-        scroll.target = targetSlugScrollPosition;
+    if (state.scrollMode === 'fixed') {
+      recalculateCurrentPage(state, scroll.current, true);
+    } else {
+      const targetSlugScrollPosition = getScrollFromContentSlug(state, slug);
+      if (targetSlugScrollPosition !== null && state.forceScroll === undefined) {
+        const scrollLimits = getMinAndMaxScroll(state);
+        if (targetSlugScrollPosition > scrollLimits.maxScroll) {
+          scroll.target = scrollLimits.maxScroll;
+          scroll.forceUpdate = true;
+        } else if (targetSlugScrollPosition < scrollLimits.minScroll) {
+          scroll.target = scrollLimits.minScroll;
+          scroll.forceUpdate = true;
+        } else {
+          scroll.target = targetSlugScrollPosition;
+        }
       }
+      executeTransitions();
+      scroll.forceUpdate = false;
     }
-    executeTransitions();
-    scroll.forceUpdate = false;
   };
 
   const resetPageScroll = (): void => {
@@ -272,41 +281,52 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
 
   const fitHeight = (): void => {
     if (state.layout === LayoutTypes.Fixed) {
+      top.target = state.margin.top;
+      zoom.target = state.containerHeight / state.maxHeight;
       scale.target = Math.max(
         0,
         (state.containerHeight - (state.margin.top + state.margin.bottom)) / state.containerHeight,
       );
-      top.target = state.margin.top;
-      zoom.target = state.containerHeight / state.maxHeight;
-      // console.log({
-      //   scale: scale.target,
-      //   top: top.target,
-      //   zoom: zoom.target,
-      // });
+
       if (state.scrollMode === 'horizontal') {
         left.target = state.margin.left;
-      } else if (state.scrollMode === 'vertical') {
+      }
+      if (state.scrollMode === 'vertical') {
         const widthReduction = state.containerWidth * (1 - scale.target);
         const marginWidth = widthReduction - state.margin.left - state.margin.right;
         left.target = state.margin.left + marginWidth / 2;
+      }
+      if (state.scrollMode === 'fixed') {
+        const contentsWidth = getFixedScrollContentsWidth(state);
+        const realContentsWidth = contentsWidth * scale.target * zoom.target;
+        const availableWidth = window.innerWidth - (state.margin.left + state.margin.right);
+        left.target = state.margin.left - (realContentsWidth - availableWidth) / 2;
       }
     }
   };
 
   const fitWidth = (): void => {
     if (state.layout === LayoutTypes.Fixed) {
+      left.target = state.margin.left;
+      zoom.target = state.containerWidth / state.maxWidth;
       scale.target = Math.max(
         0,
         (state.containerWidth - state.margin.left - state.margin.right) / state.containerWidth,
       );
-      left.target = state.margin.left;
-      zoom.target = state.containerWidth / state.maxWidth;
+
       if (state.scrollMode === 'vertical') {
         top.target = state.margin.top;
-      } else {
+      }
+      if (state.scrollMode === 'horizontal') {
         const heightReduction = state.containerHeight * (1 - scale.target);
         const marginHeight = heightReduction - state.margin.top - state.margin.bottom;
         top.target = state.margin.top + marginHeight / 2;
+      }
+      if (state.scrollMode === 'fixed') {
+        const contentsHeight = getFixedScrollContentsHeight(state);
+        const realContentsHeight = contentsHeight * scale.target * zoom.target;
+        const availableHeight = window.innerHeight - (state.margin.top + state.margin.bottom);
+        top.target = state.margin.top - (realContentsHeight - availableHeight) / 2;
       }
     }
   };
@@ -335,6 +355,9 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
         navigateToContentSlug(state.contentSlug);
       } else {
         zoom.target = state.zoom;
+        if (state.scrollMode === 'fixed') {
+          onReadModeChangeEvent(true);
+        }
       }
       scale.current = scale.target;
       zoom.current = zoom.target;
@@ -349,7 +372,7 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
   };
 
   const onPositionBySlugChange = (): void => {
-    if (state.layout === LayoutTypes.Fixed) {
+    if (state.layout === LayoutTypes.Fixed && state.scrollMode !== 'fixed') {
       if (state.fitMode === FitMode.Height) {
         zoom.target = window.innerHeight / state.maxHeight;
       } else if (state.fitMode === FitMode.Width) {
@@ -370,6 +393,18 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
       zoom.current = zoom.target;
       zoom.forceUpdate = true;
       reCalcScrollLimits(state, true);
+      if (state.scrollMode === 'fixed') {
+        const contentsWidth = getFixedScrollContentsWidth(state);
+        const realContentsWidth = contentsWidth * scale.target * zoom.target;
+        const availableWidth = window.innerWidth - (state.margin.left + state.margin.right);
+        left.target = state.margin.left - (realContentsWidth - availableWidth) / 2;
+        left.current = left.target;
+        const contentsHeight = getFixedScrollContentsHeight(state);
+        const realContentsHeight = contentsHeight * scale.target * zoom.target;
+        const availableHeight = window.innerHeight - (state.margin.top + state.margin.bottom);
+        top.target = state.margin.top - (realContentsHeight - availableHeight) / 2;
+        top.current = top.target;
+      }
       executeTransitions();
       zoom.forceUpdate = false;
     }

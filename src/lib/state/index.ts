@@ -63,6 +63,10 @@ export const initializeState = (initialConfig: InitialConfig): void => {
     });
   }
 
+  if (config.layoutType === 'fixed' && config.initialFixedMode === ViewerMode.Paginated) {
+    config.fixedViewerPreloadOrder = [0, 1, 2, 3, -1, -2, 5, 6, -3, -4, 7, 8, -5, -6];
+  }
+
   const defaultInitialMargins = config.initialReadMode
     ? defaultConfig.readModeMargin
     : defaultConfig.uiModeMargin;
@@ -73,7 +77,7 @@ export const initializeState = (initialConfig: InitialConfig): void => {
   if (config.linksProps) {
     Object.entries(config.linksProps).forEach(([key, value]) => {
       linksCustomProps.set(key, value);
-    })
+    });
   }
 
   const globalState: GlobalState = {
@@ -160,6 +164,7 @@ export const initializeState = (initialConfig: InitialConfig): void => {
         ...defaultPaginated,
       };
     }
+
     if (config.initialFixedMode === ViewerMode.WithScroll) {
       state = {
         ...globalState,

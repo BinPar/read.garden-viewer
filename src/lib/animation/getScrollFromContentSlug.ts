@@ -34,7 +34,6 @@ const getScrollFromContentSlug = (state: State, contentSlug = state.contentSlug)
       }
     }
   }
-  // console.log({ result });
   return result;
 }
 

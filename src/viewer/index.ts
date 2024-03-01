@@ -8,6 +8,7 @@ import { setupGlobalEvents } from '../utils/globalEvents';
 import animationController from '../lib/animation/animationController';
 import setupHandlers from '../utils/setupHandlers';
 import unmount from '../utils/unmount';
+import ensureSafeAreas from '../utils/ensureSafeAreas';
 
 /**
  * Main viewer function
@@ -17,7 +18,6 @@ import unmount from '../utils/unmount';
 const viewer: ViewerFunction = (config) => {
   initializeState(config);
   const state = getState();
-  // console.log({ state });
   const api: APIInterface = {
     dispatch,
     state,
@@ -25,6 +25,9 @@ const viewer: ViewerFunction = (config) => {
   };
   setInitialProperties(state);
   createBasicDOMElements(state);
+  if (state.debugViewerSafeArea) {
+    ensureSafeAreas(state);
+  }
   setupGlobalEvents(state, api.dispatch);
   animationController(state, api.dispatch);
   setupHandlers(state, api.dispatch).catch((ex) => {

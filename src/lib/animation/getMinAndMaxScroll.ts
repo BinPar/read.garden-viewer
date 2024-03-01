@@ -1,5 +1,6 @@
 import { State } from '../../model/state';
 import { LayoutTypes } from '../../model/viewerSettings';
+import getFixedScrollContentsWidth from '../../utils/getFixedScrollContentsWidth';
 import { zoom, leftCorrector, topCorrector, scale } from './interpolationValues';
 
 export interface MinAndMaxScroll {
@@ -46,7 +47,8 @@ const getMinAndMaxScroll = (state: State, forceMargin: number | null = null): Mi
           minScroll = -1 * maxScrollableWidth + correctorFix;
         }
       }
-    } else if (state.scrollMode === 'vertical') {
+    }
+    if (state.scrollMode === 'vertical') {
       if (state.slugByPosition) {
         let max = 0;
         let i = 0;
@@ -78,6 +80,14 @@ const getMinAndMaxScroll = (state: State, forceMargin: number | null = null): Mi
           minScroll = -1 * maxScrollableHeight + correctorFix;
         }
       }
+    }
+    if (state.scrollMode === 'fixed') {
+      const contentsWidth = getFixedScrollContentsWidth(state);
+      const realContentsWidth = contentsWidth * scale.target * zoom.target;
+      const availableWidth = window.innerWidth - (state.margin.left + state.margin.right);
+      console.log({ contentsWidth, realContentsWidth, availableWidth });
+      maxScroll = state.margin.left;
+      minScroll = -state.margin.right;
     }
   }
   return { minScroll, maxScroll };
@@ -119,6 +129,13 @@ export const getMinAndMaxAltScroll = (state: State): MinAndMaxScroll => {
         minScroll,
       };
     }
+    if (state.scrollMode === 'fixed') {
+      return {
+        maxScroll: state.margin.top,
+        minScroll: -state.margin.bottom,
+      }
+    }
+    // TODO: Fixed limits
   }
   return { minScroll: 0, maxScroll: 0 };
 };

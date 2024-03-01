@@ -29,6 +29,8 @@ const zoomControls = async (
     }
   };
 
+  let currentZoom = 0;
+
   slider.onchange = onChange;
 
   const sliderWrapper = document.createElement('div');
@@ -40,21 +42,43 @@ const zoomControls = async (
 
   const decreaseButton = document.createElement('button');
   decreaseButton.innerText = '-';
+  decreaseButton.onclick = (): void => {
+    const action: SetZoom = {
+      type: 'setZoom',
+      zoom: Math.round(Math.max(50, Math.round((currentZoom * 100) / 5) * 5 - 5)) / 100,
+    };
+    dispatcher(action).catch((ex) => {
+      const { stack, message } = ex as Error;
+      console.error('Error dispatching action', stack || message);
+    });
+  };
 
   const increaseButton = document.createElement('button');
   increaseButton.innerText = '+';
+  increaseButton.onclick = (): void => {
+    const action: SetZoom = {
+      type: 'setZoom',
+      zoom: Math.round(Math.min(400, Math.round((currentZoom * 100) / 5) * 5 + 5)) / 100,
+    };
+    dispatcher(action).catch((ex) => {
+      const { stack, message } = ex as Error;
+      console.error('Error dispatching action', stack || message);
+    });
+  };
 
   const valueHolder = document.createElement('span');
   valueHolder.classList.add('zoom-value');
 
-  // valuesControls.appendChild(decreaseButton);
+  valuesControls.appendChild(decreaseButton);
   valuesControls.appendChild(valueHolder);
-  // valuesControls.appendChild(increaseButton);
+  valuesControls.appendChild(increaseButton);
 
   const onZoomChange: AddOnChangeEvent<number> = {
     type: 'addOnChangeEvent',
     propertyName: 'zoom',
+    returnValue: true,
     event: (newValue) => {
+      currentZoom = newValue;
       const zoom = Math.round(newValue * 100);
       slider.value = `${zoom}`;
       valueHolder.innerText = `${zoom}%`;
@@ -115,7 +139,7 @@ const zoomControls = async (
   fitPage.innerText = 'Fit page';
   fitPage.onclick = onFitPage;
   if (state.layout === LayoutTypes.Fixed && state.fitMode === FitMode.Page) {
-    fitWidth.classList.add('active');
+    fitPage.classList.add('active');
   }
 
   const onFitModeChange: AddOnChangeEvent<FitMode | undefined> = {

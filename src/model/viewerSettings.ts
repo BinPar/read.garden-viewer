@@ -1,7 +1,7 @@
 /**
  * Viewer mode
  */
- export enum ViewerMode {
+export enum ViewerMode {
   /**
    * Paginated viewer. One page shown at the same time.
    */
@@ -19,7 +19,7 @@
 /**
  * Possible fit modes
  */
- export enum FitMode {
+export enum FitMode {
   /**
    * Fit width
    */
@@ -111,7 +111,7 @@ export type ViewerTheme = 'dark' | 'light';
 /**
  * Layout types
  */
- export enum LayoutTypes {
+export enum LayoutTypes {
   Fixed = 'fixed',
   Flow = 'flow',
 }

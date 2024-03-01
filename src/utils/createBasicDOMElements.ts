@@ -25,6 +25,8 @@ const createBasicDOMElements = (state: State): void => {
     `rg-${state.theme}-theme`,
   );
 
+  const partialState: Partial<State> = {};
+
   // #region Container node
   const readGardenContainerNode = document.createElement('div');
   readGardenContainerNode.id = 'rg-container';
@@ -51,16 +53,17 @@ const createBasicDOMElements = (state: State): void => {
   const contentPlaceholderNode = document.createElement('div');
   contentPlaceholderNode.id = 'rg-content-placeholder';
   contentWrapperNode.appendChild(contentPlaceholderNode);
-
-  const endOfChapterCalculatorNode = document.createElement('div');
-  endOfChapterCalculatorNode.innerText = 'realEndOfChapter';
-  endOfChapterCalculatorNode.classList.add('rg-end-of-chapter-calculator');
-  endOfChapterCalculatorNode.dataset.page = '-';
-  contentWrapperNode.appendChild(endOfChapterCalculatorNode);
   // #endregion Content Wrapper and child nodes
 
   let pagesLabelsNode: HTMLDivElement | undefined;
   if (state.layout === 'flow') {
+    const endOfChapterCalculatorNode = document.createElement('div');
+    endOfChapterCalculatorNode.innerText = 'realEndOfChapter';
+    endOfChapterCalculatorNode.classList.add('rg-end-of-chapter-calculator');
+    endOfChapterCalculatorNode.dataset.page = '-';
+    contentWrapperNode.appendChild(endOfChapterCalculatorNode);
+    partialState.endOfChapterCalculatorNode = endOfChapterCalculatorNode;
+
     // #region Content Wrapper Siblings
     pagesLabelsNode = document.createElement('div');
     pagesLabelsNode.classList.add('rg-pages-labels');
@@ -117,13 +120,13 @@ const createBasicDOMElements = (state: State): void => {
   const containerHeight = contentWrapperNode.clientHeight;
 
   updateState({
+    ...partialState,
     basicDOMElementsCreated: true,
     mainStyleNode: mainStylesheet?.ownerNode as HTMLLinkElement,
     readGardenContainerNode,
     readGardenViewerNode,
     contentWrapperNode,
     contentPlaceholderNode,
-    endOfChapterCalculatorNode,
     pagesLabelsNode,
     selectionHighlightsNode,
     selectionSelectorsNode,

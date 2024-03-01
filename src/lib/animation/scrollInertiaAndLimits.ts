@@ -69,6 +69,12 @@ const scrollInertiaAndLimits = (
     }
     min = scrollLimits.maxScroll * -1;
     max = scrollLimits.minScroll * -1;
+    console.table([{
+      isAltScroll,
+      min,
+      max,
+      scroll: scroll.target,
+    }]);
   }
   if (min !== null && scroll.target * -1 < min) {
     scroll.target = min * -1;
@@ -76,6 +82,7 @@ const scrollInertiaAndLimits = (
   if (max !== null && scroll.target * -1 > max) {
     scroll.target = max * -1;
   }
+  console.log({ scroll: scroll.target });
   if (state.layout === LayoutTypes.Flow) {
     const scrollLimits = getMinAndMaxScroll(state, 100);
     if (scroll.current >= scrollLimits.maxScroll) {

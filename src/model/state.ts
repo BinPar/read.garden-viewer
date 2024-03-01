@@ -362,7 +362,7 @@ export interface FixedViewerContentInfo extends FixedContentInfo {
   /**
    * Pair order (left or right) for fixed scroll double page
    */
-  pairOrder: boolean;
+  rightSide: boolean;
 }
 
 export interface FixedState {
