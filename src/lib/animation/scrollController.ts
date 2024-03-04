@@ -95,6 +95,8 @@ const scrollController = (
   let isClick = false;
   let syntheticEvent: SyntheticEvent;
   let mobileSelectionTimeout: NodeJS.Timeout | null = null;
+  let avoidScroll = false;
+  let avoidAltScroll = false;
 
   const detectDoubleTap = (): void => {
     const time = new Date().getTime();
@@ -157,7 +159,7 @@ const scrollController = (
   };
 
   const onDragStart = (ev: MouseEvent | TouchEvent): void => {
-    console.log('onDragStart');
+    // console.log('onDragStart');
 
     if (ev.type === 'touchstart') {
       isFirstMove = true;
@@ -244,6 +246,21 @@ const scrollController = (
       lastY = null;
       lastDelta = 0;
       altDelta = 0;
+
+      if (state.scrollMode === 'fixed') {
+        if (state.maxWidth && state.maxHeight) {
+          const realContentsWidth = state.maxWidth * scale.target * zoom.target;
+          const availableWidth = window.innerWidth - (state.margin.left + state.margin.right);
+          if (availableWidth > realContentsWidth) {
+            avoidScroll = true;
+          }
+          const realContentsHeight = state.maxHeight * scale.target * zoom.target;
+          const availableHeight = window.innerHeight - (state.margin.top + state.margin.bottom);
+          if (availableHeight > realContentsHeight) {
+            avoidAltScroll = true;
+          }
+        }
+      }
     }
   };
 
@@ -301,7 +318,7 @@ const scrollController = (
   };
 
   const onDragEnd = (ev: MouseEvent | TouchEvent): void => {
-    console.log('onDragEnd');
+    // console.log('onDragEnd');
 
     if (mobileSelectionTimeout) {
       clearTimeout(mobileSelectionTimeout);
@@ -424,6 +441,8 @@ const scrollController = (
     currentSelection = null;
     mobileSelection = false;
     isSelecting = false;
+    avoidScroll = false;
+    avoidAltScroll = false;
   };
 
   const onDragMove = (ev: MouseEvent | TouchEvent): void => {
@@ -485,10 +504,13 @@ const scrollController = (
         setCSSProperty('pointer-events', 'none');
         setCSSProperty('user-select', 'none');
       }
-      scroll.forceUpdate = true;
-      updateScrollDeltas(ev);
-      scroll.current += lastDelta;
-      scroll.target = scroll.current;
+
+      if (!avoidScroll) {
+        scroll.forceUpdate = true;
+        updateScrollDeltas(ev);
+        scroll.current += lastDelta;
+        scroll.target = scroll.current;
+      }
 
       if (state.layout === LayoutTypes.Fixed) {
         if (state.scrollMode === 'vertical') {
@@ -505,7 +527,8 @@ const scrollController = (
             altScroll.target = altScroll.current;
           }
         }
-        if (state.scrollMode === 'fixed') {
+
+        if (state.scrollMode === 'fixed' && !avoidAltScroll) {
           altScroll.current += altDelta;
           altScroll.target = altScroll.current;
         }

@@ -1,6 +1,5 @@
 import { State } from '../../model/state';
 import { LayoutTypes } from '../../model/viewerSettings';
-import getFixedScrollContentsWidth from '../../utils/getFixedScrollContentsWidth';
 import { zoom, leftCorrector, topCorrector, scale } from './interpolationValues';
 
 export interface MinAndMaxScroll {
@@ -11,7 +10,9 @@ export interface MinAndMaxScroll {
 const getMinAndMaxScroll = (state: State, forceMargin: number | null = null): MinAndMaxScroll => {
   const margin =
     forceMargin ??
-    (state.scrollMode === 'horizontal' ? window.innerWidth / 2 : window.innerHeight / 2);
+    (state.scrollMode === 'horizontal' || state.scrollMode === 'fixed'
+      ? window.innerWidth / 2
+      : window.innerHeight / 2);
   let minScroll = margin * -1;
   let maxScroll = margin;
   if (state.layout === LayoutTypes.Flow || state.layout === LayoutTypes.Fixed) {
@@ -82,10 +83,24 @@ const getMinAndMaxScroll = (state: State, forceMargin: number | null = null): Mi
       }
     }
     if (state.scrollMode === 'fixed') {
-      const contentsWidth = getFixedScrollContentsWidth(state);
-      const realContentsWidth = contentsWidth * scale.target * zoom.target;
-      const availableWidth = window.innerWidth - (state.margin.left + state.margin.right);
-      console.log({ contentsWidth, realContentsWidth, availableWidth });
+      // const margins = state.readMode ? state.config.readModeMargin : state.config.uiModeMargin;
+      // const targetScale = Math.abs(scale.target * zoom.target);
+      // maxScroll = 0;
+      // let maxScrollableWidth = 0;
+      // const availableWidth = state.containerWidth - (state.margin.left + state.margin.right);
+      // const totalWidth = state.maxWidth * targetScale;
+      // if (availableWidth > totalWidth) {
+      //   maxScrollableWidth = (state.maxWidth - availableWidth / targetScale) / 2;
+      //   maxScroll = -1 * maxScrollableWidth;
+      // } else {
+      //   maxScrollableWidth = Math.max(state.maxWidth - availableWidth / targetScale, 0);
+      // }
+      // minScroll = -1 * maxScrollableWidth;
+      // console.log({ availableWidth, totalWidth, maxScroll, minScroll, maxScrollableWidth });
+
+      // const realContentsWidth = state.maxWidth * scale.target * zoom.target;
+      // const availableWidth = window.innerWidth - (state.margin.left + state.margin.right);
+      // console.log({ contentsWidth, realContentsWidth, availableWidth });
       maxScroll = state.margin.left;
       minScroll = -state.margin.right;
     }
@@ -133,7 +148,7 @@ export const getMinAndMaxAltScroll = (state: State): MinAndMaxScroll => {
       return {
         maxScroll: state.margin.top,
         minScroll: -state.margin.bottom,
-      }
+      };
     }
     // TODO: Fixed limits
   }
