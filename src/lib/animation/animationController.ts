@@ -282,25 +282,34 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
   const fitHeight = (): void => {
     if (state.layout === LayoutTypes.Fixed) {
       top.target = state.margin.top;
-      zoom.target = state.containerHeight / state.maxHeight;
-      scale.target = Math.max(
-        0,
-        (state.containerHeight - (state.margin.top + state.margin.bottom)) / state.containerHeight,
-      );
 
-      if (state.scrollMode === 'horizontal') {
-        left.target = state.margin.left;
-      }
-      if (state.scrollMode === 'vertical') {
-        const widthReduction = state.containerWidth * (1 - scale.target);
-        const marginWidth = widthReduction - state.margin.left - state.margin.right;
-        left.target = state.margin.left + marginWidth / 2;
-      }
       if (state.scrollMode === 'fixed') {
+        zoom.target =
+          (state.containerHeight / state.maxHeight) *
+          Math.max(
+            0,
+            (state.containerHeight - (state.margin.top + state.margin.bottom)) /
+              state.containerHeight,
+          );
         const contentsWidth = getFixedScrollContentsWidth(state);
         const realContentsWidth = contentsWidth * scale.target * zoom.target;
         const availableWidth = window.innerWidth - (state.margin.left + state.margin.right);
         left.target = state.margin.left - (realContentsWidth - availableWidth) / 2;
+      } else {
+        zoom.target = state.containerHeight / state.maxHeight;
+        scale.target = Math.max(
+          0,
+          (state.containerHeight - (state.margin.top + state.margin.bottom)) /
+            state.containerHeight,
+        );
+        if (state.scrollMode === 'horizontal') {
+          left.target = state.margin.left;
+        }
+        if (state.scrollMode === 'vertical') {
+          const widthReduction = state.containerWidth * (1 - scale.target);
+          const marginWidth = widthReduction - state.margin.left - state.margin.right;
+          left.target = state.margin.left + marginWidth / 2;
+        }
       }
     }
   };
@@ -308,25 +317,32 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
   const fitWidth = (): void => {
     if (state.layout === LayoutTypes.Fixed) {
       left.target = state.margin.left;
-      zoom.target = state.containerWidth / state.maxWidth;
-      scale.target = Math.max(
-        0,
-        (state.containerWidth - state.margin.left - state.margin.right) / state.containerWidth,
-      );
 
-      if (state.scrollMode === 'vertical') {
-        top.target = state.margin.top;
-      }
-      if (state.scrollMode === 'horizontal') {
-        const heightReduction = state.containerHeight * (1 - scale.target);
-        const marginHeight = heightReduction - state.margin.top - state.margin.bottom;
-        top.target = state.margin.top + marginHeight / 2;
-      }
       if (state.scrollMode === 'fixed') {
+        zoom.target =
+          (state.containerWidth / state.maxWidth) *
+          Math.max(
+            0,
+            (state.containerWidth - state.margin.left - state.margin.right) / state.containerWidth,
+          );
         const contentsHeight = getFixedScrollContentsHeight(state);
         const realContentsHeight = contentsHeight * scale.target * zoom.target;
         const availableHeight = window.innerHeight - (state.margin.top + state.margin.bottom);
         top.target = state.margin.top - (realContentsHeight - availableHeight) / 2;
+      } else {
+        zoom.target = state.containerWidth / state.maxWidth;
+        scale.target = Math.max(
+          0,
+          (state.containerWidth - state.margin.left - state.margin.right) / state.containerWidth,
+        );
+        if (state.scrollMode === 'vertical') {
+          top.target = state.margin.top;
+        }
+        if (state.scrollMode === 'horizontal') {
+          const heightReduction = state.containerHeight * (1 - scale.target);
+          const marginHeight = heightReduction - state.margin.top - state.margin.bottom;
+          top.target = state.margin.top + marginHeight / 2;
+        }
       }
     }
   };

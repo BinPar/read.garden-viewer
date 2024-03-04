@@ -317,7 +317,7 @@ div.rg-content-wrapper #rg-content-placeholder > div a {
 .rg-fixed-layout div.rg-content-wrapper div#rg-content-placeholder > .rg-fixed-content-container {
   margin: 0;
   overflow: hidden;
-  /* border: solid 1px green; */
+  border: solid 1px green;
 }
 
 .rg-fixed-layout.rg-fixed-scroll #rg-content-placeholder {
