@@ -10,11 +10,10 @@ export interface MinAndMaxScroll {
 const getMinAndMaxScroll = (state: State, forceMargin: number | null = null): MinAndMaxScroll => {
   const margin =
     forceMargin ??
-    (state.scrollMode === 'horizontal' || state.scrollMode === 'fixed'
-      ? window.innerWidth / 2
-      : window.innerHeight / 2);
+    (state.scrollMode === 'horizontal' ? window.innerWidth / 2 : window.innerHeight / 2);
   let minScroll = margin * -1;
   let maxScroll = margin;
+
   if (state.layout === LayoutTypes.Flow || state.layout === LayoutTypes.Fixed) {
     if (state.scrollMode === 'horizontal') {
       if (state.slugByPosition) {
@@ -83,26 +82,38 @@ const getMinAndMaxScroll = (state: State, forceMargin: number | null = null): Mi
       }
     }
     if (state.scrollMode === 'fixed') {
-      // const margins = state.readMode ? state.config.readModeMargin : state.config.uiModeMargin;
-      // const targetScale = Math.abs(scale.target * zoom.target);
-      // maxScroll = 0;
-      // let maxScrollableWidth = 0;
-      // const availableWidth = state.containerWidth - (state.margin.left + state.margin.right);
-      // const totalWidth = state.maxWidth * targetScale;
-      // if (availableWidth > totalWidth) {
-      //   maxScrollableWidth = (state.maxWidth - availableWidth / targetScale) / 2;
-      //   maxScroll = -1 * maxScrollableWidth;
-      // } else {
-      //   maxScrollableWidth = Math.max(state.maxWidth - availableWidth / targetScale, 0);
-      // }
+      const margins = state.readMode ? state.config.readModeMargin : state.config.uiModeMargin;
+      const targetScale = Math.abs(scale.target * zoom.target);
+      const availableWidth = state.containerWidth - (state.margin.left + state.margin.right);
+      const totalWidth = state.maxWidth * targetScale;
+      const test = (totalWidth * margins.left) / state.maxWidth / 2;
+      const widthReduction = state.containerWidth * (1 - zoom.target);
+      // Si cabe todo el contenido
+      if (availableWidth > totalWidth) {
+        minScroll = -margins.left * targetScale;
+        maxScroll = (-1 * (state.maxWidth - availableWidth / targetScale)) / 2;
+      } else {
+        // Cuanto
+        maxScroll = (availableWidth - state.maxWidth) / targetScale;
+        minScroll = 0;
+      }
       // minScroll = -1 * maxScrollableWidth;
-      // console.log({ availableWidth, totalWidth, maxScroll, minScroll, maxScrollableWidth });
+      console.table({
+        widthReduction,
+        availableWidth,
+        totalWidth,
+        targetScale,
+        maxWidth: state.maxWidth,
+        maxScroll,
+        minScroll,
+        test,
+      });
 
       // const realContentsWidth = state.maxWidth * scale.target * zoom.target;
       // const availableWidth = window.innerWidth - (state.margin.left + state.margin.right);
       // console.log({ contentsWidth, realContentsWidth, availableWidth });
-      maxScroll = state.margin.left;
-      minScroll = -state.margin.right;
+      // maxScroll = state.margin.left;
+      // minScroll = -state.margin.right;
     }
   }
   return { minScroll, maxScroll };

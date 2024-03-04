@@ -71,7 +71,7 @@ const processFixedContents = async (
     if (unaffected.has(slug)) {
       container.classList.add('rg-avoid-invert');
     }
-    if ((i === 0 && rightSide) || (i === l - 1 && !rightSide)) {
+    if (state.scrollMode === 'fixed' && ((i === 0 && rightSide) || (i === l - 1 && !rightSide))) {
       container.style.marginLeft = `${width / 2}px`;
     }
     containers.push(container);
