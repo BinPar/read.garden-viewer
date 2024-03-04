@@ -69,27 +69,17 @@ const scrollInertiaAndLimits = (
     }
     min = scrollLimits.maxScroll * -1;
     max = scrollLimits.minScroll * -1;
-    // console.table([{
-    //   isAltScroll,
-    //   min,
-    //   max,
-    //   scroll: scroll.target,
-    // }]);
   }
-  const previousScroll = scroll.target;
   if (min !== null && scroll.target * -1 < min) {
     scroll.target = min * -1;
   }
   if (max !== null && scroll.target * -1 > max) {
     scroll.target = max * -1;
   }
-  if (!isAltScroll) {
-    console.log({ previousScroll, scroll: scroll.target, min, max });
-  }
   if (state.layout === LayoutTypes.Flow) {
     const scrollLimits = getMinAndMaxScroll(state, 100);
     if (scroll.current >= scrollLimits.maxScroll) {
-      console.info('Navigate to prev');
+      console.debug('Navigate to prev');
       const navigateToPrevious: NavigateToPreviousChapter = {
         type: 'navigateToPreviousChapter',
         goToEnd: true,
@@ -99,7 +89,7 @@ const scrollInertiaAndLimits = (
         console.error('Error dispatching action', stack || message);
       });
     } else if (scroll.current <= scrollLimits.minScroll) {
-      console.info('Navigate to next');
+      console.debug('Navigate to next');
       dispatch({ type: 'navigateToNextChapter' }).catch((ex) => {
         const { stack, message } = ex as Error;
         console.error('Error dispatching action', stack || message);
