@@ -6,14 +6,19 @@ import { FitMode, GapMode } from '../viewerSettings';
  * Names of the action types for Fixed Layout Actions
  */
 export enum FixedActionTypes {
-  SetSinglePageMode = 'setSinglePageMode',
+  SetDoublePage = 'setDoublePage',
+  SetContentsInfo = 'setContentsInfo',
+  SetZoom = 'setZoom',
+  SetFitMode = 'setFitMode',
+  SetGapMode = 'setGapMode',
 }
 
 /**
  * Set the Single Page Mode (not scroll mode)
  */
-export interface SetSinglePageMode extends Action {
-  type: 'setSinglePageMode';
+export interface SetDoublePage extends Action {
+  type: 'setDoublePage';
+  doublePage: boolean;
 }
 
 /**
@@ -67,4 +72,4 @@ export interface SetGapMode extends Action {
 /**
  * Actions for FixedLayout
  */
-export type FixedActions = SetSinglePageMode | SetContentsInfo | SetZoom | SetFitMode | SetGapMode;
+export type FixedActions = SetDoublePage | SetContentsInfo | SetZoom | SetFitMode | SetGapMode;

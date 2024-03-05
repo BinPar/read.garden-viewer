@@ -22,13 +22,31 @@ export type StatePropertyNames<T> = AllowedPropertyNamesNames<FullState, T>;
  * Names of the action types for global actions
  */
 export enum GlobalActionTypes {
+  AppendNewContent = 'appendNewContent',
+  SetDebugViewerSafeArea = 'setDebugViewerSafeArea',
   SetScrollMode = 'setScrollMode',
+  SetTheme = 'setTheme',
   SetDarkMode = 'setDarkMode',
   NavigateToPage = 'navigateToPage',
-  SetDebugViewerSafeArea = 'setDebugViewerSafeArea',
-  AppendNewContent = 'appendNewContent',
   Resize = 'resize',
+  AddOnChangeEvent = 'addOnChangeEvent',
+  RemoveOnChangeEvent = 'removeOnChangeEvent',
+  RemoveAllChangeEvents = 'removeAllChangeEvents',
   HighlightSearchTerms = 'highlightSearchTerms',
+  RemoveSearchHighlights = 'removeSearchHighlights',
+  SetReadMode = 'setReadMode',
+  ShowSelectionMenu = 'showSelectionMenu',
+  ShowNotesDialog = 'showNotesDialog',
+  RemoveSelectionMenu = 'removeSelectionMenu',
+  RemoveNotesDialog = 'removeNotesDialog',
+  ClearSelection = 'clearSelection',
+  DrawHighlights = 'drawHighlights',
+  RemoveHighlights = 'removeHighlights',
+  SetHighlighterColor = 'setHighlighterColor',
+  MoveNext = 'moveNext',
+  MovePrev = 'movePrev',
+  SetLinkProps = 'setLinkProps',
+  
 }
 
 /**

@@ -11,6 +11,8 @@ export enum FlowActionTypes {
   SetLineHeight = 'setLineHeight',
   SetFontFamily = 'setFontFamily',
   SetTextAlign = 'setTextAlign',
+  NavigateToNextChapter = 'navigateToNextChapter',
+  NavigateToPreviousChapter = 'navigateToPreviousChapter',
 }
 
 /**

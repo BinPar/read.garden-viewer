@@ -16,6 +16,7 @@ import navigationButtons from './navigationButtons';
 import zoomControls from './zoomControls';
 import lineHeightButtons from './lineHeightButtons';
 import gapButtons from './gapButtons';
+import doublePageButtons from './doublePageButtons';
 
 const setupButtonBar = async (state: State, dispatcher: DispatchAPIAction): Promise<void> => {
   const redrawToolbar = async (): Promise<void> => {
@@ -62,6 +63,12 @@ const setupButtonBar = async (state: State, dispatcher: DispatchAPIAction): Prom
       gapButtons(testingButtonsPanel, state, dispatcher).catch((ex) => {
         const { stack, message } = ex as Error;
         console.error('Error at gap mode buttons setup', stack || message);
+      });
+    }
+    if (state.scrollMode === 'fixed') {
+      doublePageButtons(testingButtonsPanel, state, dispatcher).catch((ex) => {
+        const { stack, message } = ex as Error;
+        console.error('Error at double page buttons setup', stack || message);
       });
     }
     navigationButtons(testingButtonsPanel, state, dispatcher);

@@ -433,6 +433,7 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
   addOnChangeEventListener('containerWidth', () => onReadModeChangeEvent());
   addOnChangeEventListener('containerHeight', () => onReadModeChangeEvent());
   addOnChangeEventListener('fontSize', () => onReadModeChangeEvent());
+  addOnChangeEventListener('doublePage', onChapterChange);
 
   onReadModeChangeEvent(true);
   scrollController(state, dispatch, executeTransitions);

@@ -33,6 +33,7 @@ import movePrev from './movePrev';
 import setLineHeight from './setLineHeight';
 import setGapMode from './setGapMode';
 import setLinkProps from './setLinkProps';
+import setDoublePage from './setDoublePage';
 
 /**
  * List of all action dispatchers
@@ -73,6 +74,7 @@ const actionDispatchers  = {
   movePrev,
   setGapMode,
   setLinkProps,
+  setDoublePage,
 };
 
 export default actionDispatchers;
