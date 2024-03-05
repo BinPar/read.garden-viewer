@@ -159,8 +159,6 @@ const scrollController = (
   };
 
   const onDragStart = (ev: MouseEvent | TouchEvent): void => {
-    // console.log('onDragStart');
-
     if (ev.type === 'touchstart') {
       isFirstMove = true;
       fingers = (ev as TouchEvent).touches.length;
@@ -318,8 +316,6 @@ const scrollController = (
   };
 
   const onDragEnd = (ev: MouseEvent | TouchEvent): void => {
-    // console.log('onDragEnd');
-
     if (mobileSelectionTimeout) {
       clearTimeout(mobileSelectionTimeout);
       mobileSelectionTimeout = null;
@@ -446,8 +442,6 @@ const scrollController = (
   };
 
   const onDragMove = (ev: MouseEvent | TouchEvent): void => {
-    // console.log('onDragMove');
-
     if (ev.type === 'touchmove' && fingers === 2 && !isDoubleTap) {
       mouseDown = false;
       mobileSelection = false;

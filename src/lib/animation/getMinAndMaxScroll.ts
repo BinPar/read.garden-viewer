@@ -120,6 +120,7 @@ export const getMinAndMaxAltScroll = (state: State): MinAndMaxScroll => {
         minScroll,
       };
     }
+
     if (state.scrollMode === 'vertical') {
       const targetScale = Math.abs(scale.target * zoom.target);
       const additional = (state.containerWidth / zoom.target - state.maxWidth) / 2;
@@ -137,13 +138,23 @@ export const getMinAndMaxAltScroll = (state: State): MinAndMaxScroll => {
         minScroll,
       };
     }
+
     if (state.scrollMode === 'fixed') {
-      return {
-        maxScroll: state.margin.top,
-        minScroll: -state.margin.bottom,
-      };
+      let minScroll = 0;
+      const targetScale = Math.abs(scale.target * zoom.target);
+      let maxScroll = 0;
+      let maxScrollableHeight = 0;
+      const availableHeight = state.containerHeight - (state.margin.top + state.margin.bottom);
+      const totalHeight = state.maxHeight * targetScale;
+      if (availableHeight > totalHeight) {
+        maxScrollableHeight = (state.maxHeight - availableHeight / targetScale) / 2;
+        maxScroll = -1 * maxScrollableHeight;
+      } else {
+        maxScrollableHeight = Math.max(state.maxHeight - availableHeight / targetScale, 0);
+      }
+      minScroll = -1 * maxScrollableHeight;
+      return { maxScroll, minScroll };
     }
-    // TODO: Fixed limits
   }
   return { minScroll: 0, maxScroll: 0 };
 };

@@ -195,6 +195,7 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
     }
 
     if (state.scrollMode === 'fixed') {
+      top.target = newMargins.top;
       left.target = newMargins.left;
     }
 
@@ -302,6 +303,9 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
   const fitWidth = (): void => {
     if (state.layout === LayoutTypes.Fixed) {
       left.target = state.margin.left;
+      if (state.scrollMode === 'vertical' || state.scrollMode === 'fixed') {
+        top.target = state.margin.top;
+      }
 
       if (state.scrollMode === 'fixed') {
         zoom.target =
@@ -310,18 +314,12 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
             0,
             (state.containerWidth - state.margin.left - state.margin.right) / state.containerWidth,
           );
-        const realContentsHeight = state.maxHeight * scale.target * zoom.target;
-        const availableHeight = window.innerHeight - (state.margin.top + state.margin.bottom);
-        top.target = state.margin.top - (realContentsHeight - availableHeight) / 2;
       } else {
         zoom.target = state.containerWidth / state.maxWidth;
         scale.target = Math.max(
           0,
           (state.containerWidth - state.margin.left - state.margin.right) / state.containerWidth,
         );
-        if (state.scrollMode === 'vertical') {
-          top.target = state.margin.top;
-        }
         if (state.scrollMode === 'horizontal') {
           const heightReduction = state.containerHeight * (1 - scale.target);
           const marginHeight = heightReduction - state.margin.top - state.margin.bottom;
