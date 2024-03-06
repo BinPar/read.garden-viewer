@@ -337,6 +337,13 @@ div.rg-content-wrapper #rg-content-placeholder > div a {
   position: absolute;
 }
 
+.rg-fixed-layout.rg-fixed-scroll
+  div.rg-content-wrapper
+  div#rg-content-placeholder
+  > .rg-fixed-content-container {
+  position: relative;
+}
+
 .rg-fixed-layout
   div.rg-content-wrapper
   div#rg-content-placeholder
