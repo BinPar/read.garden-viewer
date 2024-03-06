@@ -245,6 +245,8 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
   const onContentSlugChanged = (slug: string): void => {
     if (state.scrollMode === 'fixed') {
       recalculateCurrentPage(state, scroll.current, true);
+      reCalcScrollLimits(state, true);
+      applyCSSProps();
     } else {
       const targetSlugScrollPosition = getScrollFromContentSlug(state, slug);
       if (targetSlugScrollPosition !== null && state.forceScroll === undefined) {

@@ -15,8 +15,8 @@ const getContainer = (
   const { order, width, height, slug, label } = info;
   const container = document.createElement('div');
   container.classList.add('rg-fixed-content-container');
-  container.style.width = `${width}px`;
-  container.style.height = `${height - 1}px`;
+  // container.style.width = `${width}px`;
+  // container.style.height = `${height - 1}px`;
   container.dataset.order = `${order}`;
   container.dataset.slug = slug;
   container.dataset.label = label;
@@ -71,9 +71,6 @@ const processFixedContents = async (
     if (unaffected.has(slug)) {
       container.classList.add('rg-avoid-invert');
     }
-    if (state.scrollMode === 'fixed' && ((i === 0 && rightSide) || (i === l - 1 && !rightSide))) {
-      container.style.marginLeft = `${width / 2}px`;
-    }
     containers.push(container);
     const position = state.scrollMode === 'horizontal' ? left : top;
     positionBySlug.set(slug, position);
@@ -106,10 +103,6 @@ const processFixedContents = async (
       previousContent.next = slug;
     }
     previousContent = contentInfo;
-  }
-
-  if (previousContent) {
-    previousContent.next = prev;
   }
 
   setCSSProperty('total-width', `${totalWidth}px`);

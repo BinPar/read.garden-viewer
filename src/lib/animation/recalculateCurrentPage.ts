@@ -29,6 +29,7 @@ const recalculateCurrentPage = (state: State, currentScroll: number, avoidUpdate
       containers.push(current.container);
 
       if (state.doublePage) {
+        console.log({ current });
         if (!current.rightSide) {
           target = current.slug;
           if (current.next) {

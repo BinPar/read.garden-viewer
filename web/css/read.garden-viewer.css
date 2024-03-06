@@ -6,10 +6,6 @@
   box-sizing: border-box;
 }
 
-html {
-  line-sizing: normal;
-}
-
 body {
   margin: 0;
 }
@@ -317,6 +313,8 @@ div.rg-content-wrapper #rg-content-placeholder > div a {
 .rg-fixed-layout div.rg-content-wrapper div#rg-content-placeholder > .rg-fixed-content-container {
   margin: 0;
   overflow: hidden;
+  width: var(--page-width);
+  height: var(--page-height);
   /* border: solid 1px green; */
 }
 
@@ -822,6 +820,7 @@ div.rg-notes-dialog .rg-notes-dialog-wrapper .rg-notes-dialog-holder .rg-notes-o
   width: 1.375rem;
   min-width: 1.375rem;
   height: 1.375rem;
+  appearance: button;
   -webkit-appearance: button;
   cursor: pointer;
   border: 0;
