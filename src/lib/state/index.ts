@@ -162,6 +162,7 @@ export const initializeState = (initialConfig: InitialConfig): void => {
         ...globalState,
         ...fixedState,
         ...defaultPaginated,
+        doublePage: initialConfig.initialDoublePage ?? defaultPaginated.doublePage,
       };
     }
 

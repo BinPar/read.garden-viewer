@@ -88,6 +88,12 @@ export interface DefaultConfig {
    * @scope Scrolled
    */
   initialScrollMode: ScrollModes;
+  
+  /**
+   * Initial double page
+   * @scope Fixed
+   */
+  initialDoublePage: boolean;
   /**
    * Initial viewer theme
    * @scope Global

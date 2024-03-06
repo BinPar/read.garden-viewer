@@ -13,6 +13,7 @@ const defaultConfig: DefaultConfig = {
   initialLineHeight: 1.5,
   initialZoom: 1,
   initialSearchTerms: new Array<string>(),
+  initialDoublePage: true,
   showPageSeparation: false,
   animationFriction: 10,
   animationSpeed: 300,
