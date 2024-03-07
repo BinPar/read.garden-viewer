@@ -47,7 +47,7 @@ const recalculateCurrentPage = (state: State, currentScroll: number, avoidUpdate
             maxWidth += prev.width;
             maxHeight = Math.max(prev.height, maxHeight);
           }
-        } else {
+        } else if (current.label !== '1') {
           console.warn(`No initial page for slug: ${state.contentSlug}`);
         }
       } else {
