@@ -331,6 +331,42 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
     }
   };
 
+  const fitPage = (): void => {
+    let fitWidthZoom = 0;
+    let fitHeightZoom = 0;
+
+    if (state.scrollMode === 'fixed') {
+      fitWidthZoom =
+        (state.containerWidth / state.maxWidth) *
+        Math.max(
+          0,
+          (state.containerWidth - state.margin.left - state.margin.right) / state.containerWidth,
+        );
+      fitHeightZoom =
+        (state.containerHeight / state.maxHeight) *
+        Math.max(
+          0,
+          (state.containerHeight - (state.margin.top + state.margin.bottom)) /
+            state.containerHeight,
+        );
+    } else {
+      fitWidthZoom = Math.max(
+        0,
+        (state.containerWidth - state.margin.left - state.margin.right) / state.containerWidth,
+      );
+      fitHeightZoom = Math.max(
+        0,
+        (state.containerHeight - state.margin.top - state.margin.bottom) / state.containerHeight,
+      );
+    }
+
+    if (fitWidthZoom < fitHeightZoom) {
+      fitWidth();
+    } else {
+      fitHeight();
+    }
+  };
+
   const onChapterChange = (): void => {
     resetPageScroll();
     if (state.layout === LayoutTypes.Fixed) {
@@ -339,19 +375,7 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
       } else if (state.fitMode === FitMode.Width) {
         fitWidth();
       } else if (state.fitMode === FitMode.Page) {
-        const fitWidthZoom = Math.max(
-          0,
-          (state.containerWidth - state.margin.left - state.margin.right) / state.containerWidth,
-        );
-        const fitHeightZoom = Math.max(
-          0,
-          (state.containerHeight - state.margin.top - state.margin.bottom) / state.containerHeight,
-        );
-        if (fitWidthZoom < fitHeightZoom) {
-          fitWidth();
-        } else {
-          fitHeight();
-        }
+        fitPage();
         navigateToContentSlug(state.contentSlug);
       } else {
         zoom.target = state.zoom;
@@ -435,7 +459,10 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
   addOnChangeEventListener('containerWidth', () => onReadModeChangeEvent());
   addOnChangeEventListener('containerHeight', () => onReadModeChangeEvent());
   addOnChangeEventListener('fontSize', () => onReadModeChangeEvent());
-  addOnChangeEventListener('doublePage', onChapterChange);
+  addOnChangeEventListener('doublePage', () => {
+    onChapterChange();
+    onChapterChange();
+  });
 
   onReadModeChangeEvent(true);
   scrollController(state, dispatch, executeTransitions);

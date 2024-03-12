@@ -94,6 +94,9 @@ const processFixedContents = async (
       prev,
       rightSide,
     };
+    if (contentInfo.html) {
+      container.innerHTML = contentInfo.html;
+    }
     contentsByOrder.set(order, contentInfo);
     contentsBySlug.set(slug, contentInfo);
     contentsInfo.push(contentInfo);
@@ -109,15 +112,17 @@ const processFixedContents = async (
   setCSSProperty('total-height', `${totalHeight}px`);
   setCSSProperty('max-width', `${maxWidth}px`);
   setCSSProperty('max-height', `${maxHeight}px`);
-  contentPlaceholderNode.append(...containers);
 
   return new Promise<Partial<State>>((resolve) => {
     window.requestAnimationFrame(() => {
       window.requestAnimationFrame(() => {
         for (let i = 0, l = info.length; i < l; i++) {
           const content = contentsByOrder.get(i);
-          if (content && content.slug !== state.contentSlug) {
-            contentPlaceholderNode.removeChild(content.container);
+          if (content?.container && content.slug === state.contentSlug) {
+            contentPlaceholderNode.append(content.container);
+            if (!content.container.innerHTML) {
+              console.warn(`No HTML for initial content container`, content);
+            }
           }
         }
         window.requestAnimationFrame(() => {
