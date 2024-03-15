@@ -22,6 +22,7 @@ import {
   topCorrector,
   resetInterpolationValues,
 } from './interpolationValues';
+import getMargins from '../../utils/getMargins';
 
 let unmountAnimationsHandler = (): void => {};
 
@@ -150,127 +151,6 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
     }
   };
 
-  const onReadModeChangeEvent = (instant = false): void => {
-    const newMargins = state.readMode
-      ? { ...state.config.readModeMargin }
-      : { ...state.config.uiModeMargin };
-
-    if (!state.readMode && state.layout === LayoutTypes.Flow) {
-      newMargins.bottom += state.fontSize * 3;
-    }
-
-    const currentWidth = state.containerWidth;
-    const horizontalMargin = newMargins.left + newMargins.right;
-    const targetWidth = currentWidth - horizontalMargin;
-    const widthNeededScale = targetWidth / currentWidth;
-
-    const currentHeight = state.containerHeight;
-    const verticalMargin = newMargins.top + newMargins.bottom;
-    const targetHeight = currentHeight - verticalMargin;
-    const heightNeededScale = targetHeight / currentHeight;
-
-    if (state.layout === LayoutTypes.Flow) {
-      scale.target = Math.max(Math.min(widthNeededScale, heightNeededScale), 0);
-    } else if (state.scrollMode !== 'fixed') {
-      if (state.fitMode === FitMode.Height) {
-        scale.target = Math.max(heightNeededScale, 0);
-      }
-      if (state.fitMode === FitMode.Width) {
-        scale.target = Math.max(widthNeededScale, 0);
-      }
-    }
-
-    if (state.scrollMode === 'horizontal') {
-      left.target = newMargins.left;
-      const heightReduction = currentHeight * (1 - scale.target);
-      const marginHeight = heightReduction - newMargins.top - newMargins.bottom;
-      top.target = newMargins.top + marginHeight / 2;
-    }
-
-    if (state.scrollMode === 'vertical') {
-      top.target = newMargins.top;
-      const widthReduction = currentWidth * (1 - scale.target);
-      const marginWidth = widthReduction - newMargins.left - newMargins.right;
-      left.target = newMargins.left + marginWidth / 2;
-    }
-
-    if (state.scrollMode === 'fixed') {
-      top.target = newMargins.top;
-      left.target = newMargins.left;
-    }
-
-    updateState({
-      margin: newMargins,
-    });
-
-    if (instant) {
-      left.current = left.target;
-      top.current = top.target;
-      scale.current = scale.target;
-      scale.speed = 0;
-      top.speed = 0;
-      left.speed = 0;
-      applyCSSProps();
-    } else {
-      executeTransitions();
-    }
-
-    setCSSProperty('scroller-left', `${state.margin.left}px`);
-    setCSSProperty('scroller-scale', `${scale.target}`);
-  };
-
-  const resetPageProps = (): void => {
-    if (!state.avoidReset) {
-      const targetSlugScrollPosition = getScrollFromContentSlug(state) ?? 0;
-      scroll.target = targetSlugScrollPosition;
-      scroll.current = scroll.target;
-      scroll.speed = 0;
-      recalculateCurrentPage(state, scroll.current, true);
-    }
-  };
-
-  const onScrollModeChange = (): void => {
-    setTimeout(() => {
-      onReadModeChangeEvent(true);
-      scroll.current = getScrollFromContentSlug(state) ?? 0;
-      scroll.target = scroll.current;
-      scroll.speed = 0;
-      if (state.layout === LayoutTypes.Fixed) {
-        reCalcScrollLimits(state, true);
-      }
-      applyCSSProps();
-    }, 0);
-  };
-
-  const onContentSlugChanged = (slug: string): void => {
-    if (state.scrollMode === 'fixed') {
-      recalculateCurrentPage(state, scroll.current, true);
-      reCalcScrollLimits(state, true);
-      applyCSSProps();
-    } else {
-      const targetSlugScrollPosition = getScrollFromContentSlug(state, slug);
-      if (targetSlugScrollPosition !== null && state.forceScroll === undefined) {
-        const scrollLimits = getMinAndMaxScroll(state);
-        if (targetSlugScrollPosition > scrollLimits.maxScroll) {
-          scroll.target = scrollLimits.maxScroll;
-          scroll.forceUpdate = true;
-        } else if (targetSlugScrollPosition < scrollLimits.minScroll) {
-          scroll.target = scrollLimits.minScroll;
-          scroll.forceUpdate = true;
-        } else {
-          scroll.target = targetSlugScrollPosition;
-        }
-      }
-      executeTransitions();
-      scroll.forceUpdate = false;
-    }
-  };
-
-  const resetPageScroll = (): void => {
-    const scrollingElement = document.scrollingElement ?? document.body;
-    scrollingElement.scrollTop = 0;
-  };
-
   const fitHeight = (): void => {
     if (state.layout === LayoutTypes.Fixed) {
       top.target = state.margin.top;
@@ -365,6 +245,140 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
     } else {
       fitHeight();
     }
+  };
+
+  const onReadModeChangeEvent = (instant = false): void => {
+    const newMargins = getMargins({
+      containerWidth: state.containerWidth,
+      config: state.config,
+      readMode: state.readMode,
+    });
+
+    if (!state.readMode && state.layout === LayoutTypes.Flow) {
+      newMargins.bottom += state.fontSize * 3;
+    }
+
+    const currentWidth = state.containerWidth;
+    const horizontalMargin = newMargins.left + newMargins.right;
+    const targetWidth = currentWidth - horizontalMargin;
+    const widthNeededScale = targetWidth / currentWidth;
+
+    const currentHeight = state.containerHeight;
+    const verticalMargin = newMargins.top + newMargins.bottom;
+    const targetHeight = currentHeight - verticalMargin;
+    const heightNeededScale = targetHeight / currentHeight;
+
+    if (state.layout === LayoutTypes.Flow) {
+      scale.target = Math.max(Math.min(widthNeededScale, heightNeededScale), 0);
+    } else if (state.scrollMode !== 'fixed') {
+      if (state.fitMode === FitMode.Height) {
+        scale.target = Math.max(heightNeededScale, 0);
+      }
+      if (state.fitMode === FitMode.Width) {
+        scale.target = Math.max(widthNeededScale, 0);
+      }
+    }
+
+    if (state.scrollMode === 'horizontal') {
+      left.target = newMargins.left;
+      const heightReduction = currentHeight * (1 - scale.target);
+      const marginHeight = heightReduction - newMargins.top - newMargins.bottom;
+      top.target = newMargins.top + marginHeight / 2;
+    }
+
+    if (state.scrollMode === 'vertical') {
+      top.target = newMargins.top;
+      const widthReduction = currentWidth * (1 - scale.target);
+      const marginWidth = widthReduction - newMargins.left - newMargins.right;
+      left.target = newMargins.left + marginWidth / 2;
+    }
+
+    if (state.scrollMode === 'fixed') {
+      top.target = newMargins.top;
+      left.target = newMargins.left;
+    }
+
+    updateState({
+      margin: newMargins,
+    });
+
+    if (state.scrollMode === 'fixed' && state.fitMode) {
+      if (state.fitMode === FitMode.Height) {
+        fitHeight();
+      } else if (state.fitMode === FitMode.Width) {
+        fitWidth();
+      } else if (state.fitMode === FitMode.Page) {
+        fitPage();
+        navigateToContentSlug(state.contentSlug);
+      }
+    }
+
+    if (instant) {
+      left.current = left.target;
+      top.current = top.target;
+      scale.current = scale.target;
+      scale.speed = 0;
+      top.speed = 0;
+      left.speed = 0;
+      applyCSSProps();
+    } else {
+      executeTransitions();
+    }
+
+    setCSSProperty('scroller-left', `${state.margin.left}px`);
+    setCSSProperty('scroller-scale', `${scale.target}`);
+  };
+
+  const resetPageProps = (): void => {
+    if (!state.avoidReset) {
+      const targetSlugScrollPosition = getScrollFromContentSlug(state) ?? 0;
+      scroll.target = targetSlugScrollPosition;
+      scroll.current = scroll.target;
+      scroll.speed = 0;
+      recalculateCurrentPage(state, scroll.current, true);
+    }
+  };
+
+  const onScrollModeChange = (): void => {
+    setTimeout(() => {
+      onReadModeChangeEvent(true);
+      scroll.current = getScrollFromContentSlug(state) ?? 0;
+      scroll.target = scroll.current;
+      scroll.speed = 0;
+      if (state.layout === LayoutTypes.Fixed) {
+        reCalcScrollLimits(state, true);
+      }
+      applyCSSProps();
+    }, 0);
+  };
+
+  const onContentSlugChanged = (slug: string): void => {
+    if (state.scrollMode === 'fixed') {
+      recalculateCurrentPage(state, scroll.current, true);
+      reCalcScrollLimits(state, true);
+      applyCSSProps();
+    } else {
+      const targetSlugScrollPosition = getScrollFromContentSlug(state, slug);
+      if (targetSlugScrollPosition !== null && state.forceScroll === undefined) {
+        const scrollLimits = getMinAndMaxScroll(state);
+        if (targetSlugScrollPosition > scrollLimits.maxScroll) {
+          scroll.target = scrollLimits.maxScroll;
+          scroll.forceUpdate = true;
+        } else if (targetSlugScrollPosition < scrollLimits.minScroll) {
+          scroll.target = scrollLimits.minScroll;
+          scroll.forceUpdate = true;
+        } else {
+          scroll.target = targetSlugScrollPosition;
+        }
+      }
+      executeTransitions();
+      scroll.forceUpdate = false;
+    }
+  };
+
+  const resetPageScroll = (): void => {
+    const scrollingElement = document.scrollingElement ?? document.body;
+    scrollingElement.scrollTop = 0;
   };
 
   const onChapterChange = (): void => {

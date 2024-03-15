@@ -19,6 +19,7 @@ import defaultConfig from '../../config/default';
 import { setConfig } from '../../config';
 import changeHandlers from './changeHandlers';
 import { notifyEventHandler } from './stateChangeEvents';
+import getMargins from '../../utils/getMargins';
 
 const handlers = new Map<string, Map<any, PropChangeHandler>>();
 
@@ -67,11 +68,6 @@ export const initializeState = (initialConfig: InitialConfig): void => {
     config.fixedViewerPreloadOrder = [0, 1, 2, 3, -1, -2, 5, 6, -3, -4, 7, 8, -5, -6];
   }
 
-  const defaultInitialMargins = config.initialReadMode
-    ? defaultConfig.readModeMargin
-    : defaultConfig.uiModeMargin;
-  const initialMargins = config.initialReadMode ? config.readModeMargin : config.uiModeMargin;
-
   const linksCustomProps = new Map<string, LinkProps>();
 
   if (config.linksProps) {
@@ -80,13 +76,12 @@ export const initializeState = (initialConfig: InitialConfig): void => {
     });
   }
 
+  const margin = getMargins({ config, containerWidth: 0, readMode: config.initialReadMode });
+
   const globalState: GlobalState = {
     ...defaultGlobal,
     config,
-    margin: {
-      ...defaultInitialMargins,
-      ...(initialMargins ?? {}),
-    },
+    margin,
     title: 'Title', // From initial config
     slug: config.slug,
     productSlug: config.productSlug || config.slug,

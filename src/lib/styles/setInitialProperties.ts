@@ -3,6 +3,7 @@ import { LayoutTypes } from '../../model/viewerSettings';
 
 import setCSSProperty from '../../utils/setCSSProperty';
 import removeCSSProperty from '../../utils/removeCSSProperty';
+import updateSafeAreaVariables from '../../utils/updateSafeAreaVariables';
 
 /**
  * Sets initial CSS properties values.
@@ -45,14 +46,7 @@ const setInitialProperties = (state: State): void => {
 
   setCSSProperty('debug-viewer-safe-area', `${state.debugViewerSafeArea ? 1 : 0}`);
   setCSSProperty('safe-area-border-width', 'calc(1px * var(--debug-viewer-safe-area))');
-  setCSSProperty('safe-area-read-top', `${state.config.readModeMargin.top}px`);
-  setCSSProperty('safe-area-read-left', `${state.config.readModeMargin.left}px`);
-  setCSSProperty('safe-area-read-right', `${state.config.readModeMargin.right}px`);
-  setCSSProperty('safe-area-read-bottom', `${state.config.readModeMargin.bottom}px`);
-  setCSSProperty('safe-area-ui-top', `${state.config.uiModeMargin.top}px`);
-  setCSSProperty('safe-area-ui-left', `${state.config.uiModeMargin.left}px`);
-  setCSSProperty('safe-area-ui-right', `${state.config.uiModeMargin.right}px`);
-  setCSSProperty('safe-area-ui-bottom', `${state.config.uiModeMargin.bottom}px`);
+  updateSafeAreaVariables(state);
 
   if (state.theme === 'dark') {
     setCSSProperty('theme-filter', 'invert(1)');

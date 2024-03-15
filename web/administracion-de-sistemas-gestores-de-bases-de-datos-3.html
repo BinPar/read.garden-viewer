@@ -24,6 +24,17 @@
 
   <body></body>
   <script type="text/javascript">
+    var barLeftMargin = 8;
+    var buttonsBarWidth = 64;
+    var xlSidebarWidth = 384;
+    var lgSidebarWidth = 300;
+    var mdSidebarWidth = 240;
+    var leftMargin = buttonsBarWidth + barLeftMargin * 2;
+    var topMargin = 20;
+    var rightMargin = barLeftMargin;
+    var bottomMargin = 70;
+    var paddingTop = 0;
+    var paddingBottom = 0;
     window.readGardenApi = window.readGardenViewer({
       layoutType: 'fixed',
       initialFixedMode: 'paginated',
@@ -55,6 +66,64 @@
         bottom: 96,
         right: 340,
       },
+      responsiveReadModeMargin: [
+        [
+          768,
+          {
+            left: leftMargin,
+            top: topMargin,
+            right: mdSidebarWidth + mdSidebarWidth + rightMargin,
+            bottom: 64,
+          },
+        ],
+        [
+          1024,
+          {
+            left: leftMargin,
+            top: topMargin,
+            right: lgSidebarWidth + lgSidebarWidth + rightMargin,
+            bottom: 64,
+          },
+        ],
+        [
+          1280,
+          {
+            left: leftMargin,
+            top: topMargin,
+            right: xlSidebarWidth + xlSidebarWidth + rightMargin,
+            bottom: 64,
+          },
+        ],
+      ],
+      responsiveUiModeMargin: [
+        [
+          768,
+          {
+            left: mdSidebarWidth + leftMargin,
+            top: topMargin,
+            right: mdSidebarWidth + rightMargin,
+            bottom: 64,
+          },
+        ],
+        [
+          1024,
+          {
+            left: lgSidebarWidth + leftMargin,
+            top: topMargin,
+            right: lgSidebarWidth + rightMargin,
+            bottom: 64,
+          },
+        ],
+        [
+          1280,
+          {
+            left: xlSidebarWidth + leftMargin,
+            top: topMargin,
+            right: xlSidebarWidth + rightMargin,
+            bottom: 64,
+          },
+        ],
+      ],
       toggleReadModeOnClick: false,
       paddingTop: 0,
       paddingBottom: 0,

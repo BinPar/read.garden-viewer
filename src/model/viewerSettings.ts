@@ -106,6 +106,8 @@ export interface Margin {
   left: number;
 }
 
+export type ResponsiveMargin = [number, Margin][];
+
 export type ViewerTheme = 'dark' | 'light';
 
 /**

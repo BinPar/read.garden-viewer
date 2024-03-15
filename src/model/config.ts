@@ -8,6 +8,7 @@ import {
   LineHeight,
   Margin,
   NewContent,
+  ResponsiveMargin,
   ScrollModes,
   TextAlignModes,
   ViewerMode,
@@ -132,6 +133,16 @@ export interface DefaultConfig {
    * @scope Global
    */
   uiModeMargin: Margin;
+  /**
+   * Viewer margins during `read mode`
+   * @scope Global
+   */
+  responsiveReadModeMargin?: ResponsiveMargin;
+  /**
+   * Viewer margins during `UI mode`
+   * @scope Global
+   */
+  responsiveUiModeMargin?: ResponsiveMargin;
   /**
    * Viewer padding top
    */
