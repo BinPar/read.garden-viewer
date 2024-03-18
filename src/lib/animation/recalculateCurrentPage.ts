@@ -1,5 +1,7 @@
 import { State } from '../../model/state';
 import { LayoutTypes } from '../../model/viewerSettings';
+
+import redrawUserHighlights from '../../utils/highlights/redrawUserHighlights';
 import loadContentsInBackground from '../../utils/loadContentsInBackground';
 import setCSSProperty from '../../utils/setCSSProperty';
 import { updateState } from '../state';
@@ -62,6 +64,8 @@ const recalculateCurrentPage = (state: State, currentScroll: number, avoidUpdate
         state.contentPlaceholderNode.replaceChildren();
         state.contentPlaceholderNode.append(...containers);
       }
+
+      redrawUserHighlights(state, true).catch(console.error);
     } else {
       console.warn(`No content for slug: ${state.contentSlug}`);
     }
