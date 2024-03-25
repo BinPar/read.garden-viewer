@@ -54,113 +54,110 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
         clean(state);
         removeUserHighlights(state);
         clearUserHighlights(state);
-        contentPlaceholderNode!.innerHTML = action.htmlContent;
-        contentPlaceholderNode!.dataset.highlighted = '';
 
-        window.requestAnimationFrame(() => {
+        if (contentPlaceholderNode) {
+          contentPlaceholderNode.innerHTML = action.htmlContent;
+          contentPlaceholderNode.dataset.highlighted = '';
+
           window.requestAnimationFrame(() => {
-            let replace = true;
-            const newLink = document.createElement('link');
-            const done = async (): Promise<void> => {
-              const recalculateState = await recalculate(state);
-              handleAnchors(contentPlaceholderNode!, state);
-              setCSSProperty('viewer-margin-top', '0');
-              const finalPartialState: Partial<State> = {
-                ...recalculateState,
-                layout: LayoutTypes.Flow,
-                scrollMode: state.scrollMode,
-                slug: action.slug,
-                contentSlug: action.contentSlug,
-                chapterNumber: action.chapterNumber,
-                cssLoaded: true,
-              };
-              if (replace) {
-                finalPartialState.dynamicStyleNode = newLink;
-              }
-              if (action.goToEnd) {
-                const tempState = recalculateState as GlobalState & ScrolledState;
-                if (state.scrollMode === 'horizontal') {
-                  finalPartialState.forceScroll =
-                    tempState.lastPosition - (tempState.lastPosition % tempState.containerWidth);
-                } else {
-                  finalPartialState.forceScroll = Math.max(
-                    tempState.totalHeight + config.paddingTop - tempState.containerHeight,
-                    0,
-                  );
-                }
-              }
-              resolve(finalPartialState);
-              if (state.config.eventHandler) {
-                const event: ContentLoaded = {
-                  type: 'contentLoaded',
-                  contentSlug: action.contentSlug,
+            window.requestAnimationFrame(() => {
+              let replace = true;
+              const newLink = document.createElement('link');
+              const done = async (): Promise<void> => {
+                const recalculateState = await recalculate(state);
+                handleAnchors(contentPlaceholderNode, state);
+                setCSSProperty('viewer-margin-top', '0');
+                const finalPartialState: Partial<State> = {
+                  ...recalculateState,
+                  layout: LayoutTypes.Flow,
+                  scrollMode: state.scrollMode,
                   slug: action.slug,
-                  productSlug: state.productSlug,
+                  contentSlug: action.contentSlug,
+                  chapterNumber: action.chapterNumber,
+                  visibleContents: [action.contentSlug],
+                  cssLoaded: true,
                 };
-                state.config.eventHandler(event).catch((ex) => {
-                  const { stack, message } = ex as Error;
-                  console.error('Error at event handler', stack || message);
-                });
-              }
-              await redrawUserHighlights(state);
-              setTimeout((): void => {
-                highlightTerms(state.searchTerms);
-              }, 0);
-            };
-            const onStylesLoad = (): void => {
-              newLink.removeEventListener('load', onStylesLoad);
-              newLink.removeEventListener('error', onStylesLoad);
-              const checkFonts = (): void => {
-                window.requestAnimationFrame(() => {
-                  window.requestAnimationFrame(() => {
-                    const checkStatus = (): void => {
-                      if (document.fonts.status === 'loaded') {
-                        done().catch((ex) => {
-                          const { stack, message } = ex as Error;
-                          console.error('Error at styles loaded', stack || message);
-                        });
-                      } else {
-                        setTimeout(checkStatus, 16);
-                      }
-                    };
-                    checkStatus();
+                if (replace) {
+                  finalPartialState.dynamicStyleNode = newLink;
+                }
+                if (action.goToEnd) {
+                  const tempState = recalculateState as GlobalState & ScrolledState;
+                  if (state.scrollMode === 'horizontal') {
+                    finalPartialState.forceScroll =
+                      tempState.lastPosition - (tempState.lastPosition % tempState.containerWidth);
+                  } else {
+                    finalPartialState.forceScroll = Math.max(
+                      tempState.totalHeight + config.paddingTop - tempState.containerHeight,
+                      0,
+                    );
+                  }
+                }
+                resolve(finalPartialState);
+                if (state.config.eventHandler) {
+                  const event: ContentLoaded = {
+                    type: 'contentLoaded',
+                    contentSlug: action.contentSlug,
+                    slug: action.slug,
+                    productSlug: state.productSlug,
+                  };
+                  state.config.eventHandler(event).catch((ex) => {
+                    const { stack, message } = ex as Error;
+                    console.error('Error at event handler', stack || message);
                   });
-                });
+                }
+                await redrawUserHighlights(state);
+                setTimeout((): void => {
+                  highlightTerms(state.searchTerms);
+                }, 0);
               };
-              const images = contentPlaceholderNode!.querySelectorAll('img');
-              if (!images.length) {
-                checkFonts();
+              const onStylesLoad = (): void => {
+                newLink.removeEventListener('load', onStylesLoad);
+                newLink.removeEventListener('error', onStylesLoad);
+                const checkFonts = (): void => {
+                  window.requestAnimationFrame(() => {
+                    window.requestAnimationFrame(() => {
+                      const checkStatus = (): void => {
+                        if (document.fonts.status === 'loaded') {
+                          done().catch((ex) => {
+                            const { stack, message } = ex as Error;
+                            console.error('Error at styles loaded', stack || message);
+                          });
+                        } else {
+                          setTimeout(checkStatus, 16);
+                        }
+                      };
+                      checkStatus();
+                    });
+                  });
+                };
+                const images = contentPlaceholderNode.querySelectorAll('img');
+                if (!images.length) {
+                  checkFonts();
+                  return;
+                }
+                Promise.all(Array.from(images).map((i) => checkImagesHeight([i], state)))
+                  .then(checkFonts)
+                  .catch((ex) => {
+                    const { stack, message } = ex as Error;
+                    console.error('Error checking images', stack || message);
+                  });
+              };
+              if (!action.cssURL || action.cssURL === dynamicStyleNode!.href) {
+                replace = false;
+                onStylesLoad();
                 return;
               }
-              Promise.all(
-                Array.from(images).map((i) =>
-                  checkImagesHeight(
-                    [i],
-                    state,
-                  ),
-                ),
-              )
-                .then(checkFonts)
-                .catch((ex) => {
-                  const { stack, message } = ex as Error;
-                  console.error('Error checking images', stack || message);
-                });
-            };
-            if (!action.cssURL || action.cssURL === dynamicStyleNode!.href) {
-              replace = false;
-              onStylesLoad();
-              return;
-            }
-            newLink.rel = 'stylesheet';
-            newLink.type = 'text/css';
-            newLink.addEventListener('load', onStylesLoad);
-            newLink.addEventListener('error', onStylesLoad);
-            dynamicStyleNode!.removeEventListener('load', onStylesLoad);
-            dynamicStyleNode!.removeEventListener('error', onStylesLoad);
-            dynamicStyleNode!.replaceWith(newLink);
-            newLink.href = action.cssURL;
+              newLink.rel = 'stylesheet';
+              newLink.type = 'text/css';
+              newLink.addEventListener('load', onStylesLoad);
+              newLink.addEventListener('error', onStylesLoad);
+              dynamicStyleNode!.removeEventListener('load', onStylesLoad);
+              dynamicStyleNode!.removeEventListener('error', onStylesLoad);
+              dynamicStyleNode!.replaceWith(newLink);
+              newLink.href = action.cssURL;
+            });
           });
-        });
+        }
       });
     }
 

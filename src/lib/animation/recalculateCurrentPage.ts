@@ -25,10 +25,12 @@ const recalculateCurrentPage = (state: State, currentScroll: number, avoidUpdate
   if (state.scrollMode === 'fixed') {
     const current = state.contentsBySlug.get(state.contentSlug);
     const containers = new Array<HTMLDivElement>();
+    const visibleContents = new Array<string>();
     if (current) {
       let maxWidth = current.width;
       let maxHeight = current.height;
       containers.push(current.container);
+      visibleContents.push(current.slug);
 
       if (state.doublePage) {
         if (!current.rightSide) {
@@ -37,6 +39,7 @@ const recalculateCurrentPage = (state: State, currentScroll: number, avoidUpdate
             const next = state.contentsBySlug.get(current.next);
             if (next) {
               containers.push(next.container);
+              visibleContents.push(next.slug);
               maxWidth += next.width;
               maxHeight = Math.max(next.height, maxHeight);
             }
@@ -46,6 +49,7 @@ const recalculateCurrentPage = (state: State, currentScroll: number, avoidUpdate
           if (prev) {
             target = prev.slug;
             containers.unshift(prev.container);
+            visibleContents.push(prev.slug);
             maxWidth += prev.width;
             maxHeight = Math.max(prev.height, maxHeight);
           }
@@ -56,7 +60,6 @@ const recalculateCurrentPage = (state: State, currentScroll: number, avoidUpdate
         target = current.slug;
       }
 
-      updateState({ maxWidth, maxHeight });
       setCSSProperty('max-width', `${maxWidth}px`);
       setCSSProperty('max-height', `${maxHeight}px`);
 
@@ -66,6 +69,7 @@ const recalculateCurrentPage = (state: State, currentScroll: number, avoidUpdate
       }
 
       redrawUserHighlights(state, true).catch(console.error);
+      updateState({ maxWidth, maxHeight, visibleContents });
     } else {
       console.warn(`No content for slug: ${state.contentSlug}`);
     }
@@ -106,10 +110,14 @@ const recalculateCurrentPage = (state: State, currentScroll: number, avoidUpdate
         if (lastStartPage !== startPage || endPage !== lastEndPage) {
           const containers = [];
           const pagesToAppend = new Set<number>();
+          const visibleContents = new Array<string>();
           for (let i = startPage; i <= endPage; i++) {
             const content = state.contentsByOrder.get(i);
-            if (content && !state.contentPlaceholderNode.contains(content.container)) {
-              containers.push(content.container);
+            if (content) {
+              visibleContents.push(content.slug);
+              if (!state.contentPlaceholderNode.contains(content.container)) {
+                containers.push(content.container);
+              }
             }
             pagesToAppend.add(i);
           }
@@ -126,6 +134,7 @@ const recalculateCurrentPage = (state: State, currentScroll: number, avoidUpdate
           }
           lastStartPage = startPage;
           lastEndPage = endPage;
+          updateState({ visibleContents });
         }
       }
     }
@@ -163,10 +172,14 @@ const recalculateCurrentPage = (state: State, currentScroll: number, avoidUpdate
       if (lastStartPage !== startPage || endPage !== lastEndPage) {
         const containers = [];
         const pagesToAppend = new Set<number>();
+        const visibleContents = new Array<string>();
         for (let i = startPage; i <= endPage; i++) {
           const content = state.contentsByOrder.get(i);
-          if (content && !state.contentPlaceholderNode.contains(content.container)) {
-            containers.push(content.container);
+          if (content) {
+            visibleContents.push(content.slug);
+            if (!state.contentPlaceholderNode.contains(content.container)) {
+              containers.push(content.container);
+            }
           }
           pagesToAppend.add(i);
         }
@@ -183,6 +196,7 @@ const recalculateCurrentPage = (state: State, currentScroll: number, avoidUpdate
         }
         lastStartPage = startPage;
         lastEndPage = endPage;
+        updateState({ visibleContents });
       }
     }
   } else if (state.slugByPosition) {

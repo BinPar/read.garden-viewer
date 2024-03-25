@@ -277,6 +277,10 @@ export interface GlobalState {
    * Custom props for content links
    */
   linksCustomProps: Map<string, LinkProps>;
+  /**
+   * Array of visible content containers selectors
+   */
+  visibleContents: string[];
 }
 
 /**
