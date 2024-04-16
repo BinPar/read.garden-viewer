@@ -698,6 +698,14 @@ const scrollController = (
 
   state.readGardenContainerNode?.addEventListener('mousedown', onDragStart);
   state.readGardenContainerNode?.addEventListener('touchstart', onDragStart);
+
+  const onTouchEnd = (): void => {
+    console.log("touch end");
+  }
+
+  state.readGardenContainerNode?.addEventListener("touchend", onTouchEnd);
+  state.readGardenContainerNode?.addEventListener("touchcancel", onTouchEnd);
+
   if (state.scrollerNode) {
     state.scrollerNode.addEventListener('scroll', onScroll);
   }

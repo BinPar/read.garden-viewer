@@ -11,6 +11,7 @@
     "publish-web": "rm -rf ./dist;tsc -p tsconfig.web.json;rm -r ../read.garden/web/sdk/read.garden-viewer;mkdir ../read.garden/web/sdk/read.garden-viewer;cp -R ./dist/* ../read.garden/web/sdk/read.garden-viewer;cp ./web/css/read.garden-viewer.css ../read.garden/web/public/css/",
     "publish-t3": "rm -rf ./dist;tsc -p tsconfig.web.json;rm -r ../read.garden-t3/src/viewer;mkdir ../read.garden-t3/src/viewer;cp -R ./dist/* ../read.garden-t3/src/viewer;cp ./web/css/read.garden-viewer.css ../read.garden-t3/src/styles/",
     "publish-app": "rm -rf ./dist;tsc -p tsconfig.app.json;webpack --config webpack.config.app.js;cp ./web/css/read.garden-viewer.css ../read.garden-mobile/sdk-viewer/css/;cp -R ./web/img ../read.garden-mobile/sdk-viewer/",
+    "publish-app-t3": "rm -rf ./dist;tsc -p tsconfig.app.json;webpack --config webpack.config.app-t3.js;cat ./web/css/read.garden-viewer.css ./web/css/read.garden-viewer-icons.css > ../read.garden-mobile-t3/sdk-viewer/css/read.garden-viewer.css;cp -R ./web/img ../read.garden-mobile-t3/sdk-viewer/",
     "server-dev": "NODE_ENV=development ts-node-dev --debug --respawn ./src/server/index.ts",
     "start": "node ./dist/server/index.js",
     "test": "jest --runInBand",
