@@ -12,6 +12,7 @@ import updatePositionsMaps from '../utils/updatePositionsMaps';
 import getColumnGap from '../utils/getColumnGap';
 import checkImagesHeight from '../utils/checkImagesHeight';
 import applyTextCursor from '../utils/applyTextCursor';
+import getMargins from '../utils/getMargins';
 
 const charWidthFactor = 1.65;
 
@@ -33,11 +34,13 @@ const recalculate = async (state: State): Promise<Partial<State>> => {
 
     const containerRect = readGardenContainerNode!.getBoundingClientRect();
     const { width: containerWidth, height: containerHeight } = containerRect;
+    const margin = getMargins({ config: state.config, containerWidth, readMode: state.readMode });
 
     const globalUpdate: Partial<GlobalState> = {
       containerWidth,
       containerHeight,
       recalculating: false,
+      margin,
     };
 
     if (state.layout === LayoutTypes.Flow) {
@@ -183,10 +186,10 @@ const recalculate = async (state: State): Promise<Partial<State>> => {
       }
 
       if (state.scrollMode === 'vertical') {
-        const columnGap = Math.max(
-          getColumnGap(containerWidth, maxWidth, minWidth, desiredColumnGap),
-          state.config.minColumnGap,
-        );
+        const availableWidth = containerWidth - (margin.left + margin.right);
+        const desiredGap = availableWidth - maxWidth;
+        const minColumnGap = margin.horizontalPadding ?? state.config.minColumnGap;
+        const columnGap = Math.max(desiredGap, minColumnGap * 2);
 
         setCSSProperty('column-gap', `${columnGap}px`);
         setCSSProperty('vertical-translate', '0');

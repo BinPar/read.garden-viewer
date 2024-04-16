@@ -104,6 +104,10 @@ export interface Margin {
    * Left margin (pixels)
    */
   left: number;
+  /**
+   * For responsive paddings
+   */
+  horizontalPadding?: number;
 }
 
 export type ResponsiveMargin = [number, Margin][];

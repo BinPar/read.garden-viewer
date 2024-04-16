@@ -269,7 +269,9 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
     const heightNeededScale = targetHeight / currentHeight;
 
     if (state.layout === LayoutTypes.Flow) {
-      scale.target = Math.max(Math.min(widthNeededScale, heightNeededScale), 0);
+      if (state.scrollMode === 'horizontal') {
+        scale.target = Math.max(Math.min(widthNeededScale, heightNeededScale), 0);
+      }
     } else if (state.scrollMode !== 'fixed') {
       if (state.fitMode === FitMode.Height) {
         scale.target = Math.max(heightNeededScale, 0);
@@ -288,9 +290,13 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
 
     if (state.scrollMode === 'vertical') {
       top.target = newMargins.top;
-      const widthReduction = currentWidth * (1 - scale.target);
-      const marginWidth = widthReduction - newMargins.left - newMargins.right;
-      left.target = newMargins.left + marginWidth / 2;
+      if (state.layout === LayoutTypes.Fixed) {
+        const widthReduction = currentWidth * (1 - scale.target);
+        const marginWidth = widthReduction - newMargins.left - newMargins.right;
+        left.target = newMargins.left + marginWidth / 2;
+      } else {
+        left.target = newMargins.left;
+      }
     }
 
     if (state.scrollMode === 'fixed') {

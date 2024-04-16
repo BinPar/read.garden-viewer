@@ -25,6 +25,7 @@ const resize: ActionDispatcher<Resize> = async ({ state }) => {
     if (recalculateUpdate.recalculating === false) {
       setCSSProperty('viewer-margin-top', '0');
     }
+    updateSafeAreaVariables();
     if (state.searchRanges.length && state.searchTermsHighlightsNode) {
       drawHighlights(state.searchTermsHighlightsNode, state.searchRanges);
     }

@@ -6,9 +6,9 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui"
     />
-    <title>Read.Garden Testing Viewer Acuario (EPUB Flow)</title>
+    <title>Read.Garden Testing Viewer 9788490325070 (EPUB Flow)</title>
     <link rel="icon" href="/favicon.ico" />
-    <meta name="description" content="Viewer used by to test the Acuario content" />
+    <meta name="description" content="Viewer used by to test the 9788490325070 content" />
     <link rel="preload" as="style" href="/css/readium.css" />
     <link rel="stylesheet" type="text/css" href="/css/readium.css" />
     <link rel="preload" as="style" href="/css/read.garden-viewer.css" />
@@ -25,10 +25,11 @@
   <body></body>
   <script type="text/javascript">
     window.readGardenApi = window.readGardenViewer({
+      debugViewerSafeArea: true,
       layoutType: 'flow',
       eventHandler: window.readGardenEventHandler,
-      slug: 'acuario',
-      contentSlug: '50',
+      slug: '9788490325070',
+      contentSlug: '83',
       initialFontSize: 18,
       initialFontFamily: 'Obf-Helvetica',
       availableFontFamilies: [
@@ -40,20 +41,100 @@
         'Obf-Tahoma',
         'Obf-TimesNewRoman',
       ],
+      minColumnGap: 136,
+      paddingTop: 60,
+      paddingBottom: 60,
+      responsiveReadModeMargin: [
+        [
+          0,
+          {
+            left: 0,
+            top: 0,
+            right: 8,
+            bottom: 8,
+            horizontalPadding: 8,
+          },
+        ],
+        [
+          768,
+          {
+            left: 0,
+            top: 0,
+            right: 408,
+            bottom: 0,
+          },
+        ],
+        [
+          1024,
+          {
+            left: 0,
+            top: 0,
+            right: 528,
+            bottom: 0,
+          },
+        ],
+        [
+          1280,
+          {
+            left: 0,
+            top: 0,
+            right: 696,
+            bottom: 0,
+          },
+        ],
+      ],
+      responsiveUiModeMargin: [
+        [
+          0,
+          {
+            left: 0,
+            top: 0,
+            right: 8,
+            bottom: 8,
+            horizontalPadding: 8,
+          },
+        ],
+        [
+          768,
+          {
+            left: 384,
+            top: 0,
+            right: 384,
+            bottom: 0,
+          },
+        ],
+        [
+          1024,
+          {
+            left: 384,
+            top: 0,
+            right: 384,
+            bottom: 0,
+          },
+        ],
+        [
+          1280,
+          {
+            left: 384,
+            top: 0,
+            right: 384,
+            bottom: 0,
+          },
+        ],
+      ],
       readModeMargin: {
-        top: 0,
         left: 0,
+        top: 0,
+        right: 768,
         bottom: 0,
-        right: 0,
       },
       uiModeMargin: {
-        top: 20,
-        left: 450,
-        bottom: 70,
-        right: 20,
+        left: 384,
+        top: 0,
+        right: 384,
+        bottom: 0,
       },
       toggleReadModeOnClick: true,
-      experimental: { scrollbars: true },
       // initialTextAlign: 'start',
       initialScrollMode: 'vertical',
     });
