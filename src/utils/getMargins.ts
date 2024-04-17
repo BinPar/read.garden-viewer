@@ -9,7 +9,7 @@ const getMargins = (
     : state.config.responsiveUiModeMargin;
 
   if (!responsiveConfig && config) {
-    return config;
+    return { ...config };
   }
 
   if (!responsiveConfig) {
@@ -31,7 +31,8 @@ const getMargins = (
   }
 
   if (state.containerWidth === 0) {
-    return entries.at(-1)![1];
+    const margin = entries.at(-1)![1];
+    return { ...margin };
   }
 
   let margin: State['margin'] | undefined;
@@ -52,7 +53,7 @@ const getMargins = (
     throw new Error(`Couldn't find response margin`);
   }
 
-  return margin;
+  return { ...margin };
 };
 
 export default getMargins;
