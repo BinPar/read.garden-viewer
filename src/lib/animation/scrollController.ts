@@ -700,7 +700,7 @@ const scrollController = (
   state.readGardenContainerNode?.addEventListener('touchstart', onDragStart);
 
   const onTouchEnd = (): void => {
-    console.log("touch end");
+    // Sometimes touchStart doesn't work without this
   }
 
   state.readGardenContainerNode?.addEventListener("touchend", onTouchEnd);
