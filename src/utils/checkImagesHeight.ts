@@ -1,35 +1,10 @@
 import { State } from '../model';
 
-// const getApplyingProperties = (
-//   element: HTMLImageElement,
-//   sheet?: CSSStyleSheet | null,
-// ): Set<string> => {
-//   const res = new Set<string>();
-//   if (!sheet) {
-//     return res;
-//   }
-//   const rules = sheet.cssRules;
-//   for (let i = 0, l = rules.length; i < l; i++) {
-//     const { cssText, selectorText } = rules[i] as CSSStyleRule;
-//     if (selectorText && element.matches(selectorText)) {
-//       const match = cssText.match(/{([^}]+)}/);
-//       if (match && match[1]) {
-//         match[1].split(';').forEach((item) => {
-//           const [property] = item.split(':');
-//           if (property && property.trim()) {
-//             res.add(property.trim().toLowerCase());
-//           }
-//         });
-//       }
-//     }
-//   }
-//   return res;
-// };
-
 /**
  * Checks images height and provides special CSS class when image is higher than the available
- * vertical space. Also provides
- * @param images Node list of images (result from `querySelectorAll`)
+ * vertical space. Also provides image ratio to keep proportion
+ * @param images Node list or array of HTMLImageElement
+ * @param state Viewer state
  */
 const checkImagesHeight = async (
   images: NodeListOf<HTMLImageElement> | HTMLImageElement[],
@@ -38,10 +13,10 @@ const checkImagesHeight = async (
   const checkImagesHeightPromises = new Array<Promise<void>>();
   images.forEach((img: HTMLImageElement) => {
     checkImagesHeightPromises.push(
-      new Promise<void>((imageResolve) => {
+      new Promise<void>((resolve) => {
         const securityTimeout = setTimeout(() => {
-          console.info('Image without width', img);
-          imageResolve();
+          console.warn('Image without width', img);
+          resolve();
         }, 2000);
         const clone = new Image();
         const onLoad = (): void => {
@@ -61,7 +36,7 @@ const checkImagesHeight = async (
             img.style.setProperty('--image-ratio', `${fullHeight / fullWidth}`);
           }
           img.classList.add('rg-ready');
-          imageResolve();
+          resolve();
         };
         clone.onload = onLoad;
         clone.src = img.src;

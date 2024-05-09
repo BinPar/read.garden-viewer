@@ -13,6 +13,7 @@ import getColumnGap from '../utils/getColumnGap';
 import checkImagesHeight from '../utils/checkImagesHeight';
 import applyTextCursor from '../utils/applyTextCursor';
 import getMargins from '../utils/getMargins';
+import checkSvgImagesHeight from '../utils/checkSvgImagesHeight';
 
 const charWidthFactor = 1.65;
 
@@ -165,6 +166,11 @@ const recalculate = async (state: State): Promise<Partial<State>> => {
         const images = contentPlaceholderNode!.querySelectorAll('img');
         if (images.length) {
           Array.from(images).map((i) => checkImagesHeight([i], state));
+        }
+
+        const svgImages = contentPlaceholderNode!.querySelectorAll<SVGImageElement>('svg image');
+        if (svgImages.length) {
+          Array.from(svgImages).map((i) => checkSvgImagesHeight([i], state));
         }
 
         resolve({

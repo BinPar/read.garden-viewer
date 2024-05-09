@@ -18,6 +18,7 @@ import clearUserHighlights from '../../utils/highlights/clearUserHighlights';
 import redrawUserHighlights from '../../utils/highlights/redrawUserHighlights';
 import { highlightTerms, clean } from '../../utils/highlights/search';
 import handleAnchors from '../../utils/handleAnchors';
+import checkSvgImagesHeight from '../../utils/checkSvgImagesHeight';
 
 /**
  * Appends new content to viewer
@@ -134,6 +135,11 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
                 if (!images.length) {
                   checkFonts();
                   return;
+                }
+                const svgImages =
+                  contentPlaceholderNode.querySelectorAll<SVGImageElement>('svg image');
+                if (svgImages.length) {
+                  Array.from(svgImages).map((i) => checkSvgImagesHeight([i], state));
                 }
                 Promise.all(Array.from(images).map((i) => checkImagesHeight([i], state)))
                   .then(checkFonts)

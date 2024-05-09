@@ -449,12 +449,14 @@ div.rg-content-wrapper #rg-content-placeholder *::selection {
 }
 
 .rg-flow-layout div.rg-content-wrapper img.rg-ready,
+.rg-flow-layout div.rg-content-wrapper svg.rg-ready,
 .rg-flow-layout div.rg-content-wrapper video:not(:fullscreen),
 .rg-flow-layout div.rg-content-wrapper iframe {
   filter: var(--theme-filter, none);
 }
 
 .rg-flow-layout.rg-horizontal-scroll div.rg-content-wrapper img.rg-ready,
+.rg-flow-layout.rg-horizontal-scroll div.rg-content-wrapper svg.rg-ready,
 .rg-flow-layout.rg-horizontal-scroll div.rg-content-wrapper video,
 .rg-flow-layout.rg-horizontal-scroll div.rg-content-wrapper table,
 .rg-flow-layout.rg-horizontal-scroll div.rg-content-wrapper iframe {
@@ -462,6 +464,7 @@ div.rg-content-wrapper #rg-content-placeholder *::selection {
 }
 
 .rg-flow-layout.rg-vertical-scroll div.rg-content-wrapper img.rg-ready,
+.rg-flow-layout.rg-vertical-scroll div.rg-content-wrapper svg.rg-ready,
 .rg-flow-layout.rg-vertical-scroll div.rg-content-wrapper video,
 .rg-flow-layout.rg-vertical-scroll div.rg-content-wrapper table,
 .rg-flow-layout.rg-vertical-scroll div.rg-content-wrapper iframe {
@@ -469,19 +472,22 @@ div.rg-content-wrapper #rg-content-placeholder *::selection {
 }
 
 .rg-flow-layout div.rg-content-wrapper img.rg-ready,
+.rg-flow-layout div.rg-content-wrapper svg.rg-ready,
 .rg-fixed-layout div.rg-content-wrapper div#rg-content-placeholder img {
   pointer-events: none;
   cursor: pointer;
 }
 
-.rg-flow-layout.rg-horizontal-scroll div.rg-content-wrapper img.rg-ready {
+.rg-flow-layout.rg-horizontal-scroll div.rg-content-wrapper img.rg-ready,
+.rg-flow-layout.rg-horizontal-scroll div.rg-content-wrapper svg.rg-ready {
   max-height: min(
     calc(100vh - var(--padding-top) - var(--padding-bottom)),
     calc(var(--image-ratio, 100) * var(--column-width))
   ) !important;
 }
 
-.rg-flow-layout.rg-horizontal-scroll div.rg-content-wrapper img.rg-fit-height {
+.rg-flow-layout.rg-horizontal-scroll div.rg-content-wrapper img.rg-fit-height,
+.rg-flow-layout.rg-horizontal-scroll div.rg-content-wrapper svg.rg-fit-height {
   width: unset !important;
 }
 
@@ -497,7 +503,8 @@ div.rg-content-wrapper #rg-content-placeholder *::selection {
 }
 
 @media (max-width: 48em) {
-  .rg-flow-layout.rg-horizontal-scroll div.rg-content-wrapper img.rg-fit-height {
+  .rg-flow-layout.rg-horizontal-scroll div.rg-content-wrapper img.rg-fit-height,
+  .rg-flow-layout.rg-horizontal-scroll div.rg-content-wrapper svg.rg-fit-height {
     max-height: min(
       calc(100vh - var(--padding-top) - var(--padding-bottom) - 65px),
       calc(var(--image-ratio, 100) * var(--column-width))
