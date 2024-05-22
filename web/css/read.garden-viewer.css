@@ -438,8 +438,8 @@ div.rg-content-wrapper #rg-content-placeholder *::selection {
 
 .rg-flow-layout.rg-vertical-scroll div.rg-content-wrapper {
   position: fixed;
+  left: 0px;
   top: var(--vertical-flow-area-top);
-  left: var(--vertical-flow-area-left);
   right: var(--vertical-flow-area-right);
   bottom: var(--vertical-flow-area-bottom);
 }

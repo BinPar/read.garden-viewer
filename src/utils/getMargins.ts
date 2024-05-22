@@ -50,7 +50,7 @@ const getMargins = (
   }
 
   if (!margin) {
-    throw new Error(`Couldn't find response margin`);
+    throw new Error(`Couldn't find responsive margin`);
   }
 
   return { ...margin };

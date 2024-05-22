@@ -45,6 +45,10 @@ let state: State;
 export const initializeState = (initialConfig: InitialConfig): void => {
   let config = setConfig({
     ...defaultConfig,
+    uiModeMargin: undefined,
+    readModeMargin: undefined,
+    responsiveUiModeMargin: undefined,
+    responsiveReadModeMargin: undefined,
     ...initialConfig,
     zoom: {
       ...defaultConfig.zoom,

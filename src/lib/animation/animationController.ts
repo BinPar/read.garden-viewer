@@ -23,6 +23,7 @@ import {
   resetInterpolationValues,
 } from './interpolationValues';
 import getMargins from '../../utils/getMargins';
+import updateSafeAreaVariables from '../../utils/updateSafeAreaVariables';
 
 let unmountAnimationsHandler = (): void => {};
 
@@ -333,6 +334,7 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
 
     setCSSProperty('scroller-left', `${state.margin.left}px`);
     setCSSProperty('scroller-scale', `${scale.target}`);
+    updateSafeAreaVariables(state);
   };
 
   const resetPageProps = (): void => {

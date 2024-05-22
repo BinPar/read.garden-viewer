@@ -28,8 +28,7 @@ const updateSafeAreaVariables = (state = getState()): void => {
   if (state.layout === LayoutTypes.Flow && state.scrollMode === 'vertical') {
     const margins = state.readMode ? readModeMargin : uiModeMargin;
     setCSSProperty('vertical-flow-area-top', `${margins.top}px`);
-    setCSSProperty('vertical-flow-area-left', `${margins.left}px`);
-    setCSSProperty('vertical-flow-area-right', `${margins.right}px`);
+    setCSSProperty('vertical-flow-area-right', `${margins.right + margins.left}px`);
     setCSSProperty('vertical-flow-area-bottom', `${margins.bottom}px`);
   }
 };
