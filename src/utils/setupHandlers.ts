@@ -9,7 +9,7 @@ import layoutSetup from '../viewer/layoutSetup';
 import redrawUserHighlights from './highlights/redrawUserHighlights';
 
 const setupHandlers = async (state: State, dispatch: DispatchAPIAction): Promise<void> => {
-  if (state.config.initialContent) {
+  if (state.config.initialContent?.htmlContent) {
     const action: AppendNewContent = {
       type: 'appendNewContent',
       ...state.config.initialContent,
