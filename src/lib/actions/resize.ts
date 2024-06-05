@@ -36,8 +36,9 @@ const resize: ActionDispatcher<Resize> = async ({ state }) => {
   if (state.layout === LayoutTypes.Fixed) {
     const { readGardenContainerNode } = state;
     if (readGardenContainerNode) {
-      const { width: containerWidth, height: containerHeight } =
-        readGardenContainerNode.getBoundingClientRect();
+      const containerRect = readGardenContainerNode.getBoundingClientRect();
+      const containerWidth = Math.round(containerRect.width);
+      const containerHeight = Math.round(containerRect.height);
       const margin = getMargins({ config: state.config, containerWidth, readMode: state.readMode });
       updateState({ containerWidth, containerHeight, margin });
       const { fitMode } = state;
