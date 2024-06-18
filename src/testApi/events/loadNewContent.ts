@@ -38,7 +38,6 @@ const loadNewContent: EventHandler<LoadNewContent> = async (event, dispatch) => 
   }
   if (layout === LayoutTypes.Fixed) {
     if (index.cssURL) {
-      htmlContent = replaceUrls(htmlContent);
       cssURL = `${testingConfig.baseURL}books/${slug}/${index.cssURL}`;
     } else {
       const fixedChapterNumber = parseInt(currentContent.cssUrl!.split('/')[1]!, 10) + 1;
@@ -54,7 +53,7 @@ const loadNewContent: EventHandler<LoadNewContent> = async (event, dispatch) => 
     label: currentContent.labels[0],
     chapterNumber,
     cssURL,
-    htmlContent,
+    htmlContent: replaceUrls(htmlContent),
   };
   dispatch(action).catch((ex) => {
     const { stack, message } = ex as Error;
