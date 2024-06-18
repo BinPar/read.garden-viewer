@@ -51,61 +51,66 @@ const processFixedContents = async (
   for (let i = 0, l = info.length; i < l; i++) {
     const content = info[i];
     const { width, height, label, slug, order, html, cssURL } = content;
-    const previousInfo = oldContentsByOrder?.get(order);
-    const rightSide = order % 2 === pairOrder;
-    const top = Math.max(totalHeight - 1, 0);
-    const left = Math.max(totalWidth - 1, 0);
-    totalHeight += height - 3;
-    totalWidth += width;
-    if (gapMode !== GapMode.None) {
-      totalHeight += gapSize;
-      if (gapMode === GapMode.All || !pageOne || order % 2 === pairOrder) {
-        totalWidth += gapSize;
+
+    if (width && height) {
+      const previousInfo = oldContentsByOrder?.get(order);
+      const rightSide = order % 2 === pairOrder;
+      const top = Math.max(totalHeight - 1, 0);
+      const left = Math.max(totalWidth - 1, 0);
+      totalHeight += height - 3;
+      totalWidth += width;
+      if (gapMode !== GapMode.None) {
+        totalHeight += gapSize;
+        if (gapMode === GapMode.All || !pageOne || order % 2 === pairOrder) {
+          totalWidth += gapSize;
+        }
       }
+      maxWidth = Math.max(maxWidth, width);
+      maxHeight = Math.max(maxHeight, height);
+      const container = getContainer(content, previousInfo);
+      container.style.setProperty('--page-top', `${top}px`);
+      container.style.setProperty('--page-left', `${left}px`);
+      if (unaffected.has(slug)) {
+        container.classList.add('rg-avoid-invert');
+      }
+      containers.push(container);
+      const position = state.scrollMode === 'horizontal' ? left : top;
+      positionBySlug.set(slug, position);
+      slugByPosition.set(position, slug);
+      const initialContent =
+        (state.config.initialContent?.contentSlug === slug && state.config.initialContent) ||
+        undefined;
+      const contentInfo: FixedViewerContentInfo = {
+        width,
+        height,
+        label,
+        slug,
+        order,
+        container,
+        html: previousInfo?.html || html || initialContent?.htmlContent,
+        cssURL: previousInfo?.cssURL || cssURL || initialContent?.cssURL,
+        left,
+        top,
+        maxLeft: totalWidth,
+        maxTop: totalHeight,
+        prev,
+        rightSide,
+      };
+      if (contentInfo.html) {
+        container.innerHTML = contentInfo.html;
+      }
+      contentsByOrder.set(order, contentInfo);
+      contentsBySlug.set(slug, contentInfo);
+      contentsInfo.push(contentInfo);
+      lastPosition = position;
+      prev = slug;
+      if (previousContent) {
+        previousContent.next = slug;
+      }
+      previousContent = contentInfo;
+    } else {
+      console.warn(`Fixed content missing width or height, review conversion`, content);
     }
-    maxWidth = Math.max(maxWidth, width);
-    maxHeight = Math.max(maxHeight, height);
-    const container = getContainer(content, previousInfo);
-    container.style.setProperty('--page-top', `${top}px`);
-    container.style.setProperty('--page-left', `${left}px`);
-    if (unaffected.has(slug)) {
-      container.classList.add('rg-avoid-invert');
-    }
-    containers.push(container);
-    const position = state.scrollMode === 'horizontal' ? left : top;
-    positionBySlug.set(slug, position);
-    slugByPosition.set(position, slug);
-    const initialContent =
-      (state.config.initialContent?.contentSlug === slug && state.config.initialContent) ||
-      undefined;
-    const contentInfo: FixedViewerContentInfo = {
-      width,
-      height,
-      label,
-      slug,
-      order,
-      container,
-      html: previousInfo?.html || html || initialContent?.htmlContent,
-      cssURL: previousInfo?.cssURL || cssURL || initialContent?.cssURL,
-      left,
-      top,
-      maxLeft: totalWidth,
-      maxTop: totalHeight,
-      prev,
-      rightSide,
-    };
-    if (contentInfo.html) {
-      container.innerHTML = contentInfo.html;
-    }
-    contentsByOrder.set(order, contentInfo);
-    contentsBySlug.set(slug, contentInfo);
-    contentsInfo.push(contentInfo);
-    lastPosition = position;
-    prev = slug;
-    if (previousContent) {
-      previousContent.next = slug;
-    }
-    previousContent = contentInfo;
   }
 
   setCSSProperty('total-width', `${totalWidth}px`);
@@ -116,13 +121,15 @@ const processFixedContents = async (
   return new Promise<Partial<State>>((resolve) => {
     window.requestAnimationFrame(() => {
       window.requestAnimationFrame(() => {
-        for (let i = 0, l = info.length; i < l; i++) {
+        let found = false;
+        for (let i = 0, l = info.length; i < l && !found; i++) {
           const content = contentsByOrder.get(i);
           if (content?.container && content.slug === state.contentSlug) {
             contentPlaceholderNode.append(content.container);
             if (!content.container.innerHTML) {
               console.warn(`No HTML for initial content container`, content);
             }
+            found = true;
           }
         }
         window.requestAnimationFrame(() => {

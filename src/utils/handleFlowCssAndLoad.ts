@@ -25,6 +25,9 @@ const handleFlowCssAndLoad = (url: string, callback: () => any): void => {
     callback();
   };
   link.addEventListener('load', onLoad);
+  link.addEventListener('error', (ex) => {
+    console.error(`Error loading ${url}`, ex);
+  });
   document.head.appendChild(link);
   state.fixedStylesNodes.push(link);
   link.href = url;
