@@ -8,7 +8,7 @@ import { getState } from '../lib/state';
 const setCSSProperty = (property: string, value: string): void => {
   const state = getState();
   if (state.readGardenContainerNode) {
-    document.documentElement.style.setProperty(`--${property}`, value);
+    state.readGardenContainerNode.style.setProperty(`--${property}`, value);
   }
 };
 
