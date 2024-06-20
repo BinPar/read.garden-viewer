@@ -23,8 +23,8 @@ const viewer: ViewerFunction = (config) => {
     state,
     unmount: (): void => unmount(state),
   };
-  setInitialProperties(state);
   createBasicDOMElements(state);
+  setInitialProperties(state);
   if (state.debugViewerSafeArea) {
     ensureSafeAreas(state);
   }
