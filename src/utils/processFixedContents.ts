@@ -3,6 +3,7 @@ import { GapMode, LayoutTypes } from '../model/viewerSettings';
 
 import { getState } from '../lib/state';
 import setCSSProperty from './setCSSProperty';
+import type { LoadNewContent } from '../model/events';
 
 const getContainer = (
   info: FixedContentInfo,
@@ -122,11 +123,13 @@ const processFixedContents = async (
     window.requestAnimationFrame(() => {
       window.requestAnimationFrame(() => {
         let found = false;
+        let initialContentToAsk = '';
         for (let i = 0, l = info.length; i < l && !found; i++) {
           const content = contentsByOrder.get(i);
           if (content?.container && content.slug === state.contentSlug) {
             contentPlaceholderNode.append(content.container);
             if (!content.container.innerHTML) {
+              initialContentToAsk = content.slug;
               console.warn(`No HTML for initial content container`, content);
             }
             found = true;
@@ -134,7 +137,6 @@ const processFixedContents = async (
         }
         window.requestAnimationFrame(() => {
           window.requestAnimationFrame(() => {
-            // setCSSProperty('viewer-margin-top', '0');
             resolve({
               fixedInfo: info,
               layout: LayoutTypes.Fixed,
@@ -150,6 +152,18 @@ const processFixedContents = async (
               lastPosition,
               wrapperReady: true,
             });
+            if (initialContentToAsk && state.config.eventHandler) {
+              const loadNewContent: LoadNewContent = {
+                type: 'loadNewContent',
+                slug: state.config.slug,
+                productSlug: state.productSlug,
+                contentSlug: initialContentToAsk,
+              };
+              state.config.eventHandler(loadNewContent).catch((ex) => {
+                const { stack, message } = ex as Error;
+                console.error('Error at event handler', stack || message);
+              });
+            }
           });
         });
       });

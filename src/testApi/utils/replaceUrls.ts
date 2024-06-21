@@ -9,7 +9,6 @@ const cdnRegEx = /%%CDN%%/g;
  */
 const replaceUrls = (src: string): string => {
   const url = `http${testingConfig.isDev ? '' : 's'}://${testingConfig.cdnDomain}/books`;
-  console.log({ src });
   return src.replace(newCdnRegEx, url).replace(cdnRegEx, url);
 };
 
