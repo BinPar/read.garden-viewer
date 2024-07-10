@@ -32,7 +32,7 @@ const defaultConfig: DefaultConfig = {
     step: 2,
   },
   columnGap: 216,
-  minColumnGap: 48,
+  minColumnGap: 80,
   pageChangeThreshold: 40,
   chapterChangeThreshold: 40,
   minCharsPerColumn: 50,
