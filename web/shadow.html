@@ -2,9 +2,13 @@
 <html>
   <head>
     <title>Read.Garden Testing Viewer with Shadow DOM</title>
-    <link rel="preload" as="style" href="/css/shadow.css" />
-    <link rel="stylesheet" type="text/css" href="/css/shadow.css" />
     <style>
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+      }
       iframe {
         border: none;
         height: 100%;
@@ -13,11 +17,10 @@
     </style>
   </head>
   <body>
-    <!-- <div id="host"></div>
-    <read-garden-viewer></read-garden-viewer> -->
+    <div id="host"></div>
+    <read-garden-viewer></read-garden-viewer>
     <iframe
-      srcdoc='
-    <html>
+      srcdoc='<html>
   <head>
     <link rel="preload" as="script" href="/js/testing-shadow.js" />
     <link rel="preload" as="style" href="/css/shadow.css" />
@@ -30,18 +33,22 @@
     ></iframe>
   </body>
   <!-- <script type="text/javascript">
-    const host = document.querySelector('#host');
-    console.log({ host });
-    const shadow = host.attachShadow({ mode: 'open' });
-    window.shadow = shadow;
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.type = 'text/css';
-    link.href = '/css/read.garden-viewer.css';
-    shadow.appendChild(link);
-    const span = document.createElement('span');
-    span.textContent = 'Hello there';
-    shadow.appendChild(span);
+    // const host = document.querySelector('#host');
+    // console.log({ host });
+    // const shadow = host.attachShadow({ mode: 'open' });
+    // window.shadow = shadow;
+    // const link = document.createElement('link');
+    // link.rel = 'stylesheet';
+    // link.type = 'text/css';
+    // link.href = '/css/read.garden-viewer.css';
+    // shadow.appendChild(link);
+    // const script = document.createElement('script');
+    // script.src = '/js/testing-shadow.js';
+    // shadow.appendChild(script);
+
+    // const span = document.createElement('span');
+    // span.textContent = 'Hello there';
+    // shadow.appendChild(span);
 
     class ReadGardenViewer extends HTMLElement {
       constructor() {
@@ -53,9 +60,13 @@
         link.href = '/css/read.garden-viewer.css';
         this.appendChild(link);
 
-        const span = document.createElement('span');
-        span.textContent = 'Hello there';
-        this.appendChild(span);
+        const script = document.createElement('script');
+        script.src = '/js/testing-shadow.js';
+        this.appendChild(script);
+
+        // const span = document.createElement('span');
+        // span.textContent = 'Hello there';
+        // this.appendChild(span);
       }
     }
 

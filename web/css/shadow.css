@@ -91,18 +91,28 @@ html {
   height: 100%;
   width: 100%;
   background-color: green;
+  overflow: hidden;
 }
 
-body {
+body, #container {
   height: 100%;
   background-color: gray;
-  overflow: hidden;
+  /* overflow: hidden; */
   white-space: nowrap;
-  touch-action: none;
+  /* touch-action: none; */
+  overflow-y: hidden;
+  overflow-x: scroll;
+  padding: 10px;
 }
+
+/* body > div {
+  overflow: hidden;
+} */
 
 div {
   display: inline-block;
+  text-wrap: wrap;
+  width: 400px;
   vertical-align: top;
   /* Optional: Add some styling to visually distinguish the items */
   margin-right: 10px;
@@ -110,4 +120,8 @@ div {
   background-color: #f0f0f0;
   border: 1px solid #ccc;
   user-select: none;
+}
+
+span {
+  background-color: red;
 }
