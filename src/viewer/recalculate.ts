@@ -12,6 +12,7 @@ import updatePositionsMaps from '../utils/updatePositionsMaps';
 import getColumnGap from '../utils/getColumnGap';
 import checkImagesHeight from '../utils/checkImagesHeight';
 import applyTextCursor from '../utils/applyTextCursor';
+import { updateFlowWatermark } from '../utils/watermark';
 import getMargins from '../utils/getMargins';
 import checkSvgImagesHeight from '../utils/checkSvgImagesHeight';
 
@@ -206,6 +207,12 @@ const recalculate = async (state: State): Promise<Partial<State>> => {
           lastPosition: lastPosition!,
         });
 
+        updateFlowWatermark(state, {
+          scrollMode: 'horizontal',
+          columns: totalColumns,
+          containerHeight,
+        });
+
         applyTextCursor(contentPlaceholderNode);
 
         return;
@@ -265,6 +272,11 @@ const recalculate = async (state: State): Promise<Partial<State>> => {
         });
 
         setCSSProperty('scroll-height', `${totalHeight}px`);
+        updateFlowWatermark(state, {
+          scrollMode: 'vertical',
+          columns: Math.ceil(totalHeight / Math.max(containerHeight, 1)),
+          containerHeight,
+        });
         applyTextCursor(contentPlaceholderNode);
         return;
       }

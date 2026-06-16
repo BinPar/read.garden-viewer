@@ -19,6 +19,7 @@ import redrawUserHighlights from '../../utils/highlights/redrawUserHighlights';
 import { highlightTerms, clean } from '../../utils/highlights/search';
 import handleAnchors from '../../utils/handleAnchors';
 import checkSvgImagesHeight from '../../utils/checkSvgImagesHeight';
+import { applyFixedPageWatermark } from '../../utils/watermark';
 
 /**
  * Appends new content to viewer
@@ -178,6 +179,8 @@ const appendNewContent: ActionDispatcher<AppendNewContent> = async ({ state, act
       content.cssURL = action.cssURL;
       container.classList.add('rg-loading');
       container.innerHTML = action.htmlContent;
+      // Re-inject the watermark: innerHTML above wiped any previous one.
+      applyFixedPageWatermark(container, config);
 
       setTimeout(() => {
         const done = (): void => {

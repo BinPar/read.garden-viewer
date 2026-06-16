@@ -130,6 +130,10 @@ export interface GlobalState {
    */
   searchTermsHighlightsNode?: HTMLDivElement;
   /**
+   * Watermark layer DOM node (flow layout, holds one watermark per column)
+   */
+  watermarkLayerNode?: HTMLDivElement;
+  /**
    * Scroller node
    */
   scrollerNode?: HTMLDivElement;

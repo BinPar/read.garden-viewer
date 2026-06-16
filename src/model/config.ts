@@ -27,6 +27,8 @@ SCOPES:
 
 export type LayoutType = 'fixed' | 'flow';
 
+export type WatermarkPosition = 'top' | 'bottom' | 'left' | 'right';
+
 export interface ExperimentalConfig {
   /**
    * Show scrollbars
@@ -241,6 +243,18 @@ export interface DefaultConfig {
    * Initial links props
    */
   linksProps?: Record<string, LinkProps>;
+  /**
+   * Watermark text shown over every page. Any `{{name}}` token must already be
+   * resolved by the host app before being passed in (the SDK has no user info).
+   * If empty/undefined, no watermark is rendered.
+   * @scope Global
+   */
+  watermarkText?: string;
+  /**
+   * Watermark placement on each page. Defaults to `bottom`.
+   * @scope Global
+   */
+  watermarkPosition?: WatermarkPosition;
 }
 
 export interface RequiredConfig {

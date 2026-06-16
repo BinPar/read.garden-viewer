@@ -997,3 +997,77 @@ div.rg-selection-menu
   .rg-selection-option:disabled:after {
   opacity: 0.5;
 }
+/* #region Watermark */
+.rg-watermark {
+  position: absolute;
+  pointer-events: none;
+  -webkit-user-select: none;
+  user-select: none;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 300;
+  color: #808080;
+  opacity: 0.5;
+  white-space: nowrap;
+  z-index: 4;
+}
+
+.rg-watermark[data-position='top'] {
+  top: 1.5%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.rg-watermark[data-position='bottom'] {
+  bottom: 1.5%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.rg-watermark[data-position='left'] {
+  top: 50%;
+  left: 1.5%;
+  transform: translateY(-50%) rotate(-90deg);
+  transform-origin: left center;
+}
+
+.rg-watermark[data-position='right'] {
+  top: 50%;
+  right: 1.5%;
+  transform: translateY(-50%) rotate(90deg);
+  transform-origin: right center;
+}
+
+/* Fixed layout: size relative to the page so it scales per page (and with zoom,
+   since the whole placeholder is transform-scaled). */
+.rg-fixed-content-container > .rg-watermark {
+  font-size: calc(var(--page-width) / 50);
+}
+
+/* Flow layout: layer holding one watermark per column (virtual page). */
+.rg-watermark-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 4;
+}
+
+.rg-horizontal-scroll .rg-watermark-layer {
+  width: var(--total-width);
+  height: 100%;
+}
+
+.rg-vertical-scroll .rg-watermark-layer {
+  width: 100%;
+  height: var(--scroll-height, 100%);
+}
+
+.rg-watermark-slot {
+  position: absolute;
+  overflow: hidden;
+}
+
+.rg-watermark-layer .rg-watermark {
+  font-size: 0.75rem;
+}
+/* #endregion Watermark */

@@ -3,6 +3,7 @@ import { GapMode, LayoutTypes } from '../model/viewerSettings';
 
 import { getState } from '../lib/state';
 import setCSSProperty from './setCSSProperty';
+import { applyFixedPageWatermark } from './watermark';
 import type { LoadNewContent } from '../model/events';
 
 const getContainer = (
@@ -99,6 +100,7 @@ const processFixedContents = async (
       };
       if (contentInfo.html) {
         container.innerHTML = contentInfo.html;
+        applyFixedPageWatermark(container, state.config);
       }
       contentsByOrder.set(order, contentInfo);
       contentsBySlug.set(slug, contentInfo);

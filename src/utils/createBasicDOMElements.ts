@@ -1,6 +1,7 @@
 import { State } from '../model/state';
 
 import { updateState } from '../lib/state';
+import { createFlowWatermarkLayer } from './watermark';
 
 
 export const cleanDOM = (state: State): void => {
@@ -81,6 +82,16 @@ const createBasicDOMElements = (state: State): void => {
   const searchTermsHighlightsNode = document.createElement('div');
   searchTermsHighlightsNode.classList.add('rg-highlights-layer', 'rg-search');
   readGardenViewerNode.appendChild(searchTermsHighlightsNode);
+
+  // Flow watermark layer (one watermark per column). Only created when a
+  // watermark text is configured; fixed layout injects per page instead.
+  let watermarkLayerNode: HTMLDivElement | undefined;
+  if (state.layout === 'flow') {
+    watermarkLayerNode = createFlowWatermarkLayer(state.config);
+    if (watermarkLayerNode) {
+      readGardenViewerNode.appendChild(watermarkLayerNode);
+    }
+  }
   // #endregion Content Wrapper Siblings
 
   let scrollerNode: HTMLDivElement | undefined;
@@ -131,6 +142,7 @@ const createBasicDOMElements = (state: State): void => {
     selectionHighlightsNode,
     selectionSelectorsNode,
     searchTermsHighlightsNode,
+    watermarkLayerNode,
     dynamicStyleNode,
     containerWidth,
     containerHeight,
