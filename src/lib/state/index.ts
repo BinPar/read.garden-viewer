@@ -147,6 +147,12 @@ export const initializeState = (initialConfig: InitialConfig): void => {
       maximumZoomValue: config.zoom.max ?? defaultFixed.maximumZoomValue,
       gapMode: config.fixedPagesGap ?? defaultFixed.gapMode,
       gapSize: config.fixedPagesGapSize ?? defaultFixed.gapSize,
+      separatorColor: config.pageSeparatorColor,
+      separatorWidth: config.pageSeparatorWidth ?? defaultFixed.separatorWidth,
+      separatorPairWidth:
+        config.pageSeparatorPairWidth ??
+        config.pageSeparatorWidth ??
+        defaultFixed.separatorPairWidth,
     };
 
     if (config.initialContent) {

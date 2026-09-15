@@ -217,6 +217,23 @@ export interface DefaultConfig {
    */
   fixedPagesGapSize?: number;
   /**
+   * Page separator (filete) color between fixed pages. If set, a separator line is drawn in the
+   * space between pages (and the space is enabled automatically).
+   * @scope Fixed
+   */
+  pageSeparatorColor?: string;
+  /**
+   * Page separator (filete) thickness in pixels for a page change (within a leaf). Defaults to `1`.
+   * @scope Fixed
+   */
+  pageSeparatorWidth?: number;
+  /**
+   * Page separator (filete) thickness in pixels for a leaf change (every two pages). Usually a bit
+   * thicker than `pageSeparatorWidth`. Defaults to `pageSeparatorWidth`.
+   * @scope Fixed
+   */
+  pageSeparatorPairWidth?: number;
+  /**
    * Experimental config
    */
   experimental?: ExperimentalConfig;

@@ -320,6 +320,12 @@ div.rg-content-wrapper #rg-content-placeholder > div a {
   overflow: hidden;
 }
 
+.rg-fixed-layout div.rg-content-wrapper div#rg-content-placeholder > .rg-page-separator {
+  position: absolute;
+  pointer-events: none;
+  z-index: 1;
+}
+
 .rg-fixed-layout
   div.rg-content-wrapper
   div#rg-content-placeholder

@@ -463,6 +463,18 @@ export interface FixedState {
    * Gap size (in pixels)
    */
   gapSize: number;
+  /**
+   * Page separator (filete) color. When set, a separator line is drawn between fixed pages.
+   */
+  separatorColor?: string;
+  /**
+   * Page separator (filete) thickness in pixels for a page change (within a leaf).
+   */
+  separatorWidth: number;
+  /**
+   * Page separator (filete) thickness in pixels for a leaf change (every two pages).
+   */
+  separatorPairWidth: number;
 }
 
 export interface FlowState {
