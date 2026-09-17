@@ -130,6 +130,31 @@ const processFixedContents = async (
     previousContent.next = prev;
   }
 
+  // Typical (most common) page size, used by auto-fit so the regular reading pages fill the screen
+  // instead of being sized for outlier pages (covers, fold-outs, etc.).
+  const widthCounts = new Map<number, number>();
+  const heightCounts = new Map<number, number>();
+  contentsInfo.forEach((c) => {
+    widthCounts.set(c.width, (widthCounts.get(c.width) || 0) + 1);
+    heightCounts.set(c.height, (heightCounts.get(c.height) || 0) + 1);
+  });
+  let typicalWidth = maxWidth;
+  let typicalHeight = maxHeight;
+  let bestWidthCount = 0;
+  let bestHeightCount = 0;
+  widthCounts.forEach((count, w) => {
+    if (count > bestWidthCount) {
+      bestWidthCount = count;
+      typicalWidth = w;
+    }
+  });
+  heightCounts.forEach((count, h) => {
+    if (count > bestHeightCount) {
+      bestHeightCount = count;
+      typicalHeight = h;
+    }
+  });
+
   setCSSProperty('total-width', `${totalWidth}px`);
   setCSSProperty('total-height', `${totalHeight}px`);
   setCSSProperty('max-width', `${maxWidth}px`);
@@ -183,6 +208,8 @@ const processFixedContents = async (
               totalWidth,
               maxWidth,
               maxHeight,
+              typicalWidth,
+              typicalHeight,
               contentsInfo,
               contentsBySlug,
               contentsByOrder,

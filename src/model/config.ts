@@ -208,6 +208,13 @@ export interface DefaultConfig {
    */
   searchHighlightColor?: string;
   /**
+   * When `true`, the fixed viewer automatically chooses the fit mode based on the device: fit by
+   * width on tall/narrow screens (mobile) and fit by height on wide screens (desktop), so a whole
+   * page is always shown while using the most screen. Recalculated on resize/rotation.
+   * @scope Fixed
+   */
+  fixedAutoFit?: boolean;
+  /**
    * Desired fixed pages gap mode.
    */
   fixedPagesGap?: GapMode;

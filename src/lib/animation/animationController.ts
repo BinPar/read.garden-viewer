@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { DispatchAPIAction } from '../../model/actions/common';
-import { State } from '../../model/state';
+import { FixedState, State } from '../../model/state';
 import { FitMode, LayoutTypes } from '../../model/viewerSettings';
 import navigateToContentSlug from '../../utils/navigateToContentSlug';
 import setCSSProperty from '../../utils/setCSSProperty';
@@ -147,7 +147,33 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
     }
   };
 
+  // Reference page size for fitting.
+  const refWidth = (): number =>
+    (state.config.fixedAutoFit && (state as FixedState).typicalWidth) ||
+    (state as FixedState).maxWidth;
+  const refHeight = (): number =>
+    (state.config.fixedAutoFit && (state as FixedState).typicalHeight) ||
+    (state as FixedState).maxHeight;
+
+  // Resolves the fit mode to apply.
+  const getEffectiveFitMode = (): FitMode | undefined => {
+    if (
+      state.config.fixedAutoFit &&
+      state.layout === LayoutTypes.Fixed &&
+      refWidth() &&
+      refHeight() &&
+      state.containerWidth &&
+      state.containerHeight
+    ) {
+      const screenAspect = state.containerWidth / state.containerHeight;
+      const pageAspect = refWidth() / refHeight();
+      return screenAspect >= pageAspect ? FitMode.Height : FitMode.Width;
+    }
+    return (state as FixedState).fitMode;
+  };
+
   const onReadModeChangeEvent = (instant = false): void => {
+    const fitMode = getEffectiveFitMode();
     const newMargins = state.readMode
       ? { ...state.config.readModeMargin }
       : { ...state.config.uiModeMargin };
@@ -162,7 +188,7 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
 
     const currentHeight = state.containerHeight;
     const verticalMargin =
-      state.layout === LayoutTypes.Fixed && state.fitMode === FitMode.Height
+      state.layout === LayoutTypes.Fixed && fitMode === FitMode.Height
         ? state.config.readModeMargin.top + state.config.readModeMargin.bottom
         : newMargins.top + newMargins.bottom;
     const targetHeight = currentHeight - verticalMargin;
@@ -170,10 +196,10 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
 
     scale.target = Math.max(Math.min(widthNeededScale, heightNeededScale), 0);
     if (state.layout === LayoutTypes.Fixed) {
-      if (state.fitMode === FitMode.Height) {
+      if (fitMode === FitMode.Height) {
         scale.target = Math.max(heightNeededScale, 0);
       }
-      if (state.fitMode === FitMode.Width) {
+      if (fitMode === FitMode.Width) {
         scale.target = Math.max(widthNeededScale, 0);
       }
     }
@@ -265,7 +291,7 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
         (state.containerHeight - state.margin.top - state.margin.bottom) / state.containerHeight,
       );
       top.target = state.margin.top;
-      zoom.target = state.containerHeight / state.maxHeight;
+      zoom.target = state.containerHeight / refHeight();
       if (state.scrollMode === 'horizontal') {
         left.target = state.margin.left;
       } else {
@@ -283,7 +309,7 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
         (state.containerWidth - state.margin.left - state.margin.right) / state.containerWidth,
       );
       left.target = state.margin.left;
-      zoom.target = state.containerWidth / state.maxWidth;
+      zoom.target = state.containerWidth / refWidth();
       if (state.scrollMode === 'vertical') {
         top.target = state.margin.top;
       } else {
@@ -297,11 +323,12 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
   const onChapterChange = (): void => {
     resetPageScroll();
     if (state.layout === LayoutTypes.Fixed) {
-      if (state.fitMode === FitMode.Height) {
+      const fitMode = getEffectiveFitMode();
+      if (fitMode === FitMode.Height) {
         fitHeight();
-      } else if (state.fitMode === FitMode.Width) {
+      } else if (fitMode === FitMode.Width) {
         fitWidth();
-      } else if (state.fitMode === FitMode.Page) {
+      } else if (fitMode === FitMode.Page) {
         const fitWidthZoom = Math.max(
           0,
           (state.containerWidth - state.margin.left - state.margin.right) / state.containerWidth,
@@ -333,10 +360,17 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
 
   const onPositionBySlugChange = (): void => {
     if (state.layout === LayoutTypes.Fixed) {
-      if (state.fitMode === FitMode.Height) {
-        zoom.target = window.innerHeight / state.maxHeight;
-      } else if (state.fitMode === FitMode.Width) {
-        zoom.target = window.innerWidth / state.maxWidth;
+      const fitMode = getEffectiveFitMode();
+      // With auto-fit, base the zoom on the container (consistent with the fit decision) instead of
+      // the window, so it works even when the viewer doesn't fill the whole window.
+      const referenceHeight = state.config.fixedAutoFit
+        ? state.containerHeight
+        : window.innerHeight;
+      const referenceWidth = state.config.fixedAutoFit ? state.containerWidth : window.innerWidth;
+      if (fitMode === FitMode.Height) {
+        zoom.target = referenceHeight / refHeight();
+      } else if (fitMode === FitMode.Width) {
+        zoom.target = referenceWidth / refWidth();
       } else {
         zoom.target = state.zoom;
       }

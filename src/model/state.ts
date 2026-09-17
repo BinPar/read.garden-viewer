@@ -426,6 +426,14 @@ export interface FixedState {
    */
   maxHeight: number;
   /**
+   * Most common (typical) page width across the content. Used by auto-fit.
+   */
+  typicalWidth: number;
+  /**
+   * Most common (typical) page height across the content. Used by auto-fit.
+   */
+  typicalHeight: number;
+  /**
    * Viewer is loading content
    */
   loadingContent?: string;
