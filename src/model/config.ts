@@ -215,6 +215,18 @@ export interface DefaultConfig {
    */
   fixedAutoFit?: boolean;
   /**
+   * When `true`, scrolling in the fixed viewer snaps to the nearest page boundary, so pages are not
+   * left cut off after a scroll ("controlled scroll").
+   * @scope Fixed
+   */
+  fixedSmartScroll?: boolean;
+  /**
+   * When `true`, the minimum zoom in the fixed viewer is fixed to the current fit zoom, so the user
+   * cannot zoom out past the page filling the screen (avoids getting lost among many pages).
+   * @scope Fixed
+   */
+  fixedLimitZoomOut?: boolean;
+  /**
    * Desired fixed pages gap mode.
    */
   fixedPagesGap?: GapMode;

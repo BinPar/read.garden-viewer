@@ -9,7 +9,7 @@ const setZoom: ActionDispatcher<SetZoom> = async ({ action, state }) => {
   }
 
   return {
-    zoom: Math.max(Math.min(action.zoom, state.config.zoom.max), state.config.zoom.min),
+    zoom: Math.max(Math.min(action.zoom, state.maximumZoomValue), state.minimumZoomValue),
     fitMode: undefined,
   };
 };

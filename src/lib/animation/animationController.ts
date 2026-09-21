@@ -157,7 +157,9 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
 
   // Resolves the fit mode to apply.
   const getEffectiveFitMode = (): FitMode | undefined => {
+    const configuredFitMode = (state as FixedState).fitMode;
     if (
+      configuredFitMode !== undefined &&
       state.config.fixedAutoFit &&
       state.layout === LayoutTypes.Fixed &&
       refWidth() &&
@@ -169,7 +171,17 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
       const pageAspect = refWidth() / refHeight();
       return screenAspect >= pageAspect ? FitMode.Height : FitMode.Width;
     }
-    return (state as FixedState).fitMode;
+    return configuredFitMode;
+  };
+
+  const storeFitZoom = (): void => {
+    if (state.layout === LayoutTypes.Fixed && getEffectiveFitMode() && zoom.target > 0) {
+      if (state.config.fixedLimitZoomOut) {
+        updateState({ fitZoom: zoom.target, minimumZoomValue: zoom.target });
+      } else {
+        updateState({ fitZoom: zoom.target });
+      }
+    }
   };
 
   const onReadModeChangeEvent = (instant = false): void => {
@@ -350,6 +362,7 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
       zoom.current = zoom.target;
       top.current = top.target;
       left.current = left.target;
+      storeFitZoom();
     }
     resetPageProps();
     if (state.layout === LayoutTypes.Fixed) {
@@ -375,6 +388,7 @@ const animationController = (state: State, dispatch: DispatchAPIAction): void =>
         zoom.target = state.zoom;
       }
       zoom.current = zoom.target;
+      storeFitZoom();
       reCalcScrollLimits(state, true);
     }
     resetPageProps();

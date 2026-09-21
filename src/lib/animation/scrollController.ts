@@ -17,6 +17,7 @@ import getSyntheticEvent from './getSyntheticEvent';
 import { zoom, scale, altScroll, scroll } from './interpolationValues';
 import getWordSelection from './getWordSelection';
 import scrollInertiaAndLimits from './scrollInertiaAndLimits';
+import getScrollFromContentSlug from './getScrollFromContentSlug';
 import { LayoutTypes } from '../../model/viewerSettings';
 import updateZoom from './updateZoom';
 import getClickedHighlight from './getClickedHighlight';
@@ -117,9 +118,23 @@ const scrollController = (
         const originalZoomFactor = zoomFactor;
         zoomFactor *= theZoom;
         theZoom = zoomFactor / originalZoomFactor;
+        const previousZoomTarget = zoom.target;
         zoom.target *= theZoom;
-        zoom.target = Math.min(state.config.zoom.max, Math.max(zoom.target, state.config.zoom.min));
-        if (zoom.current !== zoom.target) {
+        // Clamp to the effective zoom bounds (minimumZoomValue honors the zoom-out limit, if set),
+        // consistent with the wheel handler in updateZoom.
+        zoom.target = Math.min(
+          state.maximumZoomValue,
+          Math.max(zoom.target, state.minimumZoomValue),
+        );
+        // Only correct the focal point and follow the fingers when the zoom actually changed.
+        // When clamped at the limit, this prevents the content from drifting on further pinching.
+        const zoomChanged = zoom.target !== previousZoomTarget;
+        if (!zoomChanged) {
+          // Keep the accumulator in sync with the clamped zoom so pinching back in responds
+          // immediately (no dead zone after hitting the limit).
+          zoomFactor = originalZoomFactor;
+        }
+        if (zoomChanged) {
           if (state.scrollMode === 'vertical') {
             scroll.target -= (theZoom - 1) * (touchCenter.y / zoom.target);
             altScroll.target -= (theZoom - 1) * (touchCenter.x / zoom.target);
@@ -130,7 +145,7 @@ const scrollController = (
           }
           reCalcScrollLimits(state, true);
         }
-        if (lastZoomCenter) {
+        if (zoomChanged && lastZoomCenter) {
           if (state.scrollMode === 'vertical') {
             scroll.target += touchCenter.y - lastZoomCenter.y;
             altScroll.target += touchCenter.x - lastZoomCenter.x;
@@ -297,6 +312,22 @@ const scrollController = (
   };
 
   const onDragEnd = (ev: MouseEvent | TouchEvent): void => {
+    // Pinch/zoom gesture end: if the zoom settled at the fit level, recenter the current page on
+    // both axes (a zoom-out to the limit can otherwise leave the page off-center until you scroll).
+    if (state.layout === LayoutTypes.Fixed && fingers === 2) {
+      const atFitZoom = !state.fitZoom || state.zoom <= state.fitZoom * 1.02;
+      if (atFitZoom) {
+        const alignedScroll = getScrollFromContentSlug(state);
+        if (alignedScroll !== null) {
+          scroll.target = alignedScroll;
+        }
+        altScroll.target = 0;
+        scrollInertiaAndLimits(state, scroll, 0, executeTransitions, dispatch, true, false);
+        scrollInertiaAndLimits(state, altScroll, 0, executeTransitions, dispatch, true, true);
+      }
+      fingers = 0;
+    }
+
     if (mobileSelectionTimeout) {
       clearTimeout(mobileSelectionTimeout);
       mobileSelectionTimeout = null;

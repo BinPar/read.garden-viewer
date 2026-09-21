@@ -434,6 +434,11 @@ export interface FixedState {
    */
   typicalHeight: number;
   /**
+   * Current fit zoom (the zoom at which a page fills the screen). Used to know when the user has
+   * zoomed in past the fit, so smart scroll can allow free panning instead of snapping.
+   */
+  fitZoom: number;
+  /**
    * Viewer is loading content
    */
   loadingContent?: string;

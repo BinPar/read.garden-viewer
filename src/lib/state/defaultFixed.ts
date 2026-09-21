@@ -25,6 +25,7 @@ const defaultFixed: FixedState = {
   maxWidth: 0,
   typicalWidth: 0,
   typicalHeight: 0,
+  fitZoom: 0,
   gapMode: GapMode.None,
   gapSize: 16,
   separatorWidth: 1,

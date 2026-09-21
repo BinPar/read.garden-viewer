@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 import { NavigateToPreviousChapter } from '../../model';
 import { DispatchAPIAction } from '../../model/actions/common';
-import { State } from '../../model/state';
+import { FixedState, State } from '../../model/state';
 import { LayoutTypes } from '../../model/viewerSettings';
 import getMinAndMaxScroll, { getMinAndMaxAltScroll, MinAndMaxScroll } from './getMinAndMaxScroll';
 import { InterpolationValue } from './interpolationValues';
@@ -66,6 +66,29 @@ const scrollInertiaAndLimits = (
     }
     if (!avoidInertia) {
       scroll.target += lastDelta * state.animationInertia;
+    }
+    // Controlled scroll: snap to the nearest page boundary so pages are not left cut off.
+    // Only while at the fit zoom — if the user has zoomed in to read closely, allow free panning.
+    const fixedState = state as FixedState;
+    const atFitZoom = !fixedState.fitZoom || fixedState.zoom <= fixedState.fitZoom * 1.02;
+    if (
+      !isAltScroll &&
+      state.config.fixedSmartScroll &&
+      atFitZoom &&
+      fixedState.contentsInfo &&
+      fixedState.contentsInfo.length
+    ) {
+      const targetPosition = scroll.target * -1;
+      let nearest: number | null = null;
+      fixedState.contentsInfo.forEach((content) => {
+        const position = state.scrollMode === 'vertical' ? content.top : content.left;
+        if (nearest === null || Math.abs(position - targetPosition) < Math.abs(nearest - targetPosition)) {
+          nearest = position;
+        }
+      });
+      if (nearest !== null) {
+        scroll.target = nearest * -1;
+      }
     }
     min = scrollLimits.maxScroll * -1;
     max = scrollLimits.minScroll * -1;
